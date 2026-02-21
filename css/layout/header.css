@@ -1,0 +1,12 @@
+header {
+  background-color: transparent;
+}
+
+header .row:nth-child(1) {
+  justify-content: space-between;
+  padding: 13px 0;
+}
+header .row:nth-child(1) .col-2:nth-child(2) {
+  display: flex;
+  gap: 7px;
+}

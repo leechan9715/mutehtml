@@ -66,7 +66,7 @@ body {
   margin-left: auto;
 }
 
-.row:nth-of-type(3) {
+.row:nth-of-type(2) {
   scrollbar-width: none;
   height: calc(100vh - 260px);
   overflow-y: auto;
@@ -74,7 +74,7 @@ body {
   padding-bottom: 140px;
 }
 
-.row:nth-of-type(3) label {
+.row:nth-of-type(2) label {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -82,12 +82,12 @@ body {
   box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
   border-radius: 50%;
 }
-.row:nth-of-type(3) label > img {
+.row:nth-of-type(2) label > img {
   object-fit: cover;
   padding: 4px;
   width: 100%;
 }
-.row:nth-of-type(3) label .checked-heart {
+.row:nth-of-type(2) label .checked-heart {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
@@ -100,10 +100,10 @@ body {
   transition: opacity 0.3s ease-in-out;
 }
 
-.row:nth-of-type(3) label:has(input:checked) .checked-heart {
+.row:nth-of-type(2) label:has(input:checked) .checked-heart {
   opacity: 1;
 }
-.row:nth-of-type(3) h2 {
+.row:nth-of-type(2) h2 {
   margin-top: 4px;
 }
 .bottom {
