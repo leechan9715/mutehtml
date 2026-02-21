@@ -1,0 +1,320 @@
+/* variables.css
+ * - 프로젝트 공통 디자인 토큰: color / typography / opacity / icon settings
+ * - 추가 시 네이밍 규칙: --color-*, --font-*, --fw-*
+ */
+
+:root {
+  /* 컬러 */
+  --color-white: #ffffff;
+  --color-black: #0b0e19;
+  --color-gray: #929599;
+  --color-pink: #f8dcff;
+  --color-pink-2: #fea6ff;
+  --color-sky-light: #d3f4fe;
+  --color-accent-blue: #bbd1ff;
+  --color-primary: #546cf7; /* 메인(진한) */
+  --color-primary-2: #6077fc; /* 서브(조금 연함) */
+  --color-primary-3: #597edb; /* 중간 톤(새로 추가) */
+  --color-primary-4: #6f83f7; /* 중간 톤(새로 추가) */
+  --color-primary-5: #d3dcff; /* 중간 톤(새로 추가) */
+  --color-primary-6: #bdc6e0; /* 중간 톤(새로 추가) */
+  --color-primary-7: #7692ff;
+  --color-primary-8: #bbd1ff;
+  --color-primary-9: #4860ec;
+  --color-surface: #c9d8ff;
+  --color-red: #f56363;
+  /* 폰트사이즈 */
+  --font-48: 48px;
+  --font-26: 26px;
+  --font-24: 24px;
+  --font-22: 22px;
+  --font-21: 21px;
+  --font-20: 20px;
+  --font-18: 18px;
+  --font-16: 16px;
+  --font-17: 17px;
+  --font-14: 14px;
+  --font-13: 13px;
+  --font-12: 12px;
+  --font-10: 10px;
+  /* --font-48: clamp(30px, 6.2vw, 48px);
+  --font-26: clamp(18px, 4.2vw, 26px);
+  --font-24: clamp(17px, 3.8vw, 24px);
+  --font-22: clamp(16px, 3.4vw, 22px);
+  --font-20: clamp(15px, 3.1vw, 20px);
+  --font-16: clamp(13px, 2.6vw, 16px);
+  --font-14: clamp(12px, 2.2vw, 14px);
+  --font-13: clamp(12px, 2vw, 13px);
+  --font-12: clamp(11px, 1.8vw, 12px); */
+
+  /* 폰트 웨이트(굵기) */
+  --fw-100: 100;
+  --fw-200: 200;
+  --fw-300: 300;
+  --fw-400: 400; /* normal */
+  --fw-500: 500; /* medium */
+  --fw-600: 600; /* semibold */
+  --fw-700: 700; /* bold */
+  --fw-800: 800;
+  --fw-900: 900;
+  --fw-normal: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+}
+/* =========================
+  COLOR UTILITIES
+========================= */
+.color-white {
+  color: var(--color-white);
+}
+.color-black {
+  color: var(--color-black);
+}
+.color-gray {
+  color: var(--color-gray);
+}
+.color-pink {
+  color: var(--color-pink);
+}
+.color-pink-2 {
+  color: var(--color-pink-2);
+}
+.color-sky-light {
+  color: var(--color-sky-light);
+}
+.color-accent-blue {
+  color: var(--color-accent-blue);
+}
+.color-primary {
+  color: var(--color-primary);
+}
+.color-primary-2 {
+  color: var(--color-primary-2);
+}
+.color-primary-3 {
+  color: var(--color-primary-3);
+}
+.color-primary-4 {
+  color: var(--color-primary-4);
+}
+.color-primary-5 {
+  color: var(--color-primary-5);
+}
+.color-primary-6 {
+  color: var(--color-primary-6);
+}
+.color-primary-7 {
+  color: var(--color-primary-7);
+}
+.color-primary-8 {
+  color: var(--color-primary-8);
+}
+.color-primary-9 {
+  color: var(--color-primary-9);
+}
+
+.color-surface {
+  color: var(--color-surface);
+}
+.color-red {
+  color: var(--color-red);
+}
+
+/* (옵션) 배경색 유틸 */
+.bg-white {
+  background-color: var(--color-white);
+}
+.bg-black {
+  background-color: var(--color-black);
+}
+.bg-pink {
+  background-color: var(--color-pink);
+}
+.bg-sky-light {
+  background-color: var(--color-sky-light);
+}
+.bg-accent-blue {
+  background-color: var(--color-accent-blue);
+}
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+/* =========================
+  FONT SIZE UTILITIES
+========================= */
+.text-center {
+  text-align: center;
+}
+.font-48 {
+  font-size: var(--font-48);
+}
+.font-26 {
+  font-size: var(--font-26);
+}
+.font-24 {
+  font-size: var(--font-24);
+}
+.font-22 {
+  font-size: var(--font-22);
+}
+.font-21 {
+  font-size: var(--font-21);
+}
+.font-20 {
+  font-size: var(--font-20);
+}
+.font-18 {
+  font-size: var(--font-18);
+}
+.font-17 {
+  font-size: var(--font-17);
+}
+.font-16 {
+  font-size: var(--font-16);
+}
+.font-14 {
+  font-size: var(--font-14);
+}
+.font-13 {
+  font-size: var(--font-13);
+}
+.font-12 {
+  font-size: var(--font-12);
+}
+.font-10 {
+  font-size: var(--font-10);
+}
+
+/* =========================
+  FONT WEIGHT UTILITIES
+  - 프로젝트에서 많이 쓰는 두께만 기본으로 제공
+========================= */
+.fw-100 {
+  font-weight: var(--fw-100);
+}
+.fw-200 {
+  font-weight: var(--fw-200);
+}
+.fw-300 {
+  font-weight: var(--fw-300);
+}
+.fw-400 {
+  font-weight: var(--fw-400);
+}
+.fw-500 {
+  font-weight: var(--fw-500);
+}
+.fw-600 {
+  font-weight: var(--fw-600);
+}
+.fw-700 {
+  font-weight: var(--fw-700);
+}
+.fw-800 {
+  font-weight: var(--fw-800);
+}
+.fw-900 {
+  font-weight: var(--fw-900);
+}
+/* (옵션) 자주 쓰는 별칭 */
+.fw-normal {
+  font-weight: var(--fw-normal);
+}
+.fw-medium {
+  font-weight: var(--fw-medium);
+}
+.fw-semibold {
+  font-weight: var(--fw-semibold);
+}
+.fw-bold {
+  font-weight: var(--fw-bold);
+}
+
+.op-0 {
+  opacity: 0;
+}
+.op-5 {
+  opacity: 0.05;
+}
+.op-10 {
+  opacity: 0.1;
+}
+.op-15 {
+  opacity: 0.15;
+}
+.op-20 {
+  opacity: 0.2;
+}
+.op-25 {
+  opacity: 0.25;
+}
+.op-30 {
+  opacity: 0.3;
+}
+.op-35 {
+  opacity: 0.35;
+}
+.op-40 {
+  opacity: 0.4;
+}
+.op-45 {
+  opacity: 0.45;
+}
+.op-50 {
+  opacity: 0.5;
+}
+.op-55 {
+  opacity: 0.55;
+}
+.op-60 {
+  opacity: 0.6;
+}
+.op-65 {
+  opacity: 0.65;
+}
+.op-70 {
+  opacity: 0.7;
+}
+.op-75 {
+  opacity: 0.75;
+}
+.op-80 {
+  opacity: 0.8;
+}
+.op-85 {
+  opacity: 0.85;
+}
+.op-90 {
+  opacity: 0.9;
+}
+.op-95 {
+  opacity: 0.95;
+}
+.op-100 {
+  opacity: 1;
+}
+/* 얇게 */
+.thin {
+  font-variation-settings:
+    "wght" 200,
+    "FILL" 0,
+    "opsz" 24;
+}
+
+/* 기본 */
+.reg {
+  font-variation-settings:
+    "wght" 400,
+    "FILL" 0,
+    "opsz" 24;
+}
+
+/* 두껍게 */
+.bold {
+  font-variation-settings:
+    "wght" 700,
+    "FILL" 0,
+    "opsz" 24;
+}

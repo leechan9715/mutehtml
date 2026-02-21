@@ -1,0 +1,277 @@
+/*================ 
+스플래시 페이지 메인 CSS 수정 X
+==============*/
+
+/* =========================================================
+   SPLASH ANIMATION TIMELINE (원하는 시나리오)
+   1) logo-1 : DOM 로드 직후 1초 동안 scale로 사라짐 (0~1s)
+   2) logo-2-img : 1초 딜레이 후 1초 동안 scale로 나타남 (1~2s)
+   3) login-form : 2초 딜레이 후 1초 동안 max-height로 펼쳐지며 로고를 위로 밀어냄 (2~3s)
+   4) star/mute/tagline/form opacity : 3초 딜레이 후 1초 동안 보이게 (3~4s)
+========================================================= */
+
+/* =========================================================
+   1) SPLASH 전체 레이아웃
+   - 화면 전체를 가운데 정렬
+   - 배경 이미지는 cover로 꽉 채움
+========================================================= */
+#splash {
+  display: flex;
+  align-items: center; /* 세로 중앙 */
+  justify-content: center; /* 가로 중앙 */
+  min-height: 100dvh; /* 화면 높이만큼 */
+  width: 100vw; /* 화면 너비만큼 */
+  background: url(../../assets/images/splash_bg/splash_bg_big.png) no-repeat
+    center;
+  background-size: cover;
+  padding: 25px 0;
+}
+
+/* =========================================================
+   2) 컨텐츠 컨테이너
+   - 내부 요소를 가운데로 모으고
+   - logo-1을 absolute로 올리기 위해 position:relative
+========================================================= */
+#splash > .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; /* 위→아래 배치 */
+  z-index: 1;
+  position: relative;
+}
+
+/* =========================================================
+   3) logo-1 (첫 로고)
+   - absolute로 중앙에 떠있다가
+   - is-load가 붙으면 1초 동안 scaleX(0) , opacity 0 으로 사라짐
+========================================================= */
+#splash > .container > .logo-1 {
+  position: absolute;
+  transition:
+    transform 1s ease-in-out,
+    opacity 1s ease-in-out; /* 0~1s */
+  opacity: 1;
+}
+#splash > .container > .logo-1.is-load {
+  transform: scaleX(0);
+  opacity: 0;
+}
+
+/* =========================================================
+   4) logo-2 영역 (두번째 로고 + 폼 묶음)
+========================================================= */
+#splash > .container > .logo-2 {
+  width: 100%;
+  height: 100%;
+}
+
+/* 내부 정렬: 세로로 쌓고 중앙 정렬 */
+#splash > .container > .logo-2 > .row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+/* =========================================================
+   6) 두번째 로고 이미지 (logo-2-img)
+   - 1초 딜레이 후 1초 동안 scaleX( 0 -> 1) , opacity (0 -> 1)로 등장 (1~2s)
+   - 2초 딜레이 후 margin-bottom을 늘려 아래 요소와 간격 확보 (2~3s)
+========================================================= */
+#splash > .container > .logo-2 > .row > .logo_box {
+  transform: scaleX(0);
+  margin-bottom: 0px;
+  transition:
+    opacity 1s ease-in-out 1s,
+    transform 1s ease-in-out 1s,
+    margin-bottom 1s ease-in-out 2s;
+  opacity: 0;
+}
+#splash > .container > .logo-2 > .row > .logo_box.is-load {
+  transform: scaleX(1);
+  margin-bottom: 24px;
+  opacity: 1;
+}
+
+/* =========================================================
+   7) MUTE 로고 (logo-mute-img)
+   - max-height / margin-bottom을 2초부터 열어 공간 확보 (2~3s)
+   - opacity는 3초부터 페이드 인 (3~4s)
+========================================================= */
+#splash > .container > .logo-2 > .row > img.logo-mute-img {
+  opacity: 0;
+  margin-bottom: 0;
+  max-height: 0;
+  transition:
+    opacity 1s ease-in-out 3s,
+    max-height 1s ease-in-out 2s,
+    margin-bottom 1s ease-in-out 2s;
+}
+#splash > .container > .logo-2 > .row > img.logo-mute-img.is-load {
+  opacity: 1;
+  margin-bottom: 13px;
+  max-height: 100px;
+}
+
+/* =========================================================
+   8) 태그라인(tagline)
+   - max-height / margin-bottom을 2초부터 열어 공간 확보 (2~3s)
+   - opacity는 3초부터 페이드 인 (3~4s)
+========================================================= */
+#splash > .container > .logo-2 > .row > .tagline {
+  margin-bottom: 0;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden; /* max-height 접힐 때 내용 안 튀어나오게 */
+  font-size: var(--font-20);
+  transition:
+    opacity 1s ease-in-out 3s,
+    max-height 1s ease-in-out 2s,
+    margin-bottom 1s ease-in-out 2s;
+  color: var(--color-black);
+}
+#splash > .container > .logo-2 > .row > .tagline.is-load {
+  opacity: 1;
+  margin-bottom: 16px;
+  max-height: 500px;
+}
+
+/* =========================================================
+   9) 로그인 폼 (login-form)  ★ 핵심 영역
+   - 2초부터 1초 동안 max-height/padding으로 펼쳐짐 (2~3s)
+   - 3초부터 opacity로 등장 (3~4s)
+   - overflow:hidden으로 접히는 동안 내부가 튀어나오지 않게
+========================================================= */
+#splash > .container > .logo-2 > .row > .login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden; /* max-height 접힐 때 필수 */
+  opacity: 0;
+  max-height: 0px; /* 접힌 상태 */
+  padding: 0px 25px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 23.076923191547394%
+  );
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0px -2px 4px 0px rgba(211, 220, 255, 1);
+  transition:
+    max-height 1s ease-in-out 2s,
+    opacity 1s ease-in-out 3s,
+    padding 1s ease-in-out 2s;
+}
+#splash > .container > .logo-2 > .row > .login-form.is-load {
+  opacity: 1;
+  padding: 50px 25px;
+  max-height: 500px;
+
+  overflow: initial; /* 펼쳐진 뒤에는 기본 overflow로 */
+}
+
+/* =========================================================
+   10) 폼 내부 - input 필드
+========================================================= */
+#splash > .container > .logo-2 > .row > .login-form > .login-form-field {
+  width: 100%;
+  border-radius: 30px;
+  border: 1px solid #bbd1ff;
+  padding: 21px 24px;
+  box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+  margin-bottom: 15px;
+}
+#splash
+  > .container
+  > .logo-2
+  > .row
+  > .login-form
+  > .login-form-field
+  .login-form-label {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+#splash
+  > .container
+  > .logo-2
+  > .row
+  > .login-form
+  > .login-form-field:nth-child(2) {
+  margin-bottom: 13px;
+}
+
+#splash
+  > .container
+  > .logo-2
+  > .row
+  > .login-form
+  > .login-form-field
+  > .input {
+  width: 100%;
+  font-size: 14px;
+}
+
+/* =========================================================
+   11) 아이디/비밀번호 찾기 링크 영역
+========================================================= */
+#splash > .container > .logo-2 > .row > .login-form > .auth-links {
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 54px;
+}
+#splash > .container > .logo-2 > .row > .login-form > .auth-links > a {
+  font-size: var(--font-14);
+  color: #6f83f7;
+}
+
+/* =========================================================
+   12) 버튼 공통 + 로그인/회원가입 버튼 스타일
+========================================================= */
+#splash > .container > .logo-2 > .row > .login-form > button {
+  padding: 19px 0;
+  border-radius: 30px;
+  border: 1px solid #d3dcff;
+  box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+  font-size: var(--font-22);
+  font-weight: bold;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(200, 218, 255, 1) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(111, 131, 247, 1) 0%,
+      rgba(56, 82, 232, 1) 100%
+    );
+
+  color: #6f83f7;
+}
+
+#splash > .container > .logo-2 > .row > .login-form > .login-btn {
+  margin-bottom: 13px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(200, 218, 255, 1) 100%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(111, 131, 247, 1) 0%,
+      rgba(56, 82, 232, 1) 100%
+    );
+  color: #6f83f7;
+}
+
+#splash > .container > .logo-2 > .row > .login-form > .signup-btn {
+  background: linear-gradient(
+    0deg,
+    rgba(11, 14, 25, 1) 0%,
+    rgba(29, 46, 109, 1) 100%
+  );
+  color: #ffffff;
+}

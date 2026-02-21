@@ -1,0 +1,125 @@
+:root {
+  /* =========================
+         [UI 튜닝 핵심 변수]
+         1) --visible : 한 번에 보이는 줄 수(3/5/7...)
+         2) --item-h  : 한 칸(아이템) 높이
+         ※ 아래 wheel 높이는 자동 계산됨
+
+                      * 수정 X *
+                      
+      ========================= */
+  --visible: 3;
+  /* ✅ 3줄/5줄/7줄 ... 바꾸면 PAD도 자동으로 따라감 */
+  --item-h: 51px;
+  /* ✅ 한 칸 높이(px) */
+
+  --wheel-h: calc(var(--item-h) * var(--visible));
+  /* 자동 */
+  --radius: 18px;
+}
+
+.wheel-card {
+  background: #fff;
+  border: 1px solid var(--color-primary-5);
+  border-radius: var(--radius);
+  box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+  overflow: hidden;
+  margin-bottom: 68px;
+}
+
+.wheel-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: var(--wheel-h);
+}
+
+.wheel {
+  height: var(--wheel-h);
+  overflow-y: auto;
+
+  /* ✅ 가운데에 스냅(마지막 정렬용) */
+  scroll-snap-type: y mandatory;
+
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  /* 위/아래 패딩은 PAD 아이템으로 처리하므로 padding은 0 */
+  padding: 0;
+
+  overscroll-behavior: contain;
+
+  /* ✅ 휠 영역에서 페이지 스크롤이 섞이지 않게(드래그 피커 조작 우선) */
+  touch-action: none;
+}
+
+.wheel::-webkit-scrollbar {
+  display: none;
+}
+
+.wheel.is-dragging {
+  cursor: grabbing;
+}
+
+.wheel-item {
+  height: var(--item-h);
+  scroll-snap-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  padding: 0 20px;
+  color: var(--color-primary-6);
+  transition: all 0.15s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.wheel-item.is-selected {
+  color: rgba(0, 0, 0, 0.95);
+  font-weight: 400;
+  transform: scale(1.1);
+}
+
+/* ✅ 중앙 선택 영역 표시(가이드 라인) */
+.wheel-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: var(--item-h);
+  transform: translateY(-50%);
+  border-top: 1px solid var(--color-primary-5);
+  border-bottom: 1px solid var(--color-primary-5);
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.preview {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--color-primary-5);
+  border-radius: 14px;
+  background: #fafafa;
+  font-size: 16px;
+  text-align: center;
+}
+
+.btn {
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(
+    180deg,
+    rgba(111, 131, 247, 1) 0%,
+    rgba(74, 99, 248, 1) 100%
+  );
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.btn:active {
+  transform: scale(0.98);
+}

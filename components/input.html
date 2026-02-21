@@ -1,0 +1,48 @@
+<!-------------------------------------
+ Vue에서 작업할 컴포넌트 입니다.
+ 필요시 Html , Css 에서만 작업시 코드 복사후 사용가능 수정 X
+---------------------------------------->
+<div class="login-form-field">
+    <label class="login-form-label" for="login-id">
+        <span class="hidden">이메일</span>
+        <img src="./assets/images/icon/Mail.png" alt="Mail" /></label>
+    <input class="input" id="login-id" name="id" type="text" placeholder="이메일을 입력하세요." />
+</div>
+
+<style>
+    /* 로그인 페이지 input */
+    .login-form-field {
+        display: flex;
+        gap: 19px;
+        width: 100%;
+        border-radius: 30px;
+        border: 1px solid #bbd1ff;
+        padding: 21px 24px;
+        box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+        margin-bottom: 15px;
+        align-items: center;
+    }
+
+    .login-form-field>input {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    /* 회원가입 페이지 input */
+    .login-form-field {
+        display: flex;
+        width: 100%;
+        border-radius: 30px;
+        border: 1px solid #bbd1ff;
+        align-items: center;
+        box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+        height: 56px;
+        padding: 20px 19px;
+    }
+
+    .login-form-field>input {
+        font-size: 14px;
+        margin-left: 25px;
+        width: 50%;
+    }
+</style>

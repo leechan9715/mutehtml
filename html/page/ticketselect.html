@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../css/base/variables.css">
+    <link rel="stylesheet" href="../../css/base/reset.css">
+    <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+    <link rel="stylesheet" href="../../css/layout/grid.css">
+    <link rel="stylesheet" href="../../css/components/logo.css">
+    <link rel="stylesheet" href="../../css/pages/ticktselect.css">
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="container">
+            <div class="row">
+                <div class="col-3">
+                    <span class="material-symbols-outlined font-26 bold color-primary-3">
+                        arrow_back
+                    </span>
+                </div>
+                <div class="col-3" style="margin: 0 auto;">
+                    <h2 class=" fw-semibold font-24 text-center">
+                        마이페이지
+                    </h2>
+                </div>
+                <div class="col-3" style="visibility: hidden;">
+                    <span class="material-symbols-outlined font-26 bold color-primary-3">
+                        arrow_back
+                    </span>
+                </div>
+            </div>
+            <div class="row g-37">
+                <div class="logo_box">
+                    <!-- 1행 -->
+                    <div class="face">
+                        <div class="block"></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div class="block"></div>
+                        <!-- 2행 -->
+                        <div class="block"></div>
+                        <div class="block eye"></div>
+                        <div></div>
+                        <div class="block eye"></div>
+                        <div class="block"></div>
+                        <!-- 3행 -->
+                        <div class="block"></div>
+                        <div></div>
+                        <div class="block mouth"></div>
+                        <div></div>
+                        <div class="block"></div>
+                    </div>
+                    <img src="../../assets/images/common/circle.png" alt="circle">
+                </div>
+                <div class="col-1">
+                    <h3 class="fw-semibold color-primary-9 text-center">5,900/월</h3>
+                </div>
+            </div>
+        </div>
+        <from class="container" id="ticketForm">
+            <div class="row g-23">
+                <label class="col-3" for="basic" onclick="select(0)">
+                    <p><span>Basic</span></p>
+                    <input type="radio" name="ticket" value="Basic" id="basic" checked class="hidden">
+                </label>
+                <label class="col-3 " for="standard" onclick="select(1)">
+                    <p><span>Standard</span></p>
+                    <input type="radio" name="ticket" value="Standard" id="standard" class="hidden">
+                </label>
+                <label class="col-3 premium" for="premium" onclick="select(2)">
+                    <p><span>Premium</span></p>
+                    <input type="radio" name="ticket" value="Premium" id="premium" class="hidden">
+                </label>
+            </div>
+            <ul class="row g-38">
+                <li class="col-1">
+                    <span class="material-symbols-outlined bold">block</span>
+                    <p>광고제거</p>
+                    <label for="disableds" class="hidden">광고제거</label>
+                    <input type="checkbox" id="disableds" disabled>
+                </li>
+                <li class="col-1">
+                    <span class="material-symbols-outlined bold">person_heart</span>
+                    <p>맞춤추천</p>
+                    <label for="disableds" class="hidden">맞춤추천</label>
+                    <input type="checkbox" id="disableds" disabled>
+                </li>
+                <li class="col-1">
+                    <span class="material-symbols-outlined bold">video_library</span>
+                    <p>백그라운드 재생</p>
+                    <label for="disableds" class="hidden">백그라운드 재생</label>
+                    <input type="checkbox" id="disableds" disabled>
+                </li>
+                <li class="col-1">
+                    <span class="material-symbols-outlined bold">wifi_off</span>
+                    <p>오프라인 저장</p>
+                    <label for="disableds" class="hidden">오프라인 저장</label>
+                    <input type="checkbox" id="disableds" disabled>
+                </li>
+                <li class="col-1">
+                    <span class="material-symbols-outlined bold">mobile_sound</span>
+                    <p>고음질 스트리밍</p>
+                    <label for="disableds" class="hidden">고음질 스트리밍</label>
+                    <input type="checkbox" id="disableds" disabled>
+                </li>
+                <li class="col-1">
+                    <span class="material-symbols-outlined bold">stars_2</span>
+                    <p>AI 비서</p>
+                    <label for="disableds" class="hidden">AI 비서</label>
+                    <input type="checkbox" id="disableds" disabled>
+                </li>
+                <div class="col-1">
+                    <button type="button" class="pay-btn" onclick="TestBtn()">결제하기</button>
+                </div>
+            </ul>
+        </from>
+    </div>
+    <script src=" ../../js/logo.js"></script>
+    <script>
+        const row3 = document.querySelector(".container:nth-child(2) .row:nth-child(1)");
+        const spans = document.querySelectorAll(".container:nth-child(2) .row:nth-child(1) span");
+        const checkBoxs = document.querySelectorAll("input[type='checkbox']");
+        console.log(checkBoxs)
+
+        /* Basic Standard Premium 중 택1 클릭시 이벤트 함수 */
+        function select(i) {
+            spans.forEach(s => (s.style.color = "black"));
+            checkBoxs.forEach(cd => (cd.checked = false))
+            spans[i].style.color = "white";
+            const pos = ["6%", "40%", "74%"];
+            const checkboxList = [
+                [checkBoxs[0], checkBoxs[1]],
+                [checkBoxs[0], checkBoxs[1], checkBoxs[2], checkBoxs[3]],
+                [checkBoxs[0], checkBoxs[1], checkBoxs[2], checkBoxs[3], checkBoxs[4], checkBoxs[5]]
+            ]
+            row3.style.setProperty("--bx", pos[i]);
+            checkboxList[i].forEach(cd => (
+                cd.checked = true
+            ))
+        }
+        select(0)
+
+        const form = document.querySelector("#ticketForm");
+
+        /* Submit 데이터 출력 테스트 버튼 */
+        function TestBtn() {
+            const checked = form.querySelector("input[name='ticket']:checked");
+            const value = checked ? checked.value : "";
+            alert(value);
+        }
+
+
+
+
+
+
+    </script>
+</body>
+
+</html>

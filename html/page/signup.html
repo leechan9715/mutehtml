@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<!-- =========================
+  회원가입 페이지
+========================== -->
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 페이지</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../css/base/variables.css">
+    <link rel="stylesheet" href="../..//css/base/reset.css">
+    <link rel="stylesheet" href="../..//assets/fonts/fonts.css">
+    <link rel="stylesheet" href="../..//css/layout/grid.css">
+    <link rel="stylesheet" href="../../css/pages/signup.css">
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="container">
+            <div class="row g-9 title  ">
+                <div class="col-1 color-primary">
+                    <h2 class="font-24 fw-semibold">회원가입</h2>
+                </div>
+                <div class="col-1">
+                    <p class="color-black fw-medium op-50">1억명이 선택한 글로벌 음악 스트리밍 사이트, <br>
+                        뮤트에 지금 가입하세요</p>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <form action="#" method="post" class="row g-15">
+                <div class="col-1 login-form-field">
+                    <label class="login-form-label" for="login-id">
+                        <span class="hidden">닉네임</span>
+                        <span class="material-symbols-outlined color-primary-3 font-16 bold">
+                            person
+                        </span>
+                        <input class="input" id="login-id" name="id" type="text" placeholder="닉네임을 입력하세요" />
+                    </label>
+                    <button type="button" class="name-check">
+                        <p>중복 확인</p>
+                    </button>
+                </div>
+                <div class="col-1 login-form-field">
+                    <label class="login-form-label" for="login-id">
+                        <span class="hidden">이메일</span>
+                        <span class="material-symbols-outlined color-primary-3 font-16 bold">
+                            mail
+                        </span>
+                        <input class="input" id="login-id" name="id" type="text" placeholder="이메일을 입력하세요" />
+                    </label>
+                </div>
+                <div class="col-1 login-form-field">
+                    <label class="login-form-label" for="login-id">
+                        <span class="hidden">전화번호</span>
+                        <span class="material-symbols-outlined color-primary-3 font-16 bold">
+                            call
+                        </span>
+                        <input class="input" id="login-id" name="id" type="text" placeholder="전화번호를 입력하세요" />
+                    </label>
+                </div>
+                <div class="col-1 login-form-field">
+                    <label class="login-form-label" for="login-id">
+                        <span class="hidden">비밀번호</span>
+                        <span class="material-symbols-outlined color-primary-3 font-16 bold">
+                            lock
+                        </span>
+                        <input class="input" id="login-id" name="password" type="password" placeholder="비밀번호를 입력하세요" />
+                    </label>
+                </div>
+                <div class="col-1 login-form-field">
+                    <label class="login-form-label" for="login-id">
+                        <span class="hidden">이메일</span>
+                        <span class="material-symbols-outlined color-primary-3 font-16 bold">
+                            lock
+                        </span>
+                        <input class="input" id="login-id" name="password-check" type="password"
+                            placeholder="비밀번호를 다시 입력하세요" />
+                    </label>
+                </div>
+                <div class="col-1 terms-check">
+                    <input type="checkbox" id="terms" class="hidden">
+                    <label for="terms" class="color-primary-2 fw-medium font-12">뮤트에서 제공하는 서비스 약관에 동의합니다.</label>
+                </div>
+                <div class="col-1">
+                    <button type="button" class="login-btn" onclick="location.href='./welcome.html'">
+                        가입하기
+                    </button>
+                </div>
+                <div class="col-1 social-login">
+                    <p class="text-center">소셜 계정으로 가입하기</p>
+                </div>
+            </form>
+            <div class="row g-24 social-login-icon">
+                <img src="../../assets/images/icon/facebook.png" alt="facebook">
+                <img src="../../assets/images/icon/google.png" alt="google">
+                <img src="../../assets/images/icon/apple.png" alt="apple">
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

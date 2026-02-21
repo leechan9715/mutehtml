@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>날짜 선택기</title>
+
+    <link rel="stylesheet" href="./css/base/variables.css">
+    <link rel="stylesheet" href="./css/base/reset.css">
+    <link rel="stylesheet" href="./assets/fonts/fonts.css">
+
+    <style>
+        :root {
+            /* =========================
+         [UI 튜닝 핵심 변수]
+         1) --visible : 한 번에 보이는 줄 수(3/5/7...)
+         2) --item-h  : 한 칸(아이템) 높이
+         ※ 아래 wheel 높이는 자동 계산됨
+      ========================= */
+            --visible: 3;
+            /* ✅ 3줄/5줄/7줄 ... 바꾸면 PAD도 자동으로 따라감 */
+            --item-h: 51px;
+            /* ✅ 한 칸 높이(px) */
+
+            --wheel-h: calc(var(--item-h) * var(--visible));
+            /* 자동 */
+            --radius: 18px;
+        }
+
+        .wheel-form {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .wheel-card {
+            background: #fff;
+            border: 1px solid var(--color-primary-5);
+            border-radius: var(--radius);
+            box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+            overflow: hidden;
+        }
+
+        .wheel-grid {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            height: var(--wheel-h);
+        }
+
+        .wheel {
+            height: var(--wheel-h);
+            overflow-y: auto;
+
+            /* ✅ 가운데에 스냅(마지막 정렬용) */
+            scroll-snap-type: y mandatory;
+
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+
+            /* 위/아래 패딩은 PAD 아이템으로 처리하므로 padding은 0 */
+            padding: 0;
+
+            overscroll-behavior: contain;
+
+            /* ✅ 휠 영역에서 페이지 스크롤이 섞이지 않게(드래그 피커 조작 우선) */
+            touch-action: none;
+        }
+
+        .wheel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .wheel.is-dragging {
+            cursor: grabbing;
+        }
+
+        .wheel-item {
+            height: var(--item-h);
+            scroll-snap-align: center;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 24px;
+            padding: 0 20px;
+            color: rgba(0, 0, 0, .55);
+
+            transition: all 0.15s ease;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .wheel-item.is-selected {
+            color: rgba(0, 0, 0, .95);
+            font-weight: 400;
+            transform: scale(1.1);
+        }
+
+        /* ✅ 중앙 선택 영역 표시(가이드 라인) */
+        .wheel-highlight {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 50%;
+            height: var(--item-h);
+            transform: translateY(-50%);
+            border-top: 1px solid var(--color-primary-5);
+            border-bottom: 1px solid var(--color-primary-5);
+            pointer-events: none;
+            background: rgba(0, 0, 0, .02);
+        }
+
+        .preview {
+            margin: 0;
+            padding: 12px 14px;
+            border: 1px solid var(--color-primary-5);
+            border-radius: 14px;
+            background: #fafafa;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px 16px;
+            border: 0;
+            border-radius: 14px;
+            background: #111;
+            color: #fff;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        .btn:active {
+            transform: scale(.98);
+        }
+
+        .btn:hover {
+            background: #222;
+        }
+    </style>
+</head>
+
+<body>
+    <form class="wheel-form">
+        <div class="wheel-card">
+            <div class="wheel-grid">
+                <!-- 3개의 휠(년/월/일) -->
+                <div class="wheel" id="yearWheel"></div>
+                <div class="wheel" id="monthWheel"></div>
+                <div class="wheel" id="dayWheel"></div>
+
+                <!-- 가운데 선택 가이드 -->
+                <div class="wheel-highlight"></div>
+            </div>
+        </div>
+
+        <p id="preview" class="preview"></p>
+        <button type="button" class="btn" onclick="handleSubmit()">제출</button>
+    </form>
+
+    <script>
+        /* =========================================================
+           [DOM 참조]
+           - 각 휠 컨테이너(년/월/일)와 미리보기 영역을 DOM에서 가져옴
+        ========================================================= */
+        const yearWheel = document.getElementById('yearWheel');
+        const monthWheel = document.getElementById('monthWheel');
+        const dayWheel = document.getElementById('dayWheel');
+        const preview = document.getElementById('preview');
+
+        /* =========================================================
+           [상태 값(선택된 날짜)]
+           - selectedYear/Month/Day : 현재 최종 선택된 값(제출/미리보기용)
+           - prevYear/prevMonth     : "년/월 변경 감지"용(변경되면 day 목록 재생성)
+        ========================================================= */
+        const MAX_YEAR = new Date().getFullYear(); // 올해(년도 리스트 끝값)
+        let selectedYear, selectedMonth, selectedDay;
+        let prevYear = null;
+        let prevMonth = null;
+
+        /* =========================================================
+           [UI 관련 유틸]
+           - CSS 변수 --visible(보이는 줄 수)를 읽어서
+             위/아래에 몇 개의 빈 아이템(PAD)을 넣을지 자동 계산
+           - 예) visible=3 -> pad=1 / visible=5 -> pad=2
+        ========================================================= */
+        function getVisibleCount() {
+            const v = getComputedStyle(document.documentElement)
+                .getPropertyValue('--visible')
+                .trim();
+            const n = Number(v);
+            return Number.isFinite(n) && n > 0 ? n : 5; // 혹시 값이 이상하면 기본 5
+        }
+
+        function getPadCount() {
+            // visible=3 → pad=1, visible=5 → pad=2, visible=7 → pad=3 ...
+            return Math.floor(getVisibleCount() / 2);
+        }
+
+        function getItemHeight(wheel) {
+            // 현재 wheel에서 첫 아이템 높이를 읽어서 "1칸 이동" 등에 사용
+            const item = wheel.querySelector('.wheel-item');
+            return item ? item.getBoundingClientRect().height : 0;
+        }
+
+        /* =========================================================
+           [휠 생성(buildWheel)]
+           - values 배열을 wheel DOM으로 렌더링
+           - 위/아래 PAD 개수만큼 "빈 아이템"을 넣어서
+             첫/끝 항목도 가운데로 올 수 있게 만듦
+           - 실제 값은 dataset.value에 저장
+        ========================================================= */
+        function buildWheel(wheel, values, formatter = (v) => String(v)) {
+            wheel.innerHTML = '';
+
+            const PAD = getPadCount();
+
+            // 1) 위쪽 PAD(빈 아이템) 추가
+            for (let i = 0; i < PAD; i++) {
+                const pad = document.createElement('div');
+                pad.className = 'wheel-item wheel-pad';
+                pad.textContent = '';
+                pad.dataset.value = ''; // 빈 값(선택 제외)
+                wheel.appendChild(pad);
+            }
+
+            // 2) 실제 값 아이템 추가
+            for (const v of values) {
+                const div = document.createElement('div');
+                div.className = 'wheel-item';
+                div.textContent = formatter(v);
+                div.dataset.value = v; // 여기 저장된 값이 선택값으로 사용됨
+                wheel.appendChild(div);
+            }
+
+            // 3) 아래쪽 PAD(빈 아이템) 추가
+            for (let i = 0; i < PAD; i++) {
+                const pad = document.createElement('div');
+                pad.className = 'wheel-item wheel-pad';
+                pad.textContent = '';
+                pad.dataset.value = '';
+                wheel.appendChild(pad);
+            }
+        }
+
+        /* =========================================================
+           [scrollToValue]
+           - 특정 value를 가진 아이템을 "가운데"로 오게 scrollTop 계산
+           - 아이템 offsetTop - (휠 높이/2) + (아이템 높이/2)
+             => 아이템 중앙이 휠 중앙과 일치
+        ========================================================= */
+        function scrollToValue(wheel, value, smooth = false) {
+            const item = wheel.querySelector(`[data-value="${value}"]`);
+            if (!item) return;
+
+            const itemH = item.getBoundingClientRect().height;
+            const targetTop = item.offsetTop - wheel.clientHeight / 2 + itemH / 2;
+
+            wheel.scrollTo({ top: targetTop, behavior: smooth ? 'smooth' : 'auto' });
+        }
+
+        /* =========================================================
+           [getCenterValue]
+           - 현재 wheel의 "중앙"과 가장 가까운 item을 찾아
+             그 item의 dataset.value를 반환
+           - PAD 아이템은 dataset.value가 ''이므로
+             반환 단계에서 자연스럽게 null 처리됨
+        ========================================================= */
+        function getCenterValue(wheel) {
+            const items = wheel.querySelectorAll('.wheel-item');
+            if (!items.length) return null;
+
+            const itemH = items[0].getBoundingClientRect().height;
+            const center = wheel.scrollTop + wheel.clientHeight / 2; // wheel 중앙 위치
+
+            let closest = null;
+            let minDist = Infinity;
+
+            items.forEach((item) => {
+                const itemCenter = item.offsetTop + itemH / 2;
+                const dist = Math.abs(itemCenter - center);
+
+                if (dist < minDist) {
+                    minDist = dist;
+                    closest = item;
+                }
+            });
+
+            const val = closest?.dataset.value;
+            return val ? Number(val) : null;
+        }
+
+        /* =========================================================
+           [updateSelected]
+           - 중앙 값과 같은 item에 .is-selected 클래스 부여(하이라이트)
+           - 반환: 중앙 value(숫자) 또는 null
+        ========================================================= */
+        function updateSelected(wheel) {
+            const centerValue = getCenterValue(wheel);
+
+            wheel.querySelectorAll('.wheel-item').forEach((item) => {
+                const v = item.dataset.value ? Number(item.dataset.value) : null;
+                item.classList.toggle('is-selected', v === centerValue);
+            });
+
+            return centerValue;
+        }
+
+        /* =========================================================
+           [데이터 생성: 년/월/일]
+           - 년: 1920 ~ MAX_YEAR
+           - 월: 1 ~ 12
+           - 일: 선택된 year/month에 따라 lastDay 계산(윤년 포함)
+        ========================================================= */
+        function buildYears() {
+            const years = [];
+            for (let y = 1920; y <= MAX_YEAR; y++) years.push(y);
+            buildWheel(yearWheel, years);
+        }
+
+        function buildMonths() {
+            const months = Array.from({ length: 12 }, (_, i) => i + 1);
+            buildWheel(monthWheel, months);
+        }
+
+        function buildDays(year, month) {
+            const lastDay = new Date(year, month, 0).getDate();
+            const days = Array.from({ length: lastDay }, (_, i) => i + 1);
+            buildWheel(dayWheel, days);
+        }
+
+        /* =========================================================
+           [updateValues] ★핵심 로직★
+           - 중앙 선택값(년/월/일)을 읽어 selectedYear/Month/Day 업데이트
+           - year/month가 바뀌면:
+             1) dayWheel을 해당 달의 일수로 재생성(buildDays)
+             2) 기존 day가 lastDay보다 크면 lastDay로 보정
+             3) 보정한 day로 다시 중앙 정렬(scrollToValue)
+        ========================================================= */
+        function updateValues() {
+            // 1) 현재 중앙에 있는 값 읽기
+            const y = updateSelected(yearWheel);
+            const m = updateSelected(monthWheel);
+            const d = updateSelected(dayWheel);
+
+            // year/month가 아직 안 잡히면(초기 로딩 순간 등) 중단
+            if (!y || !m) return;
+
+            // 2) year/month 변경 감지 → dayWheel 재생성
+            if (y !== prevYear || m !== prevMonth) {
+                const lastDay = new Date(y, m, 0).getDate();
+
+                // (중요) dayWheel의 아이템 개수가 달라져야 하므로 재빌드
+                buildDays(y, m);
+
+                // 기존 day 유지(없으면 1), lastDay 초과 시 보정
+                const fixedDay = Math.min(d || 1, lastDay);
+
+                // 보정한 day를 중앙으로 맞추기
+                scrollToValue(dayWheel, fixedDay, false);
+                updateSelected(dayWheel);
+
+                // 다음 비교를 위해 prev 저장
+                prevYear = y;
+                prevMonth = m;
+            }
+
+            // 3) 최종 선택값 확정(재생성 후 day를 다시 읽음)
+            selectedYear = y;
+            selectedMonth = m;
+            selectedDay = updateSelected(dayWheel);
+
+            if (!selectedDay) return;
+
+            preview.textContent = `선택된 날짜: ${selectedYear}년 ${selectedMonth}월 ${selectedDay}일`;
+        }
+
+        /* =========================================================
+           [스크롤 이벤트 처리]
+           - 스크롤 중에는 하이라이트만 즉시 업데이트(updateSelected)
+           - 스크롤이 멈추면(100ms 후) updateValues로 최종 확정
+             -> 이때 year/month 변경에 따른 day 재생성도 일어남
+        ========================================================= */
+        const scrollTimeouts = new Map();
+
+        function handleScroll(wheel) {
+            // 스크롤 중 하이라이트 반영
+            updateSelected(wheel);
+
+            // 멈춘 뒤 한번만 확정(updateValues)
+            clearTimeout(scrollTimeouts.get(wheel));
+            scrollTimeouts.set(
+                wheel,
+                setTimeout(() => {
+                    updateValues();
+                }, 100)
+            );
+        }
+
+        /* =========================================================
+           [리사이즈 대응]
+           - 화면 회전/visible 변경 등으로 중앙 정렬이 틀어질 수 있으므로
+             선택값 유지하면서 전체 wheel을 다시 만들고 중앙 정렬
+        ========================================================= */
+        function rebuildAllKeepSelection() {
+            const y = selectedYear;
+            const m = selectedMonth;
+            const d = selectedDay;
+
+            buildYears();
+            buildMonths();
+            buildDays(y, m);
+
+            scrollToValue(yearWheel, y, false);
+            scrollToValue(monthWheel, m, false);
+            scrollToValue(dayWheel, d, false);
+
+            updateValues();
+        }
+
+        /* =========================================================
+           [옵션 1] PC 마우스 휠 1칸씩 이동
+           - 기본 wheel 스크롤은 중간값이 애매해질 수 있어서
+             "한 칸(itemH) 단위로" 스크롤을 강제함
+           - ⚠️ 옵션2(드래그)에서도 wheel을 막으면 충돌 가능
+        ========================================================= */
+        function attachWheelStepScroll(wheel) {
+            let locked = false;
+
+            wheel.addEventListener(
+                'wheel',
+                (e) => {
+                    e.preventDefault();
+
+                    if (locked) return;
+                    locked = true;
+
+                    const itemH = getItemHeight(wheel) || 51;
+                    const dir = Math.sign(e.deltaY);
+
+                    wheel.scrollBy({ top: dir * itemH, behavior: 'smooth' });
+
+                    setTimeout(() => {
+                        locked = false;
+                    }, 140);
+                },
+                { passive: false }
+            );
+        }
+
+        /* =========================================================
+           [옵션 2] 모바일 느낌 드래그 + 관성 + 스냅
+           - 드래그 중: scroll-snap 끔(부드럽게 이동)
+           - 손 뗌: 관성으로 더 굴린 뒤 마지막에 스냅 켜고 중앙 정렬
+           - 마지막에 updateValues 호출 → year/month 변경이면 day도 갱신
+        ========================================================= */
+        function attachDragPickerWithInertia(wheel) {
+            let isDown = false;
+            let startY = 0;
+            let startScrollTop = 0;
+
+            // 관성용 속도 계산 변수
+            let lastY = 0;
+            let lastT = 0;
+            let velocity = 0; // px/ms
+
+            let rafId = null;
+
+            function stopInertia() {
+                if (rafId) cancelAnimationFrame(rafId);
+                rafId = null;
+            }
+
+            function snapToNearest(smooth = true) {
+                // 마지막에만 스냅 켜서 "딱 중앙" 정렬
+                wheel.style.scrollSnapType = 'y mandatory';
+
+                const v = getCenterValue(wheel);
+                if (v != null) scrollToValue(wheel, v, smooth);
+
+                // 스냅 애니메이션 끝난 뒤 값 확정(년/월 바뀌면 day도 변경)
+                setTimeout(updateValues, 220);
+            }
+
+            function onDown(clientY) {
+                isDown = true;
+                wheel.classList.add('is-dragging');
+
+                stopInertia();
+
+                // 드래그/관성 중에는 스냅 끄기
+                wheel.style.scrollSnapType = 'none';
+
+                startY = clientY;
+                startScrollTop = wheel.scrollTop;
+
+                lastY = clientY;
+                lastT = performance.now();
+                velocity = 0;
+            }
+
+            function onMove(clientY) {
+                if (!isDown) return;
+
+                const dy = clientY - startY;
+                wheel.scrollTop = startScrollTop - dy;
+
+                // 속도 계산(관성)
+                const now = performance.now();
+                const dt = now - lastT;
+                if (dt > 0) {
+                    const dyStep = clientY - lastY;
+                    velocity = dyStep / dt;
+                    lastY = clientY;
+                    lastT = now;
+                }
+            }
+
+            function onUp() {
+                if (!isDown) return;
+                isDown = false;
+                wheel.classList.remove('is-dragging');
+
+                startInertia(-velocity);
+            }
+
+            function startInertia(v0) {
+                const friction = 0.0042; // 작게=더 오래 굴러감 / 크게=빨리 멈춤
+                let v = v0;
+
+                // 너무 느리면 관성 없이 바로 스냅
+                if (Math.abs(v) < 0.05) {
+                    snapToNearest(true);
+                    return;
+                }
+
+                let prev = performance.now();
+
+                const tick = (t) => {
+                    const dt = t - prev;
+                    prev = t;
+
+                    wheel.scrollTop += v * dt;
+
+                    const sign = Math.sign(v);
+                    const decel = friction * dt;
+                    v = v - sign * decel;
+
+                    // 속도가 0을 지나면 정지 처리
+                    if (Math.sign(v) !== sign) v = 0;
+
+                    if (Math.abs(v) > 0) {
+                        rafId = requestAnimationFrame(tick);
+                    } else {
+                        rafId = null;
+                        snapToNearest(true);
+                    }
+                };
+
+                rafId = requestAnimationFrame(tick);
+            }
+
+            // ----- 마우스 드래그 -----
+            wheel.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                onDown(e.clientY);
+            });
+
+            window.addEventListener('mousemove', (e) => onMove(e.clientY));
+            window.addEventListener('mouseup', onUp);
+
+            // ----- 터치 드래그 -----
+            wheel.addEventListener('touchstart', (e) => onDown(e.touches[0].clientY), { passive: true });
+            wheel.addEventListener('touchmove', (e) => onMove(e.touches[0].clientY), { passive: true });
+            wheel.addEventListener('touchend', () => onUp(), { passive: true });
+
+            // ✅ 드래그 전용이면 wheel(마우스휠)은 막음
+            wheel.addEventListener('wheel', (e) => e.preventDefault(), { passive: false });
+        }
+
+        /* =========================================================
+           [초기화]
+           - wheel DOM 생성
+           - 오늘 날짜를 기본 선택값으로 세팅
+           - dayWheel은 오늘의 year/month 기준으로 생성
+           - 이벤트 연결
+        ========================================================= */
+        function init() {
+            buildYears();
+            buildMonths();
+
+            // ✅ (중요) 먼저 오늘 날짜를 selected에 넣어야 함
+            const today = new Date();
+            selectedYear = today.getFullYear();
+            selectedMonth = today.getMonth() + 1;
+            selectedDay = today.getDate();
+
+            // ✅ (중요) prevYear/prevMonth는 selected 세팅 "이후"에 저장해야 정상
+            prevYear = selectedYear;
+            prevMonth = selectedMonth;
+
+            // 선택된 년/월 기준으로 day 생성
+            buildDays(selectedYear, selectedMonth);
+
+            // 초기 위치를 오늘 날짜로 중앙 정렬
+            scrollToValue(yearWheel, selectedYear, false);
+            scrollToValue(monthWheel, selectedMonth, false);
+            scrollToValue(dayWheel, selectedDay, false);
+
+            /* ======================================================
+               [입력 방식 선택]
+               - 드래그(옵션2) 중심이면 옵션1(휠 1칸 이동)은 빼는 게 충돌이 덜함
+               - PC 휠도 지원하려면 옵션1을 켜고, 옵션2의 wheel 막는 부분을 조절해야 함
+            ====================================================== */
+
+            // (선택) PC 마우스 휠 1칸 이동
+            attachWheelStepScroll(yearWheel);
+            attachWheelStepScroll(monthWheel);
+            attachWheelStepScroll(dayWheel);
+
+            // 드래그 + 관성 + 스냅
+            attachDragPickerWithInertia(yearWheel);
+            attachDragPickerWithInertia(monthWheel);
+            attachDragPickerWithInertia(dayWheel);
+
+            // 최초 미리보기 표시
+            setTimeout(() => updateValues(), 0);
+
+            // 스크롤 이벤트(드래그/관성/휠 모두 여기로 들어옴)
+            yearWheel.addEventListener('scroll', () => handleScroll(yearWheel), { passive: true });
+            monthWheel.addEventListener('scroll', () => handleScroll(monthWheel), { passive: true });
+            dayWheel.addEventListener('scroll', () => handleScroll(dayWheel), { passive: true });
+
+            // 리사이즈 시 중앙 정렬 유지
+            window.addEventListener('resize', rebuildAllKeepSelection);
+        }
+
+        /* =========================================================
+           [제출]
+           - 현재 selectedYear/Month/Day 값을 사용
+        ========================================================= */
+        function handleSubmit() {
+            alert(`선택값: ${selectedYear}년 ${selectedMonth}월 ${selectedDay}일`);
+        }
+
+        init();
+    </script>
+
+</body>
+
+</html>

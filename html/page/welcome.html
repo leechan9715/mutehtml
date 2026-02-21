@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<!-- =========================
+  Welcome 페이지
+========================== -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="../../css/base/variables.css">
+    <link rel="stylesheet" href="../../css/base/reset.css">
+    <link rel="stylesheet" href="../../assets/fonts/fonts.css">
+    <link rel="stylesheet" href="../../css/layout/grid.css">
+    <link rel="stylesheet" href="../../css/components/logo.css">
+    <link rel="stylesheet" href="../../css/pages/welcome.css">
+</head>
+
+<body>
+    <div id="wrap">
+        <div class="container">
+            <div class="row">
+                <div class="logo_box">
+                    <!-- 1행 -->
+                    <div class="face">
+                        <div class="block"></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div class="block"></div>
+                        <!-- 2행 -->
+                        <div class="block"></div>
+                        <div class="block eye"></div>
+                        <div></div>
+                        <div class="block eye"></div>
+                        <div class="block"></div>
+                        <!-- 3행 -->
+                        <div class="block"></div>
+                        <div></div>
+                        <div class="block mouth"></div>
+                        <div></div>
+                        <div class="block"></div>
+                    </div>
+                    <img src="../../assets/images/common/circle.png" alt="circle">
+                </div>
+                <div class="col-1">
+                    <h2 class="font-24 fw-800 welcome">
+                        WELCOME!
+                    </h2>
+
+                </div>
+                <div class="col-1">
+                    <p class="text-center font-16 fw-400 welcome-des">
+                        환영합니다, 00님!<br>
+                        뮤트는 사용자의 취향을 분석하고<br>
+                        그에 맞게 환경을 설계합니다.<br>
+                        보다 몰입하며 음악을 즐겨보세요.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <script src="../../js/logo.js"></script>
+        <script>
+            setTimeout(() => {
+                location.href = "./signup-info.html"
+            }, 10000);
+        </script>
+</body>
+
+</html>

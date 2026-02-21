@@ -1,0 +1,135 @@
+<!-------------------------------------
+ Vue에서 작업할 컴포넌트 입니다.
+ 필요시 Html , Css 에서만 작업시 코드 복사후 사용가능 수정 X
+---------------------------------------->
+
+<head>
+    <style>
+        .logo_box {
+            position: relative;
+            max-width: 120px;
+            width: 100%;
+            height: 120px;
+            margin-bottom: 24px;
+        }
+
+        .face {
+            position: absolute;
+            /* 3행 × 30px + gap */
+            display: grid;
+            grid-template-columns: repeat(5, 15px);
+            grid-template-rows: repeat(3, 15px);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            z-index: 1;
+        }
+
+        .lgo_box img {
+            position: absolute;
+            width: 120px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .block {
+            width: 10px;
+            height: 10px;
+            background: black;
+            z-index: 1;
+            transition: all 0.3s ease;
+            justify-self: center;
+            align-self: center;
+        }
+
+        .eye {
+            transition: transform 0.15s ease;
+        }
+
+        .mouth {
+            transition: all 0.3s ease;
+        }
+
+        /* 웃는 입 - 아래 둥글게 */
+        .mouth.smile {
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+        }
+
+        /* 입을 납작하게 (scaleY로 세로 줄임) */
+        .mouth.flat {
+            transform: scaleY(0.2) translateY(-5px);
+            border-radius: 0 !important;
+        }
+
+        /* 웃을 때 눈 */
+        .eye.smile-eye {
+            transform: scaleY(0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="logo_box">
+        <!-- 1행 -->
+        <div class="face">
+            <div class="block"></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div class="block"></div>
+            <!-- 2행 -->
+            <div class="block"></div>
+            <div class="block eye"></div>
+            <div></div>
+            <div class="block eye"></div>
+            <div class="block"></div>
+            <!-- 3행 -->
+            <div class="block"></div>
+            <div></div>
+            <div class="block mouth"></div>
+            <div></div>
+            <div class="block"></div>
+        </div>
+        <img src="./assets/images/common/circle.png" alt="circle">
+        <script>
+            const eyes = document.querySelectorAll(".eye");
+            const mouth = document.querySelector(".mouth");
+
+            // 눈 깜빡임
+            function blink() {
+                eyes.forEach((e) => (e.style.transform = "scaleY(0.1)"));
+                setTimeout(() => {
+                    eyes.forEach((e) => (e.style.transform = "scaleY(1)"));
+                }, 150);
+            }
+            setInterval(blink, 2000);
+
+            // 입 애니메이션: 납작해졌다가 웃는 입으로 변신 후 원래대로
+            function mouthAnimation() {
+                // 1. 납작한 직선 입
+                mouth.classList.add("flat");
+                mouth.classList.remove("smile");
+                eyes.forEach((e) => e.classList.remove("smile-eye"));
+
+                // 2. 0.3초 후 웃는 입
+                setTimeout(() => {
+                    mouth.classList.remove("flat");
+                    mouth.classList.add("smile");
+                    eyes.forEach((e) => e.classList.add("smile-eye"));
+                }, 300);
+
+                // 3. 1.5초 후 기본 입으로 복귀
+                setTimeout(() => {
+                    mouth.classList.remove("smile");
+                    eyes.forEach((e) => e.classList.remove("smile-eye"));
+                }, 1800);
+            }
+
+            setInterval(mouthAnimation, 5000);
+
+        </script>
+    </div>
+</body>

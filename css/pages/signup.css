@@ -1,0 +1,107 @@
+/* ================= 
+  회원가입 메인 Css파일
+=====================*/
+
+#wrap {
+  background-color: white;
+}
+h2 {
+  color: var(--color-primary);
+  font-weight: 500;
+  padding-top: 37px;
+}
+.title {
+  flex-direction: column;
+}
+.container:first-of-type {
+  margin-bottom: 43px;
+}
+
+.login-form-field {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  border-radius: 30px;
+  border: 1px solid #bbd1ff;
+  box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+  height: 56px;
+  padding: 0 19px;
+}
+.login-form-label {
+  display: flex;
+  gap: 25px;
+}
+
+.login-form-field > input {
+  font-size: 14px;
+  margin-left: 25px;
+  width: 50%;
+}
+.name-check {
+  display: flex;
+  border-radius: 35px;
+  border: 1px solid var(--color-surface);
+  font-size: var(--font-12);
+  padding: 7px 10px;
+  margin-left: auto;
+}
+.name-check p {
+  text-align: center;
+  color: var(--color-black);
+  opacity: 50%;
+}
+.terms-check {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 18px;
+  margin-bottom: 51px;
+}
+
+.terms-check input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--color-primary-2);
+  border-radius: 5px;
+  background: transparent;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+}
+
+.terms-check input[type="checkbox"]:checked {
+  background: var(--color-primary-2);
+  border-color: var(--color-primary-2);
+}
+
+.terms-check input[type="checkbox"]:checked::after {
+  content: "✓";
+  color: #fff;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 19px 0;
+  border-radius: 30px;
+  border: 1px solid #d3dcff;
+  box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+  font-size: var(--font-22);
+  font-weight: bold;
+  background: linear-gradient(
+    180deg,
+    rgba(111, 131, 247, 1) 0%,
+    rgba(74, 99, 248, 1) 100%
+  );
+  color: var(--color-white);
+  margin-bottom: 39px;
+}
+.social-login {
+  margin-bottom: 7px;
+}
+.social-login-icon {
+  justify-content: center;
+}

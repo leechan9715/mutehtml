@@ -1,0 +1,31 @@
+/* ================= 
+ Welcome 메인 Css파일
+=====================*/
+
+#wrap {
+  background: url(../../assets/images/bg/Bg02-big.png) no-repeat center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.col-1:first-of-type {
+  margin-bottom: 26px;
+}
+.welcome {
+  color: var(--color-primary-3);
+  letter-spacing: 4px;
+  margin-bottom: 36px;
+}
+.welcome-des {
+  line-height: 36px;
+}
+.logo_box {
+  margin-bottom: 24px;
+}

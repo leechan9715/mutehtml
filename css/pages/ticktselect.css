@@ -1,0 +1,107 @@
+.row:nth-child(1) {
+  margin-top: 23px;
+}
+.row:nth-child(2) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 66px;
+}
+.container:nth-child(2) .row:nth-child(1) {
+  position: relative;
+  text-align: center;
+  padding: 6px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(200, 218, 255, 1) 100%
+  );
+  border-radius: 20px;
+  border: 1px solid var(--color-primary-5);
+  --bx: 6%;
+  margin-top: 37px;
+}
+.container:nth-child(2) .row:nth-child(1)::before {
+  position: absolute;
+  content: "";
+  width: 20%;
+  height: 48px;
+  background: linear-gradient(
+    0deg,
+    rgba(11, 14, 25, 1) 0%,
+    rgba(29, 46, 109, 1) 100%
+  );
+  left: var(--bx);
+  top: 50%;
+  transform: translate(0, -50%);
+  border-radius: 12px;
+  transition: all 0.3s ease-in;
+}
+.container:nth-child(2) .row:nth-child(1) .col-3 {
+  cursor: pointer;
+}
+
+.container:nth-child(2) .row:nth-child(1) p {
+  font-weight: var(--fw-semibold);
+  padding: 13px 28px;
+}
+
+.container:nth-child(2) .row:nth-child(1) p span {
+  position: relative;
+  z-index: 1; /* 무조건 글자가 위 */
+  color: black;
+  transition: all 0.3s ease-in 0.25s;
+}
+.container:nth-child(2) .row:nth-child(2) {
+}
+.container:nth-child(2) .row:nth-child(2) .col-1 {
+  display: flex;
+  gap: 28px;
+  width: 100%;
+  padding: 0 18px;
+}
+.container:nth-child(2) .row:nth-child(2) .col-1 span {
+  font-size: var(--font-22);
+  color: var(--color-primary-9);
+}
+.container:nth-child(2) .row:nth-child(2) .col-1 p {
+  font-size: var(--font-16);
+  color: var(--color-black);
+  font-weight: var(--fw-semibold);
+}
+
+.container:nth-child(2) .row:nth-child(2) .col-1 input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  appearance: none;
+  background: url(../../assets/images/icon/check.svg) no-repeat;
+  background-size: 100% 100%;
+  margin-left: auto;
+}
+.container:nth-child(2)
+  .row:nth-child(2)
+  .col-1
+  input[type="checkbox"]:checked {
+  background: url(../../assets/images/icon/checked.svg) no-repeat;
+}
+
+/* 로그인버튼 */
+.pay-btn {
+  width: 100%;
+  padding: 19px 0;
+  border-radius: 30px;
+  border: 1px solid #d3dcff;
+  box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+  font-size: var(--font-22);
+  font-weight: bold;
+  background: linear-gradient(
+    180deg,
+    rgba(111, 131, 247, 1) 0%,
+    rgba(74, 99, 248, 1) 100%
+  );
+
+  color: #ffffff;
+}
