@@ -1,0 +1,56 @@
+#wrap {}
+
+.container {}
+
+.boundery-select {}
+
+.boundery-select .col-3 {
+    /* background-color: rgb(184, 184, 184); */
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin: 0 30px;
+    box-sizing: border-box;
+}
+
+.boundery-select .col-3 .column {
+    /* background-color: rgb(121, 121, 121); */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+
+.boundery-select .col-3 .column span {
+    font-size: var(--font-24);
+    font-weight: var(--fw-600);
+    margin-top: 20px;
+    color: var(--color-gray);
+}
+
+.icon-radio {
+    display: none;
+    /* 숨기기 */
+}
+
+.column svg,
+.column span {
+    color: var(--color-gray);
+    transition: 0.2s;
+}
+
+.column span {
+    display: inline-block;
+    /* border-bottom 안정 적용 */
+}
+
+.column input:checked+svg,
+.column input:checked+svg+span {
+    color: #6F83F7;
+    /* 체크 시 원하는 색상 */
+}
+
+.column input:checked~span {
+    border-bottom: 2px solid #6F83F7;
+    padding-bottom: 5px;
+}
