@@ -33,24 +33,16 @@
     /* 숨기기 */
 }
 
-.column svg,
-.column span {
+.boundery-select .column p {
+    font-size: var(--font-24);
+    font-weight: var(--fw-600);
+    margin-top: 20px;
     color: var(--color-gray);
     transition: 0.2s;
 }
 
-.column span {
-    display: inline-block;
-    /* border-bottom 안정 적용 */
-}
-
-.column input:checked+svg,
-.column input:checked+svg+span {
+.boundery-select .column input:checked~p {
     color: #6F83F7;
-    /* 체크 시 원하는 색상 */
-}
-
-.column input:checked~span {
     border-bottom: 2px solid #6F83F7;
     padding-bottom: 5px;
 }
