@@ -11,6 +11,15 @@
     font-weight: var(--fw-600);
 }
 
+.hot-chart a {
+    margin-left: auto;
+    transform: translateY(-5px);
+}
+
+.tab-group {
+    margin-left: 20px;
+}
+
 .tab-group input {
     display: none;
 }
@@ -20,6 +29,54 @@
     padding: 5px 20px;
     margin: 0 10px;
     border: 2px solid #BBD1FF;
-    border-radius: 30px;
+    border-radius: 40px;
+    background-color: rgb(255, 255, 255);
+    transition: all 0.3s;
+}
 
+.tab-group input:checked+label {
+    background: linear-gradient(180deg,
+            rgba(111, 131, 247, 1) 0%,
+            rgba(74, 99, 248, 1) 100%);
+    color: white;
+}
+
+/* -------위-콘텐트1---------구분----------아래-콘텐트2------ */
+
+.content2 {
+    width: 100%;
+    padding: 20px 0;
+}
+
+.content2 .chart {
+    width: 100%;
+}
+
+.content2 .chart .col-2 {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    /* background-color: aqua; */
+}
+
+.content2 .chart .col-2 img {
+    border-radius: 10px;
+    border: 2px solid #D3DCFF;
+}
+
+.content2 .chart .box {
+    margin-left: 20px;
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 2px solid #D3DCFF;
+    background: linear-gradient(180deg,
+            rgba(255, 255, 255, 1) 0%,
+            rgba(200, 218, 255, 1) 100%);
+}
+
+.content2 .chart .box p:last-of-type {
+    font-size: var(--font-24);
+    line-height: 45px;
+    cursor: pointer;
 }
