@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <main id="wrap">
+    <div id="wrap">
         <header class="container">
             <!-- 시간출력 부분 -->
             <div class="row">
@@ -50,91 +50,93 @@
             </div>
         </header>
 
-        <section class="container " id="lsc">
-            <div class="row content1"></div>
-        </section>
+        <main>
+            <section class="container " id="lsc">
+                <div class="row content1"></div>
+            </section>
 
-        <section class="container " id="nhj">
-            <div class="row content1">
+            <section class="container " id="nhj">
+                <div class="row content1">
 
-                <div class="col-3 hot-chart">
-                    <p>인기차트</p>
-                    <div class="tab-group">
-                        <input type="radio" id="korea" name="tab" checked>
-                        <label for="korea">국내</label>
+                    <div class="col-3 hot-chart">
+                        <p>인기차트</p>
+                        <div class="tab-group">
+                            <input type="radio" id="korea" name="tab" checked>
+                            <label for="korea">국내</label>
 
-                        <input type="radio" id="global" name="tab">
-                        <label for="global">해외</label>
+                            <input type="radio" id="global" name="tab">
+                            <label for="global">해외</label>
 
-                        <input type="radio" id="mine" name="tab">
-                        <label for="mine">나만</label>
+                            <input type="radio" id="mine" name="tab">
+                            <label for="mine">나만</label>
+                        </div>
+                        <a href="#">
+                            <img src="../../assets/images/icon/right-arrow.png" width="30" alt="right-arrow">
+                        </a>
                     </div>
-                    <a href="#">
-                        <img src="../../assets/images/icon/right-arrow.png" width="30" alt="right-arrow">
-                    </a>
+
                 </div>
+                <!-- 국내 -->
+                <div class="row content2">
+                    <div class="chart korea-chart">
+                        <a href="javascript:void(0)" class="col-2">
+                            <img src="../../assets/images/album_cover/1.png" alt="album_cover1" width="80
+                            ">
+                            <div class="box col-2">
+                                <p><strong>404(New Era)</strong><br>KiiiKiii (키키)</p>
+                                <p>⁝</p>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="col-2">
+                            <img src="../../assets/images/album_cover/2.jpg" alt="album_cover2" width="80
+                            ">
+                            <div class="box col-2">
+                                <p><strong>Good Goodbye</strong><br>화사 (HWASA)</p>
+                                <p>⁝</p>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="col-2">
+                            <img src="../../assets/images/album_cover/3.jpg" alt="album_cover3" width="80
+                            ">
+                            <div class="box col-2">
+                                <p><strong>BANG BANG</strong><br>IVE (아이브)</p>
+                                <p>⁝</p>
+                            </div>
+                        </a>
+                        <a href="javascript:void(0)" class="col-2">
+                            <img src="../../assets/images/album_cover/4.jpg" alt="album_cover4" width="80
+                            ">
+                            <div class="box col-2">
+                                <p><strong>Drowning</strong><br>WOODZ</p>
+                                <p>⁝</p>
+                            </div>
+                            <a>
+                    </div>
 
-            </div>
-            <!-- 국내 -->
-            <div class="row content2">
-                <div class="chart korea-chart">
-                    <a href="javascript:void(0)" class="col-2">
-                        <img src="../../assets/images/album_cover/1.png" alt="album_cover1" width="80
-                        ">
-                        <div class="box col-2">
-                            <p><strong>404(New Era)</strong><br>KiiiKiii (키키)</p>
-                            <p>⁝</p>
-                        </div>
-                    </a>
-                    <a href="javascript:void(0)" class="col-2">
-                        <img src="../../assets/images/album_cover/2.jpg" alt="album_cover2" width="80
-                        ">
-                        <div class="box col-2">
-                            <p><strong>Good Goodbye</strong><br>화사 (HWASA)</p>
-                            <p>⁝</p>
-                        </div>
-                    </a>
-                    <a href="javascript:void(0)" class="col-2">
-                        <img src="../../assets/images/album_cover/3.jpg" alt="album_cover3" width="80
-                        ">
-                        <div class="box col-2">
-                            <p><strong>BANG BANG</strong><br>IVE (아이브)</p>
-                            <p>⁝</p>
-                        </div>
-                    </a>
-                    <a href="javascript:void(0)" class="col-2">
-                        <img src="../../assets/images/album_cover/4.jpg" alt="album_cover4" width="80
-                        ">
-                        <div class="box col-2">
-                            <p><strong>Drowning</strong><br>WOODZ</p>
-                            <p>⁝</p>
-                        </div>
-                        <a>
+                    <!-- 해외 -->
+                    <div class="chart global-chart">
+                        해외 차트 내용
+                    </div>
+
+                    <!-- 나만 -->
+                    <div class="chart mine-chart">
+                        나만 차트 내용
+                    </div>
                 </div>
-
-                <!-- 해외 -->
-                <div class="chart global-chart">
-                    해외 차트 내용
+                <div class=""></div>
+            </section>
+            <section class="container " id="nhj">
+                <div class="col-1 mutead">
+                    <img src="../../assets/images/main/muteAd/mutead.png" alt="뮤트광고">
                 </div>
+            </section>
 
-                <!-- 나만 -->
-                <div class="chart mine-chart">
-                    나만 차트 내용
-                </div>
-            </div>
-            <div class=""></div>
-        </section>
-        <section class="container " id="nhj">
-            <div class="col-1 mutead">
-                <img src="../../assets/images/main/muteAd/mutead.png" alt="뮤트광고">
-            </div>
-        </section>
+            <section class="container " id="ijs">
+                <div class="row content1"></div>
+            </section>
 
-        <section class="container " id="ijs">
-            <div class="row content1"></div>
-        </section>
-
-    </main>
+        </main>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <script src=" ../../js/logo.js"></script>
     <script>
