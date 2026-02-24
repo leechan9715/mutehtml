@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="../../css/layout/header-2.css">
     <link rel="stylesheet" href="../../css/layout/footer.css">
     <link rel="stylesheet" href="./header-2-sample-page.css">
+    <link rel="stylesheet" href="../../css/pages/main-nhj.css">
 
 </head>
 
@@ -53,7 +54,49 @@
             <div class="row content1"></div>
         </section>
         <section class="container " id="nhj">
-            <div class="row content1"></div>
+
+            <div class="row content1">
+
+                <div class="col-3 hot-chart">
+                    <p>인기차트</p>
+                    <div class="tab-group">
+                        <input type="radio" id="korea" name="tab" checked>
+                        <label for="korea">국내</label>
+
+                        <input type="radio" id="global" name="tab">
+                        <label for="global">해외</label>
+
+                        <input type="radio" id="mine" name="tab">
+                        <label for="mine">나만</label>
+                    </div>
+                    <a href="#">
+                        <img src="../../assets/images/icon/right-arrow.png" width="30" alt="right-arrow">
+                    </a>
+                </div>
+
+            </div>
+            <div class="row content2">
+                <div class="chart korea-chart">
+                    <div class="col-2">
+                        <img src="" alt="">
+                        <div class="col-2">
+                            <p><strong>404(New Era)</strong><br>KiiiKiii (키키)</p>
+                            <p>⁝</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 해외 -->
+                <div class="chart global-chart">
+                    해외 차트 내용
+                </div>
+
+                <!-- 나만 -->
+                <div class="chart mine-chart">
+                    나만 차트 내용
+                </div>
+            </div>
+
         </section>
         <section class="container " id="ijs">
             <div class="row content1"></div>
@@ -152,6 +195,36 @@
         updateTime(); // 처음 1번 실행
         setInterval(updateTime, 1000); // 1초마다 갱신
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const radios = document.querySelectorAll('input[name="tab"]');
+            const charts = document.querySelectorAll('.chart');
+
+            function showChart(id) {
+                charts.forEach(chart => {
+                    chart.style.display = "none";
+                });
+
+                document.querySelector("." + id + "-chart").style.display = "block";
+            }
+
+            // 기본값 (처음 로딩 시)
+            const checked = document.querySelector('input[name="tab"]:checked');
+            if (checked) {
+                showChart(checked.id);
+            }
+
+            // 클릭 이벤트
+            radios.forEach(radio => {
+                radio.addEventListener("change", function () {
+                    showChart(this.id);
+                });
+            });
+
+        });
+    </script>
+
 </body>
 
 </html>
