@@ -80,3 +80,10 @@
     line-height: 45px;
     cursor: pointer;
 }
+
+/* -------위-콘텐트2---------구분----------아래-뮤트광고------ */
+
+.mutead img {
+    border-radius: 5px;
+    border: 1px solid #BBD1FF;
+}
