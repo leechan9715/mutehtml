@@ -1,0 +1,51 @@
+main > .singer_title {
+  height: 196px;
+  padding: 17px 26px 0 26px;
+  background:
+    linear-gradient(
+      270deg,
+      rgba(255, 255, 255, 0.52) 0%,
+      rgba(187, 209, 255, 0.52) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(248, 220, 255, 1) 0%,
+      rgba(211, 244, 254, 1) 100%
+    );
+  color: var(--color-black);
+}
+
+.singer_title h3 {
+  font-size: var(--font-20);
+  font-weight: var(--fw-semibold);
+}
+
+.singer_title .row {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 15px;
+}
+
+.singer_title .singer {
+  width: 98px;
+  height: 145px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 14px;
+}
+
+.singer_title .singer img {
+  width: 98px;
+  height: 98px;
+  border-radius: 50%;
+  border: 1px solid var(--color-primary-6);
+}
+
+.singer_title .singer p {
+  font-size: var(--font-12);
+  font-weight: var(--fw-semibold);
+}

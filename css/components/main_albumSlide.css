@@ -1,10 +1,14 @@
-h3 {
+.albumSlide {
+  padding: 27px 26px 0 26px;
+}
+
+.albumSlide h3 {
   font-size: var(--font-20);
   font-weight: var(--fw-semibold);
   margin-bottom: 20px;
 }
 
-.col5 {
+.albumSlide .col5 {
   position: relative;
   z-index: 100;
   width: 100%;
@@ -14,42 +18,42 @@ h3 {
   user-select: none;
 }
 
-.col5:active {
+.albumSlide .col5:active {
   cursor: grabbing;
 }
 
-img {
-  width: 200px;
-  height: 200px;
+.albumSlide img {
+  width: 180px;
+  height: 180px;
   transition: all 0.5s ease;
   pointer-events: none;
 }
 
-.col5 img:nth-child(1) {
+.albumSlide .col5 img:nth-child(1) {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 105;
 }
-.col5 img:nth-child(2) {
+.albumSlide .col5 img:nth-child(2) {
   position: absolute;
   top: 0;
   left: 100px;
   z-index: 104;
 }
-.col5 img:nth-child(3) {
+.albumSlide .col5 img:nth-child(3) {
   position: absolute;
   top: 0;
   left: 170px;
   z-index: 103;
 }
-.col5 img:nth-child(4) {
+.albumSlide .col5 img:nth-child(4) {
   position: absolute;
   top: 0;
   left: 210px;
   z-index: 102;
 }
-.col5 img:nth-child(5) {
+.albumSlide .col5 img:nth-child(5) {
   position: absolute;
   top: 0;
   left: 240px;

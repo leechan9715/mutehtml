@@ -1,217 +1,215 @@
-const container = document.querySelector(".col5");
-const images = Array.from(container.querySelectorAll("img"));
+/**
+ * main_albumSlide.js (FINAL - no snap bounce)
+ * - 메인은 교체 느낌 유지
+ * - 뒤 카드는 살짝 당겨짐
+ * - 마지막에 퉁 튕기는 현상 제거
+ * - 마우스 / 터치 / 키보드 지원
+ */
 
-// 각 이미지의 기본 위치 (CSS와 동일)
-const basePositions = [0, 100, 170, 210, 240];
-let currentIndex = 0;
+(() => {
+  const container = document.querySelector("#ijs-album .col5");
+  if (!container) return;
 
-// 드래그 중 임시 인덱스
-let tempIndex = 0;
+  const images = Array.from(container.querySelectorAll("img"));
 
-// 초기 위치 설정
-function updatePositions(instant = false, useIndex = null) {
-  const indexToUse = useIndex !== null ? useIndex : currentIndex;
+  const basePositions = [
+    { left: 0, opacity: 1, zIndex: 100, scale: 1 },
+    { left: 93.25, opacity: 1, zIndex: 90, scale: 1 },
+    { left: 186.5, opacity: 1, zIndex: 80, scale: 1 },
+    { left: 279.75, opacity: 1, zIndex: 70, scale: 1 },
+    { left: 373, opacity: 1, zIndex: 60, scale: 1 },
+  ];
 
-  images.forEach((img, i) => {
-    const posIndex = (i - indexToUse + images.length) % images.length;
+  const MOVE_THRESHOLD = 90;
+  const OFF_RIGHT = 635;
+  const OFF_LEFT = -220;
+  const PULL_STRENGTH = 0.35;
 
-    if (instant) {
-      img.style.transition = "none";
-    } else {
-      img.style.transition = "all 0.25s ease-out";
-    }
+  const TRANSITION =
+    "transform 2s cubic-bezier(0.22, 1, 0.36, 1), left 1s cubic-bezier(0.22, 1, 0.36, 1)";
 
-    const leftPos = basePositions[posIndex];
-    img.style.left = leftPos + "px";
-    img.style.zIndex = 105 - posIndex; // 105, 104, 103, 102, 101
+  let currentIndex = 0;
+  let isDragging = false;
+  let startX = 0;
+  let dx = 0;
+  let dragDir = 1;
+  let tempIndex = 0;
 
-    // 모든 이미지 보이게 설정
-    img.style.opacity = "1";
-    img.style.visibility = "visible";
-  });
-}
-
-// 드래그 변수
-let isDragging = false;
-let startX = 0;
-let currentX = 0;
-let accumulatedDistance = 0; // 누적 드래그 거리
-let lastMoveCount = 0; // 마지막으로 이동한 개수
-
-// 한 장 넘기는데 필요한 거리
-const MOVE_THRESHOLD = 80;
-
-// 마우스 다운
-container.addEventListener("mousedown", (e) => {
-  isDragging = true;
-  startX = e.pageX;
-  currentX = e.pageX;
-  accumulatedDistance = 0;
-  lastMoveCount = 0;
-  tempIndex = currentIndex;
-
-  container.style.cursor = "grabbing";
-  e.preventDefault();
-});
-
-// 마우스 무브 - 실시간 체크 및 이동
-container.addEventListener("mousemove", (e) => {
-  if (!isDragging) return;
-
-  const prevX = currentX;
-  currentX = e.pageX;
-  const deltaX = currentX - prevX;
-
-  // 누적 거리 계산
-  accumulatedDistance += deltaX;
-
-  console.log("누적 거리:", accumulatedDistance);
-
-  // 오른쪽으로 드래그 (이전으로) - 양수
-  if (accumulatedDistance > MOVE_THRESHOLD) {
-    console.log("← 한 장 이전으로!");
-
-    // 임시 인덱스 업데이트
-    tempIndex = (tempIndex - 1 + images.length) % images.length;
-    lastMoveCount++;
-
-    // 즉시 위치 변경
-    updatePositions(false, tempIndex);
-
-    // 누적 거리 리셋
-    accumulatedDistance = 0;
-  }
-  // 왼쪽으로 드래그 (다음으로) - 음수
-  else if (accumulatedDistance < -MOVE_THRESHOLD) {
-    console.log("한 장 다음으로 →");
-
-    // 임시 인덱스 업데이트
-    tempIndex = (tempIndex + 1) % images.length;
-    lastMoveCount++;
-
-    // 즉시 위치 변경
-    updatePositions(false, tempIndex);
-
-    // 누적 거리 리셋
-    accumulatedDistance = 0;
+  function clamp01(v) {
+    return Math.max(0, Math.min(1, v));
   }
 
-  e.preventDefault();
-});
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
 
-// 마우스 업 - 최종 인덱스 확정
-container.addEventListener("mouseup", (e) => {
-  if (!isDragging) return;
+  function updatePositions(
+    index = currentIndex,
+    progress = 0,
+    dir = 1,
+    animate = true,
+  ) {
+    const N = basePositions.length;
+    const t = clamp01(progress);
 
-  console.log(`총 ${lastMoveCount}개 이동 완료`);
+    images.forEach((img, i) => {
+      const posIndex = (i - index + images.length) % images.length;
 
-  // 최종 인덱스 확정
-  currentIndex = tempIndex;
+      img.style.transition = animate ? TRANSITION : "0.25s";
 
-  // 마지막 정리
-  updatePositions(false, currentIndex);
+      if (posIndex >= N) {
+        img.style.left = (dir === 1 ? OFF_RIGHT : OFF_LEFT) + "px";
+        img.style.transform = "scale(0.88)";
+        img.style.opacity = "0";
+        img.style.zIndex = "10";
+        return;
+      }
 
-  isDragging = false;
-  startX = 0;
-  currentX = 0;
-  accumulatedDistance = 0;
-  lastMoveCount = 0;
+      const cur = basePositions[posIndex];
+      const neighborIndex = dir === 1 ? posIndex - 1 : posIndex + 1;
+      const next = basePositions[(neighborIndex + N) % N];
+
+      // 메인 슬롯은 고정, 뒤만 살짝 당김
+      const tForThis = posIndex === 0 ? 0 : t * PULL_STRENGTH;
+
+      const left = lerp(cur.left, next.left, tForThis);
+      const opacity = lerp(cur.opacity, next.opacity, tForThis);
+      const scale = lerp(cur.scale ?? 1, next.scale ?? 1, tForThis);
+
+      img.style.left = left + "px";
+      img.style.opacity = opacity;
+      img.style.transform = `scale(${scale})`;
+      img.style.zIndex = cur.zIndex;
+    });
+  }
+
+  function applyStepsFromDx(dxValue) {
+    dragDir = dxValue < 0 ? 1 : -1;
+    const absDx = Math.abs(dxValue);
+    const steps = Math.floor(absDx / MOVE_THRESHOLD);
+    const progress = (absDx % MOVE_THRESHOLD) / MOVE_THRESHOLD;
+    return { steps, progress };
+  }
+
+  function computeTempIndex(baseIndex, steps, dir) {
+    const delta = dir === 1 ? steps : -steps;
+    return (baseIndex + delta + images.length) % images.length;
+  }
+
+  // 초기 스타일
   container.style.cursor = "grab";
-});
+  container.style.position = "relative";
+  container.style.height = "240px";
+  container.style.userSelect = "none";
 
-// 마우스가 컨테이너 밖으로 나갔을 때
-container.addEventListener("mouseleave", () => {
-  if (isDragging) {
-    console.log(`총 ${lastMoveCount}개 이동 완료 (밖으로)`);
+  images.forEach((img) => {
+    img.style.position = "absolute";
+    img.style.top = "0px"; // ✅ 추가: 위아래 튐 방지
+    img.style.left = "0px";
+    img.style.width = "180px";
+    img.style.height = "180px";
+    img.style.borderRadius = "20px";
+    img.style.cursor = "grab";
+    img.style.userSelect = "none";
+    img.style.transformOrigin = "center center";
+    img.draggable = false;
+    img.style.pointerEvents = "none";
+  });
 
-    // 최종 인덱스 확정
-    currentIndex = tempIndex;
+  updatePositions(currentIndex, 0, 1, false);
+  requestAnimationFrame(() => updatePositions(currentIndex, 0, 1, true));
 
-    updatePositions(false, currentIndex);
+  // ===== Mouse =====
+  container.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    startX = e.pageX;
+    dx = 0;
+    tempIndex = currentIndex;
+    container.style.cursor = "grabbing";
+    updatePositions(tempIndex, 0, 1, false);
+  });
 
-    isDragging = false;
-    startX = 0;
-    currentX = 0;
-    accumulatedDistance = 0;
-    lastMoveCount = 0;
+  window.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+
+    dx = e.pageX - startX;
+    const { steps, progress } = applyStepsFromDx(dx);
+    tempIndex = computeTempIndex(currentIndex, steps, dragDir);
+
+    updatePositions(tempIndex, progress, dragDir, false);
+  });
+
+  function finalizeDrag() {
+    const absDx = Math.abs(dx);
+    const steps = Math.floor(absDx / MOVE_THRESHOLD);
+    const progress = (absDx % MOVE_THRESHOLD) / MOVE_THRESHOLD;
+
+    const finalSteps = steps + (progress > 0.5 ? 1 : 0);
+    currentIndex = computeTempIndex(currentIndex, finalSteps, dragDir);
+
+    updatePositions(currentIndex, 0, dragDir, true);
+
     container.style.cursor = "grab";
-  }
-});
-
-// 터치 이벤트 (모바일)
-let touchStartX = 0;
-let touchCurrentX = 0;
-let touchPrevX = 0;
-let isTouching = false;
-
-container.addEventListener("touchstart", (e) => {
-  isTouching = true;
-  touchStartX = e.touches[0].pageX;
-  touchCurrentX = e.touches[0].pageX;
-  touchPrevX = e.touches[0].pageX;
-  accumulatedDistance = 0;
-  lastMoveCount = 0;
-  tempIndex = currentIndex;
-});
-
-container.addEventListener("touchmove", (e) => {
-  if (!isTouching) return;
-
-  touchPrevX = touchCurrentX;
-  touchCurrentX = e.touches[0].pageX;
-  const deltaX = touchCurrentX - touchPrevX;
-
-  accumulatedDistance += deltaX;
-
-  // 오른쪽으로 스와이프 (이전으로)
-  if (accumulatedDistance > MOVE_THRESHOLD) {
-    console.log("← 한 장 이전으로! (터치)");
-
-    tempIndex = (tempIndex - 1 + images.length) % images.length;
-    lastMoveCount++;
-    updatePositions(false, tempIndex);
-    accumulatedDistance = 0;
-  }
-  // 왼쪽으로 스와이프 (다음으로)
-  else if (accumulatedDistance < -MOVE_THRESHOLD) {
-    console.log("한 장 다음으로 → (터치)");
-
-    tempIndex = (tempIndex + 1) % images.length;
-    lastMoveCount++;
-    updatePositions(false, tempIndex);
-    accumulatedDistance = 0;
+    startX = 0;
+    dx = 0;
+    isDragging = false;
   }
 
-  e.preventDefault();
-});
+  window.addEventListener("mouseup", () => {
+    if (!isDragging) return;
+    finalizeDrag();
+  });
 
-container.addEventListener("touchend", () => {
-  if (!isTouching) return;
+  container.addEventListener("mouseleave", () => {
+    if (!isDragging) return;
+    finalizeDrag();
+  });
 
-  console.log(`총 ${lastMoveCount}개 이동 완료 (터치)`);
+  // ===== Touch =====
+  let touchStartX = 0;
+  let touchDx = 0;
+  let isTouching = false;
 
-  currentIndex = tempIndex;
-  updatePositions(false, currentIndex);
+  container.addEventListener("touchstart", (e) => {
+    isTouching = true;
+    touchStartX = e.touches[0].pageX;
+    touchDx = 0;
+    tempIndex = currentIndex;
+    updatePositions(tempIndex, 0, 1, false);
+  });
 
-  isTouching = false;
-  touchStartX = 0;
-  touchCurrentX = 0;
-  touchPrevX = 0;
-  accumulatedDistance = 0;
-  lastMoveCount = 0;
-});
+  container.addEventListener(
+    "touchmove",
+    (e) => {
+      if (!isTouching) return;
 
-// 키보드 방향키 지원
-document.addEventListener("keydown", (e) => {
-  if (e.key === "ArrowLeft") {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    updatePositions(false, currentIndex);
-  } else if (e.key === "ArrowRight") {
-    currentIndex = (currentIndex + 1) % images.length;
-    updatePositions(false, currentIndex);
-  }
-});
+      touchDx = e.touches[0].pageX - touchStartX;
+      const { steps, progress } = applyStepsFromDx(touchDx);
+      tempIndex = computeTempIndex(currentIndex, steps, dragDir);
 
-// 초기화
-container.style.cursor = "grab";
-updatePositions(true);
+      updatePositions(tempIndex, progress, dragDir, false);
+      e.preventDefault();
+    },
+    { passive: false },
+  );
+
+  container.addEventListener("touchend", () => {
+    if (!isTouching) return;
+    dx = touchDx;
+    finalizeDrag();
+    isTouching = false;
+    touchStartX = 0;
+    touchDx = 0;
+  });
+
+  // ===== Keyboard =====
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      updatePositions(currentIndex, 0, -1, true);
+    } else if (e.key === "ArrowRight") {
+      currentIndex = (currentIndex + 1) % images.length;
+      updatePositions(currentIndex, 0, 1, true);
+    }
+  });
+})();
