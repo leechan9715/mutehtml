@@ -1,12 +1,10 @@
 #wrap {
   padding: 0;
 }
+
 main {
   height: calc(100vh - 210px);
   overflow: hidden;
   overflow-y: auto;
   scrollbar-width: none;
-}
-main .row {
-  padding: 100px 0; /* 테스트용 css 삭제해도 됩니다. */
 }
