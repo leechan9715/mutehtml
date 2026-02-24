@@ -7,6 +7,6 @@ main {
   overflow-y: auto;
   scrollbar-width: none;
 }
-section.row {
+.row {
   padding: 100px 0; /* 테스트용 css 삭제해도 됩니다. */
 }

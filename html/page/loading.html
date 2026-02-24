@@ -45,12 +45,30 @@
                 </div>
                 <div class="col-1">
                     <h2 class="text-center fw-bold color-primary-3">LOADING...</h2>
-                    <p class="text-center fw-bold">뮤트가<span class="fw-semibold"> 홍길동</span>님을 위한 노래를 고르고 있습니다. 100%</p>
+                    <p class="text-center fw-bold">
+                        뮤트가<span class="fw-semibold"> 홍길동</span>님을 위한 노래를 고르고 있습니다.
+                        <span id="percent">0</span>%
+                    </p>
                 </div>
             </div>
         </div>
     </div>
     <script src="../../js/logo.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const percent = document.getElementById("percent");
+            let count = 0;
+
+            const loading = setInterval(() => {
+                count++;
+                percent.textContent = count;
+
+                if (count >= 100) {
+                    clearInterval(loading); // 100되면 멈춤
+                }
+            }, 30); // 숫자 올라가는 속도 (작을수록 빠름)
+        });
+    </script>
 </body>
 
 </html>

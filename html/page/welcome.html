@@ -64,6 +64,34 @@
             setTimeout(() => {
                 location.href = "./signup-info.html"
             }, 10000);
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const target = document.querySelector(".welcome-des");
+
+                // 줄 단위로 나누기
+                const lines = target.innerHTML.split("<br>");
+                target.innerHTML = "";
+
+                let lineIndex = 0;
+                let charIndex = 0;
+
+                function typeLine() {
+                    if (lineIndex < lines.length) {
+                        if (charIndex < lines[lineIndex].length) {
+                            target.innerHTML += lines[lineIndex][charIndex];
+                            charIndex++;
+                            setTimeout(typeLine, 40);
+                        } else {
+                            target.innerHTML += "<br>";
+                            lineIndex++;
+                            charIndex = 0;
+                            setTimeout(typeLine, 200); // 줄 바뀔 때 약간 텀
+                        }
+                    }
+                }
+
+                typeLine();
+            });
         </script>
 </body>
 
