@@ -1,0 +1,57 @@
+h3 {
+  font-size: var(--font-20);
+  font-weight: var(--fw-semibold);
+  margin-bottom: 20px;
+}
+
+.col5 {
+  position: relative;
+  z-index: 100;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+}
+
+.col5:active {
+  cursor: grabbing;
+}
+
+img {
+  width: 200px;
+  height: 200px;
+  transition: all 0.5s ease;
+  pointer-events: none;
+}
+
+.col5 img:nth-child(1) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 105;
+}
+.col5 img:nth-child(2) {
+  position: absolute;
+  top: 0;
+  left: 100px;
+  z-index: 104;
+}
+.col5 img:nth-child(3) {
+  position: absolute;
+  top: 0;
+  left: 170px;
+  z-index: 103;
+}
+.col5 img:nth-child(4) {
+  position: absolute;
+  top: 0;
+  left: 210px;
+  z-index: 102;
+}
+.col5 img:nth-child(5) {
+  position: absolute;
+  top: 0;
+  left: 240px;
+  z-index: 101;
+}

@@ -5,24 +5,39 @@ footer.container {
   padding: 0;
   transform: translateX(-50%);
 }
+
 footer .row {
   padding: 8px 40px;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 1) 0%,
-    rgba(200, 218, 255, 1) 100%
-  );
+  background: linear-gradient(180deg,
+      rgba(255, 255, 255, 1) 0%,
+      rgba(200, 218, 255, 1) 100%);
   border: 1px solid var(--color-primary-5);
   border-radius: 20px 20px 0 0;
 }
+
 footer .col-5 {
   text-align: center;
 }
-footer .col-5 span {
-  font-size: var(--font-25);
-  margin-bottom: 7px;
+
+footer .col-5 img {
+  width: 30px;
+  margin-bottom: 5px;
+}
+
+/* 기본 아이콘 색상 */
+svg {
+  color: #000000;
+  /* 기본 검정색 */
+  transition: color 0.2s;
+  /* 부드러운 색상 변경 */
+}
+
+/* 클릭하거나 활성화 되었을 때 */
+a:active svg,
+a:focus svg {
+  color: #6F83F7;
 }
 
 footer .col-5:nth-child(3) {
@@ -50,17 +65,17 @@ footer .face {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-
   z-index: 1;
 }
 
-footer .lgo_box img {
+footer .logo_box img {
   position: absolute;
   width: 120px;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
 footer .block {
   width: 8px;
   height: 8px;
