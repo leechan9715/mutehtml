@@ -1,3 +1,5 @@
+.container {}
+
 .boundery-select .col-3 {
     /* background-color: rgb(184, 184, 184); */
     padding-top: 30px;
@@ -97,7 +99,7 @@
 }
 
 .top-one .circlebox .circle {
-    width: 25vw;
+    width: 22vw;
     max-width: 500px;
     aspect-ratio: 1 / 1;
     background: linear-gradient(to bottom, #1D2E6D, #0B0E19);
@@ -118,7 +120,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 10px solid white;
+    border: 5px solid white;
 
 }
 
@@ -126,9 +128,9 @@
     position: absolute;
     z-index: 2;
     text-transform: uppercase;
-    font-size: 40px;
+    font-size: 36px;
     text-align: center;
-    line-height: 355px;
+    line-height: 350px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -161,13 +163,18 @@
 
 /* -----------위-섹션-3-------------구분선------------아래-섹션-4------------- */
 .chart-list {
-    background-color: #969696;
-    padding: 10px 20px;
+    padding: 30px 20px 0 20px;
+    /* background-color: #1D2E6D; */
 }
 
-.chart-list .chart-list {
+.chart-list .col-2 {
     width: 100%;
+    display: flex;
+    justify-content: space-between;
     padding: 20px 0;
+    font-weight: var(--fw-600);
+    font-size: var(--font-20);
+    text-transform: uppercase;
 }
 
 .chart-list .chart {
@@ -177,24 +184,52 @@
 .chart-list .chart .col-2 {
     width: 100%;
     display: flex;
-    justify-content: space-between;
     padding-bottom: 20px;
-    /* background-color: aqua; */
 }
 
 .chart-list .chart .col-2 img {
     border-radius: 10px;
-    border: 2px solid #D3DCFF;
+    border: 2px solid #ffffff;
+    box-shadow: 0px 2px 4px #58648d;
 }
 
-.chart-list .chart .box {
+.chart-list .chart .col-3 {
+    width: 100%;
+    display: flex;
+    padding: 20px 0;
     margin-left: 20px;
-    padding: 15px 20px;
-
 }
 
-.chart-list .chart .box p:last-of-type {
+.chart-list .chart .col-3 .upDown {
+    width: 30px;
+    text-align: center;
+    margin-right: 20px;
+    font-weight: var(--fw-600);
+
+    .up {
+        display: inline-block;
+        color: rgb(40, 176, 255);
+    }
+
+    .down {
+        display: inline-block;
+        color: rgb(255, 40, 40);
+    }
+}
+
+.chart-list .chart .col-3 .music-singer p:first-child {
+    font-size: var(--font-20);
+}
+
+.chart-list .chart .col-3 .music-singer p:last-child {
+    font-size: var(--font-16);
+    padding-top: 5px;
+    color: #737886;
+}
+
+.chart-list .chart .col-3>p {
+    margin-left: auto;
+    margin-right: 20px;
     font-size: var(--font-24);
-    line-height: 45px;
-    cursor: pointer;
+    align-self: center;
 }
