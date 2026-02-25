@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="../../css/layout/header-2.css">
     <link rel="stylesheet" href="../../css/layout/footer.css">
     <link rel="stylesheet" href="./header-2-sample-page.css">
+    <link rel="stylesheet" href="../../css/pages/chart.css">
 </head>
 
 <body>
@@ -47,39 +48,61 @@
             </div>
         </header>
         <main class="container">
-            <section class="row">
-                <div class="col-1">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. At sapiente eligendi consequatur
-                        suscipit nostrum officiis! Rem eaque quas repellendus excepturi porro ipsa, ea consequuntur
-                        enim. Asperiores tempora libero repellat magni.</p>
+            <section class="row boundery-select">
+                <div class="col-3">
+                    <label class="column">
+                        <input type="radio" class="icon-radio" name="select-type" checked />
+                        <img src="../../assets/images/icon/country.png"
+                            data-checked-src="../../assets/images/icon/country_checked.png"
+                            data-unchecked-src="../../assets/images/icon/country.png" width="90" alt="country">
+                        <p>국내</p>
+                    </label>
+                    <label class="column">
+                        <input type="radio" class="icon-radio" name="select-type" />
+                        <img src="../../assets/images/icon/globe.png"
+                            data-checked-src="../../assets/images/icon/globe_checked.png"
+                            data-unchecked-src="../../assets/images/icon/globe.png" width="90" alt="country">
+                        <p>해외</p>
+                    </label>
+                    <label class="column">
+                        <input type="radio" class="icon-radio" name="select-type" />
+                        <img src="../../assets/images/icon/heart.png"
+                            data-checked-src="../../assets/images/icon/heart_checked.png"
+                            data-unchecked-src="../../assets/images/icon/heart.png" width="90" alt="country">
+                        <p>나만</p>
+                    </label>
                 </div>
             </section>
-            <section class="row">
-                <div class="col-1">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. At sapiente eligendi consequatur
-                        suscipit nostrum officiis! Rem eaque quas repellendus excepturi porro ipsa, ea consequuntur
-                        enim. Asperiores tempora libero repellat magni.</p>
+            <section class="row time-select">
+                <div class="col-4">
+                    <input type="radio" id="daily" name="period" checked>
+                    <label for="daily">일간</label>
+
+                    <input type="radio" id="weekly" name="period">
+                    <label for="weekly">주간</label>
+
+                    <input type="radio" id="monthly" name="period">
+                    <label for="monthly">월간</label>
+
+                    <input type="radio" id="yearly" name="period">
+                    <label for="yearly">연간</label>
                 </div>
             </section>
-            <section class="row">
-                <div class="col-1">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. At sapiente eligendi consequatur
-                        suscipit nostrum officiis! Rem eaque quas repellendus excepturi porro ipsa, ea consequuntur
-                        enim. Asperiores tempora libero repellat magni.</p>
+            <section class="row top-one">
+                <div class="col-1 circlebox">
+                    <div class="circle"></div>
+                    <img src="../../assets/images/main/chart/golden.jfif" alt="">
+                    <p>best<br>song</p>
+                </div>
+                <div class="album-info">
+                    <p>Golden</p>
+                    <p>HUNTR/X</p>
                 </div>
             </section>
-            <section class="row">
-                <div class="col-1">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. At sapiente eligendi consequatur
-                        suscipit nostrum officiis! Rem eaque quas repellendus excepturi porro ipsa, ea consequuntur
-                        enim. Asperiores tempora libero repellat magni.</p>
-                </div>
-            </section>
-            <section class="row">
-                <div class="col-1">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. At sapiente eligendi consequatur
-                        suscipit nostrum officiis! Rem eaque quas repellendus excepturi porro ipsa, ea consequuntur
-                        enim. Asperiores tempora libero repellat magni.</p>
+            <section class="row chart-list">
+                <div class="">
+                    <p>Top 100</p>
+                    <a href="#">전체듣기 ▶</a>
                 </div>
             </section>
         </main>
@@ -173,6 +196,36 @@
 
         updateTime(); // 처음 1번 실행
         setInterval(updateTime, 1000); // 1초마다 갱신
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const columns = document.querySelectorAll(".boundery-select .column");
+
+            columns.forEach(column => {
+                const radio = column.querySelector("input[type='radio']");
+                const img = column.querySelector("img");
+
+                // 초기 상태 설정
+                if (radio.checked) {
+                    img.src = img.dataset.checkedSrc;
+                } else {
+                    img.src = img.dataset.uncheckedSrc;
+                }
+
+                // 클릭 이벤트
+                radio.addEventListener("change", () => {
+                    columns.forEach(c => {
+                        const r = c.querySelector("input[type='radio']");
+                        const i = c.querySelector("img");
+                        if (r.checked) {
+                            i.src = i.dataset.checkedSrc;
+                        } else {
+                            i.src = i.dataset.uncheckedSrc;
+                        }
+                    });
+                });
+            });
+        });
     </script>
 </body>
 
