@@ -160,5 +160,41 @@
 }
 
 /* -----------위-섹션-3-------------구분선------------아래-섹션-4------------- */
+.chart-list {
+    background-color: #969696;
+    padding: 10px 20px;
+}
 
-.chart-list
+.chart-list .chart-list {
+    width: 100%;
+    padding: 20px 0;
+}
+
+.chart-list .chart {
+    width: 100%;
+}
+
+.chart-list .chart .col-2 {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    /* background-color: aqua; */
+}
+
+.chart-list .chart .col-2 img {
+    border-radius: 10px;
+    border: 2px solid #D3DCFF;
+}
+
+.chart-list .chart .box {
+    margin-left: 20px;
+    padding: 15px 20px;
+
+}
+
+.chart-list .chart .box p:last-of-type {
+    font-size: var(--font-24);
+    line-height: 45px;
+    cursor: pointer;
+}
