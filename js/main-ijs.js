@@ -1,10 +1,45 @@
-/**
- * main_albumSlide.js (FINAL - no snap bounce)
- * - 메인은 교체 느낌 유지
- * - 뒤 카드는 살짝 당겨짐
- * - 마지막에 퉁 튕기는 현상 제거
- * - 마우스 / 터치 / 키보드 지원
- */
+/* ------------------- 쇼츠 ----------------------- */
+/* ------------------- 버튼 ----------------------- */
+document.querySelectorAll(".buttons").forEach((button) => {
+  const play = button.children[0];
+  const pause = button.children[1];
+
+  button.addEventListener("click", () => {
+    if (play.style.display !== "block") {
+      play.style.display = "block";
+      pause.style.display = "none";
+    } else {
+      play.style.display = "none";
+      pause.style.display = "block";
+    }
+  });
+});
+
+/* -----------------------스와이퍼------------------------- */
+
+/* ---------------------가수 스와이퍼----------------------- */
+const swiper1 = new Swiper(".ijs-swiper-1", {
+  slidesPerView: 4.5,
+  spaceBetween: 30,
+  centeredSlides: false,
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+});
+
+/* ---------------------쇼츠 스와이퍼------------------------ */
+const swiper2 = new Swiper(".ijs-swiper-2", {
+  slidesPerView: 3.2,
+  spaceBetween: 10,
+  centeredSlides: false,
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+});
+
+/* --------------- 앨범 슬라이드 ---------------- */
 
 (() => {
   const container = document.querySelector("#ijs-album .col5");
