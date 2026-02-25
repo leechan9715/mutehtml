@@ -1,4 +1,4 @@
-const swiper = new Swiper(".lsc-swiper-2", {
+const swiper1 = new Swiper(".lsc-swiper-2", {
   slidesPerView: 3.5,
   spaceBetween: 30,
   centeredSlides: false,
