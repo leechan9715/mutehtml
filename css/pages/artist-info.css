@@ -1,17 +1,16 @@
-.container {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(178, 208, 253, 0.29) 68.2692289352417%,
-      rgba(255, 255, 255, 0.46) 100%
-    ),
-    linear-gradient(to left, #ffffff, #ffffff);
+main {
+  width: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(178, 208, 253, 0.29) 68.2692289352417%,
+    rgba(255, 255, 255, 0.46) 100%
+  );
+  padding-bottom: 100px;
 }
 
 #wrap .top {
-  height: 40px;
-  padding: 0 12px 14px 12px;
+  padding: 14px 12px 14px 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -30,8 +29,7 @@
 }
 
 .artist_img img {
-  width: 339px;
-  height: 424px;
+  width: 100%;
   /* border: 1px solid var(--color-primary-8); */
   border-radius: 200px;
   box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
@@ -58,15 +56,8 @@
   font-weight: var(--fw-semibold);
 }
 
-.album-cover {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 15px;
-  padding-top: 13px;
-}
-
-.albums img {
-  width: 150px;
-  height: 150px;
+.artist-info-swiper {
+  width: 100%;
+  height: auto;
+  padding-top: 16px;
 }
