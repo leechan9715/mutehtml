@@ -163,18 +163,23 @@
 
 /* -----------위-섹션-3-------------구분선------------아래-섹션-4------------- */
 .chart-list {
-    padding: 30px 20px 0 20px;
-    /* background-color: #1D2E6D; */
+    padding: 0 20px;
+    margin-top: 30px;
+    border-top: 2px solid #D3DCFF;
 }
 
-.chart-list .col-2 {
+.chart-list>.col-2 {
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    padding: 20px 0;
+    padding: 40px 0;
     font-weight: var(--fw-600);
     font-size: var(--font-20);
     text-transform: uppercase;
+}
+
+.chart-list>.col-2>a {
+    margin-left: auto;
+    display: flex;
 }
 
 .chart-list .chart {
@@ -184,6 +189,7 @@
 .chart-list .chart .col-2 {
     width: 100%;
     display: flex;
+    align-items: center;
     padding-bottom: 20px;
 }
 
@@ -218,7 +224,7 @@
 }
 
 .chart-list .chart .col-3 .music-singer p:first-child {
-    font-size: var(--font-20);
+    font-size: var(--font-16);
 }
 
 .chart-list .chart .col-3 .music-singer p:last-child {
