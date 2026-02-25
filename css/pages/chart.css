@@ -104,6 +104,7 @@
     border-radius: 50%;
     top: 0;
     left: 0;
+    box-shadow: 0px 4px 10px #58648d;
 }
 
 .top-one .circlebox img {
@@ -155,5 +156,9 @@
 
 .top-one .album-info p:last-of-type {
     padding-top: 15px;
-    font-size: 30px;
+    font-size: 24px;
 }
+
+/* -----------위-섹션-3-------------구분선------------아래-섹션-4------------- */
+
+.chart-list
