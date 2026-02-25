@@ -1,14 +1,9 @@
 #wrap {
   padding: 0;
 }
-
 main {
   height: calc(100vh - 210px);
   overflow: hidden;
   overflow-y: auto;
   scrollbar-width: none;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> origin/main
