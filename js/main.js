@@ -11,8 +11,8 @@ function updateTime() {
 updateTime(); // 처음 1번 실행
 setInterval(updateTime, 1000); // 1초마다 갱신
 const swiper1 = new Swiper(".lsc-swiper-2", {
-  slidesPerView: 3.5,
-  spaceBetween: 30,
+  slidesPerView: 3.8,
+  spaceBetween: 15,
   centeredSlides: false,
   pagination: {
     el: ".swiper-pagination",
@@ -52,8 +52,8 @@ document.querySelectorAll(".buttons").forEach((button) => {
 
 /* ---------------------가수 스와이퍼----------------------- */
 const swiper3 = new Swiper(".ijs-swiper-1", {
-  slidesPerView: 4.5,
-  spaceBetween: 30,
+  slidesPerView: 3.5,
+  spaceBetween: 15,
   centeredSlides: false,
   pagination: {
     el: ".swiper-pagination",
@@ -163,7 +163,7 @@ const swiper4 = new Swiper(".ijs-swiper-2", {
 
   // ✅ 초기 스타일 (cursor 제거)
   container.style.position = "relative";
-  container.style.height = "240px";
+  container.style.height = "200px";
   container.style.userSelect = "none";
 
   images.forEach((img) => {
@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", function () {
       chart.style.display = "none";
     });
 
-    document.querySelector("." + id + "-chart").style.display = "block";
+    document.querySelector("." + id + "-chart").style.display = "flex";
   }
 
   // 기본값 (처음 로딩 시)
