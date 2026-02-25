@@ -9,7 +9,7 @@ main {
   padding-bottom: 100px;
 }
 
-#wrap .top {
+.top {
   padding: 14px 12px 14px 12px;
   display: flex;
   align-items: center;
