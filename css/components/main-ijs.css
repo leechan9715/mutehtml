@@ -1,16 +1,15 @@
 /* ----------- 앨범 슬라이드 ---------- */
-
-.albumSlide {
+#ijs.albumSlide {
   padding: 27px 26px 0 26px;
 }
 
-.albumSlide h3 {
+#ijs.albumSlide h3 {
   font-size: var(--font-20);
   font-weight: var(--fw-semibold);
   margin-bottom: 20px;
 }
 
-.albumSlide .col5 {
+#ijs.albumSlide .col5 {
   position: relative;
   z-index: 100;
   width: 100%;
@@ -20,42 +19,38 @@
   user-select: none;
 }
 
-.albumSlide .col5:active {
-  cursor: grabbing;
-}
-
-.albumSlide img {
+#ijs.albumSlide img {
   width: 180px;
   height: 180px;
   transition: all 0.5s ease;
   pointer-events: none;
 }
 
-.albumSlide .col5 img:nth-child(1) {
+#ijs.albumSlide .col5 img:nth-child(1) {
   position: absolute;
   top: 0;
   left: 0;
   z-index: 105;
 }
-.albumSlide .col5 img:nth-child(2) {
+#ijs.albumSlide .col5 img:nth-child(2) {
   position: absolute;
   top: 0;
   left: 100px;
   z-index: 104;
 }
-.albumSlide .col5 img:nth-child(3) {
+#ijs.albumSlide .col5 img:nth-child(3) {
   position: absolute;
   top: 0;
   left: 170px;
   z-index: 103;
 }
-.albumSlide .col5 img:nth-child(4) {
+#ijs.albumSlide .col5 img:nth-child(4) {
   position: absolute;
   top: 0;
   left: 210px;
   z-index: 102;
 }
-.albumSlide .col5 img:nth-child(5) {
+#ijs.albumSlide .col5 img:nth-child(5) {
   position: absolute;
   top: 0;
   left: 240px;
@@ -63,8 +58,7 @@
 }
 
 /* -------------- 좋아하는 가수 ---------------- */
-
-main > .singer_title {
+#ijs.singer_title {
   height: 196px;
   padding: 17px 26px 0 26px;
   background:
@@ -81,12 +75,12 @@ main > .singer_title {
   color: var(--color-black);
 }
 
-.singer_title h3 {
+#ijs.singer_title h3 {
   font-size: var(--font-20);
   font-weight: var(--fw-semibold);
 }
 
-.singer_title .row {
+#ijs.singer_title .row {
   height: 200px;
   display: flex;
   align-items: center;
@@ -94,7 +88,7 @@ main > .singer_title {
   gap: 15px;
 }
 
-.singer_title .singer {
+#ijs.singer_title .singer {
   width: 98px;
   height: 145px;
   display: flex;
@@ -104,31 +98,30 @@ main > .singer_title {
   margin-top: 14px;
 }
 
-.singer_title .singer img {
+#ijs.singer_title .singer img {
   width: 98px;
   height: 98px;
   border-radius: 50%;
   border: 1px solid var(--color-primary-6);
 }
 
-.singer_title .singer p {
+#ijs.singer_title .singer p {
   font-size: var(--font-12);
   font-weight: var(--fw-semibold);
 }
 
 /* -------------------- 쇼츠 --------------------- */
-
-main > .shorts_swiper {
+#ijs.shorts_swiper {
   height: 390px;
   margin-top: 100px;
 }
 
-main > .shorts_swiper h3 {
+#ijs.shorts_swiper h3 {
   font-size: var(--font-20);
   font-weight: var(--fw-semibold);
 }
 
-.shorts {
+#ijs.shorts_swiper .shorts {
   width: 160px;
   height: 284px;
   display: flex;
@@ -142,7 +135,7 @@ main > .shorts_swiper h3 {
   );
 }
 
-.information {
+#ijs.shorts_swiper .information {
   width: 100%;
   display: flex;
   align-items: center;
@@ -150,14 +143,14 @@ main > .shorts_swiper h3 {
   padding: 7px;
 }
 
-.information > img {
+#ijs.shorts_swiper .information > img {
   width: 30px;
   height: 30px;
   margin-right: 5px;
   border: 1px solid var(--color-primary-6);
 }
 
-.artist {
+#ijs.shorts_swiper .artist {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -165,34 +158,34 @@ main > .shorts_swiper h3 {
   margin-right: auto;
 }
 
-.artist p {
+#ijs.shorts_swiper .artist p {
   margin: 0;
   line-height: 1.1;
   color: #fff;
   font-weight: var(--fw-100);
 }
 
-.artist_song {
+#ijs.shorts_swiper .artist_song {
   font-size: var(--font-12);
 }
 
-.artist_name {
+#ijs.shorts_swiper .artist_name {
   font-size: var(--font-10);
 }
 
-.buttons {
+#ijs.shorts_swiper .buttons {
   width: 11px;
   height: 11px;
   position: relative;
 }
 
-.buttons img {
+#ijs.shorts_swiper .buttons img {
   position: absolute;
   top: 0;
   left: 0;
   cursor: pointer;
 }
 
-.buttons img:first-child {
+#ijs.shorts_swiper .buttons img:first-child {
   display: none;
 }

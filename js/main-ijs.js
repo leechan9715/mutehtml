@@ -42,17 +42,17 @@ const swiper2 = new Swiper(".ijs-swiper-2", {
 /* --------------- 앨범 슬라이드 ---------------- */
 
 (() => {
-  const container = document.querySelector("#ijs-album .col5");
+  const container = document.querySelector("#ijs.albumSlide .col5");
   if (!container) return;
 
   const images = Array.from(container.querySelectorAll("img"));
 
   const basePositions = [
-    { left: 0, opacity: 1, zIndex: 100, scale: 1 },
-    { left: 93.25, opacity: 1, zIndex: 90, scale: 1 },
-    { left: 186.5, opacity: 1, zIndex: 80, scale: 1 },
-    { left: 279.75, opacity: 1, zIndex: 70, scale: 1 },
-    { left: 373, opacity: 1, zIndex: 60, scale: 1 },
+    { left: 0, zIndex: 100 },
+    { left: 93.25, zIndex: 90 },
+    { left: 186.5, zIndex: 80 },
+    { left: 279.75, zIndex: 70 },
+    { left: 373, zIndex: 60 },
   ];
 
   const MOVE_THRESHOLD = 90;
@@ -60,8 +60,7 @@ const swiper2 = new Swiper(".ijs-swiper-2", {
   const OFF_LEFT = -220;
   const PULL_STRENGTH = 0.35;
 
-  const TRANSITION =
-    "transform 2s cubic-bezier(0.22, 1, 0.36, 1), left 1s cubic-bezier(0.22, 1, 0.36, 1)";
+  const TRANSITION = "left 1s cubic-bezier(0.22, 1, 0.36, 1)";
 
   let currentIndex = 0;
   let isDragging = false;
@@ -90,30 +89,28 @@ const swiper2 = new Swiper(".ijs-swiper-2", {
     images.forEach((img, i) => {
       const posIndex = (i - index + images.length) % images.length;
 
-      img.style.transition = animate ? TRANSITION : "0.25s";
+      img.style.transition = animate ? TRANSITION : "none";
 
       if (posIndex >= N) {
         img.style.left = (dir === 1 ? OFF_RIGHT : OFF_LEFT) + "px";
-        img.style.transform = "scale(0.88)";
-        img.style.opacity = "0";
         img.style.zIndex = "10";
         return;
       }
 
       const cur = basePositions[posIndex];
       const neighborIndex = dir === 1 ? posIndex - 1 : posIndex + 1;
-      const next = basePositions[(neighborIndex + N) % N];
 
-      // 메인 슬롯은 고정, 뒤만 살짝 당김
+      if (neighborIndex < 0 || neighborIndex >= N) {
+        img.style.left = cur.left + "px";
+        img.style.zIndex = cur.zIndex;
+        return;
+      }
+
+      const next = basePositions[neighborIndex];
       const tForThis = posIndex === 0 ? 0 : t * PULL_STRENGTH;
-
       const left = lerp(cur.left, next.left, tForThis);
-      const opacity = lerp(cur.opacity, next.opacity, tForThis);
-      const scale = lerp(cur.scale ?? 1, next.scale ?? 1, tForThis);
 
       img.style.left = left + "px";
-      img.style.opacity = opacity;
-      img.style.transform = `scale(${scale})`;
       img.style.zIndex = cur.zIndex;
     });
   }
@@ -131,20 +128,18 @@ const swiper2 = new Swiper(".ijs-swiper-2", {
     return (baseIndex + delta + images.length) % images.length;
   }
 
-  // 초기 스타일
-  container.style.cursor = "grab";
+  // ✅ 초기 스타일 (cursor 제거)
   container.style.position = "relative";
   container.style.height = "240px";
   container.style.userSelect = "none";
 
   images.forEach((img) => {
     img.style.position = "absolute";
-    img.style.top = "0px"; // ✅ 추가: 위아래 튐 방지
+    img.style.top = "0px";
     img.style.left = "0px";
     img.style.width = "180px";
     img.style.height = "180px";
     img.style.borderRadius = "20px";
-    img.style.cursor = "grab";
     img.style.userSelect = "none";
     img.style.transformOrigin = "center center";
     img.draggable = false;
@@ -154,13 +149,12 @@ const swiper2 = new Swiper(".ijs-swiper-2", {
   updatePositions(currentIndex, 0, 1, false);
   requestAnimationFrame(() => updatePositions(currentIndex, 0, 1, true));
 
-  // ===== Mouse =====
+  // ===== Mouse Only =====
   container.addEventListener("mousedown", (e) => {
     isDragging = true;
     startX = e.pageX;
     dx = 0;
     tempIndex = currentIndex;
-    container.style.cursor = "grabbing";
     updatePositions(tempIndex, 0, 1, false);
   });
 
@@ -175,16 +169,9 @@ const swiper2 = new Swiper(".ijs-swiper-2", {
   });
 
   function finalizeDrag() {
-    const absDx = Math.abs(dx);
-    const steps = Math.floor(absDx / MOVE_THRESHOLD);
-    const progress = (absDx % MOVE_THRESHOLD) / MOVE_THRESHOLD;
-
-    const finalSteps = steps + (progress > 0.5 ? 1 : 0);
-    currentIndex = computeTempIndex(currentIndex, finalSteps, dragDir);
-
+    currentIndex = tempIndex;
     updatePositions(currentIndex, 0, dragDir, true);
 
-    container.style.cursor = "grab";
     startX = 0;
     dx = 0;
     isDragging = false;
@@ -235,16 +222,5 @@ const swiper2 = new Swiper(".ijs-swiper-2", {
     isTouching = false;
     touchStartX = 0;
     touchDx = 0;
-  });
-
-  // ===== Keyboard =====
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      updatePositions(currentIndex, 0, -1, true);
-    } else if (e.key === "ArrowRight") {
-      currentIndex = (currentIndex + 1) % images.length;
-      updatePositions(currentIndex, 0, 1, true);
-    }
   });
 })();
