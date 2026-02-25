@@ -1,6 +1,6 @@
 .top-bar {
     height: 40px;
-    padding: 0 20px 14px 15px;
+    padding: 30px 20px 30px 15px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -11,4 +11,38 @@
     font-size: 30px;
 }
 
-.top-bar a:first-of-type {}
+.playlist-info {
+    margin: 20px 0;
+    padding: 20px 0;
+    text-align: center;
+    border: ;
+    background: linear-gradient(to bottom,
+            #ffffff 0%, #82ffe0 60%,
+            #ffffff 100%);
+    color: #0b1119;
+}
+
+.playlist-info .p-1 {
+    font-weight: 900;
+    letter-spacing: 2px;
+    font-size: 30px;
+
+}
+
+.playlist-info .p-2 {
+    width: 10vw;
+    margin: 20px auto;
+    line-height: 30px;
+    font-weight: 500;
+    font-size: 18px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: #ffffff;
+    border: 2px solid #0b1119;
+
+}
+
+.playlist-info img {
+    margin: 20px 0;
+    border-radius: 10px;
+}
