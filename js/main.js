@@ -1,3 +1,36 @@
+/* ------------------- 승찬 ------------- */
+const time = document.querySelector(".time");
+
+function updateTime() {
+  const now = new Date();
+  const hour = String(now.getHours()).padStart(2, "0");
+  const minute = String(now.getMinutes()).padStart(2, "0");
+  time.textContent = `${hour}:${minute}`;
+}
+
+updateTime(); // 처음 1번 실행
+setInterval(updateTime, 1000); // 1초마다 갱신
+const swiper1 = new Swiper(".lsc-swiper-2", {
+  slidesPerView: 3.5,
+  spaceBetween: 30,
+  centeredSlides: false,
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+});
+const swiper2 = new Swiper(".lsc-swiper-1", {
+  slidesPerView: 4.5,
+  spaceBetween: 15,
+  centeredSlides: false,
+  pagination: {
+    el: ".swiper-pagination",
+    clickable: true,
+  },
+});
+
+/* ---------------------- 진성 --------------------- */
+
 /* ------------------- 쇼츠 ----------------------- */
 /* ------------------- 버튼 ----------------------- */
 document.querySelectorAll(".buttons").forEach((button) => {
@@ -224,3 +257,35 @@ const swiper4 = new Swiper(".ijs-swiper-2", {
     touchDx = 0;
   });
 })();
+
+///
+/// 현주 메인 전용 js
+///
+document.addEventListener("DOMContentLoaded", function () {
+  const radios = document.querySelectorAll('input[name="tab"]');
+  const charts = document.querySelectorAll(".chart");
+
+  function showChart(id) {
+    charts.forEach((chart) => {
+      chart.style.display = "none";
+    });
+
+    document.querySelector("." + id + "-chart").style.display = "block";
+  }
+
+  // 기본값 (처음 로딩 시)
+  const checked = document.querySelector('input[name="tab"]:checked');
+  if (checked) {
+    showChart(checked.id);
+  }
+
+  // 클릭 이벤트
+  radios.forEach((radio) => {
+    radio.addEventListener("change", function () {
+      showChart(this.id);
+    });
+  });
+});
+///
+/// 현주 메인 전용 js
+///

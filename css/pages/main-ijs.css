@@ -1,3 +1,9 @@
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
 /* ----------- 앨범 슬라이드 ---------- */
 #ijs.albumSlide {
   padding: 27px 26px 0 26px;
