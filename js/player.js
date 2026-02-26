@@ -20,7 +20,7 @@ const nextButton = document.querySelector(
   'button img[alt="next-button"]',
 ).parentElement;
 
-// 🎨 색상 추출용
+// 색상 추출용
 const colorThief = new ColorThief();
 const albumImage = document.querySelector(".artist-img img");
 const artistImgBox = document.querySelector(".artist-img");
@@ -32,21 +32,17 @@ function formatTime(seconds) {
   return `${mins}:${secs.toString().padStart(2, "0")}`;
 }
 
-// ✅ 진행바 업데이트 (동그라미 따라오게!)
+// 진행바 업데이트
 function updateProgress() {
   const percentage = (currentTime / totalDuration) * 100;
   const clampedPercentage = Math.max(0, Math.min(100, percentage));
 
-  // ✅ 진행바 채우기
   progressFill.style.width = clampedPercentage + "%";
-
-  // ✅ 동그라미 위치 (left 사용)
   progressThumb.style.left = clampedPercentage + "%";
-
   currentTimeDisplay.textContent = formatTime(currentTime);
 }
 
-// ✅ 자동 재생 (requestAnimationFrame)
+// 자동 재생
 let lastTime = Date.now();
 
 function playMusic() {
@@ -107,7 +103,7 @@ nextButton.addEventListener("click", () => {
   updateProgress();
 });
 
-// ✅ 진행바 클릭/드래그 (최적화)
+// 진행바 클릭/드래그
 let rafId = null;
 
 progressBar.addEventListener("mousedown", (e) => {
@@ -136,7 +132,7 @@ window.addEventListener("mouseup", () => {
   }
 });
 
-// ✅ 터치 이벤트
+// 터치 이벤트
 progressBar.addEventListener("touchstart", (e) => {
   isDragging = true;
   progressBar.classList.add("dragging");
@@ -185,28 +181,80 @@ function updateTimeFromTouch(e) {
   updateProgress();
 }
 
-// 🎨 이미지에서 색상 추출 및 배경 적용
-albumImage.crossOrigin = "Anonymous";
+// 중앙 영역에서만 색상 추출
+function getColorFromCenter(img) {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
 
-if (albumImage.complete) {
-  const src = albumImage.src;
-  albumImage.src = "";
-  albumImage.src = src;
-  albumImage.addEventListener("load", applyBackgroundColor);
-} else {
-  albumImage.addEventListener("load", applyBackgroundColor);
+  canvas.width = img.naturalWidth || img.width;
+  canvas.height = img.naturalHeight || img.height;
+
+  ctx.drawImage(img, 0, 0);
+
+  const centerX = canvas.width / 2;
+  const centerY = canvas.height / 2;
+  const radius = Math.min(canvas.width, canvas.height) * 0.25;
+
+  const imageData = ctx.getImageData(
+    centerX - radius,
+    centerY - radius,
+    radius * 2,
+    radius * 2,
+  );
+
+  let r = 0,
+    g = 0,
+    b = 0,
+    count = 0;
+
+  for (let i = 0; i < imageData.data.length; i += 4) {
+    const red = imageData.data[i];
+    const green = imageData.data[i + 1];
+    const blue = imageData.data[i + 2];
+
+    const diff =
+      Math.abs(red - green) + Math.abs(green - blue) + Math.abs(blue - red);
+    if (diff > 30) {
+      r += red;
+      g += green;
+      b += blue;
+      count++;
+    }
+  }
+
+  if (count === 0) {
+    return [220, 180, 120];
+  }
+
+  return [Math.floor(r / count), Math.floor(g / count), Math.floor(b / count)];
 }
 
+// 색상 밝기 조절
+function adjustBrightness(r, g, b, factor) {
+  return [
+    Math.min(255, Math.floor(r * factor)),
+    Math.min(255, Math.floor(g * factor)),
+    Math.min(255, Math.floor(b * factor)),
+  ];
+}
+
+// 색상 적용
 function applyBackgroundColor() {
+  let r, g, b;
+
   try {
-    const dominantColor = colorThief.getColor(albumImage);
-    const [r, g, b] = dominantColor;
+    [r, g, b] = getColorFromCenter(albumImage);
+
+    const [topR, topG, topB] = adjustBrightness(r, g, b, 1.15);
+    const [midR, midG, midB] = adjustBrightness(r, g, b, 1.2);
+    const [bottomR, bottomG, bottomB] = adjustBrightness(r, g, b, 1.25);
 
     artistImgBox.style.background = `
       linear-gradient(
-        135deg,
-        rgba(${r}, ${g}, ${b}, 0.9) 0%,
-        rgba(${r}, ${g}, ${b}, 0.7) 100%
+        180deg,
+        rgba(${topR}, ${topG}, ${topB}, 0.8) 0%,
+        rgba(${midR}, ${midG}, ${midB}, 0.75) 50%,
+        rgba(${bottomR}, ${bottomG}, ${bottomB}, 0.8) 100%
       )
     `;
 
@@ -214,11 +262,34 @@ function applyBackgroundColor() {
       0 20px 60px rgba(${r}, ${g}, ${b}, 0.5),
       0 0 100px rgba(${r}, ${g}, ${b}, 0.3)
     `;
-
-    console.log("✅ 추출된 색상:", `rgb(${r}, ${g}, ${b})`);
   } catch (error) {
-    console.error("❌ 색상 추출 실패:", error);
+    r = 220;
+    g = 180;
+    b = 120;
+
+    artistImgBox.style.background = `
+      linear-gradient(
+        180deg,
+        rgba(253, 207, 138, 0.8) 0%,
+        rgba(264, 216, 144, 0.75) 50%,
+        rgba(275, 225, 150, 0.8) 100%
+      )
+    `;
+
+    artistImgBox.style.boxShadow = `
+      0 20px 60px rgba(${r}, ${g}, ${b}, 0.5),
+      0 0 100px rgba(${r}, ${g}, ${b}, 0.3)
+    `;
   }
+}
+
+// 이미지 로딩
+albumImage.crossOrigin = "Anonymous";
+
+if (albumImage.complete) {
+  applyBackgroundColor();
+} else {
+  albumImage.addEventListener("load", applyBackgroundColor);
 }
 
 // 초기 설정
