@@ -1,5 +1,7 @@
 header {
   background-color: transparent;
+  position: relative;
+  z-index: 9999;
 }
 
 header .row:nth-child(1) {
