@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미니플레이어</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="../../css/base/variables.css" />
+    <link rel="stylesheet" href="../../css/base/reset.css" />
+    <link rel="stylesheet" href="../..//assets/fonts/fonts.css" />
+    <link rel="stylesheet" href="../..//css/layout/grid.css" />
+    <link rel="stylesheet" href="../css/components/mini-player.css">
+</head>
+
+<body>
+    <div id="wrap">
+        <h3 class="hidden">미니 플레이어</h3>
+        <!-- ✅ 진행바 (최상단) -->
+        <div class="mini-progress-bar">
+            <div class="mini-progress-fill"></div>
+        </div>
+        <div class="container mini-player">
+            <div class="song-info">
+                <p class="song-name ">혜성</p>
+                <p class="singer-name">윤하(YOUNHA)</p>
+            </div>
+            <div class="icons">
+                <button class="cast-button">
+                    <img src="../assets/images/player/cast.png" alt="cast-button">
+                </button>
+                <button class="play-pause-button">
+                    <img src="../../assets/images/player/play.png" alt="play-button" class="play-pause-img" />
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    // ========================================
+    // mini-player.js (미니 플레이어 전용)
+    // ========================================
+
+    const miniProgressFill = document.querySelector(".mini-progress-fill");
+    const miniPlayPauseButton = document.querySelector(".play-pause-button");
+    const miniPlayPauseImg = document.querySelector(".play-pause-img");
+
+    let animationFrameId = null;
+
+    // ✅ localStorage에서 상태 가져오기
+    function getPlayerState() {
+        return {
+            currentTime: parseFloat(localStorage.getItem("currentTime")) || 0,
+            totalDuration: parseFloat(localStorage.getItem("totalDuration")) || 217,
+            isPlaying: localStorage.getItem("isPlaying") === "true",
+        };
+    }
+
+    // ✅ localStorage에 상태 저장
+    function savePlayerState(currentTime, isPlaying) {
+        localStorage.setItem("currentTime", currentTime);
+        localStorage.setItem("isPlaying", isPlaying);
+    }
+
+    // ✅ 진행바 업데이트
+    function updateMiniProgress() {
+        const state = getPlayerState();
+        const percentage = (state.currentTime / state.totalDuration) * 100;
+        miniProgressFill.style.width = Math.max(0, Math.min(100, percentage)) + "%";
+    }
+
+    // ✅ 자동 재생
+    let lastTime = Date.now();
+
+    function playMiniMusic() {
+        const state = getPlayerState();
+
+        if (state.isPlaying) {
+            const now = Date.now();
+            const delta = (now - lastTime) / 1000;
+            lastTime = now;
+
+            let newTime = state.currentTime + delta;
+
+            if (newTime >= state.totalDuration) {
+                newTime = state.totalDuration;
+                savePlayerState(newTime, false);
+                miniPlayPauseImg.src = "../../assets/images/player/play.png";
+                cancelAnimationFrame(animationFrameId);
+                return;
+            }
+
+            savePlayerState(newTime, true);
+            updateMiniProgress();
+        }
+
+        animationFrameId = requestAnimationFrame(playMiniMusic);
+    }
+
+    // ✅ 재생/일시정지
+    miniPlayPauseButton.addEventListener("click", () => {
+        const state = getPlayerState();
+        const newIsPlaying = !state.isPlaying;
+
+        savePlayerState(state.currentTime, newIsPlaying);
+
+        if (newIsPlaying) {
+            miniPlayPauseImg.src = "../../assets/images/player/pause.png";
+            lastTime = Date.now();
+            animationFrameId = requestAnimationFrame(playMiniMusic);
+        } else {
+            miniPlayPauseImg.src = "../../assets/images/player/play.png";
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+        }
+    });
+
+    // ✅ 초기화
+    const initialState = getPlayerState();
+    if (initialState.isPlaying) {
+        miniPlayPauseImg.src = "../../assets/images/player/pause.png";
+        lastTime = Date.now();
+        animationFrameId = requestAnimationFrame(playMiniMusic);
+    }
+    updateMiniProgress();
+
+    // ✅ 다른 탭에서 변경 감지
+    window.addEventListener("storage", (e) => {
+        if (e.key === "isPlaying" || e.key === "currentTime") {
+            updateMiniProgress();
+            const state = getPlayerState();
+            miniPlayPauseImg.src = state.isPlaying
+                ? "../../assets/images/player/pause.png"
+                : "../../assets/images/player/play.png";
+        }
+    });
+
+</script>
+
+</html>
