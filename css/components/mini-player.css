@@ -5,27 +5,45 @@
   flex-direction: row;
   padding: 15px 58px;
   border: 1px solid var(--color-primary-5);
-  border-radius: 10px;
+  border-radius: 0 0 10px 10px;
   background-color: var(--color-white);
 }
 
-/* ✅ 진행바 (최상단) */
+#wrap .mini-bar {
+  padding: 0;
+}
+/* ✅ 진행바 (박스 위에 붙음) */
 .mini-progress-bar {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 100%;
-  height: 2px;
-  background: rgba(0, 0, 0, 0.1);
-  z-index: 1;
+  height: 3px; /* ✅ 두께 */
+  background: var(--color-primary-5); /* ✅ 연한 배경 */
+  border-radius: 10px 10px 0 0; /* ✅ 위쪽만 둥글게 */
+  cursor: pointer;
+  z-index: 10;
 }
 
 .mini-progress-fill {
   height: 100%;
   width: 0%;
-  background: #4a90e2;
+  background: linear-gradient(90deg, #5b86e5, #36d1dc); /* ✅ 그라데이션 */
+  /* background: linear-gradient(
+    90deg,
+    var(--color-primary) 0%,
+    var(--color-primary-7) 100%
+  ); */
+  /*  background: linear-gradient(
+    90deg,
+    var(--color-primary-9) 0%,
+    var(--color-primary-4) 50%,
+    var(--color-primary-7) 100%
+  ); */
+  border-radius: 10px 0 0 0;
   transition: width 0.1s linear;
   will-change: width;
+  pointer-events: none;
 }
 
 /* 음악 / 가수명 */

@@ -17,9 +17,10 @@
 <body>
     <div id="wrap">
         <h3 class="hidden">미니 플레이어</h3>
-        <!-- ✅ 진행바 (최상단) -->
-        <div class="mini-progress-bar">
-            <div class="mini-progress-fill"></div>
+        <div class="container mini-bar">
+            <div class="mini-progress-bar">
+                <div class="mini-progress-fill"></div>
+            </div>
         </div>
         <div class="container mini-player">
             <div class="song-info">
@@ -41,103 +42,169 @@
 
 <script>
     // ========================================
-    // mini-player.js (미니 플레이어 전용)
+    // 설정
     // ========================================
-
-    const miniProgressFill = document.querySelector(".mini-progress-fill");
-    const miniPlayPauseButton = document.querySelector(".play-pause-button");
-    const miniPlayPauseImg = document.querySelector(".play-pause-img");
-
+    const totalDuration = 217; // 총 재생 시간 (초)
+    let currentTime = 0;
+    let isPlaying = false;
+    let isDragging = false;
     let animationFrameId = null;
 
-    // ✅ localStorage에서 상태 가져오기
-    function getPlayerState() {
-        return {
-            currentTime: parseFloat(localStorage.getItem("currentTime")) || 0,
-            totalDuration: parseFloat(localStorage.getItem("totalDuration")) || 217,
-            isPlaying: localStorage.getItem("isPlaying") === "true",
-        };
+    // ========================================
+    // DOM 요소
+    // ========================================
+    const miniProgressBar = document.querySelector(".mini-progress-bar");
+    const miniProgressFill = document.querySelector(".mini-progress-fill");
+    const playPauseButton = document.querySelector(".play-pause-button");
+    const playPauseImg = document.querySelector(".play-pause-img");
+
+    // ========================================
+    // 진행바 업데이트
+    // ========================================
+    function updateProgress() {
+        const percentage = (currentTime / totalDuration) * 100;
+        const clampedPercentage = Math.max(0, Math.min(100, percentage));
+        miniProgressFill.style.width = clampedPercentage + "%";
     }
 
-    // ✅ localStorage에 상태 저장
-    function savePlayerState(currentTime, isPlaying) {
-        localStorage.setItem("currentTime", currentTime);
-        localStorage.setItem("isPlaying", isPlaying);
-    }
-
-    // ✅ 진행바 업데이트
-    function updateMiniProgress() {
-        const state = getPlayerState();
-        const percentage = (state.currentTime / state.totalDuration) * 100;
-        miniProgressFill.style.width = Math.max(0, Math.min(100, percentage)) + "%";
-    }
-
-    // ✅ 자동 재생
+    // ========================================
+    // 자동 재생
+    // ========================================
     let lastTime = Date.now();
 
-    function playMiniMusic() {
-        const state = getPlayerState();
-
-        if (state.isPlaying) {
+    function playMusic() {
+        if (isPlaying && !isDragging) {
             const now = Date.now();
             const delta = (now - lastTime) / 1000;
             lastTime = now;
 
-            let newTime = state.currentTime + delta;
+            currentTime += delta;
 
-            if (newTime >= state.totalDuration) {
-                newTime = state.totalDuration;
-                savePlayerState(newTime, false);
-                miniPlayPauseImg.src = "../../assets/images/player/play.png";
+            if (currentTime >= totalDuration) {
+                currentTime = totalDuration;
+                isPlaying = false;
+                playPauseImg.src = "../../assets/images/player/play.png";
+                playPauseImg.alt = "play-button";
                 cancelAnimationFrame(animationFrameId);
                 return;
             }
 
-            savePlayerState(newTime, true);
-            updateMiniProgress();
+            updateProgress();
         }
 
-        animationFrameId = requestAnimationFrame(playMiniMusic);
+        if (isPlaying) {
+            animationFrameId = requestAnimationFrame(playMusic);
+        }
     }
 
-    // ✅ 재생/일시정지
-    miniPlayPauseButton.addEventListener("click", () => {
-        const state = getPlayerState();
-        const newIsPlaying = !state.isPlaying;
+    // ========================================
+    // 재생/일시정지
+    // ========================================
+    playPauseButton.addEventListener("click", () => {
+        isPlaying = !isPlaying;
 
-        savePlayerState(state.currentTime, newIsPlaying);
-
-        if (newIsPlaying) {
-            miniPlayPauseImg.src = "../../assets/images/player/pause.png";
+        if (isPlaying) {
+            playPauseImg.src = "../../assets/images/player/pause.png";
+            playPauseImg.alt = "pause-button";
             lastTime = Date.now();
-            animationFrameId = requestAnimationFrame(playMiniMusic);
+            animationFrameId = requestAnimationFrame(playMusic);
         } else {
-            miniPlayPauseImg.src = "../../assets/images/player/play.png";
+            playPauseImg.src = "../../assets/images/player/play.png";
+            playPauseImg.alt = "play-button";
             if (animationFrameId) {
                 cancelAnimationFrame(animationFrameId);
             }
         }
-    });
 
-    // ✅ 초기화
-    const initialState = getPlayerState();
-    if (initialState.isPlaying) {
-        miniPlayPauseImg.src = "../../assets/images/player/pause.png";
-        lastTime = Date.now();
-        animationFrameId = requestAnimationFrame(playMiniMusic);
-    }
-    updateMiniProgress();
-
-    // ✅ 다른 탭에서 변경 감지
-    window.addEventListener("storage", (e) => {
-        if (e.key === "isPlaying" || e.key === "currentTime") {
-            updateMiniProgress();
-            const state = getPlayerState();
-            miniPlayPauseImg.src = state.isPlaying
-                ? "../../assets/images/player/pause.png"
-                : "../../assets/images/player/play.png";
+        if (currentTime >= totalDuration) {
+            currentTime = 0;
         }
     });
+
+    // ========================================
+    // 진행바 클릭/드래그
+    // ========================================
+    let rafId = null;
+
+    miniProgressBar.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        miniProgressBar.classList.add("dragging");
+        updateTimeFromClick(e);
+    });
+
+    window.addEventListener("mousemove", (e) => {
+        if (isDragging) {
+            if (rafId) cancelAnimationFrame(rafId);
+            rafId = requestAnimationFrame(() => {
+                updateTimeFromClick(e);
+            });
+        }
+    });
+
+    window.addEventListener("mouseup", () => {
+        if (isDragging) {
+            isDragging = false;
+            miniProgressBar.classList.remove("dragging");
+            if (rafId) {
+                cancelAnimationFrame(rafId);
+                rafId = null;
+            }
+        }
+    });
+
+    // ✅ 터치 이벤트
+    miniProgressBar.addEventListener("touchstart", (e) => {
+        isDragging = true;
+        miniProgressBar.classList.add("dragging");
+        updateTimeFromTouch(e);
+    });
+
+    window.addEventListener(
+        "touchmove",
+        (e) => {
+            if (isDragging) {
+                e.preventDefault();
+                if (rafId) cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(() => {
+                    updateTimeFromTouch(e);
+                });
+            }
+        },
+        { passive: false }
+    );
+
+    window.addEventListener("touchend", () => {
+        if (isDragging) {
+            isDragging = false;
+            miniProgressBar.classList.remove("dragging");
+            if (rafId) {
+                cancelAnimationFrame(rafId);
+                rafId = null;
+            }
+        }
+    });
+
+    function updateTimeFromClick(e) {
+        const rect = miniProgressBar.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const percentage = Math.max(0, Math.min(1, clickX / rect.width));
+        currentTime = percentage * totalDuration;
+        updateProgress();
+    }
+
+    function updateTimeFromTouch(e) {
+        const rect = miniProgressBar.getBoundingClientRect();
+        const touch = e.touches[0];
+        const touchX = touch.clientX - rect.left;
+        const percentage = Math.max(0, Math.min(1, touchX / rect.width));
+        currentTime = percentage * totalDuration;
+        updateProgress();
+    }
+
+    // ========================================
+    // 초기 설정
+    // ========================================
+    updateProgress();
 
 </script>
 
