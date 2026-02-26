@@ -7,6 +7,7 @@
     <title>header-2-sample-page</title>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
     <link rel="stylesheet" href="../../css/base/variables.css">
     <link rel="stylesheet" href="../../css/base/reset.css">
     <link rel="stylesheet" href="../../assets/fonts/fonts.css">
@@ -14,6 +15,7 @@
     <link rel="stylesheet" href="../../css/layout/header-2.css">
     <link rel="stylesheet" href="../../css/layout/footer.css">
     <link rel="stylesheet" href="./header-2-sample-page.css">
+    <link rel="stylesheet" href="../../css/pages/search.css">
 </head>
 
 <body>
@@ -46,42 +48,128 @@
                 </div>
             </div>
         </header>
-        <main class="container">
-            <section class="row">
-                <div class="col-1">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. At sapiente eligendi consequatur
-                        suscipit nostrum officiis! Rem eaque quas repellendus excepturi porro ipsa, ea consequuntur
-                        enim. Asperiores tempora libero repellat magni.</p>
+        <main>
+            <!-- 컨텐츠 시작 -->
+            <section class="container" id="section1">
+                <div class="row">
+                    <div class="col-1">
+                        <h2 class="font-20 fw-medium">검색하기</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1">
+                        <input type="text" placeholder="가수 · 노래제목 · 가사를 적어주세요">
+                        <span class="material-symbols-outlined bold ">
+                            search
+                        </span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="swiper lsc-swiper-1">
+                        <div class="col-1 swiper-wrapper">
+                            <h3 class="swiper-slide">클래식</h3>
+                            <h3 class="swiper-slide">하드메탈</h3>
+                            <h3 class="swiper-slide">보사노바</h3>
+                            <h3 class="swiper-slide">팝</h3>
+                            <h3 class="swiper-slide">락</h3>
+                            <h3 class="swiper-slide">클래식</h3>
+                            <h3 class="swiper-slide">하드메탈</h3>
+                            <h3 class="swiper-slide">보사노바</h3>
+                            <h3 class="swiper-slide">팝</h3>
+                            <h3 class="swiper-slide">락</h3>
+                            <h3 class="swiper-slide">클래식</h3>
+                            <h3 class="swiper-slide">하드메탈</h3>
+                            <h3 class="swiper-slide">보사노바</h3>
+                            <h3 class="swiper-slide">팝</h3>
+                            <h3 class="swiper-slide">락</h3>
+                        </div>
+                    </div>
                 </div>
             </section>
-            <section class="row">
-                <div class="col-1">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. At sapiente eligendi consequatur
-                        suscipit nostrum officiis! Rem eaque quas repellendus excepturi porro ipsa, ea consequuntur
-                        enim. Asperiores tempora libero repellat magni.</p>
+            <section class="container" id="section2">
+                <div class="row">
+                    <div class="col-1">
+                        <h2>소장하고 싶은 앨범 아트워크 큐레이션</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <!-- 앨범 카드 슬라이드 -->
+                    <div class="swiper albumSwiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" data-title="Feel My Rhythm" data-artist="Red Velvet">
+                                <img src="../../assets/images/search/img-3.png" alt="Feel My Rhythm">
+                            </div>
+                            <div class="swiper-slide " data-title="Feel My Rhythm" data-artist="Red Velvet">
+                                <img src="../../assets/images/search/img-3.png" alt="Feel My Rhythm">
+                            </div>
+                            <div class="swiper-slide " data-title="Feel My Rhythm" data-artist="Red Velvet">
+                                <img src="../../assets/images/search/img-3.png" alt="Feel My Rhythm">
+                            </div>
+                            <div class="swiper-slide " data-title="Feel My Rhythm" data-artist="Red Velvet">
+                                <img src="../../assets/images/search/img-3.png" alt="Feel My Rhythm">
+                            </div>
+                            <div class="swiper-slide " data-title="Feel My Rhythm" data-artist="Red Velvet">
+                                <img src="../../assets/images/search/img-3.png" alt="Feel My Rhythm">
+                            </div>
+                            <div class="swiper-slide " data-title="Feel My Rhythm" data-artist="Red Velvet">
+                                <img src="../../assets/images/search/img-3.png" alt="Feel My Rhythm">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-1">
+                        <p>Feel My Rhythm</p>
+                        <p>Red Velvet</p>
+                    </div>
                 </div>
             </section>
-            <section class="row">
-                <div class="col-1">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. At sapiente eligendi consequatur
-                        suscipit nostrum officiis! Rem eaque quas repellendus excepturi porro ipsa, ea consequuntur
-                        enim. Asperiores tempora libero repellat magni.</p>
+            <section class="container" id="section3">
+                <div class="row">
+                    <div class="col-1">
+                        <h2 class="font-20 fw-medium">장르 탐색</h2>
+                    </div>
+                </div>
+                <div class="row g-20">
+                    <div class="col-2 pop">
+                        <p>Pop</p>
+                    </div>
+                    <div class="col-2 kpop">
+                        <p>Kpop</p>
+                    </div>
+                    <div class="col-2 hip-hop">
+                        <p>Hip-Hop</p>
+                    </div>
+                    <div class="col-2 rnb-soul">
+                        <p>R&B/Soul</p>
+                    </div>
+                    <div class="col-2 lo-fi">
+                        <p>Lo-fi</p>
+                    </div>
+                    <div class="col-2 city-pop">
+                        <p>City Pop</p>
+                    </div>
+                    <div class="col-2 indie">
+                        <p>Indie</p>
+                    </div>
+                    <div class="col-2 jazz">
+                        <p>Jazz</p>
+                    </div>
+                    <div class="col-2 classic">
+                        <p>Classic</p>
+                    </div>
+                    <div class="col-2 bossanova">
+                        <p>Bossanova</p>
+                    </div>
+                    <div class="col-2 edm">
+                        <p>EDM</p>
+                    </div>
+                    <div class="col-2 rock">
+                        <p>Rock</p>
+                    </div>
                 </div>
             </section>
-            <section class="row">
-                <div class="col-1">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. At sapiente eligendi consequatur
-                        suscipit nostrum officiis! Rem eaque quas repellendus excepturi porro ipsa, ea consequuntur
-                        enim. Asperiores tempora libero repellat magni.</p>
-                </div>
-            </section>
-            <section class="row">
-                <div class="col-1">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. At sapiente eligendi consequatur
-                        suscipit nostrum officiis! Rem eaque quas repellendus excepturi porro ipsa, ea consequuntur
-                        enim. Asperiores tempora libero repellat magni.</p>
-                </div>
-            </section>
+            <!-- 컨텐츠 끝 -->
         </main>
         <footer class="container">
             <div class="row g-5">
@@ -159,7 +247,9 @@
             </div>
         </footer>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
     <script src=" ../../js/logo.js"></script>
+    <script src="../../js/search.js"></script>
     <script>
         const time = document.querySelector(".time");
 
