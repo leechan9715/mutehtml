@@ -85,7 +85,8 @@ body {
 .row:nth-of-type(2) label > img {
   object-fit: cover;
   padding: 4px;
-  width: 100%;
+  border-radius: 50%;
+  width: 172px;
 }
 .row:nth-of-type(2) label .checked-heart {
   position: absolute;

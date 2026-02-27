@@ -1,5 +1,6 @@
 #section1 .row a > img {
   border-radius: 10px;
+  width: 80px;
 }
 
 #section1 .row .col-2 {

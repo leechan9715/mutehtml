@@ -43,6 +43,7 @@ main {
   gap: 11px;
 }
 #section1 .row:nth-child(2) a > img {
+  width: 80px;
   border-radius: 10px;
 }
 
