@@ -1,4 +1,8 @@
-.container {}
+html {
+    background-image: url(../../assets/images/bg/Bg02-big.png);
+    background-position: center;
+    background-size: cover;
+}
 
 .boundery-select .col-3 {
     /* background-color: rgb(184, 184, 184); */
@@ -11,7 +15,6 @@
 }
 
 .boundery-select .col-3 .column {
-    /* background-color: rgb(121, 121, 121); */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -37,12 +40,12 @@
     color: var(--color-gray);
     transition: 0.2s;
     padding-bottom: 10px;
-    border-bottom: 2px solid white;
+    border-bottom: 3px solid rgba(255, 255, 255, 0);
 }
 
 .boundery-select .column input:checked~p {
     color: #6F83F7;
-    border-bottom: 2px solid #6F83F7;
+    border-bottom: 3px solid #6F83F7;
 }
 
 /* -----------위-섹션-1-------------구분선------------아래-섹션-2------------- */
@@ -64,7 +67,7 @@
 
 .time-select .col-4 label {
     padding: 10px 20px;
-    font-size: var(--font-24);
+    font-size: var(--font-18);
     border-radius: 30px;
     border: 3px solid #D3DCFF;
     color: black;
@@ -99,7 +102,7 @@
 }
 
 .top-one .circlebox .circle {
-    width: 80%;
+    width: 70%;
     max-width: 500px;
     aspect-ratio: 1 / 1;
     background: linear-gradient(to bottom, #1D2E6D, #0B0E19);
@@ -110,7 +113,7 @@
 }
 
 .top-one .circlebox img {
-    width: 50%;
+    width: 40%;
     max-width: 500px;
     aspect-ratio: 1 / 1;
     background: linear-gradient(to bottom, #1D2E6D, #0B0E19);
@@ -125,7 +128,7 @@
 }
 
 .top-one .circlebox .cir-type {
-    height: 85%;
+    height: 80%;
     display: flex;
     justify-content: space-between;
     flex-flow: column wrap;
@@ -166,7 +169,7 @@
 .chart-list {
     padding: 0 20px;
     margin-top: 30px;
-    border-top: 2px solid #D3DCFF;
+    border-top: 3px solid #D3DCFF;
 }
 
 .chart-list>.col-2 {
