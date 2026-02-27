@@ -1,22 +1,18 @@
 /* ================= 
   로딩페이지 메인 Css파일
 =====================*/
-
-#wrap {
-  background: url(../../assets/images/bg/Bg02-big.png) no-repeat center;
-  background-size: cover;
+main {
+  height: calc(100vh - 50px);
   display: flex;
   align-items: center;
-  justify-content: center;
 }
-
-.row {
+main .row {
   justify-content: center;
   flex-direction: column;
   align-items: center;
 }
 
-.col-1 h2 {
+main .col-1 h2 {
   margin-bottom: 36px;
   letter-spacing: 4px;
 }
