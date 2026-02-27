@@ -27,14 +27,14 @@
   gap: 10px;
 }
 
+.modal-info img {
+  width: 60px;
+}
+
 .song-info {
   display: flex;
   flex-direction: column;
   gap: 2px;
-}
-
-.song-info img {
-  width: 60px;
 }
 
 .song-info p:nth-child(1) {
