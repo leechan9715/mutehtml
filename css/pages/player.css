@@ -95,7 +95,7 @@ main {
   top: 0;
   height: 100%;
   width: 0%;
-  background: #4a90e2;
+  background: var(--color-primary-4);
   border-radius: 1px;
   /* ✅ transition 제거 (JavaScript에서 제어) */
   pointer-events: none;
@@ -109,7 +109,7 @@ main {
   width: 14px;
   height: 14px;
   background: white;
-  border: 2px solid #4a90e2;
+  border: 2px solid var(--color-primary-4);
   border-radius: 50%;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   cursor: pointer;
@@ -135,7 +135,7 @@ main {
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  color: #666;
+  color: var(--color-black);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   padding-top: 12px;
 }
