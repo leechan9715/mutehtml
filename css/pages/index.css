@@ -15,16 +15,12 @@
    - 화면 전체를 가운데 정렬
    - 배경 이미지는 cover로 꽉 채움
 ========================================================= */
+
 #splash {
   display: flex;
   align-items: center; /* 세로 중앙 */
   justify-content: center; /* 가로 중앙 */
   min-height: 100dvh; /* 화면 높이만큼 */
-  width: 100vw; /* 화면 너비만큼 */
-  background: url(../../assets/images/splash_bg/splash_bg_big.png) no-repeat
-    center;
-  background-size: cover;
-  padding: 25px 0;
 }
 
 /* =========================================================
@@ -155,7 +151,7 @@
     180deg,
     rgba(255, 255, 255, 1) 23.076923191547394%
   );
-  border-radius: 20px 20px 0 0;
+  border-radius: 20px;
   box-shadow: 0px -2px 4px 0px rgba(211, 220, 255, 1);
   transition:
     max-height 1s ease-in-out 2s,

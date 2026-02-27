@@ -180,11 +180,15 @@
   - 내부 요소들을 세로로 쌓는 구조
 ========================================================= */
 #wrap {
-  width: 100%;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   padding: 0;
+  max-width: 500px;
+  margin: 0 auto;
+  /* background: url(../../assets/images/splash_bg/splash-bg-10.png) no-repeat
+    center;
+  background-size: cover;
+  background-attachment: fixed; */
+  background-color: white;
 }
 
 /* =========================================================

@@ -2,9 +2,6 @@
   회원가입 메인 Css파일
 =====================*/
 
-#wrap {
-  background-color: white;
-}
 h2 {
   color: var(--color-primary);
   font-weight: 500;

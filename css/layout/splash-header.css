@@ -1,6 +1,9 @@
 #wrap {
+  background: url(../../assets/images/splash_bg/splash-bg-10.png) no-repeat;
+  background-size: cover;
   padding: 0;
 }
+
 header {
   background-color: rgba(0, 0, 0, 0);
   position: relative;

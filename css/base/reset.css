@@ -18,6 +18,7 @@
 html,
 body {
   overscroll-behavior: none; /* 위아래 바운스 방지(지원되는 곳) */
+  background-color: white;
 }
 
 .hidden {

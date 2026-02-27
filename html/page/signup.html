@@ -14,11 +14,32 @@
     <link rel="stylesheet" href="../..//css/base/reset.css">
     <link rel="stylesheet" href="../..//assets/fonts/fonts.css">
     <link rel="stylesheet" href="../..//css/layout/grid.css">
+    <link rel="stylesheet" href="../../css/layout/splash-header.css">
     <link rel="stylesheet" href="../../css/pages/signup.css">
+
 </head>
 
 <body>
     <div id="wrap">
+        <header class="container">
+            <!-- 시간출력 부분 -->
+            <div class="row">
+                <div class="col-2">
+                    <p class="time"></p>
+                </div>
+                <div class="col-2">
+                    <span class="material-symbols-outlined">
+                        android_cell_4_bar
+                    </span>
+                    <span class="material-symbols-outlined">
+                        wifi
+                    </span>
+                    <span class="material-symbols-outlined">
+                        battery_android_frame_full
+                    </span>
+                </div>
+            </div>
+        </header>
         <div class="container">
             <div class="row g-9 title  ">
                 <div class="col-1 color-primary">
@@ -101,6 +122,7 @@
             </div>
         </div>
     </div>
+    <script src="/js/header.js"></script>
 </body>
 
 </html>

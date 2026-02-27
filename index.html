@@ -10,89 +10,117 @@
     <link rel="stylesheet" href="./css/base/reset.css">
     <link rel="stylesheet" href="./assets/fonts/fonts.css">
     <link rel="stylesheet" href="./css/layout/grid.css">
+    <link rel="stylesheet" href="../../css/layout/header.css">
     <link rel="stylesheet" href="./css/components/logo.css">
+    <link rel="stylesheet" href="./css/layout/splash-header.css">
     <link rel="stylesheet" href="./css/pages/index.css">
-
     <title>Document</title>
-
 </head>
 
 <body>
-
-    <section id="splash">
-        <div class="container">
-            <div class="logo-1 is-load"">
-                <img src=" ./assets/images/common/logo.png" alt="Logo_1" />
-        </div>
-        <div class="logo-2 is-load">
+    <div id="wrap">
+        <header class="container">
+            <!-- 시간출력 부분 -->
             <div class="row">
-                <!-- <img class="logo-2-img is-load" src="./assets/images/common/logo_2.png" alt="Logo_2" /> -->
-                <!-- 로고 -->
-                <div class="logo_box is-load">
-                    <!-- 1행 -->
-                    <div class="face">
-                        <div class="block"></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div class="block"></div>
-                        <!-- 2행 -->
-                        <div class="block"></div>
-                        <div class="block eye"></div>
-                        <div></div>
-                        <div class="block eye"></div>
-                        <div class="block"></div>
-                        <!-- 3행 -->
-                        <div class="block"></div>
-                        <div></div>
-                        <div class="block mouth"></div>
-                        <div></div>
-                        <div class="block"></div>
-                    </div>
-                    <img src="./assets/images/common/circle.png" alt="">
+                <div class="col-2">
+                    <p class="time"></p>
                 </div>
-                <img class="logo-mute-img is-load" src="./assets/images/common/logo.png" alt="Logo_1" />
-                <p class="tagline is-load">나만의 고요한 가상의 공간</p>
-                <form action="#" method="post" name="login-form" class="login-form is-load">
-                    <div class="login-form-field">
-                        <label class="login-form-label" for="login-id">
-                            <span class="hidden">이메일</span>
-                            <span class="material-symbols-outlined color-primary-3 font-18 bold">
-                                mail
-                            </span>
-                            <input class="input" id="login-id" name="id" type="text" placeholder="이메일을 입력하세요." />
-                        </label>
-                    </div>
-                    <div class="login-form-field">
-                        <label class="login-form-label" for="login-id">
-                            <span class="hidden">비밀번호</span>
-                            <span class="material-symbols-outlined color-primary-3 font-18 bold">
-                                lock
-                            </span>
-                            <input class="input" id="login-pass" name="pass" type="password"
-                                placeholder="비밀번호를 입력하세요." />
-                        </label>
-                    </div>
-                    <div class="auth-links">
-                        <a href="#">이메일찾기</a>
-                        <a href="#">비밀번호찾기</a>
-                    </div>
-                    <button type="submit" class="login-btn">로그인</button>
-                    <button type="button" class="signup-btn" onclick="signUp()">회원가입</button>
-                </form>
+
+                <div class="col-2">
+                    <span class="material-symbols-outlined">android_cell_4_bar</span>
+                    <span class="material-symbols-outlined">wifi</span>
+                    <span class="material-symbols-outlined">battery_android_frame_full</span>
+                </div>
             </div>
-        </div>
-        </div>
-        <script src="./js/logo.js"></script>
-        <script>
-            function signUp() {
-                location.href = "./html/page/signup.html";
-            }
-            function login() {
-                location.href = "./html/page/welcome.html";
-            }
-        </script>
-    </section>
+        </header>
+        <section id="splash">
+            <div class="container">
+                <!-- ✅ 따옴표 오류 수정: class="logo-1 is-load" -->
+                <div class="logo-1 is-load">
+                    <!-- ✅ src 앞 공백 제거 -->
+                    <img src="./assets/images/common/logo.png" alt="Logo_1" />
+                </div>
+
+                <div class="logo-2 is-load">
+                    <div class="row">
+
+                        <!-- 로고 -->
+                        <div class="logo_box is-load">
+                            <div class="face">
+                                <!-- 1행 -->
+                                <div class="block"></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div class="block"></div>
+
+                                <!-- 2행 -->
+                                <div class="block"></div>
+                                <div class="block eye"></div>
+                                <div></div>
+                                <div class="block eye"></div>
+                                <div class="block"></div>
+
+                                <!-- 3행 -->
+                                <div class="block"></div>
+                                <div></div>
+                                <div class="block mouth"></div>
+                                <div></div>
+                                <div class="block"></div>
+                            </div>
+
+                            <img src="./assets/images/common/circle.png" alt="" />
+                        </div>
+
+                        <img class="logo-mute-img is-load" src="./assets/images/common/logo.png" alt="Logo_1" />
+                        <p class="tagline is-load">나만의 고요한 가상의 공간</p>
+
+                        <form action="#" method="post" name="login-form" class="login-form is-load">
+                            <div class="login-form-field">
+                                <label class="login-form-label" for="login-id">
+                                    <span class="hidden">이메일</span>
+                                    <span class="material-symbols-outlined color-primary-3 font-18 bold">mail</span>
+                                    <input class="input" id="login-id" name="id" type="text"
+                                        placeholder="이메일을 입력하세요." />
+                                </label>
+                            </div>
+
+                            <div class="login-form-field">
+                                <!-- ✅ for가 login-id로 되어있어서 login-pass로 맞춰줌 -->
+                                <label class="login-form-label" for="login-pass">
+                                    <span class="hidden">비밀번호</span>
+                                    <span class="material-symbols-outlined color-primary-3 font-18 bold">lock</span>
+                                    <input class="input" id="login-pass" name="pass" type="password"
+                                        placeholder="비밀번호를 입력하세요." />
+                                </label>
+                            </div>
+
+                            <div class="auth-links">
+                                <a href="#">이메일찾기</a>
+                                <a href="#">비밀번호찾기</a>
+                            </div>
+
+                            <button type="submit" class="login-btn">로그인</button>
+                            <button type="button" class="signup-btn" onclick="signUp()">회원가입</button>
+                        </form>
+
+                    </div> <!-- /.row -->
+                </div> <!-- /.logo-2 -->
+
+            </div> <!-- /.container -->
+        </section>
+    </div>
+    <script src="./js/logo.js"></script>
+    <script>
+        function signUp() {
+            location.href = "./html/page/signup.html";
+        }
+        function login() {
+            location.href = "./html/page/welcome.html";
+        }
+    </script>
+    <script src="/js/header.js"></script>
+
 </body>
 
 </html>

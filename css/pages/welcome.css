@@ -5,15 +5,15 @@
 #wrap {
   background: url(../../assets/images/bg/Bg02-big.png) no-repeat center;
   background-size: cover;
-  display: flex;
-  justify-content: center;
-  align-content: center;
+}
+.container {
+  height: 100vh;
 }
 
-.row {
+#wrap .row {
   display: flex;
-  align-items: center;
   flex-direction: column;
+  justify-content: center;
 }
 .col-1:first-of-type {
   margin-bottom: 26px;
