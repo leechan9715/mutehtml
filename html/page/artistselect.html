@@ -16,257 +16,279 @@
 <link rel="stylesheet" href="../../css/base/reset.css">
 <link rel="stylesheet" href="../../assets/fonts/fonts.css">
 <link rel="stylesheet" href="../../css/layout/grid.css">
+<link rel="stylesheet" href="../../css/layout/splash-header.css">
 <link rel="stylesheet" href="../../css/pages/artistselect.css">
 
 <body>
     <div id="wrap">
-        <form action="#" method="post" name="artist-form" class="container">
-            <div class="row artist-select-header">
-                <div class="col-1">
-                    <h2 class="text-center fw-semibold">좋아하는 가수를 <br>
-                        <span class="font-48  color-primary-3">3</span>명이상 정해주세요.
-                    </h2>
+        <header class="container">
+            <!-- 시간출력 부분 -->
+            <div class="row">
+                <div class="col-2">
+                    <p class="time"></p>
                 </div>
-                <div class="col-1 artist-search-input">
-                    <div class="login-form-field">
-                        <label class="login-form-label" for="login-id">
-                            <span class="hidden">검색창</span>
-                            <span class="material-symbols-outlined font-19 color-primary-3">
-                                artist
-                            </span></label>
-                        <input class="input" id="login-id" name="search" type="text" placeholder="가수 이름을 입력해주세요." />
-                        <button type="button" class="name-check">
-                            <span class="material-symbols-outlined font-19 color-primary-6">
-                                search
-                            </span>
-                        </button>
+                <div class="col-2">
+                    <span class="material-symbols-outlined">
+                        android_cell_4_bar
+                    </span>
+                    <span class="material-symbols-outlined">
+                        wifi
+                    </span>
+                    <span class="material-symbols-outlined">
+                        battery_android_frame_full
+                    </span>
+                </div>
+            </div>
+        </header>
+        <main>
+            <form action="#" method="post" name="artist-form" class="container">
+                <div class="row artist-select-header">
+                    <div class="col-1">
+                        <h2 class="text-center fw-semibold">좋아하는 가수를 <br>
+                            <span class="font-48  color-primary-3">3</span>명이상 정해주세요.
+                        </h2>
+                    </div>
+                    <div class="col-1 artist-search-input">
+                        <div class="login-form-field">
+                            <label class="login-form-label" for="login-id">
+                                <span class="hidden">검색창</span>
+                                <span class="material-symbols-outlined font-19 color-primary-3">
+                                    artist
+                                </span></label>
+                            <input class="input" id="login-id" name="search" type="text" placeholder="가수 이름을 입력해주세요." />
+                            <button type="button" class="name-check">
+                                <span class="material-symbols-outlined font-19 color-primary-6">
+                                    search
+                                </span>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row g-17">
-                <div class="col-3">
-                    <label for="artist-iu-1" class="artist-card">
-                        <img src="../../assets/images/artistselect/1 1.png" alt="select_img_1">
-                        <input type="checkbox" id="artist-iu-1" name="artists[]" value="1" class="hidden" checked>
-                        <div class="checked-heart">
-                            <img src="../../assets/images/artistselect/heart.png" alt="">
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">아이유</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-2" class="artist-card">
-                        <img src="../../assets/images/artistselect/2 2.png" alt="select_img_2">
-                        <input type="checkbox" id="artist-iu-2" name="artists[]" value="2" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
+                <div class="row g-17">
+                    <div class="col-3">
+                        <label for="artist-iu-1" class="artist-card">
+                            <img src="../../assets/images/artistselect/1 1.png" alt="select_img_1">
+                            <input type="checkbox" id="artist-iu-1" name="artists[]" value="1" class="hidden" checked>
+                            <div class="checked-heart">
                                 <img src="../../assets/images/artistselect/heart.png" alt="">
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">이지은</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-3" class="artist-card">
-                        <img src="../../assets/images/artistselect/3 3.png" alt="select_img_3">
-                        <input type="checkbox" id="artist-iu-3" name="artists[]" value="3" class="hidden" checked>
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">아이유</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-2" class="artist-card">
+                            <img src="../../assets/images/artistselect/2 2.png" alt="select_img_2">
+                            <input type="checkbox" id="artist-iu-2" name="artists[]" value="2" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">너랑나</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-4" class="artist-card">
-                        <img src="../../assets/images/artistselect/4 4.png" alt="select_img_4">
-                        <input type="checkbox" id="artist-iu-4" name="artists[]" value="4" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">이지은</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-3" class="artist-card">
+                            <img src="../../assets/images/artistselect/3 3.png" alt="select_img_3">
+                            <input type="checkbox" id="artist-iu-3" name="artists[]" value="3" class="hidden" checked>
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">아이유</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-5" class="artist-card">
-                        <img src="../../assets/images/artistselect/5 5.png" alt="select_img_5">
-                        <input type="checkbox" id="artist-iu-5" name="artists[]" value="5" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">너랑나</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-4" class="artist-card">
+                            <img src="../../assets/images/artistselect/4 4.png" alt="select_img_4">
+                            <input type="checkbox" id="artist-iu-4" name="artists[]" value="4" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">이지은</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-6" class="artist-card">
-                        <img src="../../assets/images/artistselect/6 6.png" alt="select_img_6">
-                        <input type="checkbox" id="artist-iu-6" name="artists[]" value="6" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">아이유</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-5" class="artist-card">
+                            <img src="../../assets/images/artistselect/5 5.png" alt="select_img_5">
+                            <input type="checkbox" id="artist-iu-5" name="artists[]" value="5" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">너랑나</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-7" class="artist-card">
-                        <img src="../../assets/images/artistselect/7 7.png" alt="select_img_7">
-                        <input type="checkbox" id="artist-iu-7" name="artists[]" value="7" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">이지은</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-6" class="artist-card">
+                            <img src="../../assets/images/artistselect/6 6.png" alt="select_img_6">
+                            <input type="checkbox" id="artist-iu-6" name="artists[]" value="6" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">아이유</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-8" class="artist-card">
-                        <img src="../../assets/images/artistselect/8 8.png" alt="select_img_8">
-                        <input type="checkbox" id="artist-iu-8" name="artists[]" value="8" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">너랑나</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-7" class="artist-card">
+                            <img src="../../assets/images/artistselect/7 7.png" alt="select_img_7">
+                            <input type="checkbox" id="artist-iu-7" name="artists[]" value="7" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">이지은</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-9" class="artist-card">
-                        <img src="../../assets/images/artistselect/9 9.png" alt="select_img_9">
-                        <input type="checkbox" id="artist-iu-9" name="artists[]" value="9" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">아이유</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-8" class="artist-card">
+                            <img src="../../assets/images/artistselect/8 8.png" alt="select_img_8">
+                            <input type="checkbox" id="artist-iu-8" name="artists[]" value="8" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">너랑나</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-10" class="artist-card">
-                        <img src="../../assets/images/artistselect/10 10.png" alt="select_img_10">
-                        <input type="checkbox" id="artist-iu-10" name="artists[]" value="10" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">이지은</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-9" class="artist-card">
+                            <img src="../../assets/images/artistselect/9 9.png" alt="select_img_9">
+                            <input type="checkbox" id="artist-iu-9" name="artists[]" value="9" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">아이유</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-11" class="artist-card">
-                        <img src="../../assets/images/artistselect/11 11.png" alt="select_img_11">
-                        <input type="checkbox" id="artist-iu-11" name="artists[]" value="11" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">너랑나</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-10" class="artist-card">
+                            <img src="../../assets/images/artistselect/10 10.png" alt="select_img_10">
+                            <input type="checkbox" id="artist-iu-10" name="artists[]" value="10" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">이지은</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-12" class="artist-card">
-                        <img src="../../assets/images/artistselect/12 12.png" alt="select_img_12">
-                        <input type="checkbox" id="artist-iu-12" name="artists[]" value="12" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">아이유</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-11" class="artist-card">
+                            <img src="../../assets/images/artistselect/11 11.png" alt="select_img_11">
+                            <input type="checkbox" id="artist-iu-11" name="artists[]" value="11" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">너랑나</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-13" class="artist-card">
-                        <img src="../../assets/images/artistselect/13 13.png" alt="select_img_13">
-                        <input type="checkbox" id="artist-iu-13" name="artists[]" value="13" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">이지은</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-12" class="artist-card">
+                            <img src="../../assets/images/artistselect/12 12.png" alt="select_img_12">
+                            <input type="checkbox" id="artist-iu-12" name="artists[]" value="12" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">아이유</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-14" class="artist-card">
-                        <img src="../../assets/images/artistselect/14 14.png" alt="select_img_14">
-                        <input type="checkbox" id="artist-iu-14" name="artists[]" value="14" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">너랑나</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-13" class="artist-card">
+                            <img src="../../assets/images/artistselect/13 13.png" alt="select_img_13">
+                            <input type="checkbox" id="artist-iu-13" name="artists[]" value="13" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">이지은</h2>
-                </div>
-                <div class="col-3">
-                    <label for="artist-iu-15" class="artist-card">
-                        <img src="../../assets/images/artistselect/15 15.png" alt="select_img_15">
-                        <input type="checkbox" id="artist-iu-15" name="artists[]" value="15" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">아이유</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-14" class="artist-card">
+                            <img src="../../assets/images/artistselect/14 14.png" alt="select_img_14">
+                            <input type="checkbox" id="artist-iu-14" name="artists[]" value="14" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">너랑나1</h2>
-                </div>
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">이지은</h2>
+                    </div>
+                    <div class="col-3">
+                        <label for="artist-iu-15" class="artist-card">
+                            <img src="../../assets/images/artistselect/15 15.png" alt="select_img_15">
+                            <input type="checkbox" id="artist-iu-15" name="artists[]" value="15" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
+                            </div>
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">너랑나1</h2>
+                    </div>
 
-                <div class="col-3">
-                    <label for="artist-iu-16" class="artist-card">
-                        <img src="../../assets/images/artistselect/16 16.png" alt="select_img_16">
-                        <input type="checkbox" id="artist-iu-16" name="artists[]" value="16" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                    <div class="col-3">
+                        <label for="artist-iu-16" class="artist-card">
+                            <img src="../../assets/images/artistselect/16 16.png" alt="select_img_16">
+                            <input type="checkbox" id="artist-iu-16" name="artists[]" value="16" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">아이유</h2>
-                </div>
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">아이유</h2>
+                    </div>
 
-                <div class="col-3">
-                    <label for="artist-iu-17" class="artist-card">
-                        <img src="../../assets/images/artistselect/17 17.png" alt="select_img_17">
-                        <input type="checkbox" id="artist-iu-17" name="artists[]" value="17" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                    <div class="col-3">
+                        <label for="artist-iu-17" class="artist-card">
+                            <img src="../../assets/images/artistselect/17 17.png" alt="select_img_17">
+                            <input type="checkbox" id="artist-iu-17" name="artists[]" value="17" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">이지은</h2>
-                </div>
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">이지은</h2>
+                    </div>
 
-                <div class="col-3">
-                    <label for="artist-iu-18" class="artist-card">
-                        <img src="../../assets/images/artistselect/18 18.png" alt="select_img_18">
-                        <input type="checkbox" id="artist-iu-18" name="artists[]" value="18" class="hidden">
-                        <div class="checked-heart">
-                            <div class="heart">
-                                <img src="../../assets/images/artistselect/heart.png" alt="">
+                    <div class="col-3">
+                        <label for="artist-iu-18" class="artist-card">
+                            <img src="../../assets/images/artistselect/18 18.png" alt="select_img_18">
+                            <input type="checkbox" id="artist-iu-18" name="artists[]" value="18" class="hidden">
+                            <div class="checked-heart">
+                                <div class="heart">
+                                    <img src="../../assets/images/artistselect/heart.png" alt="">
+                                </div>
                             </div>
-                        </div>
-                    </label>
-                    <h2 class="text-center fw-semibold font-22">너랑나1</h2>
+                        </label>
+                        <h2 class="text-center fw-semibold font-22">너랑나1</h2>
+                    </div>
                 </div>
-            </div>
-            <div class="bottom">
-                <div class="button-bg"></div>
-                <button onclick="testButton()" type="button" class="login-btn">넘어가기</button>
-            </div>
-        </form>
+                <div class="bottom">
+                    <div class="button-bg"></div>
+                    <button onclick="testButton()" type="button" class="login-btn">넘어가기</button>
+                </div>
+            </form>
+        </main>
         <script>
             const artists = document.getElementsByName("artists[]");
             const Button = document.getElementsByClassName("login-btn");
@@ -279,6 +301,7 @@
 
             }
         </script>
+        <script src="/js/header.js"></script>
 </body>
 
 </html>

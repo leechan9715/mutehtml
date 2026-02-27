@@ -1,182 +1,180 @@
 html {
-    margin: 0 auto;
-    background-image: url(../../assets/images/bg/Bg02-big.png);
-    background-position: top;
-    background-size: 600px 2000px;
-    background-repeat: no-repeat;
+  margin: 0 auto;
+  background-image: url(../../assets/images/bg/Bg02-big.png);
+  background-position: top;
+  background-size: 600px 2000px;
+  background-repeat: no-repeat;
 }
 
 section {
-    margin: 0 auto;
+  margin: 0 auto;
 }
 
 .top-bar {
-    height: 40px;
-    padding: 10px 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  height: 40px;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .top-bar a:last-of-type {
-    font-size: 30px;
+  font-size: 30px;
 }
 
 .playlist-info {
-    margin: 30px 0 0 0;
-    padding: 20px 0;
-    text-align: center;
-    color: #0b1119;
+  margin: 30px 0 0 0;
+  padding: 20px 0;
+  text-align: center;
+  color: #0b1119;
 }
 
 .playlist-info .p-1 {
-    font-weight: 600;
-    font-size: clamp(16px, 5vw, 30px);
-    white-space: nowrap;
-    margin: 30px auto;
+  font-weight: 600;
+  font-size: clamp(16px, 5vw, 30px);
+  white-space: nowrap;
+  margin: 30px auto;
 }
 
 .playlist-info .p-2 {
-    font-weight: 400;
-    margin: 0px auto 20px auto;
-    color: gray;
+  font-weight: 400;
+  margin: 0px auto 20px auto;
+  color: gray;
 }
 
 .playlist-info img {
-    margin: 10px auto;
-    border-radius: 20px;
+  margin: 10px auto;
+  border-radius: 20px;
 }
 
 .info-type {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    font-weight: 500;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+  font-weight: 500;
 }
 
 .info-type p {
-    display: block;
-    width: 50%;
-    margin: 0px 10px;
-    padding: 10px;
-    background-color: rgb(255, 255, 255);
-    border: 1px solid #DAE5FF;
-    border-radius: 50px;
-    color: #000000;
-    font-weight: 300;
+  display: block;
+  width: 50%;
+  margin: 0px 10px;
+  padding: 10px;
+  background-color: rgb(255, 255, 255);
+  border: 1px solid #dae5ff;
+  border-radius: 50px;
+  color: #000000;
+  font-weight: 300;
 }
 
 .control {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 5vw;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5vw;
 }
 
 .control button {
-    width: 60px;
-    height: 60px;
-    border: none;
-    border-radius: 50%;
-    background: #ffffff;
-    border: 2px solid #DAE5FF;
-    color: #6F83F7;
-    box-shadow: 0px 2px 4px #DAE5FF;
-    cursor: pointer;
-    transition: 0.2s;
+  width: 60px;
+  height: 60px;
+  border: none;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #dae5ff;
+  color: #6f83f7;
+  box-shadow: 0px 2px 4px #dae5ff;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 .control button:nth-child(3) {
-    width: 80px;
-    height: 80px;
+  width: 80px;
+  height: 80px;
 }
 
 .control button:nth-child(3) .material-symbols-outlined {
-    font-size: 50px;
-    /* play 버튼만 크게 */
+  font-size: 50px;
+  /* play 버튼만 크게 */
 }
 
 /* 활성화 상태 */
 .control button.active {
-    background: linear-gradient(to bottom, #6F83F7, #475fe6);
-    color: white;
+  background: linear-gradient(to bottom, #6f83f7, #475fe6);
+  color: white;
 }
 
 /* 부드러운 눌림 효과 */
 .control button.vibrate {
-    animation: softPress 0.25s ease;
+  animation: softPress 0.25s ease;
 }
 
 @keyframes softPress {
-    0% {
-        transform: scale(1);
-    }
+  0% {
+    transform: scale(1);
+  }
 
-    30% {
-        transform: scale(0.95);
-    }
+  30% {
+    transform: scale(0.95);
+  }
 
-    60% {
-        transform: scale(1.03);
-    }
+  60% {
+    transform: scale(1.03);
+  }
 
-    100% {
-        transform: scale(1);
-    }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .control button.active .material-symbols-outlined {
-    font-variation-settings:
-        'FILL' 1,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 24;
+  font-variation-settings:
+    "FILL" 1,
+    "wght" 400,
+    "GRAD" 0,
+    "opsz" 24;
 }
 
 .music-list {
-    width: 100%;
-    padding: 80px 0;
+  width: 100%;
+  padding: 80px 0;
 }
 
 .music-list .col-2 {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 10px;
-
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
 }
 
-.music-list>.col-2 img {
-    border-radius: 5px;
-    border: 1px solid #BBD1FF;
-
+.music-list > .col-2 img {
+  border-radius: 5px;
+  border: 1px solid #bbd1ff;
 }
 
 .music-list .type {
-    width: 100%;
-    display: flex;
-    border-radius: 5px;
-    font-weight: 600;
-    padding: 20px;
+  width: 100%;
+  display: flex;
+  border-radius: 5px;
+  font-weight: 600;
+  padding: 20px;
 }
 
 .music-list .type .music-singer p:first-child {
-    font-size: var(--font-16);
+  font-size: var(--font-16);
 }
 
 .music-list .type .music-singer p:last-child {
-    font-size: var(--font-14);
-    padding-top: 5px;
-    color: #737886;
+  font-size: var(--font-14);
+  padding-top: 5px;
+  color: #737886;
 }
 
-.music-list .type>p {
-    margin-left: auto;
-    font-size: var(--font-24);
-    line-height: 45px;
-    cursor: pointer;
-    align-self: center;
+.music-list .type > p {
+  margin-left: auto;
+  font-size: var(--font-24);
+  line-height: 45px;
+  cursor: pointer;
+  align-self: center;
 }
