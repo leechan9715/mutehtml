@@ -67,7 +67,7 @@ html {
 
 .time-select .col-4 label {
     padding: 10px 20px;
-    font-size: var(--font-24);
+    font-size: var(--font-18);
     border-radius: 30px;
     border: 3px solid #D3DCFF;
     color: black;
@@ -102,7 +102,7 @@ html {
 }
 
 .top-one .circlebox .circle {
-    width: 80%;
+    width: 70%;
     max-width: 500px;
     aspect-ratio: 1 / 1;
     background: linear-gradient(to bottom, #1D2E6D, #0B0E19);
@@ -113,7 +113,7 @@ html {
 }
 
 .top-one .circlebox img {
-    width: 50%;
+    width: 40%;
     max-width: 500px;
     aspect-ratio: 1 / 1;
     background: linear-gradient(to bottom, #1D2E6D, #0B0E19);
@@ -128,7 +128,7 @@ html {
 }
 
 .top-one .circlebox .cir-type {
-    height: 85%;
+    height: 80%;
     display: flex;
     justify-content: space-between;
     flex-flow: column wrap;
