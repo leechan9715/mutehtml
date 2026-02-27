@@ -31,7 +31,8 @@ section {
 
 .playlist-info .p-1 {
     font-weight: 600;
-    font-size: 30px;
+    font-size: clamp(16px, 5vw, 30px);
+    white-space: nowrap;
     margin: 30px auto;
 }
 
@@ -51,7 +52,6 @@ section {
     display: flex;
     justify-content: space-between;
     margin: 20px 0;
-    font-size: 18px;
     font-weight: 500;
 }
 
@@ -72,7 +72,7 @@ section {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0px 70px;
+    padding: 0 5vw;
 }
 
 .control button {
