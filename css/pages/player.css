@@ -55,7 +55,7 @@ main {
 /* ---------- 노래제목 & 가수 ----------- */
 
 .player-info {
-  padding: 42px 12px;
+  padding: 28px 12px 20px 12px;
   color: var(--color-black);
 }
 
@@ -74,7 +74,7 @@ main {
 /* 진행바 컨테이너 */
 .music-progress-container {
   width: 100%;
-  padding: 20px 12px;
+  padding: 12px 12px;
 }
 
 .progress-bar {
@@ -154,7 +154,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 29px 12px;
+  padding: 30px 12px 0px 12px;
 }
 
 /* ---------- 하단 버튼 ----------- */
@@ -165,7 +165,7 @@ main {
   align-items: center;
   justify-content: space-between;
   margin-left: 2px;
-  padding: 29px 12px;
+  padding: 34px 12px 22px 12px;
   object-fit: cover;
 }
 
