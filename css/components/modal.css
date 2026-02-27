@@ -1,0 +1,76 @@
+.container {
+  border: 1px solid var(--color-primary-4);
+  border-radius: 20px 20px 0 0;
+  color: var(--color-black);
+}
+
+.col-1 {
+  /* padding: 0 2px; */
+}
+
+.down-modal {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+}
+
+.down-modal img {
+  width: 20px;
+}
+
+.modal-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.modal-info img {
+  width: 60px;
+}
+
+.song-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.song-info p:nth-child(1) {
+  font-size: var(--font-14);
+  font-weight: var(--fw-medium);
+}
+
+.song-info p:nth-child(2) {
+  font-size: var(--font-12);
+  font-weight: var(--fw-400);
+}
+
+.modal-buttons {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 24px 20px;
+  gap: 30px;
+}
+
+.modal-buttons button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 31px;
+}
+
+.modal-buttons button span {
+  width: 20px;
+  /* height: 20px; */
+  padding: 0;
+}
+
+.modal-buttons button p {
+  font-size: var(--font-14);
+  font-weight: var(--fw-medium);
+}

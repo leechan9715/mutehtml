@@ -4,33 +4,44 @@ header {
 }
 header.container {
   border-radius: 0 0 20px 20px;
-  border: 1px solid var(--color-primary-4);
+  /* border: 1px solid var(--color-primary-4); */
   padding: 13px 25px;
   gap: 23px;
   background-color: #fff;
 }
+
 header .row:nth-child(1) {
   justify-content: space-between;
 }
+
 header .row:nth-child(1) .col-2:nth-child(2) {
   display: flex;
   gap: 7px;
 }
+
 header .row:nth-child(2) {
   justify-content: space-between;
   align-items: center;
 }
+
 header .row:nth-child(2) .col-2:nth-child(1) {
   max-width: 90px;
 }
+
 header .row:nth-child(2) .col-2:nth-child(1) img {
   width: 100%;
 }
+
 header .row:nth-child(2) .col-2:nth-child(2) {
   border-radius: 12px;
   width: 42px;
 }
+
 header .row:nth-child(2) .col-2:nth-child(2) img {
   object-fit: cover;
   border-radius: 12px;
+}
+
+header .row .col-2 .time {
+  font-weight: 600;
 }
