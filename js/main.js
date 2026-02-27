@@ -11,7 +11,7 @@ function updateTime() {
 updateTime(); // 처음 1번 실행
 setInterval(updateTime, 1000); // 1초마다 갱신
 const swiper1 = new Swiper(".lsc-swiper-2", {
-  slidesPerView: 3.8,
+  slidesPerView: 3.3,
   spaceBetween: 15,
   centeredSlides: false,
   pagination: {
