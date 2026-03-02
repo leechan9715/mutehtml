@@ -67,7 +67,9 @@
                     >
                 </div>
                 <div class="col-1">
-                    <BaseButton class="login-btn" label="가입하기" variant="active" />
+                    <router-link to="/signup-info">
+                        <BaseButton class="login-btn" label="가입하기" variant="active"
+                    /></router-link>
                 </div>
                 <div class="col-1 social-login">
                     <p class="text-center">소셜 계정으로 가입하기</p>
