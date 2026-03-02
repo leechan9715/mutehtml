@@ -1,0 +1,30 @@
+/* ================= 
+ Welcome 메인 Css파일
+=====================*/
+
+main {
+    height: calc(100vh - 50px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+main .row {
+    display: flex;
+    justify-content: center;
+}
+
+.col-1:first-of-type {
+    margin-bottom: 26px;
+}
+.welcome {
+    color: var(--color-primary-3);
+    letter-spacing: 4px;
+    margin-bottom: 36px;
+    text-align: center;
+}
+.welcome-des {
+    line-height: 36px;
+}
+.logo_box {
+    margin-bottom: 24px;
+}
