@@ -54,3 +54,7 @@ h2 {
 .social-login-icon {
     justify-content: center;
 }
+
+.social-login-icon img {
+    width: 60px;
+}

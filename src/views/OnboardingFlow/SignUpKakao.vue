@@ -76,22 +76,122 @@
                 </div>
             </form>
             <div class="row g-24 social-login-icon">
-                <router-link to="/signup-kakao-test" class="social-icon">
+                <a href="#" class="social-icon" @click.prevent="kakaoLogin">
                     <img :src="kakao" alt="kakao" />
-                </router-link>
+                </a>
                 <img :src="google" alt="google" />
                 <img :src="apple" alt="apple" />
             </div>
         </div>
+        <button @click="kakaoLogout">카카오 로그아웃</button>
+        <button @click="kakaoUnlink">카카오 연결 해제</button>
     </main>
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue';
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import kakao from '@/assets/images/signup/kakao.png';
 import google from '@/assets/images/signup/google.png';
 import apple from '@/assets/images/signup/apple.png';
+
+const error = ref('');
+
+function ensureKakaoInit() {
+    console.log('Kakao exists?', !!window.Kakao);
+    console.log('Initialized?', window.Kakao?.isInitialized?.());
+    console.log('JS KEY:', process.env.VUE_APP_KAKAO_JS_KEY);
+    const jsKey = process.env.VUE_APP_KAKAO_JS_KEY;
+
+    if (!jsKey) {
+        throw new Error('VUE_APP_KAKAO_JS_KEY가 .env에 없습니다.');
+    }
+    if (!window.Kakao) {
+        throw new Error('Kakao SDK가 로드되지 않았습니다. public/index.html에 kakao.js 넣었는지 확인하세요.');
+    }
+    if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(jsKey);
+    }
+}
+
+onMounted(() => {
+    try {
+        ensureKakaoInit();
+    } catch (e) {
+        error.value = e.message ?? String(e);
+        console.error(e);
+    }
+});
+
+function kakaoLogin() {
+    try {
+        ensureKakaoInit();
+
+        window.Kakao.Auth.login({
+            scope: 'profile_nickname,profile_image', // 필요하면 account_email 추가
+            success: (authObj) => {
+                console.log('kakao login success:', authObj);
+
+                // 유저 정보 확인(테스트)
+                window.Kakao.API.request({
+                    url: '/v2/user/me',
+                    success: (res) => {
+                        console.log('kakao user:', res);
+                        // TODO: 여기서 res를 서버로 보내서 회원가입/로그인 처리
+                        // 필요하면 router.push('/signup-info') 같은 식으로 다음 단계 이동
+                    },
+                    fail: (err) => {
+                        console.error(err);
+                        error.value = '유저 정보 조회 실패';
+                    }
+                });
+            },
+            fail: (err) => {
+                console.error(err);
+                error.value = '카카오 로그인 실패';
+            }
+        });
+    } catch (e) {
+        error.value = e.message ?? String(e);
+        console.error(e);
+    }
+}
+
+// ✅ 로그아웃
+function kakaoLogout() {
+    if (!window.Kakao || !window.Kakao.isInitialized()) return;
+
+    if (window.Kakao.Auth.getAccessToken()) {
+        window.Kakao.Auth.logout(() => {
+            console.log('카카오 로그아웃 완료');
+        });
+    } else {
+        console.log('이미 로그아웃 상태');
+    }
+}
+function kakaoUnlink() {
+    if (!window.Kakao || !window.Kakao.isInitialized()) return;
+
+    // 토큰 있는지 체크
+    const token = window.Kakao.Auth.getAccessToken();
+    if (!token) {
+        console.log('토큰 없음: 먼저 로그인해야 unlink 가능');
+        return;
+    }
+
+    window.Kakao.API.request({
+        url: '/v1/user/unlink',
+        success: (res) => {
+            console.log('연결 해제 성공', res);
+            // 로컬 토큰 정리
+            window.Kakao.Auth.setAccessToken(null);
+        },
+        fail: (err) => {
+            console.error('연결 해제 실패', err);
+        }
+    });
+}
 </script>
 
 <style scoped src="@/assets/styles/pages/OnboardingFlow/signup-view.css"></style>

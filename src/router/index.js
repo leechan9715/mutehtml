@@ -7,6 +7,8 @@ import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
 import MainLayout from '@/views/main/MainLayout.vue';
 import MainView from '@/views/main/MainView.vue';
 import ArtistSelectView from '@/views/OnboardingFlow/ArtistSelectView.vue';
+import SignUpGoogle from '@/views/OnboardingFlow/SignUpGoogle.vue';
+import SignUpKakao from '@/views/OnboardingFlow/SignUpKakao.vue';
 
 const routes = [
     {
@@ -16,6 +18,8 @@ const routes = [
             { path: '', redirect: 'splash' },
             { path: 'splash', component: SplashView },
             { path: 'signup', component: SignUp },
+            { path: 'signup', component: SignUpGoogle },
+            { path: 'signupkakao', component: SignUpKakao },
             { path: 'signup-info', component: SignUpInfoView },
             { path: 'welcome', component: WelcomeView },
             { path: 'artist-select', component: ArtistSelectView }
