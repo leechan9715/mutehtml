@@ -49,7 +49,7 @@
                     <div></div>
                     <div class="block"></div>
                 </div>
-                <img :src="circle" alt="circle" />
+                <img :src="circle2" alt="circle2" />
             </div>
             <div class="col-5">
                 <a href="#">
@@ -83,11 +83,13 @@
 <script>
 import Logo from '@/components/ui/Logo.vue';
 import circle from '@/assets/images/common/circle.png';
+import circle2 from '@/assets/images/common/circle_2.png';
 export default {
     name: 'AppFooter',
     data() {
         return {
-            circle
+            circle,
+            circle2
         };
     },
     components: {
@@ -110,24 +112,25 @@ footer .row {
     padding: 8px 40px;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(200, 218, 255, 1) 100%);
-    border: 1px solid var(--color-primary-5);
     border-radius: 20px 20px 0 0;
-    background-color: #6f83f7;
+    background-color: #ffffff;
+    box-shadow:
+        inset 0px -7px 10px #b1c9e5,
+        0px -3px 10px rgba(107, 159, 226, 0.3);
 }
 
 footer .col-5 {
     text-align: center;
 }
-
-footer .col-5 img {
-    width: 30px;
-    margin-bottom: 5px;
+p {
+    font-size: 16px;
+    font-weight: 600;
+    color: #0d2656;
 }
 
 /* 기본 아이콘 색상 */
 svg {
-    color: #000000;
+    color: #0d2656;
     /* 기본 검정색 */
     transition: color 0.2s;
     /* 부드러운 색상 변경 */
@@ -136,10 +139,15 @@ svg {
 /* 클릭하거나 활성화 되었을 때 */
 a:active svg,
 a:focus svg {
-    color: #6f83f7;
+    color: #6f9ff7;
 }
 
-/* 
+a:active p,
+a:focus p {
+    color: #6f9ff7;
+}
+
+/*
  *  메인로고 애니메이션 css 수정 X  *
 */
 
@@ -149,6 +157,7 @@ footer .logo_box {
     width: 100%;
     height: 70px;
     top: -30px;
+    overflow: visible;
 }
 
 footer .face {
@@ -165,7 +174,7 @@ footer .face {
 
 footer .logo_box img {
     position: absolute;
-    width: 120px;
+    width: 100%;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -174,11 +183,14 @@ footer .logo_box img {
 footer .block {
     width: 8px;
     height: 8px;
-    background: black;
+    background: #171f3b;
     z-index: 1;
     transition: all 0.3s ease;
     justify-self: center;
     align-self: center;
+    box-shadow:
+        inset 0px 4px 4px rgba(255, 216, 216, 0.3),
+        0px -1px 4px rgba(0, 0, 0, 0.25);
 }
 
 footer .eye {

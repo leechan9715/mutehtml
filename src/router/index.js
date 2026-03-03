@@ -7,6 +7,7 @@ import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
 import MainLayout from '@/views/main/MainLayout.vue';
 import MainView from '@/views/main/MainView.vue';
 import ArtistSelectView from '@/views/OnboardingFlow/ArtistSelectView.vue';
+import AppFooter from '@/components/layout/AppFooter.vue';
 
 const routes = [
     {
@@ -25,6 +26,10 @@ const routes = [
         path: '/main',
         component: MainLayout,
         children: [{ path: '', component: MainView, meta: { isProfile: true } }]
+    },
+    {
+        path: '/test',
+        component: AppFooter
     }
 ];
 
