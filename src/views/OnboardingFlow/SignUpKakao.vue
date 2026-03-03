@@ -76,7 +76,9 @@
                 </div>
             </form>
             <div class="row g-24 social-login-icon">
-                <img :src="facebook" alt="facebook" />
+                <router-link to="/signup-kakao-test" class="social-icon">
+                    <img :src="kakao" alt="kakao" />
+                </router-link>
                 <img :src="google" alt="google" />
                 <img :src="apple" alt="apple" />
             </div>
@@ -87,7 +89,7 @@
 <script setup>
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
-import facebook from '@/assets/images/signup/facebook.png';
+import kakao from '@/assets/images/signup/kakao.png';
 import google from '@/assets/images/signup/google.png';
 import apple from '@/assets/images/signup/apple.png';
 </script>

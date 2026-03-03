@@ -53,10 +53,12 @@ header {
 }
 header.container {
     border-radius: 0 0 20px 20px;
-    /* border: 1px solid var(--color-primary-4); */
-    padding: 13px 25px;
-    gap: 23px;
+    padding: 20px 25px;
+    gap: 25px;
     background-color: #fff;
+    box-shadow:
+        inset 0px -7px 10px #b1c9e5,
+        0px -3px 10px rgba(107, 159, 226, 0.3);
 }
 
 header .row:nth-child(1) {

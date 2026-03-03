@@ -3,6 +3,8 @@
         <AppHeader :isProfile="isProfile" />
         <main>
             <router-view />
+            <playlist-info text="제작자 - 홍길동" />
+            <VibeSelectBtn text="운동" />
         </main>
         <AppFooter />
     </div>
@@ -11,12 +13,16 @@
 <script>
 import AppFooter from '@/components/layout/AppFooter.vue';
 import AppHeader from '@/components/layout/AppHeader.vue';
+import playlistInfo from '@/components/ui/playlist-info.vue';
+import VibeSelectBtn from '@/components/ui/VibeSelectBtn.vue';
 
 export default {
     name: 'MainLayout',
     components: {
         AppHeader,
-        AppFooter
+        AppFooter,
+        playlistInfo,
+        VibeSelectBtn
     },
     computed: {
         isProfile() {
