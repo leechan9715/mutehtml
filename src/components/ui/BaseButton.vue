@@ -22,7 +22,7 @@ export default {
     width: 100%;
     padding: 19px 0;
     border-radius: 30px;
-    border: 1px solid #d3dcff;
+    border: 2px solid #bbd1ff;
     box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
     font-size: var(--font-22);
     font-weight: bold;
