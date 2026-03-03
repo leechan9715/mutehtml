@@ -46,7 +46,9 @@
                             </div>
                         </div>
 
-                        <BaseButton label="음악 들으러 가기" variant="active" @click="handleSubmit" />
+                        <router-link to="/welcome"
+                            ><BaseButton label="음악 들으러 가기" variant="active" @click="handleSubmit"
+                        /></router-link>
                     </div>
                 </div>
             </div>
