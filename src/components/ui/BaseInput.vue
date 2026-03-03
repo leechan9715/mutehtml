@@ -29,7 +29,7 @@ export default {
 };
 </script>
 
-<style scpoed>
+<style scoped>
 .login-form-field {
     width: 100%;
     display: flex;
