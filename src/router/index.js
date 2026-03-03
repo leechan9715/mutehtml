@@ -15,8 +15,8 @@ const routes = [
             { path: '', redirect: 'splash' },
             { path: 'splash', component: SplashView },
             { path: 'signup', component: SignUp },
-            { path: 'welcome', component: WelcomeView },
-            { path: 'signup-info', component: SignUpInfoView }
+            { path: 'signup-info', component: SignUpInfoView },
+            { path: 'welcome', component: WelcomeView }
         ]
     },
     {
