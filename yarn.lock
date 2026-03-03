@@ -6822,6 +6822,11 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
+vue3-google-login@^2.0.37:
+  version "2.0.37"
+  resolved "https://registry.yarnpkg.com/vue3-google-login/-/vue3-google-login-2.0.37.tgz#33fca748b0361f63409af50dcb38eab1c5ad4c25"
+  integrity sha512-1seGaevhcMPi/dKO36KktpqYMkJdzt4s5U7XjLvHPd50e8sCBcC8/Pv3Mz+QrK12rSOmiduTtxCuPcH2ULYozw==
+
 vue@^3.2.13:
   version "3.5.29"
   resolved "https://registry.yarnpkg.com/vue/-/vue-3.5.29.tgz#859a1cc5219eb1228c7ce6f355b27de080517111"
