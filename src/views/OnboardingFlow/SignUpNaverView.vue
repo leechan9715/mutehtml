@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <main>
         <div class="container">
             <div class="row g-9 title">
@@ -79,6 +79,8 @@
                 <img :src="facebook" alt="facebook" />
                 <img :src="google" alt="google" />
                 <img :src="apple" alt="apple" />
+                <div id="naverIdLogin" v-show="!accessToken"></div>
+                <button v-if="accessToken" type="button" @click="logout">로그아웃</button>
             </div>
         </div>
     </main>
@@ -90,6 +92,102 @@ import BaseButton from '@/components/ui/BaseButton.vue';
 import facebook from '@/assets/images/signup/facebook.png';
 import google from '@/assets/images/signup/google.png';
 import apple from '@/assets/images/signup/apple.png';
+import { ref, onMounted, nextTick } from 'vue';
+
+// ✅ 상태
+const naverLogin = ref(null); // 네이버 로그인 객체
+const accessToken = ref(null); // 발급받은 access token
+
+// ✅ (Vue CLI 기준) 환경변수로 빼는 걸 추천
+// .env.local:
+// VUE_APP_NAVER_CLIENT_ID=xxxx
+// VUE_APP_NAVER_CALLBACK_URL=http://localhost:8080/naverlogin
+const NAVER_CLIENT_ID = process.env.VUE_APP_NAVER_CLIENT_ID;
+const CALLBACK_URL = process.env.VUE_APP_NAVER_CALLBACK_URL;
+
+// ✅ 네이버 로그인 버튼 초기화
+function initializeNaverLoginButton() {
+    try {
+        if (!window?.naver?.LoginWithNaverId) {
+            console.error('네이버 SDK가 아직 로드되지 않았습니다. (window.naver 없음)');
+            return;
+        }
+
+        naverLogin.value = new window.naver.LoginWithNaverId({
+            clientId: NAVER_CLIENT_ID,
+            callbackUrl: CALLBACK_URL,
+            isPopup: false,
+            loginButton: { color: 'green', type: 3, height: 60 }
+        });
+
+        naverLogin.value.init();
+
+        // SDK 초기화 후 로그인 상태 확인
+        naverLogin.value.getLoginStatus((status) => {
+            if (status) checkLoginStatus();
+            else console.log('로그인되지 않은 상태입니다.');
+        });
+    } catch (error) {
+        console.log('네이버 로그인 초기화 중 오류발생:', error);
+    }
+}
+
+// ✅ 로그인 상태 확인 + 사용자 정보 가져오기
+function checkLoginStatus() {
+    if (!naverLogin.value) {
+        console.error('네이버 로그인 객체가 초기화 되지 않았습니다.');
+        return;
+    }
+
+    naverLogin.value.getLoginStatus((status) => {
+        if (!status) {
+            console.log('callback 처리에 실패하였습니다.');
+            return;
+        }
+
+        const email = naverLogin.value.user?.getEmail?.();
+        if (!email) {
+            alert('이메일은 필수정보입니다. 정보제공을 동의해주세요');
+            naverLogin.value.reprompt?.();
+            return;
+        }
+
+        // access token 저장 (SDK 구조가 케이스마다 달라서 안전하게)
+        accessToken.value = naverLogin.value.accessToken?.accessToken || naverLogin.value.accessToken || null;
+
+        console.log('로그인 성공!', email);
+    });
+}
+
+// ✅ 로그아웃: access token 삭제는 "백엔드"에서 처리 추천
+function logout() {
+    if (!accessToken.value) {
+        console.log('로그인 상태가 아닙니다.');
+        return;
+    }
+    const logoutUrl = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=mtjjmyTeqJxD3JTzSSKD&client_secret=1WUIDotelN&access_token=${accessToken.value}&service_provider=NAVER`;
+
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = logoutUrl;
+    document.body.appendChild(iframe);
+
+    // ✅ 네이버 SDK가 저장한 sessionStorage 직접 삭제
+    sessionStorage.removeItem('com.naver.nid.access_token');
+    sessionStorage.removeItem('com.naver.nid.oauth.state_token');
+
+    accessToken.value = null;
+
+    nextTick(() => {
+        initializeNaverLoginButton();
+    });
+
+    console.log('로그아웃 요청이 실행되었습니다.');
+}
+
+onMounted(() => {
+    initializeNaverLoginButton();
+});
 </script>
 
 <style scoped src="@/assets/styles/pages/OnboardingFlow/signup-view.css"></style>
