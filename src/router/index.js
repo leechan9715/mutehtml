@@ -4,6 +4,8 @@ import SplashView from '@/views/OnboardingFlow/SplashView.vue';
 import SignUp from '@/views/OnboardingFlow/SignUpView.vue';
 import WelcomeView from '@/views/OnboardingFlow/WelcomeView.vue';
 import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
+import MainLayout from '@/views/main/MainLayout.vue';
+import MainView from '@/views/main/MainView.vue';
 
 const routes = [
     {
@@ -16,6 +18,11 @@ const routes = [
             { path: 'welcome', component: WelcomeView },
             { path: 'signup-info', component: SignUpInfoView }
         ]
+    },
+    {
+        path: '/main',
+        component: MainLayout,
+        children: [{ path: '', component: MainView, meta: { isProfile: true } }]
     }
 ];
 
