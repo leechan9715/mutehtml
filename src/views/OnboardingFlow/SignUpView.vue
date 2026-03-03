@@ -84,26 +84,12 @@
     </main>
 </template>
 
-<script>
+<script setup>
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import facebook from '@/assets/images/signup/facebook.png';
 import google from '@/assets/images/signup/google.png';
 import apple from '@/assets/images/signup/apple.png';
-export default {
-    name: 'SignUp',
-    components: {
-        BaseInput,
-        BaseButton
-    },
-    data() {
-        return {
-            facebook,
-            google,
-            apple
-        };
-    }
-};
 </script>
 
 <style scoped src="@/assets/styles/pages/OnboardingFlow/signup-view.css"></style>
