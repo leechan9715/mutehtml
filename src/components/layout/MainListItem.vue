@@ -47,7 +47,7 @@ a > img {
     padding: 15px 10px;
     border-radius: 5px;
     border: 1px solid #bbd1ff;
-    background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgb(226, 230, 255) 100%);
+    background: #ffffff;
 }
 .box .artist-name-box p:first-child {
     font-size: var(--font-16);
