@@ -42,7 +42,7 @@ h2 {
   padding: 7px 10px;
   margin-left: auto;
 }
-.name-check p {
+.name-check span {
   text-align: center;
   color: var(--color-black);
   opacity: 50%;

@@ -64,13 +64,13 @@
   gap: 31px;
 }
 
-.modal-buttons button span {
+.modal-buttons button span:nth-child(1) {
   width: 20px;
   /* height: 20px; */
   padding: 0;
 }
 
-.modal-buttons button p {
+.modal-buttons button span:nth-child(2) {
   font-size: var(--font-14);
   font-weight: var(--fw-medium);
 }
