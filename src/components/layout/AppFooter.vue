@@ -49,7 +49,6 @@
                     <div></div>
                     <div class="block"></div>
                 </div>
-                <img :src="circle2" alt="circle2" />
             </div>
             <div class="col-5">
                 <a href="#">
@@ -158,6 +157,11 @@ footer .logo_box {
     height: 70px;
     top: -30px;
     overflow: visible;
+    background-color: #ffffff;
+    box-shadow:
+        inset 0px -7px 10px #b1c9e5,
+        0px 4px 10px rgba(98, 141, 197, 0.5);
+    border-radius: 50%;
 }
 
 footer .face {
@@ -172,18 +176,11 @@ footer .face {
     z-index: 1;
 }
 
-footer .logo_box img {
-    position: absolute;
-    width: 100%;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
 footer .block {
     width: 8px;
     height: 8px;
     background: #171f3b;
+    border-radius: 2px;
     z-index: 1;
     transition: all 0.3s ease;
     justify-self: center;
