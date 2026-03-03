@@ -6,7 +6,6 @@ import WelcomeView from '@/views/OnboardingFlow/WelcomeView.vue';
 import MainLayout from '@/views/main/MainLayout.vue';
 import MainView from '@/views/main/MainView.vue';
 import ArtistSelectView from '@/views/OnboardingFlow/ArtistSelectView.vue';
-import SignUpNaverView from '@/views/OnboardingFlow/SignUpNaverView.vue';
 
 const routes = [
     {
@@ -15,7 +14,7 @@ const routes = [
         children: [
             { path: '', redirect: 'splash' },
             { path: 'splash', component: SplashView },
-            { path: 'signup', component: SignUpNaverView },
+            { path: 'signup', component: SignUp },
             { path: 'signup-info', component: SignUp },
             { path: 'welcome', component: WelcomeView },
             { path: 'artist-select', component: ArtistSelectView }
