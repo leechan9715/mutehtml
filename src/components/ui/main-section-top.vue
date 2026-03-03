@@ -1,17 +1,17 @@
 <template>
     <div class="row" @click="$emit('click')">
         <h2 class="title">{{ title }}</h2>
-
         <button class="icon-btn" type="button" aria-label="이동" @click.stop="$emit('click')">
-            <span class="material-symbols-outlined">chevron_right</span>
+            <img src="../../assets/images/icon/right-arrow.png" alt="go" />
         </button>
     </div>
+    <slot />
 </template>
 
 <script>
 export default {
     props: {
-        title: { type: String, default: '요즘 가장 좋아하는 노래' }
+        title: { type: String, default: '' }
     },
     emits: ['click']
 };
@@ -22,27 +22,24 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 14px;
     padding: 0 25px;
-    background-color: white;
 }
 
 .title {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 600;
+    font-size: var(--font-20);
+    font-weight: var(--fw-semibold);
+    line-height: 22px;
 }
 
 .icon-btn {
-    border: 0;
-    background: transparent;
-    padding: 4px;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.material-symbols-outlined {
-    font-size: 18px;
-    line-height: 1;
+img {
+    width: 20px;
+    height: 26px;
 }
 </style>
