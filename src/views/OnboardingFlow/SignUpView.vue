@@ -62,7 +62,7 @@
                 />
                 <div class="col-1 terms-check">
                     <input type="checkbox" id="terms" />
-                    <label for="terms" class="color-primary-2 fw-medium font-12"
+                    <label for="terms" class="color-primary-2 fw-medium font-14"
                         >뮤트에서 제공하는 서비스 약관에 동의합니다.</label
                     >
                 </div>
@@ -72,7 +72,7 @@
                     /></router-link>
                 </div>
                 <div class="col-1 social-login">
-                    <p class="text-center">소셜 계정으로 가입하기</p>
+                    <p class="text-center color-black">SNS 계정으로 간편하게 가입하기</p>
                 </div>
             </form>
             <div class="row g-24 social-login-icon">

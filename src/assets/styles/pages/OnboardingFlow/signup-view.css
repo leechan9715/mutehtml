@@ -35,6 +35,7 @@ h2 {
     display: grid;
     place-content: center;
     cursor: pointer;
+    background-color: #fff;
 }
 
 .terms-check input[type="checkbox"]:checked {
