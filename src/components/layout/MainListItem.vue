@@ -3,8 +3,8 @@
         <img :src="track.img" alt="album_cover1" />
         <div class="box col-2">
             <div class="artist-name-box">
-                <p>{{ track.singer }}</p>
                 <p>{{ track.title }}</p>
+                <p>{{ track.singer }}</p>
             </div>
             <p class="more-btn">⁝</p>
         </div>
@@ -30,7 +30,7 @@ export default {
 
 <style scoped>
 a > img {
-    border-radius: 10px;
+    border-radius: 5px;
     width: 80px;
 }
 
@@ -44,7 +44,7 @@ a > img {
     display: flex;
     align-items: center;
     margin-left: 20px;
-    padding: 15px 10px;
+    padding: 15px 20px;
     border-radius: 5px;
     border: 1px solid #bbd1ff;
     background: #ffffff;

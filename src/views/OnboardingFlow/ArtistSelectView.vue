@@ -47,15 +47,17 @@
                 <div class="button-bg"></div>
 
                 <!-- ✅ 3개 이상 선택 시 active -->
-                <button
-                    type="button"
-                    class="login-btn"
-                    :class="{ active: selectedArtists.length >= 3 }"
-                    :disabled="selectedArtists.length < 3"
-                    @click="testButton"
-                >
-                    넘어가기
-                </button>
+                <router-link to="/signup-info">
+                    <button
+                        type="button"
+                        class="login-btn"
+                        :class="{ active: selectedArtists.length >= 3 }"
+                        :disabled="selectedArtists.length < 3"
+                        @click="testButton"
+                    >
+                        넘어가기
+                    </button>
+                </router-link>
             </div>
         </form>
     </main>

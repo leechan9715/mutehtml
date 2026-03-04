@@ -61,13 +61,16 @@
     transition: all 0.15s ease;
     cursor: pointer;
     user-select: none;
+
 }
 
 .wheel :deep(.wheel-item.is-selected) {
     color: rgba(0, 0, 0, 0.95);
     font-weight: 400;
     transform: scale(1.1);
+    background-color: rgb(255, 255, 255);
 }
+
 /* ✅ 중앙 선택 영역 표시(가이드 라인) */
 .wheel-highlight {
     position: absolute;
@@ -87,7 +90,7 @@
     padding: 12px 14px;
     border: 1px solid var(--color-primary-5);
     border-radius: 14px;
-    background: #fafafa;
+    background: rgba(0, 0, 0, 0.02);
     font-size: 16px;
     text-align: center;
 }
@@ -106,6 +109,7 @@
 .btn:active {
     transform: scale(0.98);
 }
+
 /* ================= 
   생년월일 , 성별 선택 페이지 메인 Css파일
 =====================*/
@@ -118,10 +122,12 @@ main {
 main .row:nth-child(1) {
     margin-bottom: 20px;
 }
+
 main .row:nth-child(2) {
     display: flex;
     justify-content: center;
 }
+
 main .gender {
     display: flex;
     flex-direction: column;
@@ -135,12 +141,15 @@ main .gender {
     margin-bottom: 43px;
     cursor: pointer;
     background-color: transparent;
-    transition: background 1s ease-in-out;
+    transition: background 0.3s ease-in-out;
+    background-color: rgb(255, 255, 255);
 }
+
 main .gender:has(#female:checked) {
     background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(248, 220, 255, 1) 100%);
     border: 1px solid var(--color-pink-2);
 }
+
 main .gender:has(#male:checked) {
     background: linear-gradient(180deg, rgba(200, 218, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
     border: 1px solid var(--color-primary-7);

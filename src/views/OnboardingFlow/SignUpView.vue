@@ -73,10 +73,12 @@
                     >
                 </div>
                 <div class="col-1">
-                    <BaseButton class="login-btn" label="가입하기" variant="active" type="submit" />
+                    <router-link to="/welcome">
+                        <BaseButton class="login-btn" label="가입하기" variant="active"
+                    /></router-link>
                 </div>
                 <div class="col-1 social-login">
-                    <p class="text-center">소셜 계정으로 가입하기</p>
+                    <p class="text-center color-black">SNS 계정으로 간편하게 가입하기</p>
                 </div>
             </form>
             <div class="row g-24 social-login-icon">
@@ -94,6 +96,7 @@ import { useAuthStore } from '@/store/auth';
 import { googleSdkLoaded } from 'vue3-google-login';
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
+
 import kakao from '@/assets/images/signup/kakao.png';
 import google from '@/assets/images/signup/google.png';
 import naver from '@/assets/images/signup/naver.png';
