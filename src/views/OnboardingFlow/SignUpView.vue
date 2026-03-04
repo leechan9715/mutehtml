@@ -76,9 +76,10 @@
                 </div>
             </form>
             <div class="row g-24 social-login-icon">
-                <img :src="kakao" alt="kakao" />
-                <img @click="GoogleLogin" :src="google" alt="google" />
-                <img :src="naver" alt="naver" />
+                <img @click.prevent="kakaoLogin" :src="kakao" alt="kakao" />
+                <img @click.prevent="startGoogleLogin" :src="google" alt="google" />
+                <img @click.prevent="openNaverLogin" :src="naver" alt="naver" />
+                <div id="naverIdLogin" class="hidden"></div>
             </div>
         </div>
     </main>
@@ -92,18 +93,18 @@ import BaseButton from '@/components/ui/BaseButton.vue';
 import kakao from '@/assets/images/signup/kakao.png';
 import google from '@/assets/images/signup/google.png';
 import naver from '@/assets/images/signup/naver.png';
+import { onMounted, nextTick, ref } from 'vue';
 
 const auth = useAuthStore();
-console.log(auth.isLoggedIn);
-const isLoggedIn = auth.isLoggedIn;
-const naverLogin = auth.naverLogin;
-const naverAccessToken = auth.naverAccessToken;
+const error = ref('');
+const naverLogin = ref(null);
 const googleOauthClientId = process.env.VUE_APP_OAUTH_CLIENT;
 const NAVER_CLIENT_ID = process.env.VUE_APP_NAVER_CLIENT_ID;
 const NAVER_CALLBACK_URL = process.env.VUE_APP_NAVER_CALLBACK_URL;
+const KAKAO_JS_KEY = process.env.VUE_APP_KAKAO_JS_KEY;
 
 //  구글 로그인 //
-const GoogleLogin = () => {
+const startGoogleLogin = () => {
     googleSdkLoaded((google) => {
         google.accounts.oauth2
             .initCodeClient({
@@ -111,12 +112,89 @@ const GoogleLogin = () => {
                 scope: 'email profile openid',
                 callback: (response) => {
                     console.log('로그인 성공', response);
-                    isLoggedIn = true;
+                    auth.isLoggedIn = true;
                 }
             })
             .requestCode();
     });
 };
+// 네이버 로그인
+function initNaverButton() {
+    try {
+        if (!window?.naver?.LoginWithNaverId) {
+            console.error('네이버 SDK가 아직 로드되지 않았습니다.');
+            return;
+        }
+
+        naverLogin.value = new window.naver.LoginWithNaverId({
+            clientId: NAVER_CLIENT_ID,
+            callbackUrl: NAVER_CALLBACK_URL, // 콜백 URL로 이동
+            isPopup: false, // 팝업 방식
+            loginButton: { color: 'green', type: 3, height: 60 }
+        });
+
+        naverLogin.value.init(); // ✅ #naverIdLogin 안에 <a> 버튼이 생김
+    } catch (e) {
+        console.log('네이버 로그인 초기화 오류:', e);
+    }
+}
+
+// ✅ 이미지 클릭 → 숨겨진 SDK 버튼(<a>) 클릭 → 로그인 팝업 뜸
+async function openNaverLogin() {
+    await nextTick();
+    const aTag = document.querySelector('#naverIdLogin a');
+    if (!aTag) {
+        console.error('네이버 로그인 버튼이 아직 생성되지 않았습니다. (init 먼저 필요)');
+        return;
+    }
+    aTag.click();
+}
+// KaKao 로그인
+
+function ensureKakaoInit() {
+    if (!KAKAO_JS_KEY) throw new Error('VUE_APP_KAKAO_JS_KEY가 .env에 없습니다.');
+    if (!window.Kakao)
+        throw new Error('Kakao SDK가 로드되지 않았습니다. public/index.html에 kakao.js 넣었는지 확인하세요.');
+    if (!window.Kakao.isInitialized()) window.Kakao.init(KAKAO_JS_KEY);
+}
+
+function kakaoLogin() {
+    try {
+        ensureKakaoInit();
+        window.Kakao.Auth.login({
+            scope: 'profile_nickname,profile_image', // 필요하면 account_email 추가
+            success: (authObj) => {
+                console.log('kakao login success:', authObj);
+
+                // 유저 정보 확인(테스트)
+                window.Kakao.API.request({
+                    url: '/v2/user/me',
+                    success: (res) => {
+                        console.log('kakao user:', res);
+                        // TODO: 여기서 res를 서버로 보내서 회원가입/로그인 처리
+                        // 필요하면 router.push('/signup-info') 같은 식으로 다음 단계 이동
+                    },
+                    fail: (err) => {
+                        console.error(err);
+                        error.value = '유저 정보 조회 실패';
+                    }
+                });
+            },
+            fail: (err) => {
+                console.error(err);
+                error.value = '카카오 로그인 실패';
+            }
+        });
+    } catch (e) {
+        error.value = e.message ?? String(e);
+        console.error(e);
+    }
+}
+
+onMounted(async () => {
+    await nextTick();
+    initNaverButton();
+});
 </script>
 
 <style scoped src="@/assets/styles/pages/OnboardingFlow/signup-view.css"></style>
