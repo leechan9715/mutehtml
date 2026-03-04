@@ -20,156 +20,207 @@
 .g-1 {
     --gap: 1px;
 }
+
 .g-2 {
     --gap: 2px;
 }
+
 .g-3 {
     --gap: 3px;
 }
+
 .g-4 {
     --gap: 4px;
 }
+
 .g-5 {
     --gap: 5px;
 }
+
 .g-6 {
     --gap: 6px;
 }
+
 .g-7 {
     --gap: 7px;
 }
+
 .g-8 {
     --gap: 8px;
 }
+
 .g-9 {
     --gap: 9px;
 }
+
 .g-10 {
     --gap: 10px;
 }
+
 .g-11 {
     --gap: 11px;
 }
+
 .g-12 {
     --gap: 12px;
 }
+
 .g-13 {
     --gap: 13px;
 }
+
 .g-14 {
     --gap: 14px;
 }
+
 .g-15 {
     --gap: 15px;
 }
+
 .g-16 {
     --gap: 16px;
 }
+
 .g-17 {
     --gap: 17px;
 }
+
 .g-18 {
     --gap: 18px;
 }
+
 .g-19 {
     --gap: 19px;
 }
+
 .g-20 {
     --gap: 20px;
 }
+
 .g-21 {
     --gap: 21px;
 }
+
 .g-22 {
     --gap: 22px;
 }
+
 .g-23 {
     --gap: 23px;
 }
+
 .g-24 {
     --gap: 24px;
 }
+
 .g-25 {
     --gap: 25px;
 }
+
 .g-26 {
     --gap: 26px;
 }
+
 .g-27 {
     --gap: 27px;
 }
+
 .g-28 {
     --gap: 28px;
 }
+
 .g-29 {
     --gap: 29px;
 }
+
 .g-30 {
     --gap: 30px;
 }
+
 .g-31 {
     --gap: 31px;
 }
+
 .g-32 {
     --gap: 32px;
 }
+
 .g-33 {
     --gap: 33px;
 }
+
 .g-34 {
     --gap: 34px;
 }
+
 .g-35 {
     --gap: 35px;
 }
+
 .g-36 {
     --gap: 36px;
 }
+
 .g-37 {
     --gap: 37px;
 }
+
 .g-38 {
     --gap: 38px;
 }
+
 .g-39 {
     --gap: 39px;
 }
+
 .g-40 {
     --gap: 40px;
 }
+
 .g-41 {
     --gap: 41px;
 }
+
 .g-42 {
     --gap: 42px;
 }
+
 .g-43 {
     --gap: 43px;
 }
+
 .g-44 {
     --gap: 44px;
 }
+
 .g-45 {
     --gap: 45px;
 }
+
 .g-46 {
     --gap: 46px;
 }
+
 .g-47 {
     --gap: 47px;
 }
+
 .g-48 {
     --gap: 48px;
 }
+
 .g-49 {
     --gap: 49px;
 }
+
 .g-50 {
     --gap: 50px;
 }
+
 .g-51 {
     --gap: 51px;
 }
+
 .g-85 {
     --gap: 85px;
 }
@@ -184,11 +235,8 @@
     padding: 0;
     max-width: 500px;
     margin: 0 auto;
-    /* background: url(../../assets/images/splash_bg/splash-bg-10.png) no-repeat
-    center;
-  background-size: cover;
-  background-attachment: fixed; */
-    background-color: var(--color-white);
+    /* background: url(@/assets/images/splash_bg/splash_bg 4.png) no-repeat center;
+    background-size: cover; */
 }
 
 /* =========================================================

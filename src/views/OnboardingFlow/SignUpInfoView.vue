@@ -3,7 +3,9 @@
         <form class="container" name="signup-info" @submit.prevent="handleSubmit">
             <div class="row">
                 <div class="col-1">
-                    <h2 class="fw-semibold text-center"><span class="color-primary-4">성별</span>을 알려주세요</h2>
+                    <h2 class="fw-semibold text-center color-black">
+                        <span class="color-primary-4">성별</span>을 알려주세요
+                    </h2>
                 </div>
             </div>
 
@@ -30,7 +32,7 @@
 
             <div class="row g-29">
                 <div class="col-1">
-                    <h2 class="fw-semibold text-center">
+                    <h2 class="fw-semibold text-center color-black">
                         <span class="text-center color-primary-3">생년월일</span>을 알려주세요.
                     </h2>
                 </div>
@@ -46,7 +48,7 @@
                             </div>
                         </div>
 
-                        <router-link to="/welcome"
+                        <router-link to="/main"
                             ><BaseButton label="음악 들으러 가기" variant="active" @click="handleSubmit"
                         /></router-link>
                     </div>

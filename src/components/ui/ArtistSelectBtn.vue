@@ -50,15 +50,19 @@ label {
     align-items: center;
     box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
     border-radius: 50%;
+    background-color: white;
 }
 label > img {
     object-fit: cover;
     padding: 4px;
     width: 100%;
 }
+.heart img {
+    width: 60px;
+}
 label .checked-heart {
     position: absolute;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4);
     width: 100%;
     height: 100%;
     border-radius: 50%;
@@ -73,6 +77,8 @@ label:has(input:checked) .checked-heart {
     opacity: 1;
 }
 h2 {
-    margin-top: 4px;
+    margin-top: 10px;
+    color: var(--color-black);
+    font-size: 18px;
 }
 </style>

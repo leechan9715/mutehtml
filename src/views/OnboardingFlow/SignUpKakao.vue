@@ -98,9 +98,6 @@ import apple from '@/assets/images/signup/apple.png';
 const error = ref('');
 
 function ensureKakaoInit() {
-    console.log('Kakao exists?', !!window.Kakao);
-    console.log('Initialized?', window.Kakao?.isInitialized?.());
-    console.log('JS KEY:', process.env.VUE_APP_KAKAO_JS_KEY);
     const jsKey = process.env.VUE_APP_KAKAO_JS_KEY;
 
     if (!jsKey) {
