@@ -18,9 +18,12 @@
 
 #splash {
     display: flex;
-    align-items: center; /* 세로 중앙 */
-    justify-content: center; /* 가로 중앙 */
-    min-height: 100vh; /* 화면 높이만큼 */
+    align-items: center;
+    /* 세로 중앙 */
+    justify-content: center;
+    /* 가로 중앙 */
+    min-height: 100vh;
+    /* 화면 높이만큼 */
 }
 
 /* =========================================================
@@ -28,11 +31,12 @@
    - 내부 요소를 가운데로 모으고
    - logo-1을 absolute로 올리기 위해 position:relative
 ========================================================= */
-#splash > .container {
+#splash>.container {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column; /* 위→아래 배치 */
+    flex-direction: column;
+    /* 위→아래 배치 */
     z-index: 1;
     position: relative;
 }
@@ -42,14 +46,16 @@
    - absolute로 중앙에 떠있다가
    - is-load가 붙으면 1초 동안 scaleX(0) , opacity 0 으로 사라짐
 ========================================================= */
-#splash > .container > .logo-1 {
+#splash>.container>.logo-1 {
     position: absolute;
     transition:
         transform 1s ease-in-out,
-        opacity 1s ease-in-out; /* 0~1s */
+        opacity 1s ease-in-out;
+    /* 0~1s */
     opacity: 1;
 }
-#splash > .container > .logo-1.is-load {
+
+#splash>.container>.logo-1.is-load {
     transform: scaleX(0);
     opacity: 0;
 }
@@ -57,13 +63,13 @@
 /* =========================================================
    4) logo-2 영역 (두번째 로고 + 폼 묶음)
 ========================================================= */
-#splash > .container > .logo-2 {
+#splash>.container>.logo-2 {
     width: 100%;
     height: 100%;
 }
 
 /* 내부 정렬: 세로로 쌓고 중앙 정렬 */
-#splash > .container > .logo-2 > .row {
+#splash>.container>.logo-2>.row {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -75,7 +81,7 @@
    - 1초 딜레이 후 1초 동안 scaleX( 0 -> 1) , opacity (0 -> 1)로 등장 (1~2s)
    - 2초 딜레이 후 margin-bottom을 늘려 아래 요소와 간격 확보 (2~3s)
 ========================================================= */
-#splash > .container > .logo-2 > .row > .logo_box {
+#splash>.container>.logo-2>.row>.logo_box {
     transform: scaleX(0);
     margin-bottom: 0px;
     transition:
@@ -84,7 +90,8 @@
         margin-bottom 1s ease-in-out 2s;
     opacity: 0;
 }
-#splash > .container > .logo-2 > .row > .logo_box.is-load {
+
+#splash>.container>.logo-2>.row>.logo_box.is-load {
     transform: scaleX(1);
     margin-bottom: 24px;
     opacity: 1;
@@ -95,7 +102,7 @@
    - max-height / margin-bottom을 2초부터 열어 공간 확보 (2~3s)
    - opacity는 3초부터 페이드 인 (3~4s)
 ========================================================= */
-#splash > .container > .logo-2 > .row > img.logo-mute-img {
+#splash>.container>.logo-2>.row>img.logo-mute-img {
     opacity: 0;
     margin-bottom: 0;
     max-height: 0;
@@ -104,7 +111,8 @@
         max-height 1s ease-in-out 2s,
         margin-bottom 1s ease-in-out 2s;
 }
-#splash > .container > .logo-2 > .row > img.logo-mute-img.is-load {
+
+#splash>.container>.logo-2>.row>img.logo-mute-img.is-load {
     opacity: 1;
     margin-bottom: 13px;
     max-height: 100px;
@@ -115,19 +123,22 @@
    - max-height / margin-bottom을 2초부터 열어 공간 확보 (2~3s)
    - opacity는 3초부터 페이드 인 (3~4s)
 ========================================================= */
-#splash > .container > .logo-2 > .row > .tagline {
+#splash>.container>.logo-2>.row>.tagline {
     margin-bottom: 0;
     opacity: 0;
     max-height: 0;
-    overflow: hidden; /* max-height 접힐 때 내용 안 튀어나오게 */
+    overflow: hidden;
+    /* max-height 접힐 때 내용 안 튀어나오게 */
     font-size: var(--font-20);
     transition:
         opacity 1s ease-in-out 3s,
         max-height 1s ease-in-out 2s,
         margin-bottom 1s ease-in-out 2s;
     color: var(--color-black);
+    font-weight: var(--fw-600);
 }
-#splash > .container > .logo-2 > .row > .tagline.is-load {
+
+#splash>.container>.logo-2>.row>.tagline.is-load {
     opacity: 1;
     margin-bottom: 16px;
     max-height: 500px;
@@ -139,13 +150,15 @@
    - 3초부터 opacity로 등장 (3~4s)
    - overflow:hidden으로 접히는 동안 내부가 튀어나오지 않게
 ========================================================= */
-#splash > .container > .logo-2 > .row > .login-form {
+#splash>.container>.logo-2>.row>.login-form {
     width: 100%;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* max-height 접힐 때 필수 */
+    overflow: hidden;
+    /* max-height 접힐 때 필수 */
     opacity: 0;
-    max-height: 0px; /* 접힌 상태 */
+    max-height: 0px;
+    /* 접힌 상태 */
     padding: 0px 25px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 1) 23.076923191547394%);
     border-radius: 20px;
@@ -155,18 +168,20 @@
         opacity 1s ease-in-out 3s,
         padding 1s ease-in-out 2s;
 }
-#splash > .container > .logo-2 > .row > .login-form.is-load {
+
+#splash>.container>.logo-2>.row>.login-form.is-load {
     opacity: 1;
     padding: 50px 25px;
     max-height: 500px;
 
-    overflow: initial; /* 펼쳐진 뒤에는 기본 overflow로 */
+    overflow: initial;
+    /* 펼쳐진 뒤에는 기본 overflow로 */
 }
 
 /* =========================================================
    10) 폼 내부 - input 필드
 ========================================================= */
-#splash > .container > .logo-2 > .row > .login-form > .login-form-field {
+#splash>.container>.logo-2>.row>.login-form>.login-form-field {
     width: 100%;
     border-radius: 30px;
     border: 1px solid #bbd1ff;
@@ -174,16 +189,18 @@
     box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
     margin-bottom: 15px;
 }
-#splash > .container > .logo-2 > .row > .login-form > .login-form-field .login-form-label {
+
+#splash>.container>.logo-2>.row>.login-form>.login-form-field .login-form-label {
     display: flex;
     align-items: center;
     gap: 17px;
 }
-#splash > .container > .logo-2 > .row > .login-form > .login-form-field:nth-child(2) {
+
+#splash>.container>.logo-2>.row>.login-form>.login-form-field:nth-child(2) {
     margin-bottom: 13px;
 }
 
-#splash > .container > .logo-2 > .row > .login-form > .login-form-field > .input {
+#splash>.container>.logo-2>.row>.login-form>.login-form-field>.input {
     width: 100%;
     font-size: 14px;
 }
@@ -191,13 +208,14 @@
 /* =========================================================
    11) 아이디/비밀번호 찾기 링크 영역
 ========================================================= */
-#splash > .container > .logo-2 > .row > .login-form > .auth-links {
+#splash>.container>.logo-2>.row>.login-form>.auth-links {
     padding: 0 10px;
     display: flex;
     justify-content: space-between;
     margin-bottom: 54px;
 }
-#splash > .container > .logo-2 > .row > .login-form > .auth-links > a {
+
+#splash>.container>.logo-2>.row>.login-form>.auth-links>a {
     font-size: var(--font-14);
     color: #6f83f7;
 }
@@ -206,6 +224,6 @@
    12) 버튼 공통 + 로그인/회원가입 버튼 스타일
 ========================================================= */
 
-#splash > .container > .logo-2 > .row > .login-form > .btn-login {
+#splash>.container>.logo-2>.row>.login-form>.btn-login {
     margin-bottom: 13px;
 }

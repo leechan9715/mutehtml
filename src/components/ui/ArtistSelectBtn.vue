@@ -73,6 +73,8 @@ label:has(input:checked) .checked-heart {
     opacity: 1;
 }
 h2 {
-    margin-top: 4px;
+    margin-top: 10px;
+    color: var(--color-black);
+    font-size: 18px;
 }
 </style>
