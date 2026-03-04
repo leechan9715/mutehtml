@@ -81,6 +81,7 @@
                 </a>
                 <img :src="google" alt="google" />
                 <img :src="apple" alt="apple" />
+                <button @click="kakaoLogout">카카오 로그아웃</button>
             </div>
         </div>
     </main>
@@ -153,6 +154,17 @@ function kakaoLogin() {
     } catch (e) {
         error.value = e.message ?? String(e);
         console.error(e);
+    }
+}
+function kakaoLogout() {
+    if (!window.Kakao || !window.Kakao.isInitialized()) return;
+
+    if (window.Kakao.Auth.getAccessToken()) {
+        window.Kakao.Auth.logout(() => {
+            console.log('카카오 로그아웃 완료');
+        });
+    } else {
+        console.log('이미 로그아웃 상태');
     }
 }
 </script>
