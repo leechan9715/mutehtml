@@ -3,12 +3,10 @@ import OnboardingLayout from '@/views/OnboardingFlow/OnboardingLayout.vue';
 import SplashView from '@/views/OnboardingFlow/SplashView.vue';
 import SignUp from '@/views/OnboardingFlow/SignUpView.vue';
 import WelcomeView from '@/views/OnboardingFlow/WelcomeView.vue';
-import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
 import MainLayout from '@/views/main/MainLayout.vue';
 import MainView from '@/views/main/MainView.vue';
 import ArtistSelectView from '@/views/OnboardingFlow/ArtistSelectView.vue';
-import SignUpGoogle from '@/views/OnboardingFlow/SignUpGoogle.vue';
-import SignUpKakao from '@/views/OnboardingFlow/SignUpKakao.vue';
+import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
 
 const routes = [
     {

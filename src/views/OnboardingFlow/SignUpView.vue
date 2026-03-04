@@ -76,9 +76,9 @@
                 </div>
             </form>
             <div class="row g-24 social-login-icon">
-                <img :src="facebook" alt="facebook" />
+                <img :src="kakao" alt="kakao" />
                 <img :src="google" alt="google" />
-                <img :src="apple" alt="apple" />
+                <img :src="naver" alt="naver" />
             </div>
         </div>
     </main>
@@ -87,9 +87,9 @@
 <script setup>
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
-import facebook from '@/assets/images/signup/facebook.png';
+import kakao from '@/assets/images/signup/kakao.png';
 import google from '@/assets/images/signup/google.png';
-import apple from '@/assets/images/signup/apple.png';
+import naver from '@/assets/images/signup/naver.png';
 </script>
 
 <style scoped src="@/assets/styles/pages/OnboardingFlow/signup-view.css"></style>
