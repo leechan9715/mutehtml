@@ -96,15 +96,18 @@ import naver from '@/assets/images/signup/naver.png';
 const auth = useAuthStore();
 console.log(auth.isLoggedIn);
 const isLoggedIn = auth.isLoggedIn;
-const oauthClientId = process.env.VUE_APP_OAUTH_CLIENT;
+const naverLogin = auth.naverLogin;
+const naverAccessToken = auth.naverAccessToken;
+const googleOauthClientId = process.env.VUE_APP_OAUTH_CLIENT;
 const NAVER_CLIENT_ID = process.env.VUE_APP_NAVER_CLIENT_ID;
 const NAVER_CALLBACK_URL = process.env.VUE_APP_NAVER_CALLBACK_URL;
 
+//  구글 로그인 //
 const GoogleLogin = () => {
     googleSdkLoaded((google) => {
         google.accounts.oauth2
             .initCodeClient({
-                client_id: oauthClientId,
+                client_id: googleOauthClientId,
                 scope: 'email profile openid',
                 callback: (response) => {
                     console.log('로그인 성공', response);
