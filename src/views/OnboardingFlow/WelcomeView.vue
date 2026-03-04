@@ -7,7 +7,7 @@
                     <h2 class="font-24 fw-800 welcome">WELCOME!</h2>
                 </div>
                 <div class="col-1">
-                    <p class="text-center font-16 fw-400 welcome-des" ref="welcome-des">
+                    <p class="text-center font-18 fw-600 welcome-des color-black" ref="welcome-des">
                         환영합니다, 00님!<br />
                         뮤트는 사용자의 취향을 분석하고<br />
                         그에 맞게 환경을 설계합니다.<br />
