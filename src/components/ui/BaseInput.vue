@@ -39,6 +39,7 @@ export default {
     box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
     height: 56px;
     padding: 0 19px;
+    background-color: #ffffff;
 }
 
 .login-form-label {

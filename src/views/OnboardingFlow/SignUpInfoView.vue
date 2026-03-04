@@ -48,7 +48,7 @@
                             </div>
                         </div>
 
-                        <router-link to="/welcome"
+                        <router-link to="/main"
                             ><BaseButton label="음악 들으러 가기" variant="active" @click="handleSubmit"
                         /></router-link>
                     </div>
