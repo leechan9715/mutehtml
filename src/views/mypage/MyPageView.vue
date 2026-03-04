@@ -41,42 +41,91 @@
                     :icon="menu.icon"
                     :title="menu.title"
                     :link="menu.to"
-                    :danger="menu.danger"
                 />
+                <li>
+                    <router-link to="#" @click.prevent="logout">
+                        <span class="material-symbols-outlined color-red bold">logout</span>
+                        <p>로그아웃</p>
+                        <span class="material-symbols-outlined font-18 thin"> arrow_forward_ios </span>
+                    </router-link>
+                </li>
             </ul>
         </div>
     </div>
 </template>
-
-<script>
+<script setup>
+import { ref } from 'vue';
 import Logo from '@/components/ui/Logo.vue';
 import AppTopBar2 from '@/components/layout/AppTopBar2.vue';
-import profileImg from '@/assets/images/mypage/test.jpg';
 import MenuListItem from '@/components/ui/MenuListItem.vue';
+import profileImgSrc from '@/assets/images/mypage/test.jpg';
+import { useAuthStore } from '@/store/auth';
+const auth = useAuthStore();
+// ✅ data() -> script setup (반응형 필요 없으면 const로 둬도 됨)
+const profileImg = profileImgSrc;
+const auth_check = JSON.parse(localStorage.getItem('login-check'));
+const provider = auth_check.provider || '';
+const isLoggedIn = auth_check.isLoggedIn || false;
+const accessToken = auth_check.AccessToken || null;
 
-export default {
-    name: 'MyPageView',
-    components: {
-        Logo,
-        AppTopBar2,
-        MenuListItem
-    },
-    data() {
-        return {
-            profileImg,
-            settingsMenus: [
-                { icon: 'notifications', title: '알림', to: '#' },
-                { icon: 'local_activity', title: '쿠폰함', to: '#' },
-                { icon: 'event_available', title: '이벤트/행사 정보', to: '#' },
-                { icon: 'campaign', title: '공지사항', to: '#' },
-                { icon: 'support_agent', title: '고객센터', to: '#' },
-                { icon: 'accessibility', title: '접근성', to: '#' },
-                { icon: 'info', title: '버전정보', to: '#' },
-                { icon: 'logout', title: '로그아웃', to: '#', danger: true }
-            ]
-        };
+const settingsMenus = ref([
+    { icon: 'notifications', title: '알림', to: '#' },
+    { icon: 'local_activity', title: '쿠폰함', to: '#' },
+    { icon: 'event_available', title: '이벤트/행사 정보', to: '#' },
+    { icon: 'campaign', title: '공지사항', to: '#' },
+    { icon: 'support_agent', title: '고객센터', to: '#' },
+    { icon: 'accessibility', title: '접근성', to: '#' },
+    { icon: 'info', title: '버전정보', to: '#' }
+]);
+
+const logout = () => {
+    if (provider === 'kakao') {
+        kakaoLogout();
+    }
+
+    if (provider === 'naver') {
+        naverLogout();
+    }
+
+    if (provider === 'google') {
+        googleLogout();
     }
 };
-</script>
+const googleLogout = () => {
+    console.log(auth.isLoggedIn, auth.provider);
+    console.log('googleLogout');
+    localStorage.removeItem('login-check');
+};
+const kakaoLogout = () => {
+    if (!window.Kakao || !window.Kakao.isInitialized()) return;
+    if (window.Kakao.Auth.getAccessToken()) {
+        window.Kakao.Auth.logout(() => {
+            console.log('카카오 로그아웃 완료');
+            localStorage.removeItem('login-check');
+        });
+    } else {
+        console.log('이미 로그아웃 상태');
+    }
+};
+const naverLogout = () => {
+    if (!accessToken) {
+        console.log('로그인 상태가 아닙니다.');
+        return;
+    }
+    const logoutUrl = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=mtjjmyTeqJxD3JTzSSKD&client_secret=1WUIDotelN&access_token=${accessToken}&service_provider=NAVER`;
 
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = logoutUrl;
+    document.body.appendChild(iframe);
+
+    // ✅ 네이버 SDK가 저장한 sessionStorage 직접 삭제
+
+    console.log('로그아웃 요청이 실행되었습니다.');
+    alert('네이버 로그아웃 성공');
+    localStorage.removeItem('login-check');
+};
+console.log(provider, isLoggedIn, accessToken);
+console.log('after remove:', localStorage.getItem('login-check')); // null이면 삭제 성공
+</script>
 <style scoped src="@/assets/styles/pages/mypage.css"></style>

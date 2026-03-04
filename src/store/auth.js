@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        isLoggedIn: false,
-        naverAccessToken: null
+        isLoggedIn: Boolean,
+        AccessToken: null,
+        provider: ''
     })
 });
