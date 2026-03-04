@@ -42,6 +42,6 @@ export default {
 <style scoped>
 /* 기존 card-row의 padding 느낌 유지 */
 .song-swiper {
-    padding: 0 25px;
+    padding: 0 40px 0 0;
 }
 </style>

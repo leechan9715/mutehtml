@@ -1,11 +1,21 @@
 <template>
-    <div class="container"><h1>메인뷰</h1></div>
+    <MainSec01 />
+    <MainSec02 />
+    <MainSec03 />
 </template>
 
 <script>
+import MainSec01 from '@/views/main/MainSec01.vue';
+import MainSec02 from '@/views/main/MainSec02.vue';
+import MainSec03 from '@/views/main/MainSec03.vue';
 export default {
-    name: 'MainView'
+    name: 'MainView',
+    components: {
+        MainSec01,
+        MainSec02,
+        MainSec03
+    }
 };
 </script>
 
-<style></style>
+<style scoped src="@/assets/styles/pages/main-css/sec-01.css"></style>

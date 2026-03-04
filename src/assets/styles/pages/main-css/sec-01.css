@@ -1,0 +1,136 @@
+main {
+    height: calc(100vh - 197px);
+    position: relative;
+    top: -13px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+#lsc {
+    background:
+        linear-gradient(360deg,
+            rgba(255, 255, 255, 0.2) 0%,
+            rgba(211, 244, 254, 0.2) 16.82%,
+            rgba(211, 220, 255, 1) 62.01%,
+            rgba(187, 209, 255, 1) 85.57%),
+        linear-gradient(to left, #ffffff, #ffffff);
+    padding: 31px 41px;
+}
+
+#lsc.container {
+    gap: 25px;
+}
+
+/* 첫번째 row */
+
+#lsc>.row:first-child {
+    position: relative;
+    justify-content: space-between;
+}
+
+#lsc .col-2:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#lsc .content-text-1 h2 {
+    margin-bottom: 6px;
+}
+
+#lsc .content-text-1 h3 {
+    font-size: var(--font-14);
+}
+
+#lsc .content-text-2 p {
+    font-size: var(--font-16);
+    font-weight: var(--fw-400);
+}
+
+/* LP 영역 */
+
+#lsc .col-2:nth-child(2) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background:
+        linear-gradient(180deg,
+            rgba(111, 131, 247, 1) 0%,
+            rgba(56, 82, 232, 1) 100%);
+    border-radius: 50%;
+    height: calc(100% - 10px);
+}
+
+#lsc .play-img {
+    position: absolute;
+    left: 55%;
+    top: 50%;
+    transform: translate(-55%, -50%);
+}
+
+/* 구름 */
+
+#lsc .cloud-img-1 {
+    position: absolute;
+    left: 57%;
+    top: 10%;
+}
+
+#lsc .cloud-img-2 {
+    position: absolute;
+    right: -5%;
+    bottom: 5%;
+}
+
+#lsc .cloud-img-3 {
+    position: absolute;
+    left: -20%;
+    bottom: 15%;
+}
+
+/* --------------------------- */
+/* swiper 영역 */
+/* --------------------------- */
+
+.lsc-swiper-1 {
+    padding-top: 10px;
+}
+
+.tag-slide {
+    width: auto !important;
+}
+
+.tag-slide h4 {
+    display: inline-block;
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--color-accent-blue);
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(218, 229, 255, 1);
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.tag-slide h4:active {
+    background-color: var(--color-primary-4);
+    color: #fff;
+}
+
+.lsc-swiper-1 {
+    padding: 10px 0;
+    /* 그림자 여백 */
+    overflow: hidden;
+    /* Swiper 기본 동작 유지 */
+}
+
+.lsc-swiper-1 .swiper-wrapper {
+    overflow: visible;
+    /* ❌ 넣지 마세요. 기본값으로 두기 */
+}
+
+.tag-slide {
+    padding: 4px 0;
+    /* 위아래 그림자 공간 */
+}

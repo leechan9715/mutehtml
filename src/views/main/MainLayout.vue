@@ -3,8 +3,6 @@
         <AppHeader :isProfile="isProfile" />
         <main>
             <router-view />
-            <playlist-info text="제작자 - 홍길동" />
-            <VibeSelectBtn text="운동" />
         </main>
         <AppFooter />
     </div>
