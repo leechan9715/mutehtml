@@ -1,16 +1,6 @@
 <template>
     <div class="container">
-        <div class="row">
-            <div class="col-3">
-                <span class="material-symbols-outlined font-26 bold color-primary-3"> arrow_back </span>
-            </div>
-            <div class="col-3" style="margin: 0 auto">
-                <h2 class="fw-semibold font-24 text-center">마이페이지</h2>
-            </div>
-            <div class="col-3" style="visibility: hidden">
-                <span class="material-symbols-outlined font-26 bold color-primary-3"> arrow_back </span>
-            </div>
-        </div>
+        <AppTopBar2 title="마이페이지"></AppTopBar2>
         <div class="row">
             <div class="col-1">
                 <h3 class="sub-title">프로필</h3>
@@ -45,61 +35,14 @@
         <div class="row">
             <h3 class="col-1 sub-title fw-800">설정</h3>
             <ul>
-                <li>
-                    <a href="#">
-                        <span class="material-symbols-outlined bold">notifications</span>
-                        <p>알림</p>
-                        <span class="material-symbols-outlined font-18 thin"> arrow_forward_ios </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="material-symbols-outlined bold">local_activity</span>
-                        <p>쿠폰함</p>
-                        <span class="material-symbols-outlined font-18 thin"> arrow_forward_ios </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="material-symbols-outlined bold">event_available</span>
-                        <p>이벤트/행사 정보</p>
-                        <span class="material-symbols-outlined font-18 thin"> arrow_forward_ios </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="material-symbols-outlined bold">campaign</span>
-                        <p>공지사항</p>
-                        <span class="material-symbols-outlined font-18 thin"> arrow_forward_ios </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="material-symbols-outlined bold">support_agent</span>
-                        <p>고객센터</p>
-                        <span class="material-symbols-outlined font-18 thin"> arrow_forward_ios </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="material-symbols-outlined bold">accessibility</span>
-                        <p>접근성</p>
-                        <span class="material-symbols-outlined font-18 thin"> arrow_forward_ios </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="material-symbols-outlined bold">info</span>
-                        <p>버전정보</p>
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <span class="material-symbols-outlined color-red bold">logout</span>
-                        <p>로그아웃</p>
-                        <span class="material-symbols-outlined font-18 thin"> arrow_forward_ios </span>
-                    </a>
-                </li>
+                <MenuListItem
+                    v-for="(menu, index) in settingsMenus"
+                    :key="index"
+                    :icon="menu.icon"
+                    :title="menu.title"
+                    :link="menu.to"
+                    :danger="menu.danger"
+                />
             </ul>
         </div>
     </div>
@@ -107,16 +50,30 @@
 
 <script>
 import Logo from '@/components/ui/Logo.vue';
+import AppTopBar2 from '@/components/layout/AppTopBar2.vue';
 import profileImg from '@/assets/images/mypage/test.jpg';
+import MenuListItem from '@/components/ui/MenuListItem.vue';
 
 export default {
     name: 'MyPageView',
     components: {
-        Logo
+        Logo,
+        AppTopBar2,
+        MenuListItem
     },
     data() {
         return {
-            profileImg
+            profileImg,
+            settingsMenus: [
+                { icon: 'notifications', title: '알림', to: '#' },
+                { icon: 'local_activity', title: '쿠폰함', to: '#' },
+                { icon: 'event_available', title: '이벤트/행사 정보', to: '#' },
+                { icon: 'campaign', title: '공지사항', to: '#' },
+                { icon: 'support_agent', title: '고객센터', to: '#' },
+                { icon: 'accessibility', title: '접근성', to: '#' },
+                { icon: 'info', title: '버전정보', to: '#' },
+                { icon: 'logout', title: '로그아웃', to: '#', danger: true }
+            ]
         };
     }
 };
