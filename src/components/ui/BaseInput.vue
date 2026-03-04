@@ -45,22 +45,38 @@ export default {
     display: flex;
     gap: 25px;
     cursor: pointer;
+    width: 100%;
+    align-items: center;
 }
 
-.login-form-field > input {
-    font-size: 14px;
-    margin-left: 25px;
-    width: 50%;
+/* ✅ 여기 수정 */
+.login-form-field .input {
+    font-size: 16px;
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
 }
+
+/* ✅ placeholder 숨김 */
+.login-form-field .input::placeholder {
+    transition: opacity 0.15s ease;
+}
+.login-form-field .input:focus::placeholder {
+    opacity: 0;
+}
+
 .name-check {
     display: flex;
     border-radius: 35px;
     border: 1px solid var(--color-surface);
-    font-size: var(--font-12);
+    font-size: var(--font-14);
     padding: 7px 10px;
     margin-left: auto;
 }
+
 .name-check p {
+    width: 50px;
     text-align: center;
     color: var(--color-black);
     opacity: 50%;
