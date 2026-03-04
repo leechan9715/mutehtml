@@ -3,9 +3,17 @@
         <label class="login-form-label" :for="id">
             <span class="hidden">{{ title }}</span>
             <span class="material-symbols-outlined color-primary-3 font-16 bold"> {{ icon }} </span>
-            <input class="input" :id="id" :name="name" :type="type" :placeholder="placeholder" />
+            <input
+                class="input"
+                :id="id"
+                :name="name"
+                :type="type"
+                :placeholder="placeholder"
+                :value="modelValue"
+                @input="$emit('update:modelValue', $event.target.value)"
+            />
         </label>
-        <button v-if="showcheck" type="button" class="name-check">
+        <button v-if="showcheck" type="button" class="name-check" @click="$emit('check')">
             <p>{{ checkText }}</p>
         </button>
     </div>
@@ -15,6 +23,8 @@
 export default {
     name: 'BaseInput',
     props: {
+        modelValue: { type: String, default: '' }, // ⭐ 추가
+
         title: { type: String, required: true },
         icon: { type: String, default: '' },
         placeholder: { type: String, default: '' },
@@ -25,7 +35,8 @@ export default {
 
         showcheck: { type: Boolean, default: false },
         checkText: { type: String, default: '중복확인' }
-    }
+    },
+    emits: ['update:modelValue', 'check']
 };
 </script>
 
@@ -39,6 +50,7 @@ export default {
     box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
     height: 56px;
     padding: 0 19px;
+    background-color: #ffffff;
 }
 
 .login-form-label {

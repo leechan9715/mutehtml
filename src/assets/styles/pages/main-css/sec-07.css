@@ -1,0 +1,7 @@
+div {
+    height: 300px;
+}
+
+.favorite-artist .col-3 {
+    pointer-events: none;
+}

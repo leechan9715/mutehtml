@@ -14,7 +14,7 @@
             </div>
         </div>
         <div class="container">
-            <form action="#" method="post" class="row g-15">
+            <form action="#" method="post" class="row g-15" @submit.prevent="registerUser">
                 <BaseInput
                     title="닉네임"
                     icon="person"
@@ -23,6 +23,8 @@
                     name="name"
                     type="text"
                     :showcheck="true"
+                    v-model="nickname"
+                    @check="handleNicknameCheck"
                 />
                 <BaseInput
                     title="이메일"
@@ -32,6 +34,7 @@
                     name="email"
                     type="text"
                     :showcheck="false"
+                    v-model="email"
                 />
                 <BaseInput
                     title="전화번호"
@@ -41,6 +44,7 @@
                     name="phone"
                     type="text"
                     :showcheck="false"
+                    v-model="phone"
                 />
                 <BaseInput
                     title="비밀번호"
@@ -50,6 +54,7 @@
                     name="pass"
                     type="password"
                     :showcheck="false"
+                    v-model="password"
                 />
                 <BaseInput
                     title="비밀번호 재입력"
@@ -59,20 +64,21 @@
                     name="pass"
                     type="password"
                     :showcheck="false"
+                    v-model="confirmPassword"
                 />
                 <div class="col-1 terms-check">
                     <input type="checkbox" id="terms" />
-                    <label for="terms" class="color-primary-2 fw-medium font-12"
+                    <label for="terms" class="color-primary-2 fw-medium font-14"
                         >뮤트에서 제공하는 서비스 약관에 동의합니다.</label
                     >
                 </div>
                 <div class="col-1">
-                    <router-link to="/signup-info">
+                    <router-link to="/welcome">
                         <BaseButton class="login-btn" label="가입하기" variant="active"
                     /></router-link>
                 </div>
                 <div class="col-1 social-login">
-                    <p class="text-center">소셜 계정으로 가입하기</p>
+                    <p class="text-center color-black">SNS 계정으로 간편하게 가입하기</p>
                 </div>
             </form>
             <div class="row g-24 social-login-icon">
@@ -90,6 +96,7 @@ import { useAuthStore } from '@/store/auth';
 import { googleSdkLoaded } from 'vue3-google-login';
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
+
 import kakao from '@/assets/images/signup/kakao.png';
 import google from '@/assets/images/signup/google.png';
 import naver from '@/assets/images/signup/naver.png';
