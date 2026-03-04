@@ -77,7 +77,7 @@
             </form>
             <div class="row g-24 social-login-icon">
                 <img :src="facebook" alt="facebook" />
-                <img :src="google" alt="google" />
+                <img @click="GoogleLogin" :src="google" alt="google" />
                 <img :src="apple" alt="apple" />
             </div>
         </div>
@@ -85,11 +85,35 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/store/auth';
+import { googleSdkLoaded } from 'vue3-google-login';
 import BaseInput from '@/components/ui/BaseInput.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import facebook from '@/assets/images/signup/facebook.png';
 import google from '@/assets/images/signup/google.png';
 import apple from '@/assets/images/signup/apple.png';
+
+const auth = useAuthStore();
+console.log(auth.isLoggedIn);
+const isLoggedIn = auth.isLoggedIn;
+const oauthClientId = process.env.VUE_APP_OAUTH_CLIENT;
+const NAVER_CLIENT_ID = process.env.VUE_APP_NAVER_CLIENT_ID;
+const NAVER_CALLBACK_URL = process.env.VUE_APP_NAVER_CALLBACK_URL;
+
+const GoogleLogin = () => {
+    googleSdkLoaded((google) => {
+        google.accounts.oauth2
+            .initCodeClient({
+                client_id: oauthClientId,
+                scope: 'email profile openid',
+                callback: (response) => {
+                    console.log('로그인 성공', response);
+                    isLoggedIn = true;
+                }
+            })
+            .requestCode();
+    });
+};
 </script>
 
 <style scoped src="@/assets/styles/pages/OnboardingFlow/signup-view.css"></style>
