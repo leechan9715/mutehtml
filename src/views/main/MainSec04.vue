@@ -1,5 +1,5 @@
 <template>
-    <p>작업공간 MainView에 다 모아놨어요</p>
+    <p></p>
 </template>
 
 <script></script>

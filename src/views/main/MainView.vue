@@ -3,6 +3,7 @@
     <MainSec02 />
     <MainSec03 />
     <MainSec04 />
+    <MainSec05 />
 </template>
 
 <script>
@@ -10,13 +11,15 @@ import MainSec01 from '@/views/main/MainSec01.vue';
 import MainSec02 from '@/views/main/MainSec02.vue';
 import MainSec03 from '@/views/main/MainSec03.vue';
 import MainSec04 from '@/views/main/MainSec04.vue';
+import MainSec05 from '@/views/main/MainSec05.vue';
 export default {
     name: 'MainView',
     components: {
         MainSec01,
         MainSec02,
         MainSec03,
-        MainSec04
+        MainSec04,
+        MainSec05
     }
 };
 </script>
