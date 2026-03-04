@@ -141,7 +141,7 @@ main .gender {
     margin-bottom: 43px;
     cursor: pointer;
     background-color: transparent;
-    transition: background 1s ease-in-out;
+    transition: background 0.3s ease-in-out;
     background-color: rgb(255, 255, 255);
 }
 
