@@ -48,10 +48,12 @@ export default {
 .title {
     font-size: var(--font-14);
     font-weight: var(--fw-600);
+    color: var(--color-black);
 }
 
 .artist {
     font-size: var(--font-12);
     font-weight: var(--fw-400);
+    color: var(--color-black);
 }
 </style>

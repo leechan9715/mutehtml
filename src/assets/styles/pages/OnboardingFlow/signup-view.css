@@ -7,12 +7,15 @@ h2 {
     font-weight: 500;
     padding-top: 37px;
 }
+
 .title {
     flex-direction: column;
 }
+
 .container:first-of-type {
     margin-bottom: 43px;
 }
+
 .terms-check {
     display: flex;
     align-items: center;
@@ -45,12 +48,15 @@ h2 {
     font-size: 12px;
     line-height: 1;
 }
+
 .login-btn {
     margin-bottom: 20px;
 }
+
 .social-login {
     margin-bottom: 7px;
 }
+
 .social-login-icon {
     justify-content: center;
 }

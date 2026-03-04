@@ -23,13 +23,14 @@ export default {
     align-items: center;
     justify-content: space-between;
     margin-bottom: 14px;
-    padding: 0 25px;
+    padding: 0 10px 0 0;
 }
 
 .title {
     font-size: var(--font-20);
     font-weight: var(--fw-semibold);
     line-height: 22px;
+    color: var(--color-black);
 }
 
 .icon-btn {
