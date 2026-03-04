@@ -15,12 +15,12 @@
                 </div>
             </div>
             <div class="col-2">
-                <img src="../../assets/images/main/lp.png" alt="lp판" class="lp" />
-                <img src="../../assets/images/main/play-white.png" alt="play" class="play-img" />
+                <img src="@/assets/images/main/lp.png" alt="lp판" class="lp" />
+                <img src="@/assets/images/main/play-white.png" alt="play" class="play-img" />
             </div>
-            <img src="../../assets/images/main/cloud.png" alt="cloud" class="cloud-img-1" />
-            <img src="../../assets/images/main/cloud.png" alt="cloud" class="cloud-img-2" />
-            <img src="../../assets/images/main/cloud.png" alt="cloud" class="cloud-img-3" />
+            <img src="@/assets/images/main/cloud.png" alt="cloud" class="cloud-img-1" />
+            <img src="@/assets/images/main/cloud.png" alt="cloud" class="cloud-img-2" />
+            <img src="@/assets/images/main/cloud.png" alt="cloud" class="cloud-img-3" />
         </div>
         <div class="row">
             <Swiper class="lsc-swiper-1" :slides-per-view="'auto'" :space-between="10">

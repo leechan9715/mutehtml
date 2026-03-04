@@ -95,13 +95,18 @@ body {
 .login-btn {
     position: relative;
     z-index: 1;
-    margin-bottom: 41px;
+    margin-bottom: 40px;
     width: calc(100% - 40px);
     max-width: 600px;
     padding: 17px;
     border-radius: 30px;
     font-size: var(--font-22);
     font-weight: bold;
+    background-color: #BDC6E0;
+    color: var(--color-white);
+}
+
+.login-btn .active {
     background: linear-gradient(180deg, rgba(111, 131, 247, 1) 0%, rgba(56, 82, 232, 1) 100%);
     color: var(--color-white);
 }
