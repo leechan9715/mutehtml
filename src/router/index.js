@@ -20,8 +20,7 @@ const routes = [
             { path: 'signup', component: SignUp },
             { path: 'signup-info', component: SignUpInfoView },
             { path: 'welcome', component: WelcomeView },
-            { path: 'artist-select', component: ArtistSelectView },
-            { path: 'chart', component: ChartView }
+            { path: 'artist-select', component: ArtistSelectView }
         ]
     },
     {
@@ -29,7 +28,8 @@ const routes = [
         component: MainLayout,
         children: [
             { path: '', component: MainView, meta: { isProfile: true } },
-            { path: '/mypage', component: MyPageView, meta: { isProfile: false } }
+            { path: '/mypage', component: MyPageView, meta: { isProfile: false } },
+            { path: '/chart', component: ChartView, meta: { isProfile: false } }
         ]
     }
 ];

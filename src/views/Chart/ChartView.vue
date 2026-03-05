@@ -1,5 +1,4 @@
 <template>
-    <AppHeader :isProfile="isProfile" />
     <section class="container">
         <div class="row boundery-select">
             <div class="col-3">
@@ -11,7 +10,7 @@
                                 ? require('@/assets/images/icon/country_checked.png')
                                 : require('@/assets/images/icon/country.png')
                         "
-                        width="50"
+                        width="70"
                     />
                     <span>국내</span>
                 </label>
@@ -24,7 +23,7 @@
                                 ? require('@/assets/images/icon/globe_checked.png')
                                 : require('@/assets/images/icon/globe.png')
                         "
-                        width="50"
+                        width="70"
                     />
                     <span>해외</span>
                 </label>
@@ -37,7 +36,7 @@
                                 ? require('@/assets/images/icon/heart_checked.png')
                                 : require('@/assets/images/icon/heart.png')
                         "
-                        width="50"
+                        width="70"
                     />
                     <span>나만</span>
                 </label>
@@ -84,22 +83,17 @@
                 </a>
             </div>
         </div>
-        <ChartList></ChartList>
+        <ChartList />
     </section>
-    <AppFooter></AppFooter>
 </template>
 
 <script>
-import AppFooter from '@/components/layout/AppFooter.vue';
-import AppHeader from '@/components/layout/AppHeader.vue';
 import ChartList from '@/components/layout/ChartListItem.vue';
 
 export default {
     name: 'ChartView',
     components: {
-        ChartList,
-        AppHeader,
-        AppFooter
+        ChartList
     },
     data() {
         return {
