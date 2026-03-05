@@ -8,6 +8,7 @@ import MainView from '@/views/main/MainView.vue';
 import ArtistSelectView from '@/views/OnboardingFlow/ArtistSelectView.vue';
 import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
+import ChartView from '@/views/Chart/ChartView.vue';
 
 const routes = [
     {
@@ -19,7 +20,8 @@ const routes = [
             { path: 'signup', component: SignUp },
             { path: 'signup-info', component: SignUpInfoView },
             { path: 'welcome', component: WelcomeView },
-            { path: 'artist-select', component: ArtistSelectView }
+            { path: 'artist-select', component: ArtistSelectView },
+            { path: 'chart', component: ChartView }
         ]
     },
     {
