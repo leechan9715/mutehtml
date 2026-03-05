@@ -119,7 +119,8 @@ const error = ref('');
 const naverLogin = ref(null);
 const googleOauthClientId = process.env.VUE_APP_OAUTH_CLIENT;
 const NAVER_CLIENT_ID = process.env.VUE_APP_NAVER_CLIENT_ID;
-const NAVER_CALLBACK_URL = process.env.VUE_APP_NAVER_CALLBACK_URL;
+const NAVER_LOCAL_CALLBACK_URL = process.env.VUE_APP_LOCAL_NAVER_CALLBACK_URL;
+const NAVER_DOTHOME_CALLBACK_URL = process.env.VUE_APP_DOTHOME_NAVER_CALLBACK_URL;
 const KAKAO_JS_KEY = process.env.VUE_APP_KAKAO_JS_KEY;
 
 //  구글 로그인 //
@@ -155,15 +156,16 @@ const startGoogleLogin = () => {
 
 // 네이버 로그인
 function initNaverButton() {
+    const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    const callbackUrl = isLocal ? NAVER_LOCAL_CALLBACK_URL : NAVER_DOTHOME_CALLBACK_URL;
     try {
         if (!window?.naver?.LoginWithNaverId) {
             console.error('네이버 SDK가 아직 로드되지 않았습니다.');
             return;
         }
-
         naverLogin.value = new window.naver.LoginWithNaverId({
             clientId: NAVER_CLIENT_ID,
-            callbackUrl: NAVER_CALLBACK_URL, // 콜백 URL로 이동
+            callbackUrl: callbackUrl, // 콜백 URL로 이동
             isPopup: false, // 팝업 방식
             loginButton: { color: 'green', type: 3, height: 60 }
         });
