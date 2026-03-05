@@ -9,6 +9,7 @@ import ArtistSelectView from '@/views/OnboardingFlow/ArtistSelectView.vue';
 import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import TicketSelect from '@/views/ticket/TicketSelect.vue';
+import Library from '@/views/library/Library.vue';
 
 const routes = [
     {
@@ -29,7 +30,8 @@ const routes = [
         children: [
             { path: '', component: MainView, meta: { isProfile: true } },
             { path: '/mypage', component: MyPageView, meta: { isProfile: false } },
-            { path: '/ticket-select', component: TicketSelect, meta: { isProfile: false } }
+            { path: '/ticket-select', component: TicketSelect, meta: { isProfile: false } },
+            { path: '/library', component: Library, meta: { isProfile: false } }
         ]
     }
 ];
