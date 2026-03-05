@@ -15,11 +15,11 @@ main {
             rgba(211, 220, 255, 1) 62.01%,
             rgba(187, 209, 255, 1) 85.57%),
         linear-gradient(to left, #ffffff, #ffffff);
-    padding: 31px 41px;
+    padding: 60px 40px 30px 40px;
 }
 
 #lsc.container {
-    gap: 25px;
+    gap: 10px;
 }
 
 /* 첫번째 row */

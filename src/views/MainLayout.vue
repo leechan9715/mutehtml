@@ -39,5 +39,6 @@ main {
     overflow: hidden;
     overflow-y: auto;
     scrollbar-width: none;
+    transform: translateY(-30px);
 }
 </style>

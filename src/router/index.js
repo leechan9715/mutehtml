@@ -8,6 +8,7 @@ import MainView from '@/views/main/MainView.vue';
 import ArtistSelectView from '@/views/OnboardingFlow/ArtistSelectView.vue';
 import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
+import ChartView from '@/views/Chart/ChartView.vue';
 import Search from '@/views/search/search.vue';
 import SearchResult from '@/views/search/search-result.vue';
 import Loading from '@/views/OnboardingFlow/loading.vue';
@@ -37,6 +38,7 @@ const routes = [
         children: [
             { path: '', component: MainView, meta: { isProfile: true } },
             { path: '/mypage', component: MyPageView, meta: { isProfile: false } },
+            { path: '/chart', component: ChartView, meta: { isProfile: false } }
             { path: '/ticket-select', component: TicketSelect, meta: { isProfile: false } },
             { path: '/library', component: Library, meta: { isProfile: false } },
             { path: '/playlist', component: Playlist, meta: { isProfile: false } },
