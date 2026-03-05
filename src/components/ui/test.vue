@@ -13,7 +13,6 @@
 <script>
 import MainContainer from '@/components/ui/main-section-top.vue';
 import SongCard from '@/components/ui/main-album-component.vue';
-
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 
