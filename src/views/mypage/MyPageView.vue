@@ -43,7 +43,7 @@
                     :link="menu.to"
                 />
                 <li>
-                    <router-link to="#" @click.prevent="logout">
+                    <router-link to="/" @click.prevent="logout">
                         <span class="material-symbols-outlined color-red bold">logout</span>
                         <p>로그아웃</p>
                         <span class="material-symbols-outlined font-18 thin"> arrow_forward_ios </span>
@@ -122,8 +122,8 @@ const naverLogout = () => {
     // ✅ 네이버 SDK가 저장한 sessionStorage 직접 삭제
 
     console.log('로그아웃 요청이 실행되었습니다.');
-    alert('네이버 로그아웃 성공');
     localStorage.removeItem('login-check');
+    alert('네이버 로그아웃 성공');
 };
 console.log(provider, isLoggedIn, accessToken);
 console.log('after remove:', localStorage.getItem('login-check')); // null이면 삭제 성공
