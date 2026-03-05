@@ -8,14 +8,21 @@
                 <div class="row">
                     <Logo :class="{ 'is-load': isLoad }" />
                     <img class="logo-mute-img" :class="{ 'is-load': isLoad }" :src="logo_1" alt="Logo_1" />
-                    <p class="tagline" :class="{ 'is-load': isLoad }">나만의 고요한 가상 공간</p>
-                    <form action="#" method="post" name="login-form" class="login-form" :class="{ 'is-load': isLoad }">
+                    <p class="tagline" :class="{ 'is-load': isLoad }">나만의 고요한 가상의 공간</p>
+                    <form
+                        action="#"
+                        method="post"
+                        name="login-form"
+                        class="login-form"
+                        :class="{ 'is-load': isLoad }"
+                        @submit.prevent="handleLogin"
+                    >
                         <BaseInput
                             :showcheck="false"
                             icon="mail"
                             title="이메일"
                             id="login-id"
-                            name="id"
+                            name="email"
                             type="text"
                             placeholder="이메일을 입력하세요"
                             v-model="email"
@@ -25,7 +32,7 @@
                             icon="lock"
                             title="비밀번호"
                             id="login-pass"
-                            name="pass"
+                            name="password"
                             type="password"
                             placeholder="비밀번호를 입력하세요"
                             v-model="password"
@@ -51,6 +58,8 @@ import Logo from '@/components/ui/Logo.vue';
 import AuthHeader from '@/components/layout/AuthHeader.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseInput from '@/components/ui/BaseInput.vue';
+/* 일반 로그인 */
+import { useAuthStore } from '@/store';
 
 export default {
     name: 'SplashView',
@@ -64,8 +73,7 @@ export default {
         return {
             isLoad: false,
             logo_1: logo1,
-
-            /* 로그인 */
+            /* 일반 로그인 */
             email: '',
             password: ''
         };
@@ -75,10 +83,9 @@ export default {
             this.isLoad = true;
         });
     },
-    /* 로그인 */
+    /* 일반 로그인 */
     methods: {
         async handleLogin() {
-            // 간단 검증
             const email = this.email.trim();
             const password = this.password.trim();
 
@@ -86,13 +93,11 @@ export default {
             if (!password) return alert('비밀번호를 입력하세요.');
 
             try {
-                // ✅ Vuex 액션 호출 (auth/login 만들어야 함)
-                await this.$store.dispatch('auth/login', { username: email, password });
-
-                // ✅ 로그인 성공 후 이동
+                const authStore = useAuthStore();
+                await authStore.login({ email, password });
                 this.$router.push('/welcome');
             } catch (e) {
-                const msg = e?.response?.data?.message || e?.response?.data?.error || `로그인 실패 `;
+                const msg = e?.response?.data?.message || e?.response?.data?.error || '회원가입하신 후 이용해주세요.';
                 alert(msg);
             }
         }

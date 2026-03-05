@@ -1,15 +1,23 @@
 <template>
     <li>
-        <a href="#">
-            <span class="material-symbols-outlined bold">notifications</span>
-            <p>알림</p>
+        <router-link :to="link">
+            <span class="material-symbols-outlined bold" :class="{ 'is-danger': danger }">{{ icon }}</span>
+            <p>{{ title }}</p>
             <span class="material-symbols-outlined font-18 thin"> arrow_forward_ios </span>
-        </a>
+        </router-link>
     </li>
 </template>
 
 <script>
-export default {};
+export default {
+    name: 'MenuListItem',
+    props: {
+        icon: { type: String, default: 'notifications' },
+        title: { type: String, required: true },
+        link: { type: String, required: true },
+        danger: { type: Boolean, default: false }
+    }
+};
 </script>
 
 <style scoped>
@@ -39,5 +47,8 @@ li span:last-child {
     margin-left: auto;
     text-indent: 20px;
     font-size: var(--font-18);
+}
+.is-danger {
+    color: var(--color-red);
 }
 </style>
