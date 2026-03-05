@@ -9,6 +9,7 @@ import ArtistSelectView from '@/views/OnboardingFlow/ArtistSelectView.vue';
 import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import Search from '@/views/search/search.vue';
+import SearchResult from '@/views/search/search-result.vue';
 
 const routes = [
     {
@@ -35,6 +36,11 @@ const routes = [
         path: '/search',
         component: MainLayout,
         children: [{ path: '', component: Search, meta: { isProfile: true } }]
+    },
+    {
+        path: '/search-result',
+        component: MainLayout,
+        children: [{ path: '', component: SearchResult, meta: { isProfile: false } }]
     }
 ];
 
