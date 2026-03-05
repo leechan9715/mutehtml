@@ -8,6 +8,9 @@ import MainView from '@/views/main/MainView.vue';
 import ArtistSelectView from '@/views/OnboardingFlow/ArtistSelectView.vue';
 import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
+import Search from '@/views/search/search.vue';
+import SearchResult from '@/views/search/search-result.vue';
+import Loading from '@/views/OnboardingFlow/loading.vue';
 import TicketSelect from '@/views/ticket/TicketSelect.vue';
 import Library from '@/views/library/Library.vue';
 import Playlist from '@/views/playlist/playlist.vue';
@@ -24,7 +27,8 @@ const routes = [
             { path: 'signup', component: SignUp },
             { path: 'signup-info', component: SignUpInfoView },
             { path: 'welcome', component: WelcomeView },
-            { path: 'artist-select', component: ArtistSelectView }
+            { path: 'artist-select', component: ArtistSelectView },
+            { path: 'loading', component: Loading }
         ]
     },
     {
@@ -39,6 +43,16 @@ const routes = [
             { path: '/player', component: Player, meta: { isProfile: false } },
             { path: '/artist-info', component: ArtistInfo, meta: { isProfile: false } }
         ]
+    },
+    {
+        path: '/search',
+        component: MainLayout,
+        children: [{ path: '', component: Search, meta: { isProfile: true } }]
+    },
+    {
+        path: '/search-result',
+        component: MainLayout,
+        children: [{ path: '', component: SearchResult, meta: { isProfile: false } }]
     }
 ];
 
