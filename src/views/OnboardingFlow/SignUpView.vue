@@ -73,9 +73,7 @@
                     >
                 </div>
                 <div class="col-1">
-                    <router-link to="/welcome">
-                        <BaseButton class="login-btn" label="가입하기" variant="active"
-                    /></router-link>
+                    <BaseButton @click.prevent="registerUser" class="login-btn" label="가입하기" variant="active" />
                 </div>
                 <div class="col-1 social-login">
                     <p class="text-center color-black">SNS 계정으로 간편하게 가입하기</p>
@@ -128,17 +126,33 @@ const KAKAO_JS_KEY = process.env.VUE_APP_KAKAO_JS_KEY;
 const startGoogleLogin = () => {
     googleSdkLoaded((google) => {
         google.accounts.oauth2
-            .initCodeClient({
+            .initTokenClient({
                 client_id: googleOauthClientId,
                 scope: 'email profile openid',
                 callback: (response) => {
-                    console.log('로그인 성공', response);
+                    if (response.error) {
+                        console.error('구글 로그인 실패:', response.error);
+                        error.value = '구글 로그인에 실패했습니다.';
+                        return;
+                    }
+                    console.log('구글 로그인 성공', response);
                     auth.isLoggedIn = true;
+                    auth.provider = 'google';
+                    auth.AccessToken = response.access_token ?? null;
+                    localStorage.setItem(
+                        'login-check',
+                        JSON.stringify({
+                            AccessToken: response.access_token,
+                            provider: auth.provider,
+                            isLoggedIn: auth.isLoggedIn
+                        })
+                    );
                 }
             })
-            .requestCode();
+            .requestAccessToken();
     });
 };
+
 // 네이버 로그인
 function initNaverButton() {
     try {
@@ -155,9 +169,50 @@ function initNaverButton() {
         });
 
         naverLogin.value.init(); // ✅ #naverIdLogin 안에 <a> 버튼이 생김
+
+        naverLogin.value.getLoginStatus((status) => {
+            if (status) checkLoginStatus();
+            else console.log('로그인되지 않은 상태입니다.');
+        });
     } catch (e) {
         console.log('네이버 로그인 초기화 오류:', e);
     }
+}
+function checkLoginStatus() {
+    if (!naverLogin.value) {
+        console.error('네이버 로그인 객체가 초기화 되지 않았습니다.');
+        return;
+    }
+
+    naverLogin.value.getLoginStatus((status) => {
+        if (!status) {
+            console.log('callback 처리에 실패하였습니다.');
+            return;
+        }
+
+        const email = naverLogin.value.user?.getEmail?.();
+        if (!email) {
+            alert('이메일은 필수정보입니다. 정보제공을 동의해주세요');
+            naverLogin.value.reprompt?.();
+            return;
+        }
+
+        // access token 저장 (SDK 구조가 케이스마다 달라서 안전하게)
+        const token = naverLogin.value.accessToken?.accessToken || naverLogin.value.accessToken || null;
+        auth.AccessToken = token;
+        auth.isLoggedIn = true;
+        auth.provider = 'naver';
+        // 상단값 로컬스토리지에 저장
+        localStorage.setItem(
+            'login-check',
+            JSON.stringify({
+                AccessToken: auth.AccessToken,
+                provider: auth.provider,
+                isLoggedIn: auth.isLoggedIn
+            })
+        );
+        console.log('로그인 성공!', email);
+    });
 }
 
 // ✅ 이미지 클릭 → 숨겨진 SDK 버튼(<a>) 클릭 → 로그인 팝업 뜸
@@ -186,7 +241,6 @@ function kakaoLogin() {
             scope: 'profile_nickname,profile_image', // 필요하면 account_email 추가
             success: (authObj) => {
                 console.log('kakao login success:', authObj);
-
                 // 유저 정보 확인(테스트)
                 window.Kakao.API.request({
                     url: '/v2/user/me',
@@ -194,6 +248,16 @@ function kakaoLogin() {
                         console.log('kakao user:', res);
                         // TODO: 여기서 res를 서버로 보내서 회원가입/로그인 처리
                         // 필요하면 router.push('/signup-info') 같은 식으로 다음 단계 이동
+                        auth.isLoggedIn = true;
+                        auth.provider = 'kakao';
+                        localStorage.setItem(
+                            'login-check',
+                            JSON.stringify({
+                                AccessToken: null,
+                                provider: auth.provider,
+                                isLoggedIn: auth.isLoggedIn
+                            })
+                        );
                     },
                     fail: (err) => {
                         console.error(err);
@@ -211,6 +275,7 @@ function kakaoLogin() {
         console.error(e);
     }
 }
+console.log('저장된 값:', JSON.parse(localStorage.getItem('login-check')));
 
 onMounted(async () => {
     await nextTick();

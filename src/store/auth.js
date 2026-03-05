@@ -4,7 +4,9 @@ import api from '@/api';
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        isLoggedIn: false,
+        AccessToken: null,
+        provider: '',
+        isLoggedIn: Boolean,
         naverAccessToken: null
     }),
     /* 일반 로그인 */
