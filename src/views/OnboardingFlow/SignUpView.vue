@@ -20,7 +20,7 @@
                     icon="person"
                     placeholder="닉네임을 입력하세요"
                     id="login-name"
-                    name="name"
+                    name="nickname"
                     type="text"
                     :showcheck="true"
                     v-model="nickname"
@@ -51,7 +51,7 @@
                     icon="lock"
                     placeholder="비밀번호를 입력하세요"
                     id="login-pass"
-                    name="pass"
+                    name="password"
                     type="password"
                     :showcheck="false"
                     v-model="password"
@@ -98,7 +98,7 @@ import BaseButton from '@/components/ui/BaseButton.vue';
 import kakao from '@/assets/images/signup/kakao.png';
 import google from '@/assets/images/signup/google.png';
 import naver from '@/assets/images/signup/naver.png';
-import { onMounted, nextTick, ref } from 'vue';
+import { onMounted, nextTick, ref, watch } from 'vue';
 
 /* 일반 로그인 */
 import { useRouter } from 'vue-router';
@@ -119,7 +119,8 @@ const error = ref('');
 const naverLogin = ref(null);
 const googleOauthClientId = process.env.VUE_APP_OAUTH_CLIENT;
 const NAVER_CLIENT_ID = process.env.VUE_APP_NAVER_CLIENT_ID;
-const NAVER_CALLBACK_URL = process.env.VUE_APP_NAVER_CALLBACK_URL;
+const NAVER_LOCAL_CALLBACK_URL = process.env.VUE_APP_LOCAL_NAVER_CALLBACK_URL;
+const NAVER_DOTHOME_CALLBACK_URL = process.env.VUE_APP_DOTHOME_NAVER_CALLBACK_URL;
 const KAKAO_JS_KEY = process.env.VUE_APP_KAKAO_JS_KEY;
 
 //  구글 로그인 //
@@ -155,15 +156,16 @@ const startGoogleLogin = () => {
 
 // 네이버 로그인
 function initNaverButton() {
+    const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    const callbackUrl = isLocal ? NAVER_LOCAL_CALLBACK_URL : NAVER_DOTHOME_CALLBACK_URL;
     try {
         if (!window?.naver?.LoginWithNaverId) {
             console.error('네이버 SDK가 아직 로드되지 않았습니다.');
             return;
         }
-
         naverLogin.value = new window.naver.LoginWithNaverId({
             clientId: NAVER_CLIENT_ID,
-            callbackUrl: NAVER_CALLBACK_URL, // 콜백 URL로 이동
+            callbackUrl: callbackUrl, // 콜백 URL로 이동
             isPopup: false, // 팝업 방식
             loginButton: { color: 'green', type: 3, height: 60 }
         });
@@ -282,11 +284,23 @@ onMounted(async () => {
     initNaverButton();
 });
 /* 일반 회원가입 - 닉네임 중복확인 */
+
+watch(nickname, () => {
+    nicknameChecked.value = false;
+    nicknameCheckText.value = '중복확인';
+});
 const handleNicknameCheck = async () => {
+    const value = nickname.value.trim();
+    if (!value) {
+        alert('닉네임을 입력하세요.');
+        return;
+    }
+
     nicknameChecked.value = false;
     nicknameCheckText.value = '확인중...';
+
     try {
-        const res = await checkNickname(nickname.value.trim());
+        const res = await checkNickname(value);
         if (res.data.available) {
             nicknameChecked.value = true;
             nicknameCheckText.value = '사용가능';
@@ -340,11 +354,10 @@ const registerUser = async () => {
     try {
         /* 일반 회원가입 */
         await auth.register({
-            username: email.value,
-            password: password.value,
+            nickname: nickname.value, // 표시 닉네임
             email: email.value,
             phone: phone.value,
-            nickname: nickname.value
+            password: password.value
         });
         alert('회원가입 성공');
         router.push('/welcome');

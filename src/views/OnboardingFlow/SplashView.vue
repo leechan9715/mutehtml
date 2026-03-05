@@ -22,7 +22,7 @@
                             icon="mail"
                             title="이메일"
                             id="login-id"
-                            name="id"
+                            name="email"
                             type="text"
                             placeholder="이메일을 입력하세요"
                             v-model="email"
@@ -32,7 +32,7 @@
                             icon="lock"
                             title="비밀번호"
                             id="login-pass"
-                            name="pass"
+                            name="password"
                             type="password"
                             placeholder="비밀번호를 입력하세요"
                             v-model="password"
@@ -94,7 +94,7 @@ export default {
 
             try {
                 const authStore = useAuthStore();
-                await authStore.login({ username: email, password });
+                await authStore.login({ email, password });
                 this.$router.push('/welcome');
             } catch (e) {
                 const msg = e?.response?.data?.message || e?.response?.data?.error || '회원가입하신 후 이용해주세요.';

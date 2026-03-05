@@ -45,19 +45,16 @@
 
             <div class="bottom">
                 <div class="button-bg"></div>
-
                 <!-- ✅ 3개 이상 선택 시 active -->
-                <router-link to="/signup-info">
-                    <button
-                        type="button"
-                        class="login-btn"
-                        :class="{ active: selectedArtists.length >= 3 }"
-                        :disabled="selectedArtists.length < 3"
-                        @click="testButton"
-                    >
-                        넘어가기
-                    </button>
-                </router-link>
+                <button
+                    type="button"
+                    class="login-btn"
+                    :class="{ active: selectedArtists.length >= 3 }"
+                    :disabled="selectedArtists.length < 3"
+                    @click="testButton"
+                >
+                    넘어가기
+                </button>
             </div>
         </form>
     </main>
@@ -66,12 +63,14 @@
 <script>
 import ArtistSelectBtn from '@/components/ui/ArtistSelectBtn.vue';
 import imgs from '@/assets/images/artist-select/1 1.png';
+import { useRouter } from 'vue-router';
 
 export default {
     name: 'ArtistSelectView',
     components: { ArtistSelectBtn },
     data() {
         return {
+            router: useRouter(),
             artists: Array.from({ length: 12 }, () => ({
                 name: '아이유',
                 img: imgs
@@ -85,6 +84,7 @@ export default {
             // 3개 미만이면 막기 (disabled로도 막지만 안전하게 한 번 더)
             if (this.selectedArtists.length < 3) return;
             alert(this.selectedArtists.join(', '));
+            this.router.push('/signup-info');
         }
     },
     computed: {

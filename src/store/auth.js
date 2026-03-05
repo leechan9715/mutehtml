@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const { data } = await api.get('/auth/check_login.php');
                 this.isLoggedIn = !!data.logged_in;
-                this.user = data.logged_in ? (data.user ?? { username: data.username }) : null;
+                this.user = data.logged_in ? (data.user ?? { email: data.email }) : null;
             } catch (e) {
                 this.isLoggedIn = false;
                 this.user = null;
@@ -25,8 +25,8 @@ export const useAuthStore = defineStore('auth', {
             }
         },
 
-        async login({ username, password }) {
-            const { data } = await api.post('/auth/login.php', { username, password });
+        async login({ email, password }) {
+            const { data } = await api.post('/auth/login.php', { email, password });
             if (!data?.success) throw new Error('login failed');
             await this.checkAuth(true);
         },
