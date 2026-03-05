@@ -38,7 +38,7 @@
             </div>
         </div>
 
-        <div>
+        <div class="row content3">
             <img src="@/assets/images/main/muteAd/mutead.png" alt="advertise" />
         </div>
     </section>
@@ -59,4 +59,4 @@ export default {
 };
 </script>
 
-<style scoped src="@/assets/styles/pages/main-css/sec-05.css"></style>
+<style scoped src="../../assets/styles/pages/main-css/sec-05.css"></style>

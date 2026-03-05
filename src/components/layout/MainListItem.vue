@@ -18,7 +18,7 @@ export default {
     data() {
         return {
             trackImg,
-            tracks: Array.from({ length: 4 }, () => ({
+            tracks: Array.from({ length: 10 }, () => ({
                 img: trackImg,
                 title: '404(New Era)',
                 singer: 'KiiiKiii (키키) / 2:59'
