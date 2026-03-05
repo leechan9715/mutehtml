@@ -148,6 +148,7 @@ const startGoogleLogin = () => {
                             isLoggedIn: auth.isLoggedIn
                         })
                     );
+                    router.push('/welcome');
                 }
             })
             .requestAccessToken();
@@ -167,6 +168,7 @@ function initNaverButton() {
             clientId: NAVER_CLIENT_ID,
             callbackUrl: callbackUrl, // 콜백 URL로 이동
             isPopup: false, // 팝업 방식
+
             loginButton: { color: 'green', type: 3, height: 60 }
         });
 
@@ -213,6 +215,7 @@ function checkLoginStatus() {
                 isLoggedIn: auth.isLoggedIn
             })
         );
+        router.push('/welcome');
         console.log('로그인 성공!', email);
     });
 }
@@ -248,8 +251,7 @@ function kakaoLogin() {
                     url: '/v2/user/me',
                     success: (res) => {
                         console.log('kakao user:', res);
-                        // TODO: 여기서 res를 서버로 보내서 회원가입/로그인 처리
-                        // 필요하면 router.push('/signup-info') 같은 식으로 다음 단계 이동
+                        router.push('/welcome');
                         auth.isLoggedIn = true;
                         auth.provider = 'kakao';
                         localStorage.setItem(
