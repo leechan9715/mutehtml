@@ -10,6 +10,7 @@ import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
 import MyPageView from '@/views/mypage/MyPageView.vue';
 import Search from '@/views/search/search.vue';
 import SearchResult from '@/views/search/search-result.vue';
+import Loading from '@/views/OnboardingFlow/loading.vue';
 
 const routes = [
     {
@@ -21,7 +22,8 @@ const routes = [
             { path: 'signup', component: SignUp },
             { path: 'signup-info', component: SignUpInfoView },
             { path: 'welcome', component: WelcomeView },
-            { path: 'artist-select', component: ArtistSelectView }
+            { path: 'artist-select', component: ArtistSelectView },
+            { path: 'loading', component: Loading }
         ]
     },
     {
