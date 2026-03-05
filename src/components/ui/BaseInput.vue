@@ -3,9 +3,17 @@
         <label class="login-form-label" :for="id">
             <span class="hidden">{{ title }}</span>
             <span class="material-symbols-outlined color-primary-3 font-16 bold"> {{ icon }} </span>
-            <input class="input" :id="id" :name="name" :type="type" :placeholder="placeholder" />
+            <input
+                class="input"
+                :id="id"
+                :name="name"
+                :type="type"
+                :placeholder="placeholder"
+                :value="modelValue"
+                @input="$emit('update:modelValue', $event.target.value)"
+            />
         </label>
-        <button v-if="showcheck" type="button" class="name-check">
+        <button v-if="showcheck" type="button" class="name-check" @click="$emit('check')">
             <p>{{ checkText }}</p>
         </button>
     </div>
@@ -15,6 +23,8 @@
 export default {
     name: 'BaseInput',
     props: {
+        modelValue: { type: String, default: '' }, // ⭐ 추가
+
         title: { type: String, required: true },
         icon: { type: String, default: '' },
         placeholder: { type: String, default: '' },
@@ -25,7 +35,8 @@ export default {
 
         showcheck: { type: Boolean, default: false },
         checkText: { type: String, default: '중복확인' }
-    }
+    },
+    emits: ['update:modelValue', 'check']
 };
 </script>
 
@@ -46,38 +57,22 @@ export default {
     display: flex;
     gap: 25px;
     cursor: pointer;
-    width: 100%;
-    align-items: center;
 }
 
-/* ✅ 여기 수정 */
-.login-form-field .input {
-    font-size: 16px;
-    width: 100%;
-    border: none;
-    outline: none;
-    background: transparent;
+.login-form-field > input {
+    font-size: 14px;
+    margin-left: 25px;
+    width: 50%;
 }
-
-/* ✅ placeholder 숨김 */
-.login-form-field .input::placeholder {
-    transition: opacity 0.15s ease;
-}
-.login-form-field .input:focus::placeholder {
-    opacity: 0;
-}
-
 .name-check {
     display: flex;
     border-radius: 35px;
     border: 1px solid var(--color-surface);
-    font-size: var(--font-14);
+    font-size: var(--font-12);
     padding: 7px 10px;
     margin-left: auto;
 }
-
 .name-check p {
-    width: 50px;
     text-align: center;
     color: var(--color-black);
     opacity: 50%;
