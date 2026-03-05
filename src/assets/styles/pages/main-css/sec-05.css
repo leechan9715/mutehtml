@@ -44,10 +44,8 @@
     transition: all 0.3s;
 }
 
-#nhj .tab-group input:checked+label {
-    background: linear-gradient(180deg,
-            rgba(111, 131, 247, 1) 0%,
-            rgba(74, 99, 248, 1) 100%);
+#nhj .tab-group input:checked + label {
+    background: linear-gradient(180deg, rgba(111, 131, 247, 1) 0%, rgba(74, 99, 248, 1) 100%);
     color: white;
 }
 
@@ -64,7 +62,7 @@
     gap: 20px;
 }
 
-#nhj .content2 .chart>a>img {
+#nhj .content2 .chart > a > img {
     border-radius: 5px;
     border: 2px solid #bbd1ff;
     width: 80px;
@@ -101,5 +99,8 @@
     font-size: var(--font-24);
     cursor: pointer;
     padding-right: 0px;
+}
 
+#nhj .content3 img {
+    padding: 40px 0;
 }
