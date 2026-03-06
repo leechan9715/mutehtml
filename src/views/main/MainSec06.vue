@@ -9,10 +9,8 @@
     >
         <MainContainer title="내 취향저격 가수" @click="goNext">
             <Swiper class="favorite-artist" :slides-per-view="3.2" :space-between="16">
-                <SwiperSlide v-for="(artist, i) in artists" :key="i">
+                <SwiperSlide v-for="(artist, index) in artists" :key="index">
                     <ArtistSelectBtn
-                        v-for="(artist, index) in artists"
-                        :key="index"
                         :artistImg="artist.img"
                         :artistName="artist.name"
                         :value="index + 1"

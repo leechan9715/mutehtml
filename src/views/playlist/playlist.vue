@@ -10,8 +10,8 @@
             </p>
             <img src="../../assets/images//main/playlist/1.png" alt="" />
             <div class="info-type">
-                <p>제작자 - 홍길동</p>
-                <p>103곡 - 5시간 20분</p>
+                <PlaylistInfo text="제작자 - 홍길동" />
+                <PlaylistInfo text="103곡 - 5시간 20분" />
             </div>
         </div>
         <div class="control">
@@ -30,6 +30,7 @@
 <script>
 import AppTopBar from '@/components/layout/AppTopBar.vue';
 import PlayListItem from '@/components/layout/PlayListItem.vue';
+import PlaylistInfo from '@/components/ui/playlist-info.vue';
 
 export default {
     name: 'PlayList',
@@ -42,7 +43,8 @@ export default {
     },
     components: {
         PlayListItem,
-        AppTopBar
+        AppTopBar,
+        PlaylistInfo
     },
     mounted() {
         // ✅ 1) boundery-select 라디오 이미지 토글

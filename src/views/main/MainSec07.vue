@@ -27,6 +27,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 
 import testImg from '@/assets/images/main/shorts/shorts_img1.png';
+import router from '@/router';
 
 export default {
     name: 'TestView',

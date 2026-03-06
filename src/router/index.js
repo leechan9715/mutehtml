@@ -18,6 +18,7 @@ import Library from '@/views/library/Library.vue';
 import Playlist from '@/views/playlist/playlist.vue';
 import Player from '@/views/player/player.vue';
 import ArtistInfo from '@/views/artistinfo/ArtistInfo.vue';
+import VideoDetail from '@/views/VideoDetail/VideoDetail.vue';
 
 const routes = [
     {
@@ -38,7 +39,8 @@ const routes = [
         component: MainLayout2,
         children: [
             { path: '', component: MainView, meta: { isProfile: true } },
-            { path: 'search', component: Search, meta: { isProfile: true } }
+            { path: 'search', component: Search, meta: { isProfile: true } },
+            { path: 'chart', component: ChartView, meta: { isProfile: true } }
         ]
     },
     {
@@ -54,6 +56,11 @@ const routes = [
             { path: 'artist-info', component: ArtistInfo },
             { path: 'search-result', component: SearchResult }
         ]
+    },
+    {
+        path: '/videos/:id',
+        name: 'videoDetail',
+        component: VideoDetail
     }
 ];
 
