@@ -1,6 +1,6 @@
 <template>
     <div id="wrap">
-        <AppHeader />
+        <AppHeader :isProfile="isProfile" />
         <main>
             <router-view />
         </main>
@@ -10,17 +10,22 @@
 
 <script>
 import AppFooter from '@/components/layout/AppFooter.vue';
-import AppHeader from '@/components/layout/AppHeader.vue';
+import AppHeader from '@/components/layout/AppHeader-2.vue';
 import playlistInfo from '@/components/ui/playlist-info.vue';
 import VibeSelectBtn from '@/components/ui/VibeSelectBtn.vue';
 
 export default {
-    name: 'MainLayout',
+    name: 'MainLayout2',
     components: {
         AppHeader,
         AppFooter,
         playlistInfo,
         VibeSelectBtn
+    },
+    computed: {
+        isProfile() {
+            return this.$route.matched.some((r) => r.meta?.isProfile === true);
+        }
     }
 };
 </script>
@@ -30,13 +35,10 @@ export default {
     padding: 0;
 }
 main {
-    position: relative;
-    top: 30px;
-    height: calc(100vh - 130px);
+    height: calc(100vh - 200px);
     overflow: hidden;
     overflow-y: auto;
     scrollbar-width: none;
     transform: translateY(-30px);
-    background: darkcyan;
 }
 </style>

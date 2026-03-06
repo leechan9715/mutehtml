@@ -1,17 +1,15 @@
 <template>
-    <main>
-        <section class="container" id="section1">
-            <div class="row">
-                <div class="col-1">
-                    <input type="text" placeholder="가수 · 노래제목 · 가사를 적어주세요" />
-                    <span class="material-symbols-outlined bold"> search </span>
-                </div>
+    <section class="container" id="section1">
+        <div class="row">
+            <div class="col-1">
+                <input type="text" placeholder="가수 · 노래제목 · 가사를 적어주세요" />
+                <span class="material-symbols-outlined bold"> search </span>
             </div>
-            <div class="row">
-                <MainListItem />
-            </div>
-        </section>
-    </main>
+        </div>
+        <div class="row">
+            <MainListItem />
+        </div>
+    </section>
 </template>
 
 <script>
