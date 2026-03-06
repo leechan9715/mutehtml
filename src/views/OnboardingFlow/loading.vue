@@ -55,4 +55,4 @@ export default {
 };
 </script>
 
-<style src="@/assets/styles/pages/OnboardingFlow/loading.css"></style>
+<style scoped src="@/assets/styles/pages/OnboardingFlow/loading.css"></style>

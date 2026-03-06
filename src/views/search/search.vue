@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <div id="container-wrap">
         <section class="container" id="section1">
             <div class="row">
                 <div class="col-1">
@@ -20,7 +20,6 @@
                 </Swiper>
             </div>
         </section>
-
         <section class="container" id="section2">
             <div class="row">
                 <div class="col-1">
@@ -62,7 +61,6 @@
                 </div>
             </div>
         </section>
-
         <section class="container" id="section3">
             <div class="row">
                 <div class="col-1">
@@ -79,9 +77,8 @@
                 />
             </div>
         </section>
-    </main>
+    </div>
 </template>
-
 <script>
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Pagination, EffectCoverflow } from 'swiper/modules';
@@ -175,4 +172,4 @@ export default {
 };
 </script>
 
-<style scoped src="../../assets/styles/pages/search-css/search.css"></style>
+<style scoped src="@/assets/styles/pages/search-css/search.css"></style>

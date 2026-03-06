@@ -1,6 +1,6 @@
 /* 상위 박스 */
 .container {
-    padding: 42px 28px 34px 28px;
+    padding: 42px 28px 0 28px;
     display: flex;
     flex-direction: column;
     justify-content: center;

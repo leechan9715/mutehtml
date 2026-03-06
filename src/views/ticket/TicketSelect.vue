@@ -5,7 +5,7 @@
                 <span class="material-symbols-outlined font-26 bold color-primary-3"> arrow_back </span>
             </div>
             <div class="col-3" style="margin: 0 auto">
-                <h2 class="fw-semibold font-24 text-center">마이페이지</h2>
+                <h2 class="fw-semibold font-24 text-center">이용권 선택</h2>
             </div>
             <div class="col-3" style="visibility: hidden">
                 <span class="material-symbols-outlined font-26 bold color-primary-3"> arrow_back </span>
