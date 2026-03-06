@@ -13,12 +13,21 @@
 
 <script>
 import trackImg from '@/assets/images/main/1.png';
+
 export default {
     name: 'MainListItem',
+
+    props: {
+        count: {
+            type: Number,
+            default: 4
+        }
+    },
+
     data() {
         return {
             trackImg,
-            tracks: Array.from({ length: 10 }, () => ({
+            tracks: Array.from({ length: this.count }, () => ({
                 img: trackImg,
                 title: '404(New Era)',
                 singer: 'KiiiKiii (키키) / 2:59'
@@ -62,5 +71,9 @@ a > img {
 .box .more-btn {
     font-size: var(--font-24);
     cursor: pointer;
+}
+
+img {
+    border: 1px solid #bbd1ff;
 }
 </style>
