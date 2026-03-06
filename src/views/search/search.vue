@@ -1,81 +1,83 @@
 <template>
-    <section class="container" id="section1">
-        <div class="row">
-            <div class="col-1">
-                <h2 class="font-20 fw-medium">검색하기</h2>
+    <div id="container-wrap">
+        <section class="container" id="section1">
+            <div class="row">
+                <div class="col-1">
+                    <h2 class="font-20 fw-medium">검색하기</h2>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-1">
-                <input type="text" placeholder="가수 · 노래제목 · 가사를 적어주세요" />
-                <span class="material-symbols-outlined bold"> search </span>
+            <div class="row">
+                <div class="col-1">
+                    <input type="text" placeholder="가수 · 노래제목 · 가사를 적어주세요" />
+                    <span class="material-symbols-outlined bold"> search </span>
+                </div>
             </div>
-        </div>
-        <div class="row">
-            <Swiper class="lsc-swiper-1" :slides-per-view="3.8" :space-between="15">
-                <SwiperSlide v-for="(genre, i) in genres" :key="i">
-                    <h3>{{ genre }}</h3>
-                </SwiperSlide>
-            </Swiper>
-        </div>
-    </section>
-    <section class="container" id="section2">
-        <div class="row">
-            <div class="col-1">
-                <h2>소장하고 싶은 앨범 아트워크 큐레이션</h2>
+            <div class="row">
+                <Swiper class="lsc-swiper-1" :slides-per-view="3.8" :space-between="15">
+                    <SwiperSlide v-for="(genre, i) in genres" :key="i">
+                        <h3>{{ genre }}</h3>
+                    </SwiperSlide>
+                </Swiper>
             </div>
-        </div>
-        <div class="row">
-            <Swiper
-                class="albumSwiper"
-                :slides-per-view="3"
-                effect="coverflow"
-                :grab-cursor="true"
-                :centered-slides="true"
-                :coverflow-effect="{
-                    rotate: 0,
-                    stretch: 0,
-                    depth: 100,
-                    modifier: 3,
-                    slideShadows: true
-                }"
-                :loop="true"
-                :pagination="{ clickable: true }"
-                :modules="albumModules"
-                @slideChange="onSlideChange"
-                @swiper="onSwiper"
-            >
-                <SwiperSlide v-for="(album, i) in albums" :key="i">
-                    <img :src="album.img" :alt="album.title" />
-                </SwiperSlide>
-                <template #container-end>
-                    <div class="swiper-pagination"></div>
-                </template>
-            </Swiper>
-        </div>
-        <div class="row">
-            <div class="col-1">
-                <p>{{ currentTitle }}</p>
-                <p>{{ currentArtist }}</p>
+        </section>
+        <section class="container" id="section2">
+            <div class="row">
+                <div class="col-1">
+                    <h2>소장하고 싶은 앨범 아트워크 큐레이션</h2>
+                </div>
             </div>
-        </div>
-    </section>
-    <section class="container" id="section3">
-        <div class="row">
-            <div class="col-1">
-                <h2 class="font-20 fw-medium">장르 탐색</h2>
+            <div class="row">
+                <Swiper
+                    class="albumSwiper"
+                    :slides-per-view="3"
+                    effect="coverflow"
+                    :grab-cursor="true"
+                    :centered-slides="true"
+                    :coverflow-effect="{
+                        rotate: 0,
+                        stretch: 0,
+                        depth: 100,
+                        modifier: 3,
+                        slideShadows: true
+                    }"
+                    :loop="true"
+                    :pagination="{ clickable: true }"
+                    :modules="albumModules"
+                    @slideChange="onSlideChange"
+                    @swiper="onSwiper"
+                >
+                    <SwiperSlide v-for="(album, i) in albums" :key="i">
+                        <img :src="album.img" :alt="album.title" />
+                    </SwiperSlide>
+                    <template #container-end>
+                        <div class="swiper-pagination"></div>
+                    </template>
+                </Swiper>
             </div>
-        </div>
-        <div class="row g-20">
-            <SearchCategory
-                v-for="(genre, i) in genreList"
-                :key="i"
-                :category="genre.label"
-                :bgImg="genre.bgImg"
-                class="col-2"
-            />
-        </div>
-    </section>
+            <div class="row">
+                <div class="col-1">
+                    <p>{{ currentTitle }}</p>
+                    <p>{{ currentArtist }}</p>
+                </div>
+            </div>
+        </section>
+        <section class="container" id="section3">
+            <div class="row">
+                <div class="col-1">
+                    <h2 class="font-20 fw-medium">장르 탐색</h2>
+                </div>
+            </div>
+            <div class="row g-20">
+                <SearchCategory
+                    v-for="(genre, i) in genreList"
+                    :key="i"
+                    :category="genre.label"
+                    :bgImg="genre.bgImg"
+                    class="col-2"
+                />
+            </div>
+        </section>
+    </div>
 </template>
 <script>
 import { Swiper, SwiperSlide } from 'swiper/vue';
@@ -170,4 +172,4 @@ export default {
 };
 </script>
 
-<style scoped src="../../assets/styles/pages/search-css/search.css"></style>
+<style scoped src="@/assets/styles/pages/search-css/search.css"></style>

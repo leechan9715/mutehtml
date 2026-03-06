@@ -89,6 +89,8 @@ const logout = () => {
 
     if (provider === 'google') {
         googleLogout();
+    } else {
+        return;
     }
 };
 const googleLogout = () => {

@@ -44,7 +44,7 @@ header {
 header.container {
     padding: 20px 25px;
     gap: 25px;
-    background-color: darkgray;
+    background-color: #ffffff;
 }
 
 header .row:nth-child(1) {

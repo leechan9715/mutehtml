@@ -8,6 +8,9 @@
     flex-direction: column;
     margin-top: 66px;
 }
+.container:nth-child(2) {
+    padding-bottom: 25px;
+}
 .container:nth-child(2) .row:nth-child(1) {
     position: relative;
     text-align: center;
@@ -47,7 +50,6 @@
 }
 .btn {
     width: 100%;
-    margin-bottom: 54px;
 }
 /* 로그인버튼 */
 .pay-btn {

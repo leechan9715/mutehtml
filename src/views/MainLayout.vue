@@ -32,11 +32,10 @@ export default {
 main {
     position: relative;
     top: 30px;
-    height: calc(100vh - 130px);
+    height: calc(100vh - 153px);
     overflow: hidden;
     overflow-y: auto;
     scrollbar-width: none;
     transform: translateY(-30px);
-    background: darkcyan;
 }
 </style>

@@ -20,4 +20,4 @@ export default {
 };
 </script>
 
-<style scoped src="../../assets/styles/pages/search-css/search-result.css"></style>
+<style scoped src="@/assets/styles/pages/search-css/search-result.css"></style>
