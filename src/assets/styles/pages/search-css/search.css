@@ -4,6 +4,7 @@
     gap: 30px;
     padding-top: 50px;
 }
+
 #section1 {
     gap: 17px;
 }
@@ -19,6 +20,7 @@
     background-color: #ffffff;
     display: flex;
 }
+
 #section1 .row:nth-child(2) .col-1 input {
     font-size: var(--font-14);
     font-weight: var(--fw-medium);
@@ -36,13 +38,14 @@
 #section1 .row:nth-child(3) h3 {
     font-size: var(--font-16);
     font-weight: var(--fw-medium);
-    padding: 7px;
+    padding: 7px 20px;
     border: 1px solid var(--color-primary-8);
     border-radius: 20px;
     text-align: center;
     cursor: pointer;
     box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
 }
+
 /* section2 */
 
 #section2 {
@@ -50,23 +53,28 @@
     background: linear-gradient(180deg, rgba(187, 209, 255, 1) 0%, rgba(211, 244, 254, 1) 100%);
     padding: 30px 0;
 }
+
 #section2 img {
     width: 200px;
     object-fit: cover;
 }
+
 #section2 h2 {
     font-weight: var(--fw-semibold);
     font-size: var(--font-24);
     text-align: center;
 }
+
 #section2 p {
     text-align: center;
 }
+
 #section2 p:first-child {
     font-weight: var(--fw-medium);
     font-size: var(--font-20);
     margin-bottom: 5px;
 }
+
 #section2 p:last-child {
     font-weight: var(--fw-400);
     font-size: var(--font-18);
@@ -80,9 +88,19 @@
     padding: 24px 0;
     border-radius: 20px;
 }
+
 #section3 .row:nth-child(2) .col-2 :deep(p) {
     text-align: center;
     color: #ffffff;
     font-size: var(--font-24);
     font-weight: var(--fw-medium);
+}
+
+/* 스와이퍼 동그라미 status 안보이게 */
+:deep(.swiper-pagination) {
+    bottom: -20px;
+}
+
+.lsc-swiper-1 {
+    height: 38px;
 }
