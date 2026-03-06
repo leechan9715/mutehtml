@@ -2,7 +2,16 @@
     <div style="padding: 16px">
         <MainContainer title="아티스트 모먼트" @click="goNext">
             <Swiper class="song-swiper" :slides-per-view="3.2" :space-between="16">
-                <SwiperSlide v-for="(short, i) in shorts" :key="i" class="shorts">
+                <SwiperSlide v-for="(short, i) in shorts" :key="i" class="shorts" @click="linkTo()">
+                    <video
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        v-if="results"
+                        class="video"
+                        :src="results.post.video_url"
+                    ></video>
                     <div class="information">
                         <img :src="short.cover" :alt="short.title" />
                         <div class="artist">
@@ -21,13 +30,11 @@
 </template>
 
 <script>
+import { $api } from '@/mixins/mixins';
 import MainContainer from '@/components/ui/main-section-top.vue';
-
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
-
 import testImg from '@/assets/images/main/shorts/shorts_img1.png';
-import router from '@/router';
 
 export default {
     name: 'TestView',
@@ -38,13 +45,27 @@ export default {
                 title: '멸종위기사랑',
                 artist: '이찬혁',
                 cover: testImg
-            }))
+            })),
+            id: '1',
+            results: null
         };
     },
     methods: {
         goNext() {
             console.log('헤더 클릭!');
+        },
+
+        async getPostUrl() {
+            const result = await $api(`http://localhost/test/api/auth/videos.php`, 'GET', { id: this.id });
+            this.results = result;
+            console.log(this.results);
+        },
+        linkTo() {
+            this.$router.push(`/videos/${this.id}`);
         }
+    },
+    mounted() {
+        this.getPostUrl();
     }
 };
 </script>
