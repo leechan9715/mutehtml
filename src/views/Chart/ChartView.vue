@@ -1,5 +1,4 @@
 <template>
-    <Modal />
     <section class="container">
         <div class="row boundery-select">
             <div class="col-3">
@@ -90,13 +89,11 @@
 
 <script>
 import ChartList from '@/components/layout/ChartListItem.vue';
-import Modal from '@/components/layout/Modal.vue';
 
 export default {
     name: 'ChartView',
     components: {
-        ChartList,
-        Modal
+        ChartList
     },
     data() {
         return {

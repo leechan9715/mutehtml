@@ -6,10 +6,6 @@
     background-repeat: no-repeat;
 } */
 
-section {
-    margin: 0 auto;
-}
-
 .top-bar {
     height: 40px;
     padding: 10px 0;
@@ -137,7 +133,6 @@ section {
 
 .music-list {
     width: 100%;
-    padding: 80px 0;
 }
 /*  */
 .music-list .col-2 {

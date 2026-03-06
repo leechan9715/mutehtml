@@ -2,7 +2,7 @@
     <div class="col-1 login-form-field">
         <label class="login-form-label" :for="id">
             <span class="hidden">{{ title }}</span>
-            <span class="material-symbols-outlined color-primary-3 font-16 bold"> {{ icon }} </span>
+            <span class="material-symbols-outlined color-primary-3 font-18 bold"> {{ icon }} </span>
             <input
                 class="input"
                 :id="id"
@@ -60,15 +60,15 @@ export default {
 }
 
 .login-form-field > input {
-    font-size: 14px;
     margin-left: 25px;
     width: 50%;
+    background-color: #bbd1ff;
 }
 .name-check {
     display: flex;
     border-radius: 35px;
     border: 1px solid var(--color-surface);
-    font-size: var(--font-12);
+    font-size: var(--font-14);
     padding: 7px 10px;
     margin-left: auto;
 }
@@ -76,5 +76,13 @@ export default {
     text-align: center;
     color: var(--color-black);
     opacity: 50%;
+}
+
+.input::placeholder {
+    transition: opacity 0.2s;
+}
+
+.input:focus::placeholder {
+    opacity: 0;
 }
 </style>

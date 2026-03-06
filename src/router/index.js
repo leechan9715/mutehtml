@@ -4,6 +4,7 @@ import SplashView from '@/views/OnboardingFlow/SplashView.vue';
 import SignUp from '@/views/OnboardingFlow/SignUpView.vue';
 import WelcomeView from '@/views/OnboardingFlow/WelcomeView.vue';
 import MainLayout from '@/views/MainLayout.vue';
+import MainLayout2 from '@/views/MainLayout-2.vue';
 import MainView from '@/views/main/MainView.vue';
 import ArtistSelectView from '@/views/OnboardingFlow/ArtistSelectView.vue';
 import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
@@ -33,28 +34,24 @@ const routes = [
         ]
     },
     {
-        path: '/main',
-        component: MainLayout,
+        component: MainLayout2,
         children: [
-            { path: '', component: MainView, meta: { isProfile: true } },
-            { path: '/mypage', component: MyPageView, meta: { isProfile: false } },
-            { path: '/chart', component: ChartView, meta: { isProfile: false } },
-            { path: '/ticket-select', component: TicketSelect, meta: { isProfile: false } },
-            { path: '/library', component: Library, meta: { isProfile: false } },
-            { path: '/playlist', component: Playlist, meta: { isProfile: false } },
-            { path: '/player', component: Player, meta: { isProfile: false } },
-            { path: '/artist-info', component: ArtistInfo, meta: { isProfile: false } }
+            { path: '/main', component: MainView, meta: { isProfile: true } },
+            { path: '/search', component: Search, meta: { isProfile: true } }
         ]
     },
     {
-        path: '/search',
         component: MainLayout,
-        children: [{ path: '', component: Search, meta: { isProfile: true } }]
-    },
-    {
-        path: '/search-result',
-        component: MainLayout,
-        children: [{ path: '', component: SearchResult, meta: { isProfile: false } }]
+        children: [
+            { path: '/mypage', component: MyPageView },
+            { path: '/chart', component: ChartView },
+            { path: '/ticket-select', component: TicketSelect },
+            { path: '/library', component: Library },
+            { path: '/playlist', component: Playlist },
+            { path: '/player', component: Player },
+            { path: '/artist-info', component: ArtistInfo },
+            { path: '/search-result', component: SearchResult }
+        ]
     }
 ];
 

@@ -68,11 +68,17 @@
 </template>
 
 <script>
+import pause from '@/assets/images/player/pause.png';
+import play from '@/assets/images/player/play.png';
+
 export default {
     name: 'Player',
 
     data() {
         return {
+            // 이미지
+            pause,
+            play,
             // 설정
             totalDuration: 217,
             currentTime: 0,
@@ -139,14 +145,14 @@ export default {
 
             if (this.isPlaying) {
                 if (this.playPauseImg) {
-                    this.playPauseImg.src = '../../assets/images/player/pause.png';
+                    this.playPauseImg.src = pause;
                     this.playPauseImg.alt = 'pause-button';
                 }
                 this.lastTime = Date.now();
                 this.animationFrameId = requestAnimationFrame(this.playMusic);
             } else {
                 if (this.playPauseImg) {
-                    this.playPauseImg.src = '../../assets/images/player/play.png';
+                    this.playPauseImg.src = play;
                     this.playPauseImg.alt = 'play-button';
                 }
                 if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);

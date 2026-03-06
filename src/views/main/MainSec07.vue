@@ -1,5 +1,5 @@
 <template>
-    <div style="padding: 16px; margin-bottom: 120px">
+    <div style="padding: 16px">
         <MainContainer title="아티스트 모먼트" @click="goNext">
             <Swiper class="song-swiper" :slides-per-view="3.2" :space-between="16">
                 <SwiperSlide v-for="(short, i) in shorts" :key="i" class="shorts">

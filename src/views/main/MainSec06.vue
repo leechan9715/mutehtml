@@ -32,7 +32,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 
 import ArtistSelectBtn from '@/components/ui/ArtistSelectBtn.vue';
-import imgs from '@/assets/images/artist-select/1 1.png';
+import imgs from '@/assets/images/artist-select/1.png';
 
 export default {
     name: 'favorite-artist',
