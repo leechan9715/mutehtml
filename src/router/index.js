@@ -18,13 +18,14 @@ import Library from '@/views/library/Library.vue';
 import Playlist from '@/views/playlist/playlist.vue';
 import Player from '@/views/player/player.vue';
 import ArtistInfo from '@/views/artistinfo/ArtistInfo.vue';
+import VideoDetail from '@/views/VideoDetail/VideoDetail.vue';
 
 const routes = [
     {
-        path: '/',
+        path: '',
         component: OnboardingLayout,
         children: [
-            { path: '', redirect: 'splash' },
+            { path: '', redirect: '/splash' },
             { path: 'splash', component: SplashView },
             { path: 'signup', component: SignUp },
             { path: 'signup-info', component: SignUpInfoView },
@@ -34,24 +35,32 @@ const routes = [
         ]
     },
     {
+        path: '/main',
         component: MainLayout2,
         children: [
-            { path: '/main', component: MainView, meta: { isProfile: true } },
-            { path: '/search', component: Search, meta: { isProfile: true } }
+            { path: '', component: MainView, meta: { isProfile: true } },
+            { path: 'search', component: Search, meta: { isProfile: true } },
+            { path: 'chart', component: ChartView, meta: { isProfile: true } }
         ]
     },
     {
+        path: '/main',
         component: MainLayout,
         children: [
-            { path: '/mypage', component: MyPageView },
-            { path: '/chart', component: ChartView },
-            { path: '/ticket-select', component: TicketSelect },
-            { path: '/library', component: Library },
-            { path: '/playlist', component: Playlist },
-            { path: '/player', component: Player },
-            { path: '/artist-info', component: ArtistInfo },
-            { path: '/search-result', component: SearchResult }
+            { path: 'mypage', component: MyPageView },
+            { path: 'chart', component: ChartView },
+            { path: 'ticket-select', component: TicketSelect },
+            { path: 'library', component: Library },
+            { path: 'playlist', component: Playlist },
+            { path: 'player', component: Player },
+            { path: 'artist-info', component: ArtistInfo },
+            { path: 'search-result', component: SearchResult }
         ]
+    },
+    {
+        path: '/videos/:id',
+        name: 'videoDetail',
+        component: VideoDetail
     }
 ];
 
