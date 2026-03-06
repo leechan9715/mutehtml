@@ -38,7 +38,7 @@ const routes = [
         children: [
             { path: '', component: MainView, meta: { isProfile: true } },
             { path: '/mypage', component: MyPageView, meta: { isProfile: false } },
-            { path: '/chart', component: ChartView, meta: { isProfile: false } }
+            { path: '/chart', component: ChartView, meta: { isProfile: false } },
             { path: '/ticket-select', component: TicketSelect, meta: { isProfile: false } },
             { path: '/library', component: Library, meta: { isProfile: false } },
             { path: '/playlist', component: Playlist, meta: { isProfile: false } },
