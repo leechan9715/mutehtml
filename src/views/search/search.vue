@@ -160,6 +160,7 @@ export default {
     },
 
     methods: {
+        // 입력한 검색어로 검색결과 페이지 이동
         async handleSearch() {
             this.$router.push({
                 path: '/main/search-result',

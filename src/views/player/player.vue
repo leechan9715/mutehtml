@@ -1,5 +1,6 @@
 <template>
     <h2 class="hidden">플레이어</h2>
+
     <section class="container">
         <div class="row top">
             <button>
@@ -10,30 +11,42 @@
             </button>
         </div>
     </section>
+
     <section class="container album-cover">
         <div class="row player-img">
             <div class="col-1">
-                <div class="artist-img">
-                    <img src="@/assets/images/player/player-img1.png" alt="player-img1" />
+                <div class="artist-img" ref="artistImgBox">
+                    <img
+                        :src="albumCover"
+                        alt="player-img1"
+                        crossorigin="anonymous"
+                        ref="albumImage"
+                        @load="handleAlbumLoad"
+                    />
                 </div>
             </div>
         </div>
     </section>
+
     <section class="container color-box">
         <div class="player-info">
-            <p class="song-name">오르트구름</p>
-            <p class="singer-name">윤하</p>
+            <p class="song-name">{{ songName }}</p>
+            <p class="singer-name">{{ singerName }}</p>
         </div>
+
+        <audio ref="audio" :src="audioSrc" preload="metadata"></audio>
+
         <div class="music-progress-container">
             <div class="progress-bar">
                 <div class="progress-fill"></div>
                 <div class="progress-thumb"></div>
             </div>
             <div class="time-display">
-                <span class="current-time">0:00</span>
-                <span class="total-time">3:37</span>
+                <span class="current-time">{{ formatTime(currentTime) }}</span>
+                <span class="total-time">{{ formatTime(totalDuration) }}</span>
             </div>
         </div>
+
         <div class="row player-buttons">
             <div class="col-5 player-buttons-top">
                 <button>
@@ -43,7 +56,11 @@
                     <img src="@/assets/images/player/prev.png" alt="prev-button" />
                 </button>
                 <button class="play-pause-button">
-                    <img src="@/assets/images/player/play.png" alt="play-button" class="play-pause-img" />
+                    <img
+                        :src="isPlaying ? pause : play"
+                        :alt="isPlaying ? 'pause-button' : 'play-button'"
+                        class="play-pause-img"
+                    />
                 </button>
                 <button>
                     <img src="@/assets/images/player/next.png" alt="next-button" />
@@ -53,6 +70,7 @@
                 </button>
             </div>
         </div>
+
         <div class="col-3 player-buttons-bottom">
             <button>
                 <img src="../../assets/images/player/like.png" alt="like-button" />
@@ -71,24 +89,28 @@
 import pause from '@/assets/images/player/pause.png';
 import play from '@/assets/images/player/play.png';
 
+import { $api } from '@/mixins/mixins.js';
+
 export default {
     name: 'Player',
 
     data() {
         return {
-            // 이미지
             pause,
             play,
-            // 설정
-            totalDuration: 217,
+
+            terms: '',
+            audioSrc: '',
+            songName: '곡 제목',
+            singerName: '가수명',
+            albumCover: null,
+
+            totalDuration: 0,
             currentTime: 0,
             isPlaying: false,
             isDragging: false,
-            animationFrameId: null,
             rafId: null,
-            lastTime: Date.now(),
 
-            // DOM
             progressFill: null,
             progressThumb: null,
             currentTimeDisplay: null,
@@ -99,12 +121,10 @@ export default {
             prevButton: null,
             nextButton: null,
 
-            // color
             colorThief: null,
             albumImage: null,
             artistImgBox: null,
 
-            // 이벤트 제거용 핸들러 참조
             _onPlayPauseClick: null,
             _onPrevClick: null,
             _onNextClick: null,
@@ -114,12 +134,81 @@ export default {
             _onTouchStart: null,
             _onTouchMove: null,
             _onTouchEnd: null,
-            _onAlbumLoad: null
+            _onAlbumLoad: null,
+
+            _onLoadedMetadata: null,
+            _onTimeUpdate: null,
+            _onEnded: null
         };
     },
 
-    mounted() {
-        // ✅ DOM 캐싱
+    async mounted() {
+        // URL 쿼리스트링에서 검색어(term) 가져오기
+        // 예: /player?term=아이유
+        this.terms = this.$route.query.term?.trim() || '';
+
+        // 검색어가 있을 때만 실행
+        if (this.terms) {
+            // iTunes API로 노래 1개 검색
+            const result = await $api('https://itunes.apple.com/search', 'GET', {
+                term: this.terms, // 사용자가 입력한 검색어
+                country: 'KR', // 한국 기준 검색
+                media: 'music', // 음악만 검색
+                entity: 'song', // 곡 단위로 검색
+                limit: 1 // 첫 번째 결과만 가져오기
+            });
+
+            // 검색 결과에서 첫 번째 곡 꺼내기
+            const song = result?.results?.[0];
+
+            // 곡 정보가 있을 때만 실행
+            if (song) {
+                // 미리듣기 오디오 주소 저장
+                this.audioSrc = song.previewUrl || '';
+
+                // 곡 제목 저장
+                this.songName = song.trackName;
+
+                // 가수 이름 저장
+                this.singerName = song.artistName || '가수명';
+
+                // Last.fm API 키
+                const LASTFM_API_KEY = process.env.VUE_APP_LASTFM_API_KEY;
+
+                // Last.fm API 기본 주소
+                const LASTFM_BASE_URL = 'https://ws.audioscrobbler.com/2.0/';
+
+                // Last.fm에서 앨범 정보 조회
+                const result = await $api(LASTFM_BASE_URL, 'GET', {
+                    method: 'album.getinfo', // 앨범 정보 가져오기
+                    api_key: LASTFM_API_KEY, // 발급받은 API 키
+                    artist: this.singerName, // 가수명
+                    album: this.songName, // 현재는 곡 제목이 들어가고 있음
+                    format: 'json', // JSON 형식으로 받기
+                    autocorrect: 1 // 오타 자동 보정
+                });
+
+                // 앨범 이미지 배열 가져오기
+                // result.album.image 안에 small, medium, large 같은 이미지 목록이 들어있음
+                const images = result?.album?.image || [];
+
+                // 가장 큰 이미지부터 순서대로 찾기
+                // mega -> extralarge -> large -> medium -> small
+                // '#text' 안에 실제 이미지 URL이 들어있음
+                const biggestImage =
+                    images.find((img) => img.size === 'mega' && img['#text']?.trim())?.['#text'] ||
+                    images.find((img) => img.size === 'extralarge' && img['#text']?.trim())?.['#text'] ||
+                    images.find((img) => img.size === 'large' && img['#text']?.trim())?.['#text'] ||
+                    images.find((img) => img.size === 'medium' && img['#text']?.trim())?.['#text'] ||
+                    images.find((img) => img.size === 'small' && img['#text']?.trim())?.['#text'] ||
+                    '';
+
+                // Last.fm 큰 이미지가 있으면 그걸 사용
+                // 없으면 iTunes 기본 앨범 이미지 사용
+                this.albumCover = biggestImage || song.artworkUrl100 || '';
+            }
+        }
+
         this.progressFill = document.querySelector('.progress-fill');
         this.progressThumb = document.querySelector('.progress-thumb');
         this.currentTimeDisplay = document.querySelector('.current-time');
@@ -133,45 +222,72 @@ export default {
         this.prevButton = prevImg ? prevImg.parentElement : null;
         this.nextButton = nextImg ? nextImg.parentElement : null;
 
-        this.albumImage = document.querySelector('.artist-img img');
-        this.artistImgBox = document.querySelector('.artist-img');
+        this.albumImage = this.$refs.albumImage;
+        this.artistImgBox = this.$refs.artistImgBox;
 
-        // ColorThief는 전역에 로딩돼있다는 가정
         this.colorThief = typeof ColorThief !== 'undefined' ? new ColorThief() : null;
 
-        // ✅ 이벤트 핸들러 정의 + 등록
-        this._onPlayPauseClick = () => {
-            this.isPlaying = !this.isPlaying;
+        const audio = this.$refs.audio;
 
-            if (this.isPlaying) {
-                if (this.playPauseImg) {
-                    this.playPauseImg.src = pause;
-                    this.playPauseImg.alt = 'pause-button';
-                }
-                this.lastTime = Date.now();
-                this.animationFrameId = requestAnimationFrame(this.playMusic);
-            } else {
-                if (this.playPauseImg) {
-                    this.playPauseImg.src = play;
-                    this.playPauseImg.alt = 'play-button';
-                }
-                if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
-                this.animationFrameId = null;
+        this._onLoadedMetadata = () => {
+            this.totalDuration = audio.duration || 0;
+            this.updateProgress();
+        };
+
+        this._onTimeUpdate = () => {
+            if (this.isDragging) return;
+            this.currentTime = audio.currentTime || 0;
+            this.updateProgress();
+        };
+
+        this._onEnded = () => {
+            this.isPlaying = false;
+            this.currentTime = 0;
+            this.updateProgress();
+        };
+
+        if (audio) {
+            audio.addEventListener('loadedmetadata', this._onLoadedMetadata);
+            audio.addEventListener('timeupdate', this._onTimeUpdate);
+            audio.addEventListener('ended', this._onEnded);
+
+            if (this.audioSrc) {
+                audio.load();
             }
+        }
 
-            if (this.currentTime >= this.totalDuration) {
-                this.currentTime = 0;
-                this.updateProgress();
+        this._onPlayPauseClick = async () => {
+            const audio = this.$refs.audio;
+            if (!audio || !this.audioSrc) return;
+
+            if (audio.paused) {
+                try {
+                    await audio.play();
+                    this.isPlaying = true;
+                } catch (error) {
+                    console.log('재생 실패:', error);
+                }
+            } else {
+                audio.pause();
+                this.isPlaying = false;
             }
         };
 
         this._onPrevClick = () => {
-            this.currentTime = Math.max(0, this.currentTime - 5);
+            const audio = this.$refs.audio;
+            if (!audio) return;
+
+            audio.currentTime = Math.max(0, audio.currentTime - 5);
+            this.currentTime = audio.currentTime;
             this.updateProgress();
         };
 
         this._onNextClick = () => {
-            this.currentTime = Math.min(this.totalDuration, this.currentTime + 5);
+            const audio = this.$refs.audio;
+            if (!audio) return;
+
+            audio.currentTime = Math.min(audio.duration || this.totalDuration, audio.currentTime + 5);
+            this.currentTime = audio.currentTime;
             this.updateProgress();
         };
 
@@ -228,125 +344,103 @@ export default {
         window.addEventListener('touchmove', this._onTouchMove, { passive: false });
         window.addEventListener('touchend', this._onTouchEnd);
 
-        // ✅ 이미지 로딩 시 배경색 적용
-        if (this.albumImage) {
-            this.albumImage.crossOrigin = 'Anonymous';
-            this._onAlbumLoad = () => this.applyBackgroundColor();
-
-            if (this.albumImage.complete) {
-                this.applyBackgroundColor();
-            } else {
-                this.albumImage.addEventListener('load', this._onAlbumLoad);
-            }
-        }
-
-        // ✅ 초기 설정
-        if (this.totalTimeDisplay) this.totalTimeDisplay.textContent = this.formatTime(this.totalDuration);
         this.updateProgress();
     },
 
     beforeUnmount() {
-        // 재생 루프 정리
-        if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
-        this.animationFrameId = null;
+        const audio = this.$refs.audio;
 
         if (this.rafId) cancelAnimationFrame(this.rafId);
         this.rafId = null;
 
-        // 이벤트 제거
-        if (this.playPauseButton && this._onPlayPauseClick)
+        if (audio && this._onLoadedMetadata) {
+            audio.removeEventListener('loadedmetadata', this._onLoadedMetadata);
+        }
+        if (audio && this._onTimeUpdate) {
+            audio.removeEventListener('timeupdate', this._onTimeUpdate);
+        }
+        if (audio && this._onEnded) {
+            audio.removeEventListener('ended', this._onEnded);
+        }
+
+        if (this.playPauseButton && this._onPlayPauseClick) {
             this.playPauseButton.removeEventListener('click', this._onPlayPauseClick);
+        }
 
-        if (this.prevButton && this._onPrevClick) this.prevButton.removeEventListener('click', this._onPrevClick);
-        if (this.nextButton && this._onNextClick) this.nextButton.removeEventListener('click', this._onNextClick);
+        if (this.prevButton && this._onPrevClick) {
+            this.prevButton.removeEventListener('click', this._onPrevClick);
+        }
 
-        if (this.progressBar && this._onMouseDown) this.progressBar.removeEventListener('mousedown', this._onMouseDown);
+        if (this.nextButton && this._onNextClick) {
+            this.nextButton.removeEventListener('click', this._onNextClick);
+        }
+
+        if (this.progressBar && this._onMouseDown) {
+            this.progressBar.removeEventListener('mousedown', this._onMouseDown);
+        }
+
         window.removeEventListener('mousemove', this._onMouseMove);
         window.removeEventListener('mouseup', this._onMouseUp);
 
-        if (this.progressBar && this._onTouchStart)
+        if (this.progressBar && this._onTouchStart) {
             this.progressBar.removeEventListener('touchstart', this._onTouchStart);
+        }
+
         window.removeEventListener('touchmove', this._onTouchMove);
         window.removeEventListener('touchend', this._onTouchEnd);
 
-        if (this.albumImage && this._onAlbumLoad) this.albumImage.removeEventListener('load', this._onAlbumLoad);
+        if (this.albumImage && this._onAlbumLoad) {
+            this.albumImage.removeEventListener('load', this._onAlbumLoad);
+        }
     },
 
     methods: {
-        // 시간 형식 변환
         formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
             const secs = Math.floor(seconds % 60);
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         },
 
-        // 진행바 업데이트
         updateProgress() {
-            if (!this.progressFill || !this.progressThumb || !this.currentTimeDisplay) return;
+            if (!this.progressFill || !this.progressThumb) return;
 
-            const percentage = (this.currentTime / this.totalDuration) * 100;
+            const duration = this.totalDuration || 0;
+            const percentage = duration > 0 ? (this.currentTime / duration) * 100 : 0;
             const clamped = Math.max(0, Math.min(100, percentage));
 
             this.progressFill.style.width = clamped + '%';
             this.progressThumb.style.left = clamped + '%';
-            this.currentTimeDisplay.textContent = this.formatTime(this.currentTime);
         },
 
-        // 자동 재생 (requestAnimationFrame)
-        playMusic() {
-            if (this.isPlaying && !this.isDragging) {
-                const now = Date.now();
-                const delta = (now - this.lastTime) / 1000;
-                this.lastTime = now;
-
-                this.currentTime += delta;
-
-                if (this.currentTime >= this.totalDuration) {
-                    this.currentTime = this.totalDuration;
-                    this.isPlaying = false;
-
-                    if (this.playPauseImg) {
-                        this.playPauseImg.src = '../../assets/images/player/play.png';
-                        this.playPauseImg.alt = 'play-button';
-                    }
-
-                    if (this.animationFrameId) cancelAnimationFrame(this.animationFrameId);
-                    this.animationFrameId = null;
-
-                    this.updateProgress();
-                    return;
-                }
-
-                this.updateProgress();
-            }
-
-            if (this.isPlaying) {
-                this.animationFrameId = requestAnimationFrame(this.playMusic);
-            }
-        },
-
-        // 진행바 클릭
         updateTimeFromClick(e) {
             if (!this.progressBar) return;
+            const audio = this.$refs.audio;
+            if (!audio || !audio.duration) return;
+
             const rect = this.progressBar.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
             const percentage = Math.max(0, Math.min(1, clickX / rect.width));
-            this.currentTime = percentage * this.totalDuration;
+
+            audio.currentTime = percentage * audio.duration;
+            this.currentTime = audio.currentTime;
             this.updateProgress();
         },
 
-        // 진행바 터치
         updateTimeFromTouch(e) {
             if (!this.progressBar) return;
+            const audio = this.$refs.audio;
+            if (!audio || !audio.duration) return;
+
             const rect = this.progressBar.getBoundingClientRect();
             const touch = e.touches[0];
             const touchX = touch.clientX - rect.left;
             const percentage = Math.max(0, Math.min(1, touchX / rect.width));
-            this.currentTime = percentage * this.totalDuration;
+
+            audio.currentTime = percentage * audio.duration;
+            this.currentTime = audio.currentTime;
             this.updateProgress();
         },
 
-        // 중앙 영역에서만 색상 추출
         getColorFromCenter(img) {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
@@ -385,7 +479,6 @@ export default {
             return [Math.floor(r / count), Math.floor(g / count), Math.floor(b / count)];
         },
 
-        // 색상 밝기 조절
         adjustBrightness(r, g, b, factor) {
             return [
                 Math.min(255, Math.floor(r * factor)),
@@ -394,7 +487,6 @@ export default {
             ];
         },
 
-        // 색상 적용
         applyBackgroundColor() {
             if (!this.albumImage || !this.artistImgBox) return;
 
@@ -408,38 +500,40 @@ export default {
                 const [bottomR, bottomG, bottomB] = this.adjustBrightness(r, g, b, 1.25);
 
                 this.artistImgBox.style.background = `
-          linear-gradient(
-            180deg,
-            rgba(${topR}, ${topG}, ${topB}, 0.8) 0%,
-            rgba(${midR}, ${midG}, ${midB}, 0.75) 50%,
-            rgba(${bottomR}, ${bottomG}, ${bottomB}, 0.8) 100%
-          )
-        `;
+                    linear-gradient(
+                        180deg,
+                        rgba(${topR}, ${topG}, ${topB}, 0.8) 0%,
+                        rgba(${midR}, ${midG}, ${midB}, 0.75) 50%,
+                        rgba(${bottomR}, ${bottomG}, ${bottomB}, 0.8) 100%
+                    )
+                `;
 
                 this.artistImgBox.style.boxShadow = `
-          0 20px 60px rgba(${r}, ${g}, ${b}, 0.5),
-          0 0 100px rgba(${r}, ${g}, ${b}, 0.3)
-        `;
+                    0 20px 60px rgba(${r}, ${g}, ${b}, 0.5),
+                    0 0 100px rgba(${r}, ${g}, ${b}, 0.3)
+                `;
             } catch (error) {
                 r = 220;
                 g = 180;
                 b = 120;
 
-                // ⚠️ 원본 코드에 264/275 같은 255 초과 값이 있어서 255로 보정했어
                 this.artistImgBox.style.background = `
-          linear-gradient(
-            180deg,
-            rgba(253, 207, 138, 0.8) 0%,
-            rgba(255, 216, 144, 0.75) 50%,
-            rgba(255, 225, 150, 0.8) 100%
-          )
-        `;
+                    linear-gradient(
+                        180deg,
+                        rgba(253, 207, 138, 0.8) 0%,
+                        rgba(255, 216, 144, 0.75) 50%,
+                        rgba(255, 225, 150, 0.8) 100%
+                    )
+                `;
 
                 this.artistImgBox.style.boxShadow = `
-          0 20px 60px rgba(${r}, ${g}, ${b}, 0.5),
-          0 0 100px rgba(${r}, ${g}, ${b}, 0.3)
-        `;
+                    0 20px 60px rgba(${r}, ${g}, ${b}, 0.5),
+                    0 0 100px rgba(${r}, ${g}, ${b}, 0.3)
+                `;
             }
+        },
+        handleAlbumLoad() {
+            this.applyBackgroundColor();
         }
     }
 };

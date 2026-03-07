@@ -32,6 +32,8 @@ main {
     width: 100%;
     margin: 0 auto;
     padding: 5%;
+    object-fit: cover cover;
+    border-radius: 50%;
 }
 
 /* ------------ 아래 박스 -------------- */
