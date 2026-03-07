@@ -1,10 +1,10 @@
 <template>
-    <a href="javascript:void(0)" class="col-2" v-for="(track, index) in tracks" :key="index">
-        <img :src="track.img" alt="album_cover1" />
+    <a href="javascript:void(0)" class="col-2">
+        <img :src="img" alt="album_cover1" />
         <div class="box col-2">
             <div class="artist-name-box">
-                <p>{{ track.title }}</p>
-                <p>{{ track.singer }}</p>
+                <p>{{ title }}</p>
+                <p>{{ singer }}</p>
             </div>
             <p class="more-btn">⁝</p>
         </div>
@@ -16,22 +16,14 @@ import trackImg from '@/assets/images/main/1.png';
 
 export default {
     name: 'MainListItem',
-
     props: {
-        count: {
-            type: Number,
-            default: 4
-        }
+        title: { type: String, default: '' },
+        singer: { type: String, default: '' },
+        img: { type: String, default: '' }
     },
-
     data() {
         return {
-            trackImg,
-            tracks: Array.from({ length: this.count }, () => ({
-                img: trackImg,
-                title: '404(New Era)',
-                singer: 'KiiiKiii (키키) / 2:59'
-            }))
+            trackImg
         };
     }
 };

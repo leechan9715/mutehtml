@@ -2,12 +2,13 @@
     <div style="padding: 16px">
         <MainContainer title="아티스트 모먼트" @click="goNext">
             <Swiper class="song-swiper" :slides-per-view="3.2" :space-between="16">
-                <SwiperSlide v-for="(short, i) in shorts" :key="i" class="shorts">
+                <SwiperSlide v-for="post in posts" :key="post.id" class="shorts" @click="linkTo(post.id)">
+                    <video autoplay muted loop playsinline class="video" :src="post.video_url"></video>
                     <div class="information">
-                        <img :src="short.cover" :alt="short.title" />
+                        <img :src="testImg" :alt="post.title" />
                         <div class="artist">
-                            <p class="artist_song">{{ short.title }}</p>
-                            <p class="artist_name">{{ short.artist }}</p>
+                            <p class="artist_song">{{ post.title }}</p>
+                            <p class="artist_name">{{ post.content }}</p>
                         </div>
                         <div class="buttons">
                             <img src="../../assets/images/icon/play.png" alt="play" />
@@ -21,30 +22,41 @@
 </template>
 
 <script>
+import { $api } from '@/mixins/mixins';
 import MainContainer from '@/components/ui/main-section-top.vue';
-
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
-
 import testImg from '@/assets/images/main/shorts/shorts_img1.png';
-import router from '@/router';
 
 export default {
     name: 'TestView',
     components: { MainContainer, Swiper, SwiperSlide },
     data() {
         return {
-            shorts: Array.from({ length: 8 }).map(() => ({
-                title: '멸종위기사랑',
-                artist: '이찬혁',
-                cover: testImg
-            }))
+            posts: [],
+            testImg
         };
     },
     methods: {
         goNext() {
             console.log('헤더 클릭!');
+        },
+
+        async getPostUrl() {
+            try {
+                const result = await $api('http://localhost/test/api/auth/videolist.php', 'GET');
+                this.posts = result.posts || [];
+            } catch (error) {
+                console.error('게시글 불러오기 실패:', error);
+            }
+        },
+
+        linkTo(id) {
+            this.$router.push(`/videos/${id}`);
         }
+    },
+    mounted() {
+        this.getPostUrl();
     }
 };
 </script>
