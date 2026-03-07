@@ -1,6 +1,6 @@
 <template>
-    <div v-if="result">
-        <video autoplay muted loop playsinline class="video" :src="result.post.video_url"></video>
+    <div class="container" v-if="result">
+        <video autoplay loop controls class="video" :src="result.post.video_url"></video>
         <p>{{ result.post.title }}</p>
 
         <form @submit.prevent="comment_ADD">

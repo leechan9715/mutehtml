@@ -9,13 +9,13 @@
             </form>
         </div>
         <div class="row">
-            <a v-for="(list, index) in this.results" :key="index" href="javascript:void(0)" class="col-2">
-                <MainListItem
-                    :title="list.collectionCensoredName"
-                    :singer="list.artistName"
-                    :img="list.artworkUrl100"
-                />
-            </a>
+            <MainListItem
+                v-for="(list, index) in this.results"
+                :key="index"
+                :title="list.collectionCensoredName"
+                :singer="list.artistName"
+                :img="list.artworkUrl100"
+            />
         </div>
     </section>
 </template>

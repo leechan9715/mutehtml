@@ -7,10 +7,8 @@
                 <div class="tab-group">
                     <input type="radio" id="korea" name="tab" value="korea" v-model="activeTab" />
                     <label for="korea">국내</label>
-
                     <input type="radio" id="global" name="tab" value="global" v-model="activeTab" />
                     <label for="global">해외</label>
-
                     <input type="radio" id="mine" name="tab" value="mine" v-model="activeTab" />
                     <label for="mine">나만</label>
                 </div>
@@ -24,12 +22,24 @@
         <div class="row content2">
             <!-- 국내 -->
             <div class="chart korea-chart" v-show="activeTab === 'korea'">
-                <MainListItem />
+                <MainListItem
+                    v-for="(list, index) in kpop"
+                    :key="index"
+                    :img="list.artworkUrl100"
+                    :title="list.name"
+                    :singer="list.artistName"
+                />
             </div>
 
             <!-- 해외 -->
             <div class="chart global-chart" v-show="activeTab === 'global'">
-                <MainListItem />
+                <MainListItem
+                    v-for="(list, index) in global"
+                    :key="index"
+                    :img="list.artworkUrl100"
+                    :title="list.name"
+                    :singer="list.artistName"
+                />
             </div>
 
             <!-- 나만 -->
@@ -46,6 +56,7 @@
 
 <script>
 import MainListItem from '@/components/layout/MainListItem.vue';
+import { $api } from '@/mixins/mixins';
 export default {
     name: 'HotChartSection',
     components: {
@@ -53,8 +64,36 @@ export default {
     },
     data() {
         return {
-            activeTab: 'korea'
+            activeTab: 'korea',
+            keywords: ['kpop', 'POP'],
+            kpop: [],
+            global: []
         };
+    },
+    methods: {
+        async getKpopResults() {
+            try {
+                const results = await $api('https://muteapp.dothome.co.kr/api/music/kpop_ranking.php', 'GET');
+                this.kpop = results?.feed?.results?.slice(0, 4) || [];
+                console.log(this.kpop);
+            } catch (error) {
+                console.error('getKpopResults error:', error);
+                this.kpop = [];
+            }
+        },
+        async getGlobalResults() {
+            try {
+                const results = await $api('https://muteapp.dothome.co.kr/api/music/global_ranking.php', 'GET');
+                this.global = results?.feed?.results?.slice(0, 4) || [];
+            } catch (error) {
+                console.error('getKpopResults error:', error);
+                this.global = [];
+            }
+        }
+    },
+    mounted() {
+        this.getKpopResults();
+        this.getGlobalResults();
     }
 };
 </script>

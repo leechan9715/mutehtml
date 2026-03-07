@@ -3,7 +3,15 @@
         <MainContainer title="아티스트 모먼트" @click="goNext">
             <Swiper class="song-swiper" :slides-per-view="3.2" :space-between="16">
                 <SwiperSlide v-for="post in posts" :key="post.id" class="shorts" @click="linkTo(post.id)">
-                    <video autoplay muted loop playsinline class="video" :src="post.video_url"></video>
+                    <video
+                        style="object-fit: cover"
+                        autoplay
+                        muted
+                        loop
+                        playsinline
+                        class="video"
+                        :src="post.short_url"
+                    ></video>
                     <div class="information">
                         <img :src="testImg" :alt="post.title" />
                         <div class="artist">

@@ -1,12 +1,5 @@
 <template>
-    <div
-        style="
-            padding: 16px;
-            background:;
-            /* linear-gradient(270deg, rgba(255, 255, 255, 0.52) 0%, rgba(187, 209, 255, 0.52) 100%),
-                linear-gradient(0deg, rgba(248, 220, 255, 1) 0%, rgba(211, 244, 254, 1) 100%); */
-        "
-    >
+    <div style="padding: 16px">
         <MainContainer title="내 취향저격 가수" @click="goNext">
             <Swiper class="favorite-artist" :slides-per-view="3.2" :space-between="16">
                 <SwiperSlide v-for="(artist, index) in artists" :key="index">
