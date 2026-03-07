@@ -2,21 +2,13 @@
     <div style="padding: 16px">
         <MainContainer title="아티스트 모먼트" @click="goNext">
             <Swiper class="song-swiper" :slides-per-view="3.2" :space-between="16">
-                <SwiperSlide v-for="(short, i) in shorts" :key="i" class="shorts" @click="linkTo()">
-                    <video
-                        autoplay
-                        muted
-                        loop
-                        playsinline
-                        v-if="results"
-                        class="video"
-                        :src="results.post.video_url"
-                    ></video>
+                <SwiperSlide v-for="post in posts" :key="post.id" class="shorts" @click="linkTo(post.id)">
+                    <video autoplay muted loop playsinline class="video" :src="post.video_url"></video>
                     <div class="information">
-                        <img :src="short.cover" :alt="short.title" />
+                        <img :src="testImg" :alt="post.title" />
                         <div class="artist">
-                            <p class="artist_song">{{ short.title }}</p>
-                            <p class="artist_name">{{ short.artist }}</p>
+                            <p class="artist_song">{{ post.title }}</p>
+                            <p class="artist_name">{{ post.content }}</p>
                         </div>
                         <div class="buttons">
                             <img src="../../assets/images/icon/play.png" alt="play" />
@@ -41,13 +33,8 @@ export default {
     components: { MainContainer, Swiper, SwiperSlide },
     data() {
         return {
-            shorts: Array.from({ length: 8 }).map(() => ({
-                title: '멸종위기사랑',
-                artist: '이찬혁',
-                cover: testImg
-            })),
-            id: '1',
-            results: null
+            posts: [],
+            testImg
         };
     },
     methods: {
@@ -56,12 +43,16 @@ export default {
         },
 
         async getPostUrl() {
-            const result = await $api(`http://localhost/test/api/auth/videos.php`, 'GET', { id: this.id });
-            this.results = result;
-            console.log(this.results);
+            try {
+                const result = await $api('http://localhost/test/api/auth/videolist.php', 'GET');
+                this.posts = result.posts || [];
+            } catch (error) {
+                console.error('게시글 불러오기 실패:', error);
+            }
         },
-        linkTo() {
-            this.$router.push(`/videos/${this.id}`);
+
+        linkTo(id) {
+            this.$router.push(`/videos/${id}`);
         }
     },
     mounted() {
