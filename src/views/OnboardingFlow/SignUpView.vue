@@ -68,7 +68,7 @@
                 />
                 <div class="col-1 terms-check">
                     <input type="checkbox" id="terms" v-model="terms" />
-                    <label for="terms" class="color-primary-2 fw-medium font-12"
+                    <label for="terms" class="color-primary-2 fw-medium font-14"
                         >뮤트에서 제공하는 서비스 약관에 동의합니다.</label
                     >
                 </div>

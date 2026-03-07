@@ -2,9 +2,9 @@
     <div
         style="
             padding: 16px;
-            background:
-                linear-gradient(270deg, rgba(255, 255, 255, 0.52) 0%, rgba(187, 209, 255, 0.52) 100%),
-                linear-gradient(0deg, rgba(248, 220, 255, 1) 0%, rgba(211, 244, 254, 1) 100%);
+            background:;
+            /* linear-gradient(270deg, rgba(255, 255, 255, 0.52) 0%, rgba(187, 209, 255, 0.52) 100%),
+                linear-gradient(0deg, rgba(248, 220, 255, 1) 0%, rgba(211, 244, 254, 1) 100%); */
         "
     >
         <MainContainer title="내 취향저격 가수" @click="goNext">
@@ -30,7 +30,7 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 
 import ArtistSelectBtn from '@/components/ui/ArtistSelectBtn.vue';
-import imgs from '@/assets/images/artist-select/1 1.png';
+import imgs from '@/assets/images/artist-select/1.png';
 
 export default {
     name: 'favorite-artist',

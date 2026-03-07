@@ -198,7 +198,6 @@
 
 #splash>.container>.logo-2>.row>.login-form>.login-form-field>.input {
     width: 100%;
-    font-size: 14px;
 }
 
 /* =========================================================
@@ -212,7 +211,7 @@
 }
 
 #splash>.container>.logo-2>.row>.login-form>.auth-links>a {
-    font-size: var(--font-14);
+    font-size: var(--font-16);
     color: #6f83f7;
 }
 

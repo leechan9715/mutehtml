@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="row">
-                <Swiper class="lsc-swiper-1" :slides-per-view="3.8" :space-between="15">
+                <Swiper class="lsc-swiper-1" :slides-per-view="4" :space-between="10">
                     <SwiperSlide v-for="(genre, i) in genres" :key="i">
                         <h3>{{ genre }}</h3>
                     </SwiperSlide>
@@ -138,12 +138,11 @@ export default {
             // ✅ 각 앨범마다 다른 이미지 + 정보
             albums: [
                 { title: 'Feel My Rhythm', artist: 'Red Velvet', img: getImg('img-1') },
-                { title: 'Ditto', artist: 'NewJeans', img: getImg('img-2') },
-                { title: 'Antifragile', artist: 'LE SSERAFIM', img: getImg('img-3') },
-                { title: 'Hype Boy', artist: 'NewJeans', img: getImg('img-4') },
-                { title: 'INVU', artist: 'TAEYEON', img: getImg('img-5') },
-                // ✅ 부족한 1장 채우기 (첫 번째 반복)
-                { title: 'Feel My Rhythm', artist: 'Red Velvet', img: getImg('img-1') }
+                { title: 'Kill Bill', artist: 'SZA', img: getImg('img-2') },
+                { title: '그럴때마다', artist: '백예린', img: getImg('img-3') },
+                { title: 'The Less I Know the Better', artist: 'Tame Impala', img: getImg('img-4') },
+                { title: 'Liability', artist: 'LORDE', img: getImg('img-5') },
+                { title: 'Punisher', artist: 'Phoebe Bridgers', img: getImg('img-6') }
             ],
 
             // ✅ 초기값은 첫 번째 앨범

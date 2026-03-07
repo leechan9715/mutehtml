@@ -11,7 +11,7 @@
 }
 
 #nhj .hot-chart p {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: var(--fw-600);
     color: var(--color-black);
 }
@@ -38,13 +38,14 @@
     font-size: var(--font-16);
     background-color: rgb(255, 255, 255);
     padding: 7px 20px;
-    border: 2px solid #bbd1ff;
+    border: 1px solid #bbd1ff;
+    box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
     border-radius: 40px;
     background-color: rgb(255, 255, 255);
     transition: all 0.3s;
 }
 
-#nhj .tab-group input:checked + label {
+#nhj .tab-group input:checked+label {
     background: linear-gradient(180deg, rgba(111, 131, 247, 1) 0%, rgba(74, 99, 248, 1) 100%);
     color: white;
 }
@@ -62,7 +63,7 @@
     gap: 20px;
 }
 
-#nhj .content2 .chart > a > img {
+#nhj .content2 .chart>a>img {
     border-radius: 5px;
     border: 2px solid #bbd1ff;
     width: 80px;

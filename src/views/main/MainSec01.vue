@@ -11,16 +11,15 @@
                     <p>당신만을 위한 딥한 선곡</p>
                 </div>
                 <div class="content-text-3">
-                    <p class="color-primary-4 fw-medium font-14">#시티팝 &nbsp;&nbsp;#어쿠스틱 &nbsp;&nbsp;#Lo-fi</p>
+                    <p class="color-primary-4 fw-medium font-20">#시티팝 &nbsp;&nbsp;#어쿠스틱 &nbsp;&nbsp;#Lo-fi</p>
                 </div>
             </div>
             <div class="col-2">
                 <img src="@/assets/images/main/lp.png" alt="lp판" class="lp" />
                 <img src="@/assets/images/main/play-white.png" alt="play" class="play-img" />
             </div>
-            <img src="@/assets/images/main/cloud.png" alt="cloud" class="cloud-img-1" />
+            <img src="@/assets/images/main/cloud_1.png" alt="cloud" class="cloud-img-1" />
             <img src="@/assets/images/main/cloud.png" alt="cloud" class="cloud-img-2" />
-            <img src="@/assets/images/main/cloud.png" alt="cloud" class="cloud-img-3" />
         </div>
         <div class="row">
             <Swiper class="lsc-swiper-1" :slides-per-view="'auto'" :space-between="10">
