@@ -73,7 +73,7 @@ export default {
     methods: {
         async getKpopResults() {
             try {
-                const results = await $api('https://muteapp.dothome.co.kr/api/music/kpop_ranking.php', 'GET');
+                const results = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/music/kpop_ranking.php`, 'GET');
                 this.kpop = results?.feed?.results?.slice(0, 4) || [];
                 console.log(this.kpop);
             } catch (error) {
@@ -83,7 +83,10 @@ export default {
         },
         async getGlobalResults() {
             try {
-                const results = await $api('https://muteapp.dothome.co.kr/api/music/global_ranking.php', 'GET');
+                const results = await $api(
+                    `${process.env.VUE_APP_BASE_DOTHOME_URL}/api/music/global_ranking.php`,
+                    'GET'
+                );
                 this.global = results?.feed?.results?.slice(0, 4) || [];
             } catch (error) {
                 console.error('getKpopResults error:', error);
