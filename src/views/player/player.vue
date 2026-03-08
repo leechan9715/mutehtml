@@ -34,7 +34,7 @@
             <p class="singer-name">{{ singerName }}</p>
         </div>
 
-        <audio ref="audio" :src="audioSrc" preload="metadata"></audio>
+        <audio ref="audio" :src="audioSrc[currentIndex]?.previewUrl" preload="metadata"></audio>
 
         <div class="music-progress-container">
             <div class="progress-bar">
@@ -100,7 +100,8 @@ export default {
             play,
 
             terms: '',
-            audioSrc: '',
+            audioSrc: [],
+            currentIndex: 0,
             songName: '곡 제목',
             singerName: '가수명',
             albumCover: null,
@@ -141,6 +142,9 @@ export default {
             _onEnded: null
         };
     },
+    methods: {
+        async initSongData() {}
+    },
 
     async mounted() {
         // URL 쿼리스트링에서 검색어(term) 가져오기
@@ -164,13 +168,17 @@ export default {
             // 곡 정보가 있을 때만 실행
             if (song) {
                 // 미리듣기 오디오 주소 저장
-                this.audioSrc = song.previewUrl || '';
+                this.audioSrc.splice(this.currentIndex + 1, 0, {
+                    previewUrl: song.previewUrl,
+                    artistName: song.artistName,
+                    trackName: song.trackName
+                });
 
                 // 곡 제목 저장
                 this.songName = song.trackName;
 
                 // 가수 이름 저장
-                this.singerName = song.artistName || '가수명';
+                this.singerName = song.artistName;
 
                 // Last.fm API 키
                 const LASTFM_API_KEY = process.env.VUE_APP_LASTFM_API_KEY;
@@ -207,6 +215,25 @@ export default {
                 // 없으면 iTunes 기본 앨범 이미지 사용
                 this.albumCover = biggestImage || song.artworkUrl100 || '';
             }
+            const track = await $api('https://itunes.apple.com/search', 'GET', {
+                term: this.singerName,
+                country: 'KR',
+                media: 'music',
+                entity: 'song',
+                limit: 100
+            });
+
+            const tracks = track.results.map((list) => ({
+                previewUrl: list.previewUrl,
+                artistName: list.artistName,
+                trackName: list.trackName,
+                albumCover: list.artworkUrl100
+            }));
+
+            if (tracks) {
+                this.audioSrc.splice(1, 0, ...tracks);
+                console.log(this.audioSrc);
+            }
         }
 
         this.progressFill = document.querySelector('.progress-fill');
@@ -240,10 +267,27 @@ export default {
             this.updateProgress();
         };
 
-        this._onEnded = () => {
+        this._onEnded = async () => {
             this.isPlaying = false;
             this.currentTime = 0;
             this.updateProgress();
+            this.currentIndex++;
+            this.songName = this.audioSrc[this.currentIndex].trackName;
+            this.singerName = this.audioSrc[this.currentIndex].artistName;
+            const keyword = `${this.audioSrc[this.currentIndex].artistName}${this.audioSrc[this.currentIndex].trackName}`;
+            console.log(keyword);
+            const result = await $api('https://itunes.apple.com/search', 'GET', {
+                term: keyword, // 사용자가 입력한 검색어
+                country: 'KR', // 한국 기준 검색
+                media: 'music', // 음악만 검색
+                entity: 'song', // 곡 단위로 검색
+                limit: 1 // 첫 번째 결과만 가져오기
+            });
+            const nextAlbumCover = result.results[0]?.artworkUrl100;
+            this.albumCover = nextAlbumCover;
+            await this.$nextTick();
+            audio.play();
+            this.isPlaying = true;
         };
 
         if (audio) {

@@ -11,7 +11,7 @@
         <div class="row">
             <MainListItem
                 v-for="(list, index) in this.results"
-                @click.prevent="play(list.trackName)"
+                @click.prevent="play(list.trackName, list.artistName)"
                 :key="index"
                 :title="list.trackName"
                 :singer="list.artistName"
@@ -62,7 +62,8 @@ export default {
         },
         // 사용자가 클릭한 곡 제목(trackName)을 받아서
         // 플레이어 페이지로 이동시키는 함수
-        async play(trackName) {
+        async play(trackName, artistName) {
+            const keyword = `${artistName}${trackName}`;
             this.$router.push({
                 // 이동할 주소
                 // 현재는 /main/player/:id 로 되어 있는데
@@ -72,7 +73,7 @@ export default {
                 // query는 URL의 쿼리스트링으로 전달됨
                 // 예: ?term=Blueming
                 query: {
-                    term: trackName
+                    term: keyword
                 }
             });
         }

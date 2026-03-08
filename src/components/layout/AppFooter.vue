@@ -2,7 +2,7 @@
     <footer class="container">
         <div class="row g-5">
             <div class="col-5">
-                <a href="#">
+                <router-link to="/main">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <g>
                             <path
@@ -12,7 +12,7 @@
                         </g>
                     </svg>
                     <p>홈</p>
-                </a>
+                </router-link>
             </div>
             <div class="col-5">
                 <a href="#">
@@ -51,7 +51,7 @@
                 </div>
             </div>
             <div class="col-5">
-                <a href="#">
+                <router-link to="/main/search" href="#">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <g>
                             <path
@@ -61,7 +61,7 @@
                         </g>
                     </svg>
                     <p>검색</p>
-                </a>
+                </router-link>
             </div>
             <div class="col-5">
                 <a href="#">

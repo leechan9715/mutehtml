@@ -17,7 +17,7 @@
                 <img :src="logo" alt="logo" />
             </div>
             <div class="col-2">
-                <img :src="test" alt="test-img" />
+                <router-link to="/main/mypage"> <img :src="test" alt="test-img" /></router-link>
             </div>
         </div>
     </header>
