@@ -1,12 +1,12 @@
-<template>
+﻿<template>
     <a href="javascript:void(0)" class="col-2">
-        <img :src="img" alt="album_cover1" />
+        <img :src="img || trackImg" alt="album_cover" />
         <div class="box col-2">
             <div class="artist-name-box">
                 <p>{{ title }}</p>
                 <p>{{ singer }}</p>
             </div>
-            <p class="more-btn">⁝</p>
+            <p class="more-btn">...</p>
         </div>
     </a>
 </template>

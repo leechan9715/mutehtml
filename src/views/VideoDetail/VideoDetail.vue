@@ -36,12 +36,12 @@ const comment = ref('');
 const comments = ref([]);
 
 async function getVideo() {
-    const data = await $api(`${process.env.VUE_APP_BASE_URL}/api/auth/videos.php`, 'GET', { id });
+    const data = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/auth/videos.php`, 'GET', { id });
     result.value = data;
 }
 
 async function comment_ADD() {
-    const data = await $api(`${process.env.VUE_APP_BASE_URL}/api/auth/comment_insert.php`, 'POST', {
+    const data = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/auth/comment_insert.php`, 'POST', {
         post_id: id,
         writer: username.value,
         content: comment.value

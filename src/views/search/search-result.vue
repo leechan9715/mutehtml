@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <section class="container" id="section1">
         <div class="row">
             <form @submit.prevent="handleSearch" class="col-1">
@@ -42,7 +42,7 @@ export default {
             this.term = this.$route.query.term || '';
 
             // iTunes 검색 API 호출
-            const result = await $api('https://itunes.apple.com/search', 'GET', {
+            const result = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/itunes/search.php`, 'GET', {
                 term: this.term, // 검색어
                 country: 'KR', // 한국 기준 검색
                 media: 'music', // 음악만 검색

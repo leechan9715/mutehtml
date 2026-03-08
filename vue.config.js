@@ -25,16 +25,6 @@ module.exports = defineConfig({
                 proxyTimeout: 10000,
                 logLevel: 'info', // 개발 중에는 debug, 배포 시에는 info/silent로 변경 권장
                 ws: false // WebSocket 비활성화, 필요시 true로 변경
-            },
-            '/itunes': {
-                target: 'https://itunes.apple.com',
-                changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/itunes/, '')
-            },
-            '/lastfm': {
-                target: 'https://ws.audioscrobbler.com',
-                changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/lastfm/, '')
             }
         },
         client: {
