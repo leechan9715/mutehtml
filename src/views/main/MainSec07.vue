@@ -52,7 +52,7 @@ export default {
 
         async getPostUrl() {
             try {
-                const result = await $api(`${process.env.VUE_APP_BASE_URL}/test/api/auth/videolist.php`, 'GET');
+                const result = await $api(`${process.env.VUE_APP_BASE_URL}/api/auth/videolist.php`, 'GET');
                 this.posts = result.posts || [];
             } catch (error) {
                 console.error('게시글 불러오기 실패:', error);
