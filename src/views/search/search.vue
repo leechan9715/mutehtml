@@ -7,10 +7,15 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-1">
-                    <input type="text" placeholder="가수 · 노래제목 · 가사를 적어주세요" />
-                    <span class="material-symbols-outlined bold"> search </span>
-                </div>
+                <form @submit.prevent="handleSearch" class="col-1">
+                    <input
+                        name="search"
+                        type="text"
+                        v-model="searchText"
+                        placeholder="가수 · 노래제목 · 가사를 적어주세요"
+                    />
+                    <button type="submit"><span class="material-symbols-outlined bold"> search </span></button>
+                </form>
             </div>
             <div class="row">
                 <Swiper class="lsc-swiper-1" :slides-per-view="4" :space-between="10">
@@ -87,6 +92,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/effect-coverflow';
 
 import SearchCategory from '@/components/ui/search-category-button.vue';
+import { $api } from '@/mixins/mixins';
 
 // ✅ 이미지 한 번에 로드 (albumImg 개별 import 제거)
 const imageFiles = require.context('@/assets/images/search', false, /\.png$/);
@@ -100,6 +106,7 @@ export default {
 
     data() {
         return {
+            searchText: '',
             albumModules: [Pagination, EffectCoverflow],
 
             genres: [
@@ -153,6 +160,13 @@ export default {
     },
 
     methods: {
+        // 입력한 검색어로 검색결과 페이지 이동
+        async handleSearch() {
+            this.$router.push({
+                path: '/main/search-result',
+                query: { term: this.searchText }
+            });
+        },
         onSwiper(swiper) {
             this.swiperInstance = swiper;
         },

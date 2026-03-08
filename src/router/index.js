@@ -52,7 +52,7 @@ const routes = [
             { path: 'ticket-select', component: TicketSelect },
             { path: 'library', component: Library },
             { path: 'playlist', component: Playlist },
-            { path: 'player', component: Player },
+            { path: 'player/:id', component: Player },
             { path: 'artist-info', component: ArtistInfo },
             { path: 'search-result', component: SearchResult }
         ]
