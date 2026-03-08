@@ -154,7 +154,7 @@ export default {
         // 검색어가 있을 때만 실행
         if (this.terms) {
             // iTunes API로 노래 1개 검색
-            const result = await $api('https://itunes.apple.com/search', 'GET', {
+            const result = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/itunes/search.php`, 'GET', {
                 term: this.terms, // 사용자가 입력한 검색어
                 country: 'KR', // 한국 기준 검색
                 media: 'music', // 음악만 검색
@@ -184,7 +184,7 @@ export default {
                 const LASTFM_API_KEY = process.env.VUE_APP_LASTFM_API_KEY;
 
                 // Last.fm API 기본 주소
-                const LASTFM_BASE_URL = 'https://ws.audioscrobbler.com/2.0/';
+                const LASTFM_BASE_URL = `${process.env.VUE_APP_BASE_DOTHOME_URL}/api/lastfm/lastfm.php`;
 
                 // Last.fm에서 앨범 정보 조회
                 const result = await $api(LASTFM_BASE_URL, 'GET', {
@@ -215,7 +215,7 @@ export default {
                 // 없으면 iTunes 기본 앨범 이미지 사용
                 this.albumCover = biggestImage || song.artworkUrl100 || '';
             }
-            const track = await $api('https://itunes.apple.com/search', 'GET', {
+            const track = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/itunes/search.php`, 'GET', {
                 term: this.singerName,
                 country: 'KR',
                 media: 'music',
@@ -276,7 +276,7 @@ export default {
             this.singerName = this.audioSrc[this.currentIndex].artistName;
             const keyword = `${this.audioSrc[this.currentIndex].artistName}${this.audioSrc[this.currentIndex].trackName}`;
             console.log(keyword);
-            const result = await $api('https://itunes.apple.com/search', 'GET', {
+            const result = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/itunes/search.php`, 'GET', {
                 term: keyword, // 사용자가 입력한 검색어
                 country: 'KR', // 한국 기준 검색
                 media: 'music', // 음악만 검색
