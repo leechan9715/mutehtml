@@ -55,7 +55,7 @@ async function comment_ADD() {
 }
 
 async function getComments() {
-    const data = await $api(`${process.env.VUE_APP_BASE_URL}/api/auth/comment_list.php?post_id=${id}`, 'GET');
+    const data = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/auth/comment_list.php?post_id=${id}`, 'GET');
     console.log(data);
     comments.value = data.comments || [];
 }
