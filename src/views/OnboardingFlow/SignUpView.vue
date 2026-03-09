@@ -362,7 +362,7 @@ const registerUser = async () => {
             password: password.value
         });
         alert('회원가입 성공');
-        router.push('/welcome');
+        router.push('/');
     } catch (e) {
         alert('회원가입 실패');
     }

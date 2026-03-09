@@ -40,23 +40,31 @@ const routes = [
         children: [
             { path: '', component: MainView, meta: { isProfile: true } },
             { path: 'search', component: Search, meta: { isProfile: true } },
-            { path: 'chart', component: ChartView, meta: { isProfile: true } }
+            { path: 'chart', component: ChartView, meta: { isProfile: true } },
+            { path: 'mypage', component: MyPageView, meta: { isProfile: false } },
+            { path: 'chart', component: ChartView, meta: { isProfile: false } },
+            { path: 'ticket-select', component: TicketSelect, meta: { isProfile: false } },
+            { path: 'library', component: Library, meta: { isProfile: false } },
+            { path: 'playlist', component: Playlist, meta: { isProfile: false } },
+            { path: 'player/:id', component: Player, meta: { isProfile: false } },
+            { path: 'artist-info', component: ArtistInfo, meta: { isProfile: false } },
+            { path: 'search-result', component: SearchResult, meta: { isProfile: false } }
         ]
     },
-    {
-        path: '/main',
-        component: MainLayout,
-        children: [
-            { path: 'mypage', component: MyPageView },
-            { path: 'chart', component: ChartView },
-            { path: 'ticket-select', component: TicketSelect },
-            { path: 'library', component: Library },
-            { path: 'playlist', component: Playlist },
-            { path: 'player/:id', component: Player },
-            { path: 'artist-info', component: ArtistInfo },
-            { path: 'search-result', component: SearchResult }
-        ]
-    },
+    // {
+    //     path: '/main',
+    //     component: MainLayout,
+    //     children: [
+    //         { path: 'mypage', component: MyPageView },
+    //         { path: 'chart', component: ChartView },
+    //         { path: 'ticket-select', component: TicketSelect },
+    //         { path: 'library', component: Library },
+    //         { path: 'playlist', component: Playlist },
+    //         { path: 'player/:id', component: Player },
+    //         { path: 'artist-info', component: ArtistInfo },
+    //         { path: 'search-result', component: SearchResult }
+    //     ]
+    // },
     {
         path: '/videos/:id',
         name: 'videoDetail',

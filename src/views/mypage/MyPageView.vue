@@ -55,17 +55,18 @@
 </template>
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import Logo from '@/components/ui/Logo.vue';
 import AppTopBar2 from '@/components/layout/AppTopBar2.vue';
 import MenuListItem from '@/components/ui/MenuListItem.vue';
 import profileImgSrc from '@/assets/images/mypage/test.jpg';
 import { useAuthStore } from '@/store/auth';
 const auth = useAuthStore();
+const router = useRouter();
 // ✅ data() -> script setup (반응형 필요 없으면 const로 둬도 됨)
 const profileImg = profileImgSrc;
 const auth_check = JSON.parse(localStorage.getItem('login-check'));
 const provider = auth_check.provider || '';
-const isLoggedIn = auth_check.isLoggedIn || false;
 const accessToken = auth_check.AccessToken || null;
 
 const settingsMenus = ref([
@@ -89,29 +90,41 @@ const logout = () => {
 
     if (provider === 'google') {
         googleLogout();
+    }
+    if (provider === 'local') {
+        localLogout();
     } else {
         return;
     }
+};
+
+const localLogout = () => {
+    localStorage.removeItem('login-check');
+    alert('로컬 정상적으로 로그아웃되었습니다.');
+    router.push('/');
 };
 const googleLogout = () => {
     console.log(auth.isLoggedIn, auth.provider);
     console.log('googleLogout');
     localStorage.removeItem('login-check');
+    alert('구글 정상적으로 로그아웃되었습니다.');
+    router.push('/');
 };
 const kakaoLogout = () => {
     if (!window.Kakao || !window.Kakao.isInitialized()) return;
     if (window.Kakao.Auth.getAccessToken()) {
         window.Kakao.Auth.logout(() => {
-            console.log('카카오 로그아웃 완료');
             localStorage.removeItem('login-check');
+            alert('카카오 정상적으로 로그아웃되었습니다.');
+            router.push('/');
         });
     } else {
-        console.log('이미 로그아웃 상태');
+        alert('이미 로그아웃 상태입니다.');
     }
 };
 const naverLogout = () => {
     if (!accessToken) {
-        console.log('로그인 상태가 아닙니다.');
+        alert('로그인 상태가 아닙니다.');
         return;
     }
     const logoutUrl = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=mtjjmyTeqJxD3JTzSSKD&client_secret=1WUIDotelN&access_token=${accessToken}&service_provider=NAVER`;
@@ -123,11 +136,9 @@ const naverLogout = () => {
 
     // ✅ 네이버 SDK가 저장한 sessionStorage 직접 삭제
 
-    console.log('로그아웃 요청이 실행되었습니다.');
     localStorage.removeItem('login-check');
-    alert('네이버 로그아웃 성공');
+    alert('네이버 정상적으로 로그아웃되었습니다.');
+    router.push('/');
 };
-console.log(provider, isLoggedIn, accessToken);
-console.log('after remove:', localStorage.getItem('login-check')); // null이면 삭제 성공
 </script>
 <style scoped src="@/assets/styles/pages/mypage.css"></style>

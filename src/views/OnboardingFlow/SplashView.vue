@@ -96,6 +96,17 @@ export default {
                 const authStore = useAuthStore();
                 await authStore.login({ email, password });
                 this.$router.push('/welcome');
+                auth.isLoggedIn = true;
+                auth.provider = 'local';
+                localStorage.setItem(
+                    'login-check',
+                    JSON.stringify({
+                        AccessToken: null,
+                        provider: auth.provider,
+                        isLoggedIn: auth.isLoggedIn
+                    })
+                );
+                alert('로그인성공');
             } catch (e) {
                 const msg = e?.response?.data?.message || e?.response?.data?.error || '회원가입하신 후 이용해주세요.';
                 alert(msg);

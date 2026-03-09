@@ -1,7 +1,7 @@
 <template>
     <div id="wrap">
         <AppHeader :isProfile="isProfile" />
-        <main>
+        <main :class="{ 'no-profile': !isProfile }">
             <router-view />
         </main>
         <AppFooter />
@@ -26,6 +26,19 @@ export default {
         isProfile() {
             return this.$route.matched.some((r) => r.meta?.isProfile === true);
         }
+    },
+    mounted() {
+        this.loginCheck();
+    },
+
+    methods: {
+        loginCheck() {
+            const auth_check = localStorage.getItem('login-check');
+            if (!auth_check) {
+                alert('로그인을 해주세요');
+                this.$router.push('/');
+            }
+        }
     }
 };
 </script>
@@ -34,11 +47,16 @@ export default {
 #wrap {
     padding: 0;
 }
-main {
+#wrap main {
     height: calc(100vh - 200px);
     overflow: hidden;
     overflow-y: auto;
     scrollbar-width: none;
     transform: translateY(-30px);
+}
+#wrap main.no-profile {
+    position: relative;
+    top: 30px;
+    height: calc(100vh - 153px);
 }
 </style>
