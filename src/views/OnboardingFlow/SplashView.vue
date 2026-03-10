@@ -60,6 +60,7 @@ import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseInput from '@/components/ui/BaseInput.vue';
 /* 일반 로그인 */
 import { useAuthStore } from '@/store';
+import { loginApi } from '@/api/auth';
 
 export default {
     name: 'SplashView',
@@ -78,7 +79,7 @@ export default {
             password: ''
         };
     },
-    mounted() {
+    async mounted() {
         requestAnimationFrame(() => {
             this.isLoad = true;
         });
@@ -86,30 +87,30 @@ export default {
     /* 일반 로그인 */
     methods: {
         async handleLogin() {
+            const auth = useAuthStore();
+            auth.provider = 'local';
             const email = this.email.trim();
             const password = this.password.trim();
-
             if (!email) return alert('이메일을 입력하세요.');
             if (!password) return alert('비밀번호를 입력하세요.');
-
             try {
-                const authStore = useAuthStore();
-                await authStore.login({ email, password });
-                this.$router.push('/welcome');
-                auth.isLoggedIn = true;
-                auth.provider = 'local';
-                localStorage.setItem(
-                    'login-check',
-                    JSON.stringify({
-                        AccessToken: null,
-                        provider: auth.provider,
-                        isLoggedIn: auth.isLoggedIn
-                    })
-                );
+                const { data } = await loginApi({
+                    email,
+                    password,
+                    provider: auth.provider
+                });
+                console.log('data', data);
+                if (!data?.success) {
+                    alert(data?.message || '회원가입하신 후 이용해주세요.');
+                    return;
+                }
+                auth.setLocalStroge();
                 alert('로그인성공');
+                this.$router.push('/welcome');
             } catch (e) {
                 const msg = e?.response?.data?.message || e?.response?.data?.error || '회원가입하신 후 이용해주세요.';
                 alert(msg);
+                this.$router.push('/');
             }
         }
     }
