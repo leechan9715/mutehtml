@@ -8,7 +8,7 @@
                 <div class="row">
                     <Logo :class="{ 'is-load': isLoad }" />
                     <img class="logo-mute-img" :class="{ 'is-load': isLoad }" :src="logo_1" alt="Logo_1" />
-                    <p class="tagline" :class="{ 'is-load': isLoad }">나만의 고요한 가상의 공간</p>
+                    <p class="tagline color-black" :class="{ 'is-load': isLoad }">나만의 고요한 가상의 공간</p>
                     <form
                         action="#"
                         method="post"

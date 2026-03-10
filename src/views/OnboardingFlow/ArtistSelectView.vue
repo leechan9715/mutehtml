@@ -3,9 +3,9 @@
         <form action="#" name="artist-form" class="container">
             <div class="row artist-select-header">
                 <div class="col-1">
-                    <h2 class="text-center fw-semibold">
+                    <h2 class="text-center fw-semibold color-black">
                         좋아하는 가수를 <br />
-                        <span class="font-48 color-primary-3">{{ remainingCount }}</span
+                        <span class="font-48 color-key">{{ remainingCount }}</span
                         >명 이상 정해주세요.
                     </h2>
                 </div>
@@ -14,7 +14,7 @@
                     <div class="login-form-field">
                         <label class="login-form-label" for="login-id">
                             <span class="hidden">검색창</span>
-                            <span class="material-symbols-outlined font-24 color-primary-3">artist</span>
+                            <span class="material-symbols-outlined font-24 color-key">artist</span>
                         </label>
 
                         <input
@@ -27,7 +27,7 @@
                         />
 
                         <button type="button" class="name-check" @click="searchArtist">
-                            <span class="material-symbols-outlined font-24 color-primary-6">search</span>
+                            <span class="material-symbols-outlined font-24 color-gray">search</span>
                         </button>
                     </div>
                 </div>
@@ -142,11 +142,16 @@ export default {
 
 <style scoped>
 .login-btn.active {
-    background: linear-gradient(180deg, rgba(111, 131, 247, 1) 0%, rgba(56, 82, 232, 1) 100%);
+    background: var(--gradient-key);
     color: var(--color-white);
 }
 
 .login-btn:disabled {
     cursor: not-allowed;
+    background-color: var(--color-gray);
+}
+
+.input::placeholder {
+    color: var(--color-gray);
 }
 </style>

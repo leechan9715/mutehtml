@@ -6,9 +6,9 @@
                 <Logo />
 
                 <div class="col-1">
-                    <h2 class="text-center fw-bold color-primary-3">LOADING...</h2>
+                    <h2 class="text-center fw-bold color-key fw-900">LOADING...</h2>
                     <p class="text-center fw-bold">
-                        뮤트가<span class="fw-semibold"> 홍길동</span>님을 위한 노래를 고르고 있습니다.
+                        뮤트가 취향에 맞는 음악을 고르고 있어요...
                         <span>{{ percent }}</span
                         >%
                     </p>

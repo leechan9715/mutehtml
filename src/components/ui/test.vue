@@ -1,6 +1,6 @@
 <template>
     <div style="padding: 16px">
-        <MainContainer title="요즘 가장 좋아하는 노래" @click="goNext">
+        <MainContainer title="최근 들은 곡" @click="goNext">
             <Swiper class="song-swiper" :slides-per-view="3.2" :space-between="16">
                 <SwiperSlide v-for="(song, i) in songs" :key="i">
                     <SongCard :title="song.title" :artist="song.artist" :coverImage="song.cover" />
@@ -11,6 +11,11 @@
 </template>
 
 <script>
+import playlist1 from '@/assets/images/main/playlist_cover/playlist_1.png';
+import playlist2 from '@/assets/images/main/playlist_cover/playlist_2.png';
+import playlist3 from '@/assets/images/main/playlist_cover/playlist_3.png';
+import playlist4 from '@/assets/images/main/playlist_cover/playlist_4.png';
+import playlist5 from '@/assets/images/main/playlist_cover/playlist_5.png';
 import MainContainer from '@/components/ui/main-section-top.vue';
 import SongCard from '@/components/ui/main-album-component.vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
@@ -23,11 +28,13 @@ export default {
     components: { MainContainer, SongCard, Swiper, SwiperSlide },
     data() {
         return {
-            songs: Array.from({ length: 8 }).map(() => ({
-                title: '혜성',
-                artist: '윤하(YOUNAH)',
-                cover: testImg
-            }))
+            songs: [
+                { title: '노래1', artist: '가수1', cover: playlist1 },
+                { title: '노래2', artist: '가수2', cover: playlist2 },
+                { title: '노래3', artist: '가수3', cover: playlist3 },
+                { title: '노래4', artist: '가수4', cover: playlist4 },
+                { title: '노래5', artist: '가수5', cover: playlist5 }
+            ]
         };
     },
     methods: {
@@ -42,5 +49,8 @@ export default {
 /* 기존 card-row의 padding 느낌 유지 */
 .song-swiper {
     padding: 0 40px 0 0;
+}
+.song-swiper img {
+    border: 3px solid red;
 }
 </style>

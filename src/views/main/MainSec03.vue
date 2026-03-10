@@ -11,9 +11,13 @@
 </template>
 
 <script>
+import playlist1 from '@/assets/images/main/playlist_cover/playlist_1.png';
+import playlist2 from '@/assets/images/main/playlist_cover/playlist_2.png';
+import playlist3 from '@/assets/images/main/playlist_cover/playlist_3.png';
+import playlist4 from '@/assets/images/main/playlist_cover/playlist_4.png';
+import playlist5 from '@/assets/images/main/playlist_cover/playlist_5.png';
 import MainContainer from '@/components/ui/main-section-top.vue';
 import SongCard from '@/components/ui/main-album-component.vue';
-
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 
@@ -24,11 +28,13 @@ export default {
     components: { MainContainer, SongCard, Swiper, SwiperSlide },
     data() {
         return {
-            songs: Array.from({ length: 8 }).map(() => ({
-                title: '혜성',
-                artist: '윤하(YOUNAH)',
-                cover: testImg
-            }))
+            songs: [
+                { title: 'Study mode', artist: 'Playlist · 홍길동', cover: playlist1 },
+                { title: '지금 여행중', artist: 'Playlist · 홍길동', cover: playlist2 },
+                { title: '공상에 빠져', artist: 'Playlist · 홍길동', cover: playlist3 },
+                { title: '일요일 오후 2시 느낌', artist: 'Playlist · 홍길동', cover: playlist4 },
+                { title: 'WORKING', artist: 'Playlist · 홍길동', cover: playlist5 }
+            ]
         };
     },
     methods: {
@@ -43,5 +49,8 @@ export default {
 /* 기존 card-row의 padding 느낌 유지 */
 .song-swiper {
     padding: 0 40px 0 0;
+}
+.song-swiper img {
+    border: 3px solid red;
 }
 </style>

@@ -59,10 +59,7 @@ main {
     align-items: center;
     justify-content: center;
     position: relative;
-    background:
-        linear-gradient(180deg,
-            rgba(111, 131, 247, 1) 0%,
-            rgba(56, 82, 232, 1) 100%);
+    background: var(--gradient-key);
     border-radius: 50%;
     height: calc(100% - 10px);
 }
@@ -109,13 +106,15 @@ main {
     border-radius: 20px;
     border: 1px solid var(--color-accent-blue);
     background: #fff;
-    box-shadow: 0 2px 4px rgba(218, 229, 255, 1);
+    box-shadow: 0 2px 4px var(--color-shadow);
     white-space: nowrap;
     cursor: pointer;
 }
 
 .tag-slide h4:active {
-    background-color: var(--color-primary-4);
+    background: var(--gradient-key);
+    border: 1px solid var(--color-key);
+    ;
     color: #fff;
 }
 
