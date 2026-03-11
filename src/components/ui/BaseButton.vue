@@ -22,23 +22,21 @@ export default {
     width: 100%;
     padding: 19px 0;
     border-radius: 50px;
-    border: 1px solid #bbd1ff;
-    box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+    box-shadow: 0px 2px 4px 0px var(--color-shadow);
     font-size: var(--font-20);
     font-weight: bold;
 }
 .btn-active {
-    background: linear-gradient(180deg, rgba(111, 131, 247, 1) 0%, rgba(74, 99, 248, 1) 100%);
+    background: var(--gradient-key);
     color: #ffffff;
 }
 .btn-login {
-    color: var(--color-primary-4);
-    background:
-        linear-gradient(180deg, rgba(255, 255, 255, 1) 30%, rgba(200, 218, 255, 1) 100%),
-        linear-gradient(180deg, rgba(111, 131, 247, 1) 0%, rgba(56, 82, 232, 1) 100%);
+    color: var(--color-key);
+    background: var(--gradient-light);
+    border: 1px solid var(--color-shadow);
 }
 .btn-signup {
-    background: linear-gradient(0deg, rgb(55, 67, 178) 0%, rgba(11, 14, 25, 1) 100%);
+    background: var(--gradient-deep);
     color: #ffffff;
 }
 .btn-disable {

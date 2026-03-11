@@ -98,7 +98,7 @@ export default {
 .block {
     width: 10px;
     height: 10px;
-    background: black;
+    background: var(--color-black);
     z-index: 1;
     transition: all 0.3s ease;
     justify-self: center;

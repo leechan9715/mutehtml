@@ -27,6 +27,7 @@ export default {
 header {
     position: fixed;
     z-index: 9999;
+    color: var(--color-black);
 }
 .row {
     background-color: rgba(0, 0, 0, 0);

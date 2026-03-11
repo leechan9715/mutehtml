@@ -159,9 +159,9 @@
     opacity: 0;
     max-height: 0px;
     padding: 0px 25px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 1) 23.076923191547394%);
+    background: var(--color-white);
     border-radius: 20px;
-    box-shadow: 0px -2px 4px 0px rgba(211, 220, 255, 1);
+    box-shadow: 0px -2px 4px 0px var(--color-shadow);
     transition:
         max-height 1s ease-in-out 2s,
         opacity 1s ease-in-out 3s,
@@ -180,16 +180,18 @@
 #splash>.container>.logo-2>.row>.login-form>.login-form-field {
     width: 100%;
     border-radius: 30px;
-    border: 1px solid #bbd1ff;
+    border: 1px solid var(--color-accent-blue);
     padding: 21px 24px;
-    box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+    box-shadow: 0px 2px 4px 0px var(--color-shadow);
     margin-bottom: 15px;
+    color: var(--color-key);
 }
 
 #splash>.container>.logo-2>.row>.login-form>.login-form-field .login-form-label {
     display: flex;
     align-items: center;
     gap: 17px;
+
 }
 
 #splash>.container>.logo-2>.row>.login-form>.login-form-field:nth-child(2) {
@@ -198,6 +200,7 @@
 
 #splash>.container>.logo-2>.row>.login-form>.login-form-field>.input {
     width: 100%;
+
 }
 
 /* =========================================================
@@ -212,7 +215,7 @@
 
 #splash>.container>.logo-2>.row>.login-form>.auth-links>a {
     font-size: var(--font-16);
-    color: #6f83f7;
+    color: var(--color-key);
 }
 
 /* =========================================================

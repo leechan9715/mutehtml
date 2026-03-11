@@ -3,10 +3,10 @@
         <div class="container">
             <div class="row g-9 title">
                 <div class="col-1 color-primary">
-                    <h2 class="font-24 fw-semibold">회원가입</h2>
+                    <h2 class="font-24 fw-600">회원가입</h2>
                 </div>
                 <div class="col-1">
-                    <p class="color-black fw-medium op-50">
+                    <p class="color-gray fw-medium">
                         1억명이 선택한 글로벌 음악 스트리밍 사이트, <br />
                         뮤트에 지금 가입하세요
                     </p>
@@ -68,7 +68,7 @@
                 />
                 <div class="col-1 terms-check">
                     <input type="checkbox" id="terms" v-model="terms" />
-                    <label for="terms" class="color-primary-2 fw-medium font-14"
+                    <label for="terms" class="color-key fw-medium font-14"
                         >뮤트에서 제공하는 서비스 약관에 동의합니다.</label
                     >
                 </div>
@@ -76,7 +76,7 @@
                     <BaseButton @click.prevent="registerUser" class="login-btn" label="가입하기" variant="active" />
                 </div>
                 <div class="col-1 social-login">
-                    <p class="text-center color-black">SNS 계정으로 간편하게 가입하기</p>
+                    <p class="text-center color-key">SNS 계정으로 간편하게 가입하기</p>
                 </div>
             </form>
             <div class="row g-24 social-login-icon">

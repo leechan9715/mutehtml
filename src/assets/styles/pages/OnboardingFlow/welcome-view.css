@@ -8,6 +8,7 @@ main {
     flex-direction: column;
     justify-content: center;
 }
+
 main .row {
     display: flex;
     justify-content: center;
@@ -16,15 +17,18 @@ main .row {
 .col-1:first-of-type {
     margin-bottom: 26px;
 }
+
 .welcome {
-    color: var(--color-primary-3);
+    color: var(--color-key);
     letter-spacing: 4px;
     margin-bottom: 36px;
     text-align: center;
 }
+
 .welcome-des {
     line-height: 36px;
 }
+
 .logo_box {
     margin-bottom: 24px;
 }

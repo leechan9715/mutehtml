@@ -161,12 +161,12 @@ footer .col-5 {
 p {
     font-size: 16px;
     font-weight: 600;
-    color: #0d2656;
+    color: var(--color-black);
 }
 
 /* 기본 아이콘 색상 */
 svg {
-    color: #0d2656;
+    color: var(--color-black);
     /* 기본 검정색 */
     transition: color 0.2s;
     /* 부드러운 색상 변경 */
@@ -176,12 +176,12 @@ svg {
 /* 클릭하거나 활성화 되었을 때 */
 a:active svg,
 a:focus svg {
-    color: #6f9ff7;
+    color: var(--color-key);
 }
 
 a:active p,
 a:focus p {
-    color: #6f9ff7;
+    color: var(--color-key);
 }
 
 /*
@@ -197,8 +197,8 @@ footer .logo_box {
     overflow: visible;
     background-color: #ffffff;
     box-shadow:
-        inset 0px -7px 10px #b1c9e5,
-        0px 4px 10px rgba(98, 141, 197, 0.5);
+        inset 0px -7px 10px var(--color-shadow),
+        0px -3px 10px var(--color-accent-blue);
     border-radius: 50%;
 }
 
@@ -217,14 +217,14 @@ footer .face {
 footer .block {
     width: 8px;
     height: 8px;
-    background: #171f3b;
+    background: var(--color-black);
     border-radius: 2px;
     z-index: 1;
     transition: all 0.3s ease;
     justify-self: center;
     align-self: center;
     box-shadow:
-        inset 0px 4px 4px rgba(255, 216, 216, 0.3),
+        inset 0px 4px 4px rgba(216, 225, 255, 0.3),
         0px -1px 4px rgba(0, 0, 0, 0.25);
 }
 

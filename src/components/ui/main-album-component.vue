@@ -46,14 +46,20 @@ export default {
 }
 
 .title {
-    font-size: var(--font-14);
+    font-size: var(--font-16);
     font-weight: var(--fw-600);
     color: var(--color-black);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .artist {
-    font-size: var(--font-12);
-    font-weight: var(--fw-400);
-    color: var(--color-black);
+    font-size: var(--font-14);
+    font-weight: var(--fw-600);
+    color: var(--color-gray);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>

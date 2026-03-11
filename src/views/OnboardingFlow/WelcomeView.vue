@@ -4,12 +4,12 @@
             <div class="row">
                 <Logo />
                 <div class="col-1">
-                    <h2 class="font-24 fw-800 welcome">WELCOME!</h2>
+                    <h2 class="font-24 fw-900 welcome">WELCOME!</h2>
                 </div>
                 <div class="col-1">
                     <p class="text-center font-20 fw-600 welcome-des color-black" ref="welcome-des">
-                        환영합니다!<br />
-                        당신만을 위한 음악 공간, 뮤트
+                        안녕하세요<br />
+                        뮤트에 오신걸 환영합니다!
                     </p>
                 </div>
             </div>
