@@ -1,6 +1,5 @@
 <template>
     <div id="wrap">
-        <AuthHeader />
         <div class="box">
             <router-view />
         </div>

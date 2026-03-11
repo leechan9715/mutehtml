@@ -3,7 +3,28 @@
 main {
     width: 100%;
 }
+#player-wrap {
+    height: 100%;
+    will-change: transform;
+}
+.down-handle {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    touch-action: none;
+    background-color: #fff;
+}
+.down-handle img {
+    width: 200px;
+    margin: 0;
+    padding: 15px 0;
+    cursor: grab;
+    user-select: none;
+}
 
+.down-handle img.is-grabbing {
+    cursor: grabbing;
+}
 .top {
     padding: 14px 12px 14px 12px;
     display: flex;
@@ -18,6 +39,7 @@ main {
 
 /* ------------ 앨범 커버 -------------- */
 #wrap .album-cover {
+    min-height: calc(100% - 70vh);
     padding: 0;
     overflow: hidden;
     color: var(--color-black);
@@ -26,12 +48,14 @@ main {
 .artist-img {
     width: 100%;
     margin: 0 auto;
+    display: flex;
+    align-items: center;
 }
 
 .artist-img img {
     width: 100%;
     margin: 0 auto;
-    padding: 5%;
+    padding: 20%;
     object-fit: cover cover;
     border-radius: 50%;
 }
@@ -39,6 +63,7 @@ main {
 /* ------------ 아래 박스 -------------- */
 
 .color-box {
+    min-height: calc(100% - 45vh);
     background:
         linear-gradient(to left, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
         linear-gradient(
@@ -48,6 +73,11 @@ main {
             rgba(217, 229, 255, 1) 100%
         );
     /* padding-bottom: 40px; */
+}
+@media (min-width: 1280px) {
+    .color-box {
+        min-height: calc(100% - 70vh);
+    }
 }
 
 /* ---------- 노래제목 & 가수 ----------- */

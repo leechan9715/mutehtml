@@ -44,7 +44,7 @@ export default {
         this.charIndex = 0;
         this.redirectTimer = setTimeout(() => {
             this.$router.push('/artist-select');
-        }, 10000); // 5초 후에 회원가입 페이지로 이동
+        }, 2500); // 5초 후에 회원가입 페이지로 이동
         this.typeLine();
         const { data } = await checkSocialLogin();
         console.log('소셜로그인데이터', data);
