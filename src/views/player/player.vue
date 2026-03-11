@@ -1,8 +1,14 @@
 <template>
     <h2 class="hidden">플레이어</h2>
-    <div id="player-wrap" ref="playerWrap" :style="playerWrapStyle">
+    <div
+        id="player-wrap"
+        ref="playerWrap"
+        :style="playerWrapStyle"
+        @mousedown="onSheetAreaMouseDown"
+        @touchstart="onSheetAreaTouchStart"
+    >
         <section class="container album-cover" ref="artistImgBox">
-            <div class="row down-handle">
+            <!-- <div class="row down-handle">
                 <img
                     src="@/assets/images/popupdown/slidedown.png"
                     alt="slidedowns"
@@ -10,16 +16,24 @@
                     @mousedown.prevent="onHandleMouseDown"
                     @touchstart.prevent="onHandleTouchStart"
                 />
-            </div>
+            </div> -->
             <div class="row player-img">
                 <div class="col-1">
-                    <div class="artist-img">
+                    <div
+                        class="artist-img"
+                        :style="coverSwipeStyle"
+                        @mousedown.stop.prevent="onCoverMouseDown"
+                        @touchstart.stop.prevent="onCoverTouchStart"
+                    >
                         <img
                             :src="albumCover"
                             alt="player-img1"
                             crossorigin="anonymous"
                             ref="albumImage"
                             @load="applyBackgroundColor"
+                            @click.prevent.stop
+                            @contextmenu.prevent.stop
+                            @dragstart.prevent
                         />
                     </div>
                 </div>
@@ -63,14 +77,14 @@
                     <button @click="playPrev">
                         <img src="@/assets/images/player/prev.png" alt="prev-button" />
                     </button>
-                    <button class="play-pause-button" @click="togglePlay">
+                    <button class="play-pause-button" data-no-sheet-drag @click="togglePlay">
                         <img
                             :src="isPlaying ? pause : play"
                             :alt="isPlaying ? 'pause-button' : 'play-button'"
                             class="play-pause-img"
                         />
                     </button>
-                    <button @click="playNext">
+                    <button data-no-sheet-drag @click="playNext">
                         <img src="@/assets/images/player/next.png" alt="next-button" />
                     </button>
                     <button @click="toggleShuffle">
@@ -78,7 +92,6 @@
                     </button>
                 </div>
             </div>
-
             <div class="col-3 player-buttons-bottom">
                 <button>
                     <img src="../../assets/images/player/like.png" alt="like-button" />
@@ -98,6 +111,8 @@
 import pause from '@/assets/images/player/pause.png';
 import play from '@/assets/images/player/play.png';
 import { searchApi } from '@/api/_music_api';
+
+const PLAYER_STATE_KEY = 'mute-player-state';
 
 export default {
     name: 'Player',
@@ -122,7 +137,17 @@ export default {
 
             isHandleDragging: false,
             handleStartY: 0,
-            sheetOffsetY: 0
+            sheetOffsetY: 0,
+
+            isCoverSwiping: false,
+            coverStartX: 0,
+            coverStartY: 0,
+            coverDeltaX: 0,
+            coverDeltaY: 0,
+            coverGestureMode: 'undecided',
+            lastPersistAt: 0,
+            miniVisible: false,
+            keepPlayingOnMini: false
         };
     },
 
@@ -139,12 +164,26 @@ export default {
                 transform: `translateY(${this.sheetOffsetY}px)`,
                 transition: this.isHandleDragging ? 'none' : 'transform 240ms ease'
             };
+        },
+        coverSwipeStyle() {
+            const offset = this.isCoverSwiping ? this.coverDeltaX : 0;
+            return {
+                transform: `translateX(${offset}px)`,
+                transition: this.isCoverSwiping ? 'none' : 'transform 180ms ease'
+            };
         }
     },
 
     async mounted() {
+        this.miniVisible = false;
+        this.keepPlayingOnMini = false;
+        this.savePlayerState({ miniVisible: false });
+
         const term = this.$route.query.term?.trim();
-        if (!term) return;
+        if (!term) {
+            this.restoreFromSavedState();
+            return;
+        }
 
         await this.loadInitialTrack(term);
 
@@ -155,8 +194,10 @@ export default {
     },
 
     beforeUnmount() {
+        this.savePlayerState();
+
         const audio = this.$refs.audio;
-        if (audio) audio.pause();
+        if (audio && !this.keepPlayingOnMini) audio.pause();
 
         if (this.rafId) cancelAnimationFrame(this.rafId);
 
@@ -187,6 +228,8 @@ export default {
                 },
                 ...artistTracks
             ];
+
+            this.savePlayerState({ miniVisible: false });
         },
 
         async fetchFirstSong(term) {
@@ -214,11 +257,18 @@ export default {
 
         onLoadedMetadata() {
             this.totalDuration = this.$refs.audio?.duration ?? 0;
+            this.savePlayerState();
         },
 
         onTimeUpdate() {
             if (this.isDragging) return;
             this.currentTime = this.$refs.audio?.currentTime ?? 0;
+
+            const now = Date.now();
+            if (now - this.lastPersistAt > 400) {
+                this.lastPersistAt = now;
+                this.savePlayerState();
+            }
         },
 
         async onEnded() {
@@ -237,12 +287,14 @@ export default {
                 try {
                     await audio.play();
                     this.isPlaying = true;
+                    this.savePlayerState();
                 } catch (e) {
                     console.error('재생 실패:', e);
                 }
             } else {
                 audio.pause();
                 this.isPlaying = false;
+                this.savePlayerState();
             }
         },
 
@@ -254,6 +306,7 @@ export default {
 
             await this.$nextTick();
             await this.startPlay();
+            this.savePlayerState();
         },
 
         playPrev() {
@@ -267,6 +320,8 @@ export default {
                 this.currentIndex--;
                 this.updateTrackMeta();
             }
+
+            this.savePlayerState();
         },
 
         toggleRepeat() {
@@ -283,6 +338,7 @@ export default {
             this.songName = track.trackName;
             this.singerName = track.artistName;
             this.albumCover = track.albumCover ?? this.albumCover;
+            this.savePlayerState();
         },
 
         async startPlay() {
@@ -291,6 +347,7 @@ export default {
             try {
                 await audio.play();
                 this.isPlaying = true;
+                this.savePlayerState();
             } catch (e) {
                 console.error('재생 실패:', e);
             }
@@ -304,6 +361,10 @@ export default {
         },
 
         onWindowMouseMove(e) {
+            if (this.isCoverSwiping) {
+                this.updateCoverSwipe(e.clientX, e.clientY);
+                return;
+            }
             if (this.isHandleDragging) {
                 this.updateSheetOffset(e.clientY);
                 return;
@@ -314,6 +375,10 @@ export default {
         },
 
         onWindowMouseUp() {
+            if (this.isCoverSwiping) {
+                this.finishCoverSwipe();
+                return;
+            }
             if (this.isHandleDragging) {
                 this.finishHandleDrag();
                 return;
@@ -327,6 +392,11 @@ export default {
         },
 
         onWindowTouchMove(e) {
+            if (this.isCoverSwiping) {
+                e.preventDefault();
+                this.updateCoverSwipe(e.touches[0].clientX, e.touches[0].clientY);
+                return;
+            }
             if (this.isHandleDragging) {
                 e.preventDefault();
                 this.updateSheetOffset(e.touches[0].clientY);
@@ -339,11 +409,90 @@ export default {
         },
 
         onWindowTouchEnd() {
+            if (this.isCoverSwiping) {
+                this.finishCoverSwipe();
+                return;
+            }
             if (this.isHandleDragging) {
                 this.finishHandleDrag();
                 return;
             }
             this.stopDragging();
+        },
+
+        onCoverMouseDown(e) {
+            if (e.button !== 0) return;
+            this.startCoverSwipe(e.clientX, e.clientY);
+        },
+
+        onCoverTouchStart(e) {
+            this.startCoverSwipe(e.touches[0].clientX, e.touches[0].clientY);
+        },
+
+        startCoverSwipe(startX, startY) {
+            this.isCoverSwiping = true;
+            this.coverStartX = startX;
+            this.coverStartY = startY;
+            this.coverDeltaX = 0;
+            this.coverDeltaY = 0;
+            this.coverGestureMode = 'undecided';
+        },
+
+        updateCoverSwipe(currentX, currentY) {
+            this.coverDeltaX = currentX - this.coverStartX;
+            this.coverDeltaY = currentY - this.coverStartY;
+
+            if (this.coverGestureMode === 'undecided') {
+                const absX = Math.abs(this.coverDeltaX);
+                const absY = Math.abs(this.coverDeltaY);
+
+                if (absX < 6 && absY < 6) return;
+
+                // 앨범커버를 아래로 당기면 시트 드래그로 전환
+                if (this.coverDeltaY > 0 && absY > absX) {
+                    this.coverGestureMode = 'vertical';
+                    this.isCoverSwiping = false;
+                    this.startHandleDrag(this.coverStartY);
+                    this.updateSheetOffset(currentY);
+                    return;
+                }
+
+                // 그 외는 좌우 스와이프로 간주
+                this.coverGestureMode = 'horizontal';
+            }
+        },
+
+        async finishCoverSwipe() {
+            if (!this.isCoverSwiping) return;
+
+            const dx = this.coverDeltaX;
+            const dy = this.coverDeltaY;
+            const isHorizontal = this.coverGestureMode === 'horizontal' && Math.abs(dx) > Math.abs(dy);
+            const shouldNext = isHorizontal && dx <= -80;
+            const shouldPrev = isHorizontal && dx >= 80;
+
+            this.isCoverSwiping = false;
+            this.coverStartX = 0;
+            this.coverStartY = 0;
+            this.coverDeltaX = 0;
+            this.coverDeltaY = 0;
+            this.coverGestureMode = 'undecided';
+
+            if (shouldNext) {
+                await this.playNext();
+                return;
+            }
+
+            if (shouldPrev) {
+                const prevIndex = this.currentIndex;
+                this.playPrev();
+
+                // 인덱스가 실제로 이전 곡으로 이동했으면 재생 상태를 이어간다.
+                if (this.currentIndex !== prevIndex && this.isPlaying) {
+                    await this.$nextTick();
+                    await this.startPlay();
+                }
+            }
         },
 
         // ─── 핸들 드래그(페이지 내리기) ────────────────────────────
@@ -354,6 +503,35 @@ export default {
 
         onHandleTouchStart(e) {
             this.startHandleDrag(e.touches[0].clientY);
+        },
+
+        onSheetAreaMouseDown(e) {
+            if (e.button !== 0) return;
+            if (!this.canStartSheetDragFrom(e.target)) return;
+            this.startHandleDrag(e.clientY);
+        },
+
+        onSheetAreaTouchStart(e) {
+            if (!this.canStartSheetDragFrom(e.target)) return;
+            this.startHandleDrag(e.touches[0].clientY);
+        },
+
+        canStartSheetDragFrom(target) {
+            if (!target?.closest) return false;
+
+            // down-handle은 기존 전용 핸들 로직을 사용
+            if (target.closest('.down-handle')) return false;
+
+            // 앨범커버 영역은 좌우 스와이프 제스처 우선
+            if (target.closest('.artist-img')) return false;
+
+            // 재생/다음곡 버튼은 기존 클릭 동작 유지
+            if (target.closest('[data-no-sheet-drag]')) return false;
+
+            // 진행바 드래그는 시크 동작 유지
+            if (target.closest('.progress-bar')) return false;
+
+            return true;
         },
 
         startHandleDrag(startY) {
@@ -374,7 +552,11 @@ export default {
             this.isHandleDragging = false;
 
             if (shouldClose) {
+                this.isPlaying = !(this.$refs.audio?.paused ?? true);
                 this.sheetOffsetY = wrapHeight;
+                this.miniVisible = true;
+                this.keepPlayingOnMini = true;
+                this.savePlayerState({ miniVisible: true });
                 setTimeout(() => this.$router.back(), 220);
                 return;
             }
@@ -466,6 +648,59 @@ export default {
             const mins = Math.floor(seconds / 60);
             const secs = Math.floor(seconds % 60);
             return `${mins}:${secs.toString().padStart(2, '0')}`;
+        },
+
+        savePlayerState(override = {}) {
+            const payload = {
+                tracks: this.tracks,
+                currentIndex: this.currentIndex,
+                songName: this.songName,
+                singerName: this.singerName,
+                albumCover: this.albumCover,
+                currentTime: this.currentTime,
+                totalDuration: this.totalDuration,
+                isPlaying: this.isPlaying,
+                miniVisible: this.miniVisible,
+                playerPath: this.buildPlayerPath(),
+                updatedAt: Date.now(),
+                ...override
+            };
+            localStorage.setItem(PLAYER_STATE_KEY, JSON.stringify(payload));
+        },
+
+        buildPlayerPath() {
+            const id = this.currentIndex || 0;
+            const term = this.$route.query?.term;
+            if (!term) return `/main/player/${id}`;
+            return `/main/player/${id}?term=${encodeURIComponent(term)}`;
+        },
+
+        async restoreFromSavedState() {
+            try {
+                const raw = localStorage.getItem(PLAYER_STATE_KEY);
+                if (!raw) return;
+                const saved = JSON.parse(raw);
+                if (!saved?.tracks?.length) return;
+
+                this.tracks = saved.tracks;
+                this.currentIndex = saved.currentIndex ?? 0;
+                this.songName = saved.songName ?? this.songName;
+                this.singerName = saved.singerName ?? this.singerName;
+                this.albumCover = saved.albumCover ?? this.albumCover;
+                this.currentTime = saved.currentTime ?? 0;
+                this.isPlaying = !!saved.isPlaying;
+
+                await this.$nextTick();
+                const audio = this.$refs.audio;
+                if (!audio || !this.currentTrack?.previewUrl) return;
+
+                audio.currentTime = this.currentTime || 0;
+                if (this.isPlaying) {
+                    await this.startPlay();
+                }
+            } catch (e) {
+                console.error('플레이어 상태 복원 실패:', e);
+            }
         }
     }
 };
