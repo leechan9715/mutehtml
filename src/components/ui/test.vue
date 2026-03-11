@@ -11,17 +11,16 @@
 </template>
 
 <script>
-import playlist1 from '@/assets/images/main/playlist_cover/playlist_1.png';
-import playlist2 from '@/assets/images/main/playlist_cover/playlist_2.png';
-import playlist3 from '@/assets/images/main/playlist_cover/playlist_3.png';
-import playlist4 from '@/assets/images/main/playlist_cover/playlist_4.png';
-import playlist5 from '@/assets/images/main/playlist_cover/playlist_5.png';
+import img01 from '@/assets/images/main/sec01/img01.png';
+import img02 from '@/assets/images/main/sec01/img02.png';
+import img03 from '@/assets/images/main/sec01/img03.png';
+import img04 from '@/assets/images/main/sec01/img04.png';
+import img05 from '@/assets/images/main/sec01/img05.png';
+
 import MainContainer from '@/components/ui/main-section-top.vue';
 import SongCard from '@/components/ui/main-album-component.vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
-
-import testImg from '@/assets/images/main/test.png';
 
 export default {
     name: 'TestView',
@@ -29,11 +28,11 @@ export default {
     data() {
         return {
             songs: [
-                { title: '노래1', artist: '가수1', cover: playlist1 },
-                { title: '노래2', artist: '가수2', cover: playlist2 },
-                { title: '노래3', artist: '가수3', cover: playlist3 },
-                { title: '노래4', artist: '가수4', cover: playlist4 },
-                { title: '노래5', artist: '가수5', cover: playlist5 }
+                { title: 'RUDE', artist: 'Hearts2Hearts(하츠투하츠)', cover: img01 },
+                { title: '주저하는 연인들을 위해', artist: '잔나비', cover: img02 },
+                { title: 'Go For Love', artist: '민수', cover: img03 },
+                { title: '우리는 사랑이 돼요', artist: '안녕하신가영', cover: img04 },
+                { title: 'Forever', artist: 'Santi , ANNIAMO , Aexcit', cover: img05 }
             ]
         };
     },

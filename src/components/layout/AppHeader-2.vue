@@ -57,8 +57,8 @@ header.container {
     gap: 25px;
     background-color: #fff;
     box-shadow:
-        inset 0px -7px 10px #b1c9e5,
-        0px -3px 10px rgba(107, 159, 226, 0.3);
+        inset 0px -7px 10px var(--color-shadow),
+        0px -3px 10px var(--color-accent-blue);
 }
 
 header .row:nth-child(1) {

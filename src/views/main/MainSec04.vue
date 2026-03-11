@@ -175,9 +175,9 @@ export default {
     height: 165px;
     border-radius: 20px;
     border: 1px solid white;
-    background: rgba(255, 255, 255, 0.88);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
     display: flex;
     align-items: flex-end;
     box-sizing: border-box;
@@ -196,7 +196,7 @@ export default {
 
 .album-info {
     width: 100%;
-    color: #111827;
+    color: var(--color-black);
 }
 
 .album-title {
@@ -208,8 +208,8 @@ export default {
 
 .album-artist {
     margin: 0;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 600;
-    color: #374151;
+    color: var(--color-gray);
 }
 </style>

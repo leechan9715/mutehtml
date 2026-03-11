@@ -10,10 +10,10 @@ main {
 #lsc {
     background:
         linear-gradient(360deg,
-            rgba(255, 255, 255, 0.2) 0%,
-            rgba(211, 244, 254, 0.2) 16.82%,
-            rgba(211, 220, 255, 1) 62.01%,
-            rgba(187, 209, 255, 1) 85.57%),
+            rgba(255, 255, 255, 1) 0%,
+            rgb(242, 249, 255) 16.82%,
+            rgb(232, 244, 255) 62.01%,
+            rgb(220, 235, 255) 85.57%),
         linear-gradient(to left, #ffffff, #ffffff);
     padding: 60px 40px 30px 40px;
 }
@@ -50,25 +50,73 @@ main {
 }
 
 /* LP 영역 */
-.lp {
-    animation: spin 6s linear infinite;
+.lp-wrap {
+    position: relative;
+    width: fit-content;
 }
 
-#lsc .col-2:nth-child(2) {
+#lsc .lp-col {
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+    animation-delay: 0.4s;
+}
+
+/* LP 위에 올라가는 원 */
+.lp-wrap::after {
+    content: "";
+    position: absolute;
+    top: 49.5%;
+    left: 50%;
+    width: 65px;
+    height: 65px;
+    border: 1px solid var(--color-accent-blue);
+    background: var(--gradient-light);
+    /* 원하는 색 */
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+}
+
+.lp {
+    width: 160px;
+    height: auto;
+    /* 기본 매우 느림 */
+}
+
+/* 재생중 */
+.lp.playing {
+    animation: spin 10s linear infinite;
+    /* 빠르게 */
+}
+
+.play-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 52px;
+    height: 52px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    z-index: 5;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
-    background: var(--gradient-key);
-    border-radius: 50%;
-    height: calc(100% - 10px);
 }
 
-#lsc .play-img {
-    position: absolute;
-    left: 55%;
-    top: 50%;
-    transform: translate(-55%, -50%);
+.play-btn svg {
+    width: 40px;
+    height: 40px;
+    display: block;
+    overflow: visible;
+
+}
+
+.icon {
+    stroke: var(--color-key);
+    fill: var(--color-black);
 }
 
 /* 구름 */
@@ -76,9 +124,9 @@ main {
 #lsc .cloud-img-1 {
     animation: cloudMove2 6s ease-in-out infinite alternate;
     position: absolute;
-    left: 57%;
+    left: -16%;
     top: 10%;
-    width: 60px;
+    width: 70px;
 }
 
 #lsc .cloud-img-2 {
@@ -133,6 +181,12 @@ main {
 .tag-slide {
     padding: 4px 0;
     /* 위아래 그림자 공간 */
+}
+
+.swipe-ani {
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards;
+    animation-delay: 0.9s;
 }
 
 @keyframes spin {
@@ -210,5 +264,22 @@ main {
 }
 
 .content-text-3 p {
-    animation-delay: 0.9s;
+    animation-delay: 0.7s;
+}
+
+@keyframes twinkle {
+    0% {
+        opacity: 0;
+        transform: scale(0.6);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.6);
+    }
 }
