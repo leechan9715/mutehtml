@@ -88,8 +88,7 @@
 <script>
 import pause from '@/assets/images/player/pause.png';
 import play from '@/assets/images/player/play.png';
-
-import { $api } from '@/mixins/mixins.js';
+import { lastfmAlbumInfoApi, searchApi } from '@/api/_music_api';
 
 export default {
     name: 'Player',
@@ -142,10 +141,6 @@ export default {
             _onEnded: null
         };
     },
-    methods: {
-        async initSongData() {}
-    },
-
     async mounted() {
         // URL 쿼리스트링에서 검색어(term) 가져오기
         // 예: /player?term=아이유
@@ -154,7 +149,7 @@ export default {
         // 검색어가 있을 때만 실행
         if (this.terms) {
             // iTunes API로 노래 1개 검색
-            const result = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/itunes/search.php`, 'GET', {
+            const { data: result } = await searchApi({
                 term: this.terms, // 사용자가 입력한 검색어
                 country: 'KR', // 한국 기준 검색
                 media: 'music', // 음악만 검색
@@ -183,22 +178,18 @@ export default {
                 // Last.fm API 키
                 const LASTFM_API_KEY = process.env.VUE_APP_LASTFM_API_KEY;
 
-                // Last.fm API 기본 주소
-                const LASTFM_BASE_URL = `${process.env.VUE_APP_BASE_DOTHOME_URL}/api/lastfm/lastfm.php`;
-
                 // Last.fm에서 앨범 정보 조회
-                const result = await $api(LASTFM_BASE_URL, 'GET', {
-                    method: 'album.getinfo', // 앨범 정보 가져오기
-                    api_key: LASTFM_API_KEY, // 발급받은 API 키
+                const { data: albumInfo } = await lastfmAlbumInfoApi({
+                    apiKey: LASTFM_API_KEY,
                     artist: this.singerName, // 가수명
                     album: this.songName, // 현재는 곡 제목이 들어가고 있음
-                    format: 'json', // JSON 형식으로 받기
-                    autocorrect: 1 // 오타 자동 보정
+                    format: 'json',
+                    autocorrect: 1
                 });
 
                 // 앨범 이미지 배열 가져오기
-                // result.album.image 안에 small, medium, large 같은 이미지 목록이 들어있음
-                const images = result?.album?.image || [];
+                // albumInfo.album.image 안에 small, medium, large 같은 이미지 목록이 들어있음
+                const images = albumInfo?.album?.image || [];
 
                 // 가장 큰 이미지부터 순서대로 찾기
                 // mega -> extralarge -> large -> medium -> small
@@ -215,7 +206,7 @@ export default {
                 // 없으면 iTunes 기본 앨범 이미지 사용
                 this.albumCover = biggestImage || song.artworkUrl100 || '';
             }
-            const track = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/itunes/search.php`, 'GET', {
+            const { data: track } = await searchApi({
                 term: this.singerName,
                 country: 'KR',
                 media: 'music',
@@ -223,7 +214,7 @@ export default {
                 limit: 100
             });
 
-            const tracks = track.results.map((list) => ({
+            const tracks = (track?.results || []).map((list) => ({
                 previewUrl: list.previewUrl,
                 artistName: list.artistName,
                 trackName: list.trackName,
@@ -272,18 +263,19 @@ export default {
             this.currentTime = 0;
             this.updateProgress();
             this.currentIndex++;
+            if (!this.audioSrc[this.currentIndex]) return;
             this.songName = this.audioSrc[this.currentIndex].trackName;
             this.singerName = this.audioSrc[this.currentIndex].artistName;
             const keyword = `${this.audioSrc[this.currentIndex].artistName}${this.audioSrc[this.currentIndex].trackName}`;
             console.log(keyword);
-            const result = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/itunes/search.php`, 'GET', {
+            const { data: result } = await searchApi({
                 term: keyword, // 사용자가 입력한 검색어
                 country: 'KR', // 한국 기준 검색
                 media: 'music', // 음악만 검색
                 entity: 'song', // 곡 단위로 검색
                 limit: 1 // 첫 번째 결과만 가져오기
             });
-            const nextAlbumCover = result.results[0]?.artworkUrl100;
+            const nextAlbumCover = result?.results?.[0]?.artworkUrl100;
             this.albumCover = nextAlbumCover;
             await this.$nextTick();
             audio.play();

@@ -23,7 +23,7 @@
 
 <script>
 import MainListItem from '@/components/layout/MainListItem.vue';
-import { $api } from '@/mixins/mixins';
+import { searchApi } from '@/api/_music_api';
 
 export default {
     name: 'search-result',
@@ -42,15 +42,14 @@ export default {
             this.term = this.$route.query.term || '';
 
             // iTunes 검색 API 호출
-            const result = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/itunes/search.php`, 'GET', {
-                term: this.term, // 검색어
-                country: 'KR', // 한국 기준 검색
-                media: 'music', // 음악만 검색
-                entity: 'song', // 곡 단위 결과 가져오기
-                limit: 12 // 최대 12개 결과만 가져오기
+            const result = await searchApi({
+                term: this.term,
+                country: 'KR',
+                media: 'music',
+                entity: 'song',
+                limit: 12
             });
-
-            this.results = result.results;
+            this.results = result?.data?.results;
         },
         // 검색 결과 페이지에서 다시 검색했을 때 실행되는 함수
         handleSearch() {
