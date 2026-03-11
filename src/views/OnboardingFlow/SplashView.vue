@@ -60,7 +60,7 @@ import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseInput from '@/components/ui/BaseInput.vue';
 /* 일반 로그인 */
 import { useAuthStore } from '@/store';
-import { loginApi } from '@/api/auth';
+import { loginApi } from '@/api/_auth_api';
 
 export default {
     name: 'SplashView',

@@ -60,7 +60,7 @@ import Logo from '@/components/ui/Logo.vue';
 import AppTopBar2 from '@/components/layout/AppTopBar2.vue';
 import MenuListItem from '@/components/ui/MenuListItem.vue';
 import profileImgSrc from '@/assets/images/mypage/test.jpg';
-import { checkAuthApi, checkSocialLogin, logoutApi } from '@/api/auth';
+import { checkAuthApi, checkSocialLogin, logoutApi } from '@/api/_auth_api';
 const router = useRouter();
 const profileImg = profileImgSrc;
 
@@ -175,5 +175,7 @@ const naverLogout = async () => {
     alert('네이버 정상적으로 로그아웃되었습니다.');
     router.push('/');
 };
+
+console.log(naverAccessToken.value);
 </script>
 <style scoped src="@/assets/styles/pages/mypage.css"></style>

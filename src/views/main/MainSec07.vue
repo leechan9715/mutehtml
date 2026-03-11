@@ -1,6 +1,6 @@
 <template>
     <div style="padding: 16px">
-        <MainContainer title="아티스트 모먼트" @click="goNext">
+        <MainContainer title="아티스트 모먼트">
             <Swiper class="song-swiper" :slides-per-view="3.2" :space-between="16">
                 <SwiperSlide v-for="post in posts" :key="post.id" class="shorts" @click="linkTo(post.id)">
                     <video
@@ -30,11 +30,11 @@
 </template>
 
 <script>
-import { $api } from '@/mixins/mixins';
 import MainContainer from '@/components/ui/main-section-top.vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 import testImg from '@/assets/images/main/shorts/shorts_img1.png';
+import { mainShortsApi } from '@/api/_music_api';
 
 export default {
     name: 'TestView',
@@ -46,14 +46,11 @@ export default {
         };
     },
     methods: {
-        goNext() {
-            console.log('헤더 클릭!');
-        },
-
         async getPostUrl() {
             try {
-                const result = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/auth/videolist.php`, 'GET');
-                this.posts = result.posts || [];
+                const { data } = await mainShortsApi();
+                this.posts = data.posts || [];
+                console.log(this.posts);
             } catch (error) {
                 console.error('게시글 불러오기 실패:', error);
             }

@@ -55,8 +55,8 @@
 </template>
 
 <script>
+import { mainGlobalApi, mainKpopApi } from '@/api/_music_api';
 import MainListItem from '@/components/layout/MainListItem.vue';
-import { $api } from '@/mixins/mixins';
 export default {
     name: 'HotChartSection',
     components: {
@@ -73,8 +73,8 @@ export default {
     methods: {
         async getKpopResults() {
             try {
-                const results = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/music/kpop_ranking.php`, 'GET');
-                this.kpop = results?.feed?.results?.slice(0, 4) || [];
+                const { data } = await mainKpopApi();
+                this.kpop = data?.feed?.results?.slice(0, 4) || [];
                 console.log(this.kpop);
             } catch (error) {
                 console.error('getKpopResults error:', error);
@@ -83,13 +83,11 @@ export default {
         },
         async getGlobalResults() {
             try {
-                const results = await $api(
-                    `${process.env.VUE_APP_BASE_DOTHOME_URL}/api/music/global_ranking.php`,
-                    'GET'
-                );
-                this.global = results?.feed?.results?.slice(0, 4) || [];
+                const { data } = await mainGlobalApi();
+                this.global = data?.results?.slice(0, 4) || [];
+                console.log(this.global);
             } catch (error) {
-                console.error('getKpopResults error:', error);
+                console.error('getGlobalResults error:', error);
                 this.global = [];
             }
         }

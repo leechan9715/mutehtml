@@ -98,11 +98,11 @@ import BaseButton from '@/components/ui/BaseButton.vue';
 import kakao from '@/assets/images/signup/kakao.png';
 import google from '@/assets/images/signup/google.png';
 import naver from '@/assets/images/signup/naver.png';
-import { onMounted, nextTick, ref, watch, provide } from 'vue';
+import { onMounted, nextTick, ref, watch } from 'vue';
 
 /* 일반 로그인 */
 import { useRouter } from 'vue-router';
-import { checkNicknameApi, registerApi, socialLoginApi } from '@/api/auth';
+import { checkNicknameApi, registerApi, socialLoginApi } from '@/api/_auth_api';
 
 const router = useRouter();
 /* 일반 회원가입 */
@@ -255,65 +255,63 @@ function ensureKakaoInit() {
     }
 }
 
+function kakaoAuthLogin() {
+    return new Promise((resolve, reject) => {
+        window.Kakao.Auth.login({
+            scope: 'profile_nickname,profile_image',
+            success: resolve,
+            fail: reject
+        });
+    });
+}
+
+function kakaoGetUserMe() {
+    return new Promise((resolve, reject) => {
+        window.Kakao.API.request({
+            url: '/v2/user/me',
+            success: resolve,
+            fail: reject
+        });
+    });
+}
+
 async function kakaoLogin() {
     if (isKakaoLoading.value) return;
 
     try {
         isKakaoLoading.value = true;
+        error.value = '';
         ensureKakaoInit();
 
-        window.Kakao.Auth.login({
-            scope: 'profile_nickname,profile_image',
-            success: (authObj) => {
-                console.log('kakao login success:', authObj);
+        const authObj = await kakaoAuthLogin();
+        console.log('kakao login success:', authObj);
 
-                const accessToken = authObj?.access_token;
-                if (!accessToken) {
-                    error.value = '카카오 access token을 받지 못했습니다.';
-                    isKakaoLoading.value = false;
-                    return;
-                }
+        const accessToken = authObj?.access_token;
+        if (!accessToken) {
+            throw new Error('카카오 access token을 받지 못했습니다.');
+        }
 
-                window.Kakao.API.request({
-                    url: '/v2/user/me',
-                    success: async (res) => {
-                        try {
-                            console.log('kakao user:', res);
+        const kakaoUser = await kakaoGetUserMe();
+        console.log('kakao user:', kakaoUser);
 
-                            auth.provider = 'kakao';
-
-                            const { data } = await socialLoginApi({
-                                provider: auth.provider,
-                                accesstoken: accessToken
-                            });
-
-                            console.log('카카오 서버 저장 결과:', data);
-
-                            auth.setLocalStroge();
-                            router.push('/welcome');
-                        } catch (e) {
-                            console.error('카카오 서버 로그인 실패:', e);
-                            error.value = '카카오 서버 로그인 실패';
-                        } finally {
-                            isKakaoLoading.value = false;
-                        }
-                    },
-                    fail: (err) => {
-                        console.error('카카오 유저 정보 조회 실패:', err);
-                        error.value = '유저 정보 조회 실패';
-                        isKakaoLoading.value = false;
-                    }
-                });
-            },
-            fail: (err) => {
-                console.error('카카오 로그인 실패:', err);
-                error.value = '카카오 로그인 실패';
-                isKakaoLoading.value = false;
-            }
+        auth.provider = 'kakao';
+        const { data } = await socialLoginApi({
+            provider: auth.provider,
+            accesstoken: accessToken
         });
+
+        if (!data?.success) {
+            throw new Error(data?.message || '카카오 서버 로그인 실패');
+        }
+
+        console.log('카카오 서버 저장 결과:', data);
+        auth.setLocalStroge();
+        router.push('/welcome');
     } catch (e) {
-        error.value = e.message ?? String(e);
-        console.error(e);
+        console.error('카카오 로그인 처리 실패:', e);
+        error.value = e?.response?.data?.message || e?.message || '카카오 로그인 실패';
+        alert(error.value);
+    } finally {
         isKakaoLoading.value = false;
     }
 }

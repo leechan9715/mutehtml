@@ -1,4 +1,4 @@
-import api from './index';
+import api from './api';
 
 export const checkAuthApi = () => api.get('/auth/check_login.php');
 

@@ -19,7 +19,7 @@
 
 <script>
 import Logo from '@/components/ui/Logo.vue';
-import { checkSocialLogin } from '@/api/auth';
+import { checkSocialLogin } from '@/api/_auth_api';
 
 export default {
     name: 'WelcomeView',
