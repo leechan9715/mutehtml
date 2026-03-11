@@ -28,7 +28,7 @@ export default {
         }
     },
     mounted() {
-        this.loginCheck();
+        // this.loginCheck();
     },
 
     methods: {
@@ -57,6 +57,6 @@ export default {
 #wrap main.no-profile {
     position: relative;
     top: 30px;
-    height: calc(100vh - 153px);
+    height: calc(100vh - 80px);
 }
 </style>
