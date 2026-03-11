@@ -19,6 +19,7 @@
 
 <script>
 import Logo from '@/components/ui/Logo.vue';
+import { checkSocialLogin } from '@/api/_auth_api';
 
 export default {
     name: 'WelcomeView',
@@ -35,7 +36,7 @@ export default {
     components: {
         Logo
     },
-    mounted() {
+    async mounted() {
         this.welcomeDes = this.$refs['welcome-des'];
         this.lines = this.welcomeDes.innerHTML.split(/<br\b[^>]*>/i);
         this.welcomeDes.innerHTML = '';
@@ -45,6 +46,8 @@ export default {
             this.$router.push('/artist-select');
         }, 10000); // 5초 후에 회원가입 페이지로 이동
         this.typeLine();
+        const { data } = await checkSocialLogin();
+        console.log('소셜로그인데이터', data);
     },
     beforeUnmount() {
         clearTimeout(this.typingTimer);

@@ -92,7 +92,6 @@ import 'swiper/css/pagination';
 import 'swiper/css/effect-coverflow';
 
 import SearchCategory from '@/components/ui/search-category-button.vue';
-import { $api } from '@/mixins/mixins';
 
 // ✅ 이미지 한 번에 로드 (albumImg 개별 import 제거)
 const imageFiles = require.context('@/assets/images/search', false, /\.png$/);

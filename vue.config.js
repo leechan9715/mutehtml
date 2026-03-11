@@ -12,7 +12,7 @@ module.exports = defineConfig({
                 pathRewrite: { '^/oauth2.0': '/oauth2.0' } // 요청 경로를 재작성합니다.
             },
             '/api': {
-                target: 'https://muteapp.dothome.co.kr',
+                target: 'https://muteapp.dothome.co.kr/',
                 changeOrigin: true,
                 pathRewrite: { '^/api': '' },
 
@@ -23,7 +23,7 @@ module.exports = defineConfig({
 
                 timeout: 10000,
                 proxyTimeout: 10000,
-                logLevel: 'info', // 개발 중에는 debug, 배포 시에는 info/silent로 변경 권장
+                logLevel: 'debug', // 개발 중에는 debug, 배포 시에는 info/silent로 변경 권장
                 ws: false // WebSocket 비활성화, 필요시 true로 변경
             }
         },

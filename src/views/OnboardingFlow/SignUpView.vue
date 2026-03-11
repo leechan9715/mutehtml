@@ -102,7 +102,8 @@ import { onMounted, nextTick, ref, watch } from 'vue';
 
 /* 일반 로그인 */
 import { useRouter } from 'vue-router';
-import { checkNickname } from '@/api/auth';
+import { checkNicknameApi, registerApi, socialLoginApi } from '@/api/_auth_api';
+
 const router = useRouter();
 /* 일반 회원가입 */
 const nickname = ref('');
@@ -124,37 +125,55 @@ const NAVER_DOTHOME_CALLBACK_URL = process.env.VUE_APP_DOTHOME_NAVER_CALLBACK_UR
 const KAKAO_JS_KEY = process.env.VUE_APP_KAKAO_JS_KEY;
 
 //  구글 로그인 //
+const isGoogleLoading = ref(false);
 const startGoogleLogin = () => {
+    if (isGoogleLoading.value) return;
+
     googleSdkLoaded((google) => {
-        google.accounts.oauth2
-            .initTokenClient({
-                client_id: googleOauthClientId,
-                scope: 'email profile openid',
-                callback: (response) => {
+        const tokenClient = google.accounts.oauth2.initTokenClient({
+            client_id: googleOauthClientId,
+            scope: 'email profile openid',
+            callback: async (response) => {
+                try {
                     if (response.error) {
                         console.error('구글 로그인 실패:', response.error);
                         error.value = '구글 로그인에 실패했습니다.';
                         return;
                     }
+
+                    const accessToken = response.access_token;
+
+                    if (!accessToken) {
+                        error.value = '구글 access token을 받지 못했습니다.';
+                        return;
+                    }
+
                     console.log('구글 로그인 성공', response);
-                    auth.isLoggedIn = true;
+
                     auth.provider = 'google';
-                    auth.AccessToken = response.access_token ?? null;
-                    localStorage.setItem(
-                        'login-check',
-                        JSON.stringify({
-                            AccessToken: response.access_token,
-                            provider: auth.provider,
-                            isLoggedIn: auth.isLoggedIn
-                        })
-                    );
+
+                    const { data } = await socialLoginApi({
+                        provider: 'google',
+                        accesstoken: accessToken
+                    });
+
+                    console.log('구글 서버 저장 결과:', data);
+
+                    auth.setLocalStroge();
                     router.push('/welcome');
+                } catch (e) {
+                    console.error('구글 로그인 처리 실패:', e);
+                    error.value = '구글 로그인 처리 중 오류가 발생했습니다.';
+                } finally {
+                    isGoogleLoading.value = false;
                 }
-            })
-            .requestAccessToken();
+            }
+        });
+
+        isGoogleLoading.value = true;
+        tokenClient.requestAccessToken();
     });
 };
-
 // 네이버 로그인
 function initNaverButton() {
     const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
@@ -182,13 +201,13 @@ function initNaverButton() {
         console.log('네이버 로그인 초기화 오류:', e);
     }
 }
-function checkLoginStatus() {
+async function checkLoginStatus() {
     if (!naverLogin.value) {
         console.error('네이버 로그인 객체가 초기화 되지 않았습니다.');
         return;
     }
 
-    naverLogin.value.getLoginStatus((status) => {
+    naverLogin.value.getLoginStatus(async (status) => {
         if (!status) {
             console.log('callback 처리에 실패하였습니다.');
             return;
@@ -202,19 +221,12 @@ function checkLoginStatus() {
         }
 
         // access token 저장 (SDK 구조가 케이스마다 달라서 안전하게)
+
         const token = naverLogin.value.accessToken?.accessToken || naverLogin.value.accessToken || null;
-        auth.AccessToken = token;
-        auth.isLoggedIn = true;
         auth.provider = 'naver';
-        // 상단값 로컬스토리지에 저장
-        localStorage.setItem(
-            'login-check',
-            JSON.stringify({
-                AccessToken: auth.AccessToken,
-                provider: auth.provider,
-                isLoggedIn: auth.isLoggedIn
-            })
-        );
+        const { data } = await socialLoginApi({ provider: auth.provider, accesstoken: token });
+        auth.setLocalStroge();
+        console.log(data);
         router.push('/welcome');
         console.log('로그인 성공!', email);
     });
@@ -231,52 +243,76 @@ async function openNaverLogin() {
     aTag.click();
 }
 // KaKao 로그인
+const isKakaoLoading = ref(false);
 
 function ensureKakaoInit() {
     if (!KAKAO_JS_KEY) throw new Error('VUE_APP_KAKAO_JS_KEY가 .env에 없습니다.');
-    if (!window.Kakao)
+    if (!window.Kakao) {
         throw new Error('Kakao SDK가 로드되지 않았습니다. public/index.html에 kakao.js 넣었는지 확인하세요.');
-    if (!window.Kakao.isInitialized()) window.Kakao.init(KAKAO_JS_KEY);
+    }
+    if (!window.Kakao.isInitialized()) {
+        window.Kakao.init(KAKAO_JS_KEY);
+    }
 }
 
-function kakaoLogin() {
-    try {
-        ensureKakaoInit();
+function kakaoAuthLogin() {
+    return new Promise((resolve, reject) => {
         window.Kakao.Auth.login({
-            scope: 'profile_nickname,profile_image', // 필요하면 account_email 추가
-            success: (authObj) => {
-                console.log('kakao login success:', authObj);
-                // 유저 정보 확인(테스트)
-                window.Kakao.API.request({
-                    url: '/v2/user/me',
-                    success: (res) => {
-                        console.log('kakao user:', res);
-                        router.push('/welcome');
-                        auth.isLoggedIn = true;
-                        auth.provider = 'kakao';
-                        localStorage.setItem(
-                            'login-check',
-                            JSON.stringify({
-                                AccessToken: null,
-                                provider: auth.provider,
-                                isLoggedIn: auth.isLoggedIn
-                            })
-                        );
-                    },
-                    fail: (err) => {
-                        console.error(err);
-                        error.value = '유저 정보 조회 실패';
-                    }
-                });
-            },
-            fail: (err) => {
-                console.error(err);
-                error.value = '카카오 로그인 실패';
-            }
+            scope: 'profile_nickname,profile_image',
+            success: resolve,
+            fail: reject
         });
+    });
+}
+
+function kakaoGetUserMe() {
+    return new Promise((resolve, reject) => {
+        window.Kakao.API.request({
+            url: '/v2/user/me',
+            success: resolve,
+            fail: reject
+        });
+    });
+}
+
+async function kakaoLogin() {
+    if (isKakaoLoading.value) return;
+
+    try {
+        isKakaoLoading.value = true;
+        error.value = '';
+        ensureKakaoInit();
+
+        const authObj = await kakaoAuthLogin();
+        console.log('kakao login success:', authObj);
+
+        const accessToken = authObj?.access_token;
+        if (!accessToken) {
+            throw new Error('카카오 access token을 받지 못했습니다.');
+        }
+
+        const kakaoUser = await kakaoGetUserMe();
+        console.log('kakao user:', kakaoUser);
+
+        auth.provider = 'kakao';
+        const { data } = await socialLoginApi({
+            provider: auth.provider,
+            accesstoken: accessToken
+        });
+
+        if (!data?.success) {
+            throw new Error(data?.message || '카카오 서버 로그인 실패');
+        }
+
+        console.log('카카오 서버 저장 결과:', data);
+        auth.setLocalStroge();
+        router.push('/welcome');
     } catch (e) {
-        error.value = e.message ?? String(e);
-        console.error(e);
+        console.error('카카오 로그인 처리 실패:', e);
+        error.value = e?.response?.data?.message || e?.message || '카카오 로그인 실패';
+        alert(error.value);
+    } finally {
+        isKakaoLoading.value = false;
     }
 }
 console.log('저장된 값:', JSON.parse(localStorage.getItem('login-check')));
@@ -293,6 +329,7 @@ watch(nickname, () => {
 });
 const handleNicknameCheck = async () => {
     const value = nickname.value.trim();
+    console.log(value);
     if (!value) {
         alert('닉네임을 입력하세요.');
         return;
@@ -302,16 +339,24 @@ const handleNicknameCheck = async () => {
     nicknameCheckText.value = '확인중...';
 
     try {
-        const res = await checkNickname(value);
-        if (res.data.available) {
+        const res = await checkNicknameApi(value);
+
+        if (res.data.success && res.data.available) {
             nicknameChecked.value = true;
             nicknameCheckText.value = '사용가능';
             alert('사용 가능한 닉네임입니다.');
-        } else {
+        } else if (res.data.success && !res.data.available) {
+            nicknameChecked.value = false;
             nicknameCheckText.value = '중복';
             alert('이미 사용 중인 닉네임입니다.');
+        } else {
+            nicknameChecked.value = false;
+            nicknameCheckText.value = '중복확인';
+            alert(res.data.message || '중복확인 실패');
         }
     } catch (e) {
+        console.log('닉네임 중복확인 에러:', e);
+        nicknameChecked.value = false;
         nicknameCheckText.value = '중복확인';
         alert('중복확인 실패');
     }
@@ -355,14 +400,15 @@ const registerUser = async () => {
 
     try {
         /* 일반 회원가입 */
-        await auth.register({
+        const { data } = await registerApi({
             nickname: nickname.value, // 표시 닉네임
             email: email.value,
             phone: phone.value,
             password: password.value
         });
+        if (!data?.success) throw new Error(data?.message || 'register failed');
         alert('회원가입 성공');
-        router.push('/welcome');
+        router.push('/');
     } catch (e) {
         alert('회원가입 실패');
     }

@@ -54,19 +54,15 @@
     </div>
 </template>
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import Logo from '@/components/ui/Logo.vue';
 import AppTopBar2 from '@/components/layout/AppTopBar2.vue';
 import MenuListItem from '@/components/ui/MenuListItem.vue';
 import profileImgSrc from '@/assets/images/mypage/test.jpg';
-import { useAuthStore } from '@/store/auth';
-const auth = useAuthStore();
-// ✅ data() -> script setup (반응형 필요 없으면 const로 둬도 됨)
+import { checkAuthApi, checkSocialLogin, logoutApi } from '@/api/_auth_api';
+const router = useRouter();
 const profileImg = profileImgSrc;
-const auth_check = JSON.parse(localStorage.getItem('login-check'));
-const provider = auth_check.provider || '';
-const isLoggedIn = auth_check.isLoggedIn || false;
-const accessToken = auth_check.AccessToken || null;
 
 const settingsMenus = ref([
     { icon: 'notifications', title: '알림', to: '#' },
@@ -78,43 +74,94 @@ const settingsMenus = ref([
     { icon: 'info', title: '버전정보', to: '#' }
 ]);
 
+const localLoginData = ref({});
+const socialLoginData = ref({});
+const naverAccessToken = ref();
+onMounted(async () => {
+    try {
+        const { data } = await checkAuthApi();
+        localLoginData.value = data;
+        console.log(localLoginData.value);
+    } catch (e) {
+        console.error('로컬 로그인 체크 실패', e);
+    }
+    try {
+        const { data } = await checkSocialLogin();
+        socialLoginData.value = data;
+        naverAccessToken.value = data.accesstoken;
+    } catch (e) {
+        console.error('소셜 로그인 체크 실패', e);
+    }
+});
+
 const logout = () => {
-    if (provider === 'kakao') {
+    if (socialLoginData.value?.provider === 'kakao') {
         kakaoLogout();
+
+        return;
     }
 
-    if (provider === 'naver') {
+    if (socialLoginData.value?.provider === 'naver') {
         naverLogout();
+        return;
     }
 
-    if (provider === 'google') {
+    if (socialLoginData.value?.provider === 'google') {
         googleLogout();
-    } else {
+        return;
+    }
+
+    if (localLoginData.value?.provider === 'local') {
+        localLogout();
         return;
     }
 };
-const googleLogout = () => {
-    console.log(auth.isLoggedIn, auth.provider);
-    console.log('googleLogout');
+
+const localLogout = async () => {
     localStorage.removeItem('login-check');
+    await logoutApi();
+    alert('로컬 정상적으로 로그아웃되었습니다.');
+    router.push('/');
 };
-const kakaoLogout = () => {
-    if (!window.Kakao || !window.Kakao.isInitialized()) return;
-    if (window.Kakao.Auth.getAccessToken()) {
-        window.Kakao.Auth.logout(() => {
-            console.log('카카오 로그아웃 완료');
-            localStorage.removeItem('login-check');
-        });
-    } else {
-        console.log('이미 로그아웃 상태');
+const googleLogout = async () => {
+    localStorage.removeItem('login-check');
+    await logoutApi();
+    alert('구글 정상적으로 로그아웃되었습니다.');
+    router.push('/');
+};
+const kakaoLogout = async () => {
+    try {
+        // 1. 카카오 SDK가 있고 초기화되어 있으면 카카오 토큰 로그아웃
+        if (window.Kakao && window.Kakao.isInitialized()) {
+            const kakaoToken = window.Kakao.Auth.getAccessToken();
+            if (kakaoToken) {
+                await new Promise((resolve) => {
+                    window.Kakao.Auth.logout(() => {
+                        resolve();
+                    });
+                });
+            }
+        }
+
+        // 2. 우리 서버 세션 로그아웃은 항상 실행
+        await logoutApi();
+
+        // 3. 클라이언트 저장값 제거
+        localStorage.removeItem('login-check');
+
+        alert('카카오 정상적으로 로그아웃되었습니다.');
+        router.push('/');
+    } catch (error) {
+        console.error('카카오 로그아웃 실패:', error);
+        alert('로그아웃 중 오류가 발생했습니다.');
     }
 };
-const naverLogout = () => {
-    if (!accessToken) {
-        console.log('로그인 상태가 아닙니다.');
+const naverLogout = async () => {
+    if (!naverAccessToken.value) {
+        alert('로그인 상태가 아닙니다.');
         return;
     }
-    const logoutUrl = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=mtjjmyTeqJxD3JTzSSKD&client_secret=1WUIDotelN&access_token=${accessToken}&service_provider=NAVER`;
+    const logoutUrl = `https://nid.naver.com/oauth2.0/token?grant_type=delete&client_id=mtjjmyTeqJxD3JTzSSKD&client_secret=1WUIDotelN&access_token=${naverAccessToken.value}&service_provider=NAVER`;
 
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
@@ -123,11 +170,12 @@ const naverLogout = () => {
 
     // ✅ 네이버 SDK가 저장한 sessionStorage 직접 삭제
 
-    console.log('로그아웃 요청이 실행되었습니다.');
     localStorage.removeItem('login-check');
-    alert('네이버 로그아웃 성공');
+    await logoutApi();
+    alert('네이버 정상적으로 로그아웃되었습니다.');
+    router.push('/');
 };
-console.log(provider, isLoggedIn, accessToken);
-console.log('after remove:', localStorage.getItem('login-check')); // null이면 삭제 성공
+
+console.log(naverAccessToken.value);
 </script>
 <style scoped src="@/assets/styles/pages/mypage.css"></style>
