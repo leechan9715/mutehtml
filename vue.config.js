@@ -12,6 +12,7 @@ module.exports = defineConfig({
                 pathRewrite: { '^/oauth2.0': '/oauth2.0' } // 요청 경로를 재작성합니다.
             },
             '/api': {
+                // target: 'https://junotheweb.dothome.co.kr/',
                 target: 'https://muteapp.dothome.co.kr/',
                 changeOrigin: true,
                 pathRewrite: { '^/api': '' },
