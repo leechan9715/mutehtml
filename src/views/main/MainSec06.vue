@@ -1,6 +1,6 @@
 <template>
     <div class="app">
-        <div class="title-explain font-22 fw-600 color-black">
+        <div class="title-explain fw-600 color-black">
             <p>오늘의 아티스트 추천</p>
         </div>
         <div class="card-stack">
@@ -13,9 +13,8 @@
                     dragging: index === 0 && isDragging
                 }"
                 :style="getCardStyle(index)"
-                @pointerdown="index === 0 ? startDrag($event) : null"
             >
-                <div class="card-top">
+                <div class="card-top" @pointerdown="index === 0 ? startDrag($event) : null">
                     <img :src="card.mainImage" :alt="`${card.name} 대표 이미지`" />
                 </div>
 
@@ -206,129 +205,4 @@ export default {
 };
 </script>
 
-<style scoped>
-* {
-    box-sizing: border-box;
-}
-
-.app {
-    margin: 0 16px;
-    min-height: 20vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px 0 40px 0;
-    background: linear-gradient(0deg, #ffffff 0%, #dfeaff 30%, #ffffff 100%);
-}
-.title-explain {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 16px;
-}
-.card-stack {
-    position: relative;
-    width: 360px;
-    height: 620px;
-}
-
-.artist-card {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    border-radius: 10px;
-    border: 1px solid var(--color-accent-blue);
-    box-shadow: 0 4px 6px var(--color-shadow);
-    user-select: none;
-    touch-action: none;
-}
-
-.artist-card.top {
-    cursor: grab;
-}
-
-.artist-card.dragging {
-    cursor: grabbing;
-}
-
-.card-top {
-    height: 63%;
-    overflow: hidden;
-}
-
-.card-top img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    pointer-events: none;
-}
-
-.card-bottom {
-    height: 37%;
-    background: #ffffff;
-    padding: 22px 18px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 16px;
-}
-
-.info-area {
-    flex: 1;
-    min-width: 0;
-}
-
-.artist-name {
-    margin: 0 0 14px;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--color-black);
-}
-
-.artist-meta {
-    margin: 0 0 12px;
-    font-size: 14px;
-    color: var(--color-black);
-    line-height: 1.4;
-}
-
-.artist-feature {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-black);
-}
-
-.link-row {
-    margin-top: 70px;
-    justify-self: end;
-    font-size: 14px;
-    color: var(--color-black);
-    text-align: center;
-    cursor: pointer;
-}
-
-.thumb-area {
-    width: 74px;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    align-self: flex-end;
-}
-
-.thumb-box {
-    width: 74px;
-    height: 74px;
-    overflow: hidden;
-}
-
-.thumb-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    pointer-events: none;
-}
-</style>
+<style scoped src="../../assets/styles/pages/main-css/sec-06.css"></style>

@@ -22,7 +22,7 @@ export default {
 
 <style scoped>
 .song-card {
-    width: 120px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 6px;

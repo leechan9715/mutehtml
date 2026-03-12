@@ -22,7 +22,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: clamp(12px, 3vw, 20px);
     padding: 0 10px 0 0;
 }
 

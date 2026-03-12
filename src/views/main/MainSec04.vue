@@ -6,11 +6,12 @@
                 effect="coverflow"
                 :grab-cursor="true"
                 :centered-slides="true"
+                :centered-slides-bounds="true"
                 :slides-per-view="'auto'"
                 :initial-slide="3"
                 :coverflow-effect="{
                     rotate: 0,
-                    stretch: 100,
+                    stretch: 50,
                     depth: 50,
                     modifier: 1,
                     slideShadows: false,
@@ -56,6 +57,7 @@ import cover5 from '@/assets/images/main/albumSlide/cover5.png';
 import cover6 from '@/assets/images/main/albumSlide/cover6.png';
 import cover7 from '@/assets/images/main/albumSlide/cover7.png';
 import cover8 from '@/assets/images/main/albumSlide/cover8.png';
+import cover9 from '@/assets/images/main/albumSlide/cover9.png';
 
 export default {
     name: 'ForU',
@@ -120,6 +122,13 @@ export default {
                 {
                     cover: cover8,
                     alt: 'album_cover8',
+                    info: true,
+                    title: 'LAW (Prod.Czaer)',
+                    artist: '윤미래, 비비'
+                },
+                {
+                    cover: cover9,
+                    alt: 'album_cover9',
                     info: false
                 }
             ]
@@ -144,8 +153,6 @@ export default {
 .genre-swiper {
     width: 100%;
     height: 170px;
-    padding-left: 16px;
-    padding-right: 80px;
 }
 
 .genre-slide {
@@ -173,7 +180,6 @@ export default {
     inset: 0;
     width: 165px;
     height: 165px;
-    border-radius: 20px;
     border: 1px solid white;
     background: rgba(255, 255, 255, 0.9);
     backdrop-filter: blur(1px);
@@ -211,5 +217,37 @@ export default {
     font-size: 14px;
     font-weight: 600;
     color: var(--color-gray);
+}
+
+@media (max-width: 500px) {
+    .genre-swiper {
+        height: clamp(130px, 32vw, 170px);
+        padding-left: clamp(8px, 3vw, 16px);
+        padding-right: clamp(30px, 8vw, 80px);
+    }
+
+    .genre-slide {
+        width: clamp(120px, 32vw, 165px);
+    }
+
+    .genre-slide img {
+        width: clamp(115px, 30vw, 160px);
+        height: clamp(115px, 30vw, 160px);
+        border-radius: clamp(14px, 4vw, 20px);
+    }
+
+    .album-overlay {
+        width: clamp(120px, 32vw, 165px);
+        height: clamp(120px, 32vw, 165px);
+        padding: clamp(8px, 3vw, 14px);
+    }
+
+    .album-title {
+        font-size: clamp(13px, 3.5vw, 16px);
+    }
+
+    .album-artist {
+        font-size: clamp(11px, 3vw, 14px);
+    }
 }
 </style>

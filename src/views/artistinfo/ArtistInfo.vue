@@ -1,9 +1,6 @@
 <template>
     <h2 class="hidden">아티스트 소개</h2>
     <section class="container">
-        <AppTopBar />
-    </section>
-    <section class="container">
         <div class="row">
             <div class="col-1 artist-info">
                 <div class="artist_img">
