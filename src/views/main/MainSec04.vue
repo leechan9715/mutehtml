@@ -38,6 +38,14 @@
                 </SwiperSlide>
             </Swiper>
         </MainContainer>
+        <div class="hiphop-info">
+            <p>What is 힙합</p>
+            <p>
+                1970년대 <span class="color-black">미국 뉴욕 브롱크스 </span>지역에서 시작된 음악 문화로, 강한 비트 위에
+                랩을 얹어 자신의 이야기와 감정을 표현하는 것이 특징이며
+                <span class="color-black">자유로운 분위기와 개성</span>을 중요하게 여기는 장르다.
+            </p>
+        </div>
     </div>
 </template>
 
@@ -149,105 +157,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.genre-swiper {
-    width: 100%;
-    height: 170px;
-}
-
-.genre-slide {
-    position: relative;
-    width: 165px;
-    cursor: pointer;
-}
-
-.genre-slide img {
-    display: block;
-    width: 160px;
-    height: 160px;
-    border-radius: 20px;
-    object-fit: cover;
-    transition: filter 0.3s ease;
-    filter: brightness(0.55);
-}
-
-.genre-slide.active-slide img {
-    filter: brightness(1);
-}
-
-.album-overlay {
-    position: absolute;
-    inset: 0;
-    width: 165px;
-    height: 165px;
-    border: 1px solid white;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
-    display: flex;
-    align-items: flex-end;
-    box-sizing: border-box;
-    padding: 14px;
-    opacity: 0;
-    visibility: hidden;
-    transition:
-        opacity 0.25s ease,
-        visibility 0.25s ease;
-}
-
-.album-overlay.show {
-    opacity: 1;
-    visibility: visible;
-}
-
-.album-info {
-    width: 100%;
-    color: var(--color-black);
-}
-
-.album-title {
-    margin: 0 0 4px;
-    font-size: 16px;
-    line-height: 1.2;
-    font-weight: 700;
-}
-
-.album-artist {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-gray);
-}
-
-@media (max-width: 500px) {
-    .genre-swiper {
-        height: clamp(130px, 32vw, 170px);
-        padding-left: clamp(8px, 3vw, 16px);
-        padding-right: clamp(30px, 8vw, 80px);
-    }
-
-    .genre-slide {
-        width: clamp(120px, 32vw, 165px);
-    }
-
-    .genre-slide img {
-        width: clamp(115px, 30vw, 160px);
-        height: clamp(115px, 30vw, 160px);
-        border-radius: clamp(14px, 4vw, 20px);
-    }
-
-    .album-overlay {
-        width: clamp(120px, 32vw, 165px);
-        height: clamp(120px, 32vw, 165px);
-        padding: clamp(8px, 3vw, 14px);
-    }
-
-    .album-title {
-        font-size: clamp(13px, 3.5vw, 16px);
-    }
-
-    .album-artist {
-        font-size: clamp(11px, 3vw, 14px);
-    }
-}
-</style>
+<style scoped src="../../assets/styles/pages/main-css/sec-04.css"></style>
