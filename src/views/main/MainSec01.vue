@@ -11,7 +11,7 @@
                     <p>당신만을 위한 딥한 선곡</p>
                 </div>
                 <div class="content-text-3">
-                    <p class="color-key fw-semibold font-20">#시티팝 &nbsp;&nbsp;#어쿠스틱 &nbsp;&nbsp;#Lo-fi</p>
+                    <p class="color-key fw-semibold">#시티팝 &nbsp;&nbsp;#어쿠스틱 &nbsp;&nbsp;#Lo-fi</p>
                 </div>
             </div>
 

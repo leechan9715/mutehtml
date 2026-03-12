@@ -19,7 +19,7 @@
     --gradient-border: linear-gradient(180deg, #DAE5FF 0%, #BBD1FF 100%);
 
     /* 폰트사이즈 */
-    --font-48: 48px;
+    /* --font-48: 48px;
     --font-26: 26px;
     --font-25: 25px;
     --font-24: 24px;
@@ -32,16 +32,17 @@
     --font-14: 14px;
     --font-13: 13px;
     --font-12: 12px;
-    --font-10: 10px;
-    /* --font-48: clamp(30px, 6.2vw, 48px);
-  --font-26: clamp(18px, 4.2vw, 26px);
-  --font-24: clamp(17px, 3.8vw, 24px);
-  --font-22: clamp(16px, 3.4vw, 22px);
-  --font-20: clamp(15px, 3.1vw, 20px);
-  --font-16: clamp(13px, 2.6vw, 16px);
-  --font-14: clamp(12px, 2.2vw, 14px);
-  --font-13: clamp(12px, 2vw, 13px);
-  --font-12: clamp(11px, 1.8vw, 12px); */
+    --font-10: 10px; */
+    /* 반응형 */
+    --font-48: clamp(30px, 6.2vw, 48px);
+    --font-26: clamp(18px, 4.2vw, 26px);
+    --font-24: clamp(17px, 3.8vw, 24px);
+    --font-22: clamp(16px, 3.4vw, 22px);
+    --font-20: clamp(15px, 3.1vw, 20px);
+    --font-16: clamp(13px, 2.6vw, 16px);
+    --font-14: clamp(12px, 2.2vw, 14px);
+    --font-13: clamp(12px, 2vw, 13px);
+    --font-12: clamp(11px, 1.8vw, 12px);
 
     /* 폰트 웨이트(굵기) */
     --fw-100: 100;

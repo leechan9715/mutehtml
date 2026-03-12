@@ -47,10 +47,6 @@
                 <MainListItem />
             </div>
         </div>
-
-        <div class="row content3">
-            <img src="@/assets/images/main/muteAd/mutead.png" alt="advertise" />
-        </div>
     </section>
 </template>
 

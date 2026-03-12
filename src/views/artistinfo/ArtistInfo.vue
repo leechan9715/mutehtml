@@ -1,8 +1,6 @@
 <template>
     <h2 class="hidden">아티스트 소개</h2>
-    <section class="container">
-        <AppTopBar />
-    </section>
+
     <section class="container">
         <div class="row">
             <div class="col-1 artist-info">
@@ -14,56 +12,54 @@
             </div>
         </div>
     </section>
-    <section class="container">
-        <div class="row album-info">
-            <p class="album-text">앨범 · 싱글</p>
-            <Swiper class="artist-info-swiper" :slides-per-view="2.4" :space-between="13">
-                <SwiperSlide>
-                    <img src="@/assets/images/artist-info/albums-img/album1.png" alt="album2" class="albums" />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img src="@/assets/images/artist-info/albums-img/album2.png" alt="album2" class="albums" />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <img src="@/assets/images/artist-info/albums-img/album3.png" alt="album3" class="albums" />
+
+    <div style="padding: 16px">
+        <MainContainer title="싱글 · 앨범" @click="goNext">
+            <Swiper class="song-swiper" :slides-per-view="3.2" :space-between="16">
+                <SwiperSlide v-for="(song, i) in songs" :key="i">
+                    <SongCard :title="song.title" :artist="song.artist" :coverImage="song.cover" />
                 </SwiperSlide>
             </Swiper>
-        </div>
-    </section>
+        </MainContainer>
+    </div>
 </template>
 
 <script>
-import AppTopBar from '@/components/layout/AppTopBar.vue';
+import album1 from '@/assets/images/artist-info/album1.png';
+import album2 from '@/assets/images/artist-info/album2.png';
+import album3 from '@/assets/images/artist-info/album3.png';
+import album4 from '@/assets/images/artist-info/album4.png';
 import MainContainer from '@/components/ui/main-section-top.vue';
+import SongCard from '@/components/ui/main-album-component.vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 
+import testImg from '@/assets/images/main/test.png';
+
 export default {
-    name: 'ArtistInfo',
-    components: {
-        AppTopBar,
-        MainContainer,
-        Swiper,
-        SwiperSlide
+    name: 'TestView',
+    components: { MainContainer, SongCard, Swiper, SwiperSlide },
+    data() {
+        return {
+            songs: [
+                { title: 'On The Ground', artist: 'Single · Rosé', cover: album1 },
+                { title: 'Gone', artist: 'Single · Rosé', cover: album1 },
+                { title: 'APT', artist: 'Single · Rosé', cover: album2 },
+                { title: 'R', artist: 'Album · Rosé', cover: album3 },
+                { title: 'Rosie', artist: 'Album · Rosé', cover: album4 }
+            ]
+        };
+    },
+    methods: {
+        goNext() {
+            console.log('헤더 클릭!');
+        }
     }
-    // data() {
-    //     return {
-    //         songs: Array.from({ length: 8 }).map(() => ({
-    //             title: '혜성',
-    //             artist: '윤하(YOUNAH)',
-    //             cover: testImg
-    //         }))
-    //     };
-    // },
-    // methods: {
-    //     goNext() {
-    //         console.log('헤더 클릭!');
-    //     }
-    // }
 };
 </script>
 
-<style scoped src="@/assets/styles/pages/artistinfo.css">
+<style scoped>
+/* 기존 card-row의 padding 느낌 유지 */
 .song-swiper {
     padding: 0 40px 0 0;
 }

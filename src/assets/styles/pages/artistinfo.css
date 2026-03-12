@@ -6,11 +6,12 @@
 }
 
 .top img {
-    width: 28px;
-    height: 28px;
+    width: 28%;
+    height: auto;
 }
 
 .artist-info {
+    width: 20%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,7 +22,7 @@
     width: 100%;
     /* border: 1px solid var(--color-primary-8); */
     border-radius: 200px;
-    box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+    box-shadow: 0px 2px 4px 0px var(--color-shadow);
 }
 
 .artist-name {
@@ -31,9 +32,8 @@
 }
 
 .artist-type {
-    font-size: var(--font-16);
+    font-size: var(--font-24);
     font-weight: var(--fw-medium);
-    padding-top: 17px;
 }
 
 .album-info {

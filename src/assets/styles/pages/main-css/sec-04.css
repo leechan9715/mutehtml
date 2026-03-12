@@ -1,40 +1,147 @@
-.col5 {
-    position: relative;
-    height: 300px;
-    z-index: 100;
+.genre-swiper {
     width: 100%;
-    max-height: 200px;
-    overflow: hidden;
-    cursor: grab;
-    user-select: none;
+    height: 170px;
 }
 
-img {
+.genre-slide {
+    position: relative;
     width: 165px;
-    height: 165px;
-    transition: all 0.5s ease;
-    pointer-events: none;
-    position: absolute;
-    top: 0;
+    cursor: pointer;
 }
 
-.col5 img:nth-child(1) {
-    left: 0;
-    z-index: 105;
+.genre-slide img {
+    display: block;
+    width: 160px;
+    height: 160px;
+    border-radius: 10px;
+    object-fit: cover;
+    transition: filter 0.3s ease;
+    filter: brightness(0.55);
 }
-.col5 img:nth-child(2) {
-    left: 100px;
-    z-index: 104;
+
+.genre-slide.active-slide img {
+    filter: brightness(1);
 }
-.col5 img:nth-child(3) {
-    left: 170px;
-    z-index: 103;
+
+.album-overlay {
+    position: absolute;
+    inset: 0;
+    width: 160px;
+    height: 160px;
+    border: 1px solid white;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+    display: flex;
+    align-items: flex-end;
+    box-sizing: border-box;
+    padding: 14px;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
 }
-.col5 img:nth-child(4) {
-    left: 210px;
-    z-index: 102;
+
+.album-overlay.show {
+    opacity: 1;
+    visibility: visible;
 }
-.col5 img:nth-child(5) {
-    left: 240px;
-    z-index: 101;
+
+.album-info {
+    width: 100%;
+    color: var(--color-black);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.album-title {
+    margin: 0 0 4px;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.album-artist {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-black);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hiphop-info {
+    width: 100%;
+    padding: 20px;
+    color: var(--color-black);
+    border: 1px solid var(--color-accent-blue);
+    border-radius: 10px;
+    text-align: justify;
+    box-shadow: 0px 2px 4px var(--color-shadow);
+    margin-top: 15px;
+}
+
+.hiphop-info p:first-child {
+    font-size: 20px;
+    padding-bottom: 10px;
+    font-weight: 600;
+}
+
+.hiphop-info p:last-child {
+    font-weight: 600;
+    color: var(--color-gray);
+}
+
+
+@media (max-width: 500px) {
+    .genre-swiper {
+        height: clamp(130px, 32vw, 170px);
+        padding-left: clamp(8px, 3vw, 16px);
+        padding-right: clamp(30px, 8vw, 80px);
+    }
+
+    .genre-slide {
+        width: clamp(120px, 32vw, 160px);
+    }
+
+    .genre-slide img {
+        width: clamp(115px, 30vw, 160px);
+        height: clamp(115px, 30vw, 160px);
+        border-radius: clamp(14px, 4vw, 20px);
+    }
+
+    .album-overlay {
+        width: clamp(115px, 30vw, 160px);
+        height: clamp(115px, 30vw, 160px);
+        padding: clamp(8px, 3vw, 14px);
+    }
+
+    .album-title {
+        font-size: clamp(13px, 3.5vw, 16px);
+    }
+
+    .album-artist {
+        font-size: clamp(11px, 3vw, 14px);
+    }
+
+    .hiphop-info {
+        padding: clamp(14px, 4vw, 20px);
+        margin-top: clamp(10px, 3vw, 15px);
+        border-radius: clamp(8px, 2.5vw, 10px);
+    }
+
+    .hiphop-info p:first-child {
+        font-size: clamp(16px, 4.5vw, 20px);
+        padding-bottom: clamp(6px, 2vw, 10px);
+    }
+
+    .hiphop-info p:last-child {
+        font-size: clamp(13px, 3.5vw, 16px);
+    }
 }

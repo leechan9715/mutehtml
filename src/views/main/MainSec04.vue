@@ -6,11 +6,12 @@
                 effect="coverflow"
                 :grab-cursor="true"
                 :centered-slides="true"
+                :centered-slides-bounds="true"
                 :slides-per-view="'auto'"
                 :initial-slide="3"
                 :coverflow-effect="{
                     rotate: 0,
-                    stretch: 100,
+                    stretch: 50,
                     depth: 50,
                     modifier: 1,
                     slideShadows: false,
@@ -37,6 +38,14 @@
                 </SwiperSlide>
             </Swiper>
         </MainContainer>
+        <div class="hiphop-info">
+            <p>What is 힙합</p>
+            <p>
+                1970년대 <span class="color-black">미국 뉴욕 브롱크스 </span>지역에서 시작된 음악 문화로, 강한 비트 위에
+                랩을 얹어 자신의 이야기와 감정을 표현하는 것이 특징이며
+                <span class="color-black">자유로운 분위기와 개성</span>을 중요하게 여기는 장르다.
+            </p>
+        </div>
     </div>
 </template>
 
@@ -56,6 +65,7 @@ import cover5 from '@/assets/images/main/albumSlide/cover5.png';
 import cover6 from '@/assets/images/main/albumSlide/cover6.png';
 import cover7 from '@/assets/images/main/albumSlide/cover7.png';
 import cover8 from '@/assets/images/main/albumSlide/cover8.png';
+import cover9 from '@/assets/images/main/albumSlide/cover9.png';
 
 export default {
     name: 'ForU',
@@ -120,6 +130,13 @@ export default {
                 {
                     cover: cover8,
                     alt: 'album_cover8',
+                    info: true,
+                    title: 'LAW (Prod.Czaer)',
+                    artist: '윤미래, 비비'
+                },
+                {
+                    cover: cover9,
+                    alt: 'album_cover9',
                     info: false
                 }
             ]
@@ -140,76 +157,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.genre-swiper {
-    width: 100%;
-    height: 170px;
-    padding-left: 16px;
-    padding-right: 80px;
-}
-
-.genre-slide {
-    position: relative;
-    width: 165px;
-    cursor: pointer;
-}
-
-.genre-slide img {
-    display: block;
-    width: 160px;
-    height: 160px;
-    border-radius: 20px;
-    object-fit: cover;
-    transition: filter 0.3s ease;
-    filter: brightness(0.55);
-}
-
-.genre-slide.active-slide img {
-    filter: brightness(1);
-}
-
-.album-overlay {
-    position: absolute;
-    inset: 0;
-    width: 165px;
-    height: 165px;
-    border-radius: 20px;
-    border: 1px solid white;
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
-    display: flex;
-    align-items: flex-end;
-    box-sizing: border-box;
-    padding: 14px;
-    opacity: 0;
-    visibility: hidden;
-    transition:
-        opacity 0.25s ease,
-        visibility 0.25s ease;
-}
-
-.album-overlay.show {
-    opacity: 1;
-    visibility: visible;
-}
-
-.album-info {
-    width: 100%;
-    color: var(--color-black);
-}
-
-.album-title {
-    margin: 0 0 4px;
-    font-size: 16px;
-    line-height: 1.2;
-    font-weight: 700;
-}
-
-.album-artist {
-    margin: 0;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-gray);
-}
-</style>
+<style scoped src="../../assets/styles/pages/main-css/sec-04.css"></style>

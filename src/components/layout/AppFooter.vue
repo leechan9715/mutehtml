@@ -137,6 +137,8 @@ export default {
 <style scoped>
 footer.container {
     position: fixed;
+    background-color: #ffffff;
+    height: 80px;
     bottom: 0;
     left: 50%;
     padding: 0;
@@ -145,14 +147,12 @@ footer.container {
 }
 
 footer .row {
-    padding: 8px 40px;
+    padding: 5px 40px;
     align-items: center;
     justify-content: center;
-    border-radius: 20px 20px 0 0;
-    background-color: #ffffff;
     box-shadow:
-        inset 0px -7px 10px #b1c9e5,
-        0px -3px 10px rgba(107, 159, 226, 0.3);
+        inset 0px -7px 10px var(--color-shadow),
+        0px -3px 10px var(--color-shadow);
 }
 
 footer .col-5 {
@@ -197,8 +197,8 @@ footer .logo_box {
     overflow: visible;
     background-color: #ffffff;
     box-shadow:
-        inset 0px -7px 10px var(--color-shadow),
-        0px -3px 10px var(--color-accent-blue);
+        inset 0px -7px 10px var(--color-accent-blue),
+        0px 3px 10px var(--color-shadow);
     border-radius: 50%;
 }
 

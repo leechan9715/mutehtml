@@ -49,7 +49,4 @@ export default {
 .song-swiper {
     padding: 0 40px 0 0;
 }
-.song-swiper img {
-    border: 3px solid red;
-}
 </style>
