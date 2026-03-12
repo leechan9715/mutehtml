@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { lastfmKoreaTopTracksApi, mainGlobalApi, searchApi } from '@/api/_music_api';
+import { lastfmKoreaTopTracksApi, lastfmGlobalTopTracksApi, searchApi } from '@/api/_music_api';
 import MainListItem from '@/components/layout/MainListItem.vue';
 export default {
     name: 'HotChartSection',
@@ -85,40 +85,43 @@ export default {
             if (typeof track.artist === 'string') return track.artist;
             return track.artist?.name || '';
         },
+        async buildChartItemsFromLastfm(topTracks = [], country = 'KR') {
+            const selectedTracks = topTracks.slice(0, 4);
+            return Promise.all(
+                selectedTracks.map(async (track) => {
+                    const title = track?.name || '';
+                    const singer = this.getLastfmArtistName(track);
+
+                    try {
+                        const { data: itunesData } = await searchApi({
+                            term: `${singer} ${title}`.trim(),
+                            country,
+                            media: 'music',
+                            entity: 'song',
+                            limit: 1
+                        });
+                        const hit = itunesData?.results?.[0];
+                        return {
+                            name: title,
+                            artistName: singer,
+                            artworkUrl100: hit?.artworkUrl100 || ''
+                        };
+                    } catch (itunesError) {
+                        console.error('itunes enrich error:', itunesError);
+                        return {
+                            name: title,
+                            artistName: singer,
+                            artworkUrl100: ''
+                        };
+                    }
+                })
+            );
+        },
         async getKpopResults() {
             try {
                 const { data } = await lastfmKoreaTopTracksApi();
-                const topTracks = data?.tracks?.track?.slice(0, 4) || [];
-                const enrichedTracks = await Promise.all(
-                    topTracks.map(async (track) => {
-                        const title = track?.name || '';
-                        const singer = this.getLastfmArtistName(track);
-
-                        try {
-                            const { data: itunesData } = await searchApi({
-                                term: `${singer} ${title}`,
-                                country: 'KR',
-                                media: 'music',
-                                entity: 'song',
-                                limit: 1
-                            });
-                            const hit = itunesData?.results?.[0];
-                            return {
-                                name: title,
-                                artistName: singer,
-                                artworkUrl100: hit?.artworkUrl100 || ''
-                            };
-                        } catch (itunesError) {
-                            console.error('itunes enrich error:', itunesError);
-                            return {
-                                name: title,
-                                artistName: singer,
-                                artworkUrl100: ''
-                            };
-                        }
-                    })
-                );
-                this.kpop = enrichedTracks;
+                const topTracks = data?.tracks?.track || [];
+                this.kpop = await this.buildChartItemsFromLastfm(topTracks, 'KR');
                 console.log(this.kpop);
             } catch (error) {
                 console.error('getKpopResults error:', error);
@@ -128,8 +131,9 @@ export default {
 
         async getGlobalResults() {
             try {
-                const { data } = await mainGlobalApi();
-                this.global = data?.results?.slice(0, 4) || [];
+                const { data } = await lastfmGlobalTopTracksApi();
+                const topTracks = data?.tracks?.track || [];
+                this.global = await this.buildChartItemsFromLastfm(topTracks, 'US');
                 console.log(this.global);
             } catch (error) {
                 console.error('getGlobalResults error:', error);

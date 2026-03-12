@@ -81,7 +81,9 @@ export default {
             hasAutoplayErrorLogged: false,
             isMiniDragging: false,
             miniStartX: 0,
+            miniStartY: 0,
             miniDeltaX: 0,
+            miniDeltaY: 0,
             miniDragMoved: false,
             suppressClickByDrag: false
         };
@@ -103,10 +105,13 @@ export default {
         },
         miniDragStyle() {
             const dragX = Math.min(0, this.miniDeltaX);
+            const dragY = Math.min(0, this.miniDeltaY);
+            const expandHeight = Math.min(160, Math.max(0, -dragY * 0.9));
             return {
                 '--mini-drag-x': `${dragX}px`,
+                '--mini-expand-h': `${expandHeight}px`,
                 opacity: this.isMiniDragging ? Math.max(0.35, 1 - Math.abs(dragX) / 220) : 1,
-                transition: this.isMiniDragging ? 'none' : 'transform 180ms ease, opacity 180ms ease'
+                transition: this.isMiniDragging ? 'none' : 'transform 180ms ease, height 180ms ease, opacity 180ms ease'
             };
         }
     },
@@ -157,34 +162,37 @@ export default {
     methods: {
         onMiniMouseDown(e) {
             if (e.button !== 0) return;
-            this.startMiniDrag(e.clientX);
+            this.startMiniDrag(e.clientX, e.clientY);
         },
 
         onMiniTouchStart(e) {
-            this.startMiniDrag(e.touches[0].clientX);
+            this.startMiniDrag(e.touches[0].clientX, e.touches[0].clientY);
         },
 
-        startMiniDrag(startX) {
+        startMiniDrag(startX, startY) {
             this.isMiniDragging = true;
             this.miniStartX = startX;
+            this.miniStartY = startY;
             this.miniDeltaX = 0;
+            this.miniDeltaY = 0;
             this.miniDragMoved = false;
         },
 
         onMiniMouseMove(e) {
             if (!this.isMiniDragging) return;
-            this.updateMiniDrag(e.clientX);
+            this.updateMiniDrag(e.clientX, e.clientY);
         },
 
         onMiniTouchMove(e) {
             if (!this.isMiniDragging) return;
-            this.updateMiniDrag(e.touches[0].clientX);
+            this.updateMiniDrag(e.touches[0].clientX, e.touches[0].clientY);
             e.preventDefault();
         },
 
-        updateMiniDrag(currentX) {
+        updateMiniDrag(currentX, currentY) {
             this.miniDeltaX = currentX - this.miniStartX;
-            if (Math.abs(this.miniDeltaX) > 6) {
+            this.miniDeltaY = currentY - this.miniStartY;
+            if (Math.abs(this.miniDeltaX) > 6 || Math.abs(this.miniDeltaY) > 6) {
                 this.miniDragMoved = true;
                 this.suppressClickByDrag = true;
             }
@@ -200,15 +208,24 @@ export default {
 
         finishMiniDrag() {
             if (!this.isMiniDragging) return;
-            const shouldDismiss = this.miniDeltaX <= -90;
+            const absX = Math.abs(this.miniDeltaX);
+            const absY = Math.abs(this.miniDeltaY);
+            const isHorizontal = absX > absY;
+            const isVertical = absY > absX;
+            const shouldDismiss = isHorizontal && this.miniDeltaX <= -90;
+            const shouldOpenPlayer = isVertical && this.miniDeltaY <= -45;
             this.isMiniDragging = false;
 
             if (shouldDismiss) {
                 this.dismissAndClearPlayerState();
+            } else if (shouldOpenPlayer) {
+                this.openFullPlayer(true);
             }
 
             this.miniStartX = 0;
+            this.miniStartY = 0;
             this.miniDeltaX = 0;
+            this.miniDeltaY = 0;
         },
 
         shouldSkipClickByDrag() {
@@ -545,8 +562,8 @@ export default {
             }
         },
 
-        openFullPlayer() {
-            if (this.shouldSkipClickByDrag()) return;
+        openFullPlayer(fromSwipe = false) {
+            if (!fromSwipe && this.shouldSkipClickByDrag()) return;
             if (!this.hasTrack) return;
             const audio = this.$refs.audio;
             if (audio) {
@@ -569,7 +586,7 @@ export default {
     max-width: 500px;
     transform: translateX(calc(-50% + var(--mini-drag-x, 0px)));
     bottom: 82px;
-    height: 82px;
+    height: calc(82px + var(--mini-expand-h, 0px));
     display: grid;
     grid-template-columns: 46px 1fr auto;
     align-items: center;

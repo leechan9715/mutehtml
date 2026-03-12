@@ -40,3 +40,14 @@ export const lastfmKoreaTopTracksApi = ({ page = 1, limit = 50 } = {}) =>
             page
         }
     });
+
+export const lastfmGlobalTopTracksApi = ({ page = 1, limit = 50 } = {}) =>
+    publicApi.get('/lastfm/lastfm.php', {
+        params: {
+            method: 'chart.gettoptracks',
+            api_key: process.env.VUE_APP_LASTFM_API_KEY,
+            format: 'json',
+            limit,
+            page
+        }
+    });

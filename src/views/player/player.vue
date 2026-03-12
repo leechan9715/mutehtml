@@ -217,7 +217,9 @@ export default {
             const handoffTime = audio?.currentTime ?? this.currentTime ?? 0;
             this.currentTime = handoffTime;
             this.savePlayerState({ miniVisible: true, isPlaying: true });
-            window.dispatchEvent(new CustomEvent('mute-player-request-mini-resume', { detail: { currentTime: handoffTime } }));
+            window.dispatchEvent(
+                new CustomEvent('mute-player-request-mini-resume', { detail: { currentTime: handoffTime } })
+            );
             if (audio) audio.pause();
         } else {
             this.savePlayerState();
@@ -601,7 +603,7 @@ export default {
 
         finishHandleDrag() {
             const wrapHeight = this.$refs.playerWrap?.offsetHeight || window.innerHeight;
-            const threshold = wrapHeight * 0.5;
+            const threshold = wrapHeight * 0.2;
             const shouldClose = this.sheetOffsetY >= threshold;
 
             this.isHandleDragging = false;
@@ -618,7 +620,9 @@ export default {
                 if (this.isPlaying && audio) {
                     audio.pause();
                 }
-                window.dispatchEvent(new CustomEvent('mute-player-request-mini-resume', { detail: { currentTime: handoffTime } }));
+                window.dispatchEvent(
+                    new CustomEvent('mute-player-request-mini-resume', { detail: { currentTime: handoffTime } })
+                );
 
                 const closeDelay = this.overlayMode ? 0 : 220;
                 setTimeout(() => {
