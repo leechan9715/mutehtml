@@ -6,17 +6,17 @@
 :root {
     /* 컬러 */
     --color-white: #ffffff;
-    --color-black: #0D2656;
-    --color-gray: #8693AA;
-    --color-key: #6F9FF7;
+    --color-black: #0d2656;
+    --color-gray: #8693aa;
+    --color-key: #6f9ff7;
     --color-accent-blue: #bbd1ff;
-    --color-shadow: #DAE5FF;
+    --color-shadow: #dae5ff;
 
     /* 그라데이션 */
-    --gradient-light: linear-gradient(0deg, #DFEAFF 0%, #FFFFFF 100%);
-    --gradient-deep: linear-gradient(180deg, #0D2656 0%, #3743B2 100%);
-    --gradient-key: linear-gradient(180deg, #3852E8 0%, #6F9FF7 100%);
-    --gradient-border: linear-gradient(180deg, #DAE5FF 0%, #BBD1FF 100%);
+    --gradient-light: linear-gradient(0deg, #dfeaff 0%, #ffffff 100%);
+    --gradient-deep: linear-gradient(180deg, #0d2656 0%, #3743b2 100%);
+    --gradient-key: linear-gradient(180deg, #3852e8 0%, #6f9ff7 100%);
+    --gradient-border: linear-gradient(180deg, #dae5ff 0%, #bbd1ff 100%);
 
     /* 폰트사이즈 */
     /* --font-48: 48px;

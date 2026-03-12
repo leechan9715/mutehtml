@@ -10,13 +10,13 @@
         </div>
         <div class="mini-controls">
             <button type="button" @click.stop="playPrev" :disabled="!hasTrack">
-                <img :src="prevIcon" alt="prev-track" />
+                <img class="arrow" :src="prevIcon" alt="prev-track" />
             </button>
             <button type="button" @click.stop="togglePlay" :disabled="!hasTrack">
                 <img :src="state.isPlaying ? pauseIcon : playIcon" alt="toggle-play" />
             </button>
             <button type="button" @click.stop="playNext" :disabled="!hasTrack">
-                <img :src="nextIcon" alt="next-track" />
+                <img class="arrow" :src="nextIcon" alt="next-track" />
             </button>
         </div>
     </div>
@@ -433,16 +433,14 @@ export default {
     max-width: 500px;
     transform: translateX(-50%);
     bottom: 82px;
-    height: 62px;
+    height: 82px;
     display: grid;
     grid-template-columns: 46px 1fr auto;
     align-items: center;
     gap: 10px;
-    padding: 8px 10px;
-    border-radius: 14px;
-    background: rgba(18, 19, 22, 0.94);
-    color: #fff;
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
+    padding: 8px 20px;
+    background: var(--color-black);
+    color: var(--color-white);
     backdrop-filter: blur(8px);
     z-index: 30;
 }
@@ -487,14 +485,14 @@ export default {
 
 .mini-artist {
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.76);
+    color: var(--color-white);
     margin-top: 3px;
 }
 
 .mini-controls {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 30px;
 }
 
 .mini-controls button {
@@ -517,5 +515,8 @@ export default {
 .mini-controls img {
     width: 20px;
     height: 20px;
+}
+.arrow {
+    filter: invert(1);
 }
 </style>

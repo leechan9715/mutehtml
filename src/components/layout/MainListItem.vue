@@ -63,9 +63,17 @@ a > img {
 .box .more-btn {
     font-size: var(--font-24);
     cursor: pointer;
+    transform: rotate(90deg);
 }
 
 img {
     border: 1px solid #bbd1ff;
+}
+.artist-name-box p {
+    min-width: 160px;
+    max-width: 150px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 </style>
