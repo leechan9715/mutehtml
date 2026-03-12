@@ -437,18 +437,19 @@ export default {
     display: grid;
     grid-template-columns: 46px 1fr auto;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
     padding: 8px 20px;
-    background: var(--color-black);
+    background: var(--gradient-key);
     color: var(--color-white);
     backdrop-filter: blur(8px);
-    z-index: 30;
+    border-radius: 10px 10px 0 0;
+    z-index: 2;
 }
 
 .mini-cover {
-    width: 46px;
-    height: 46px;
-    border-radius: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
     overflow: hidden;
 }
 
@@ -462,8 +463,8 @@ export default {
 .mini-cover-placeholder {
     width: 100%;
     height: 100%;
-    border-radius: 10px;
-    background: linear-gradient(145deg, #3a3d44, #2a2d33);
+    border-radius: 5px;
+    background: white;
 }
 
 .mini-meta {
@@ -508,7 +509,6 @@ export default {
 }
 
 .mini-controls button:disabled {
-    opacity: 0.45;
     cursor: default;
 }
 
@@ -516,7 +516,39 @@ export default {
     width: 20px;
     height: 20px;
 }
-.arrow {
-    filter: invert(1);
+
+@media (max-width: 500px) {
+    @media (max-width: 500px) {
+        .mini-player {
+            bottom: 82px;
+            height: 82px;
+            padding: 8px 20px;
+            gap: 20px;
+            grid-template-columns: 46px 1fr auto;
+        }
+
+        .mini-title {
+            font-size: clamp(11px, 3.5vw, 13px);
+        }
+
+        .mini-artist {
+            font-size: clamp(10px, 3vw, 11px);
+            margin-top: 3px;
+        }
+
+        .mini-controls {
+            gap: clamp(18px, 5vw, 30px);
+        }
+
+        .mini-controls button {
+            width: clamp(22px, 6vw, 28px);
+            height: clamp(22px, 6vw, 28px);
+        }
+
+        .mini-controls img {
+            width: clamp(14px, 4vw, 20px);
+            height: clamp(14px, 4vw, 20px);
+        }
+    }
 }
 </style>

@@ -1,11 +1,13 @@
 <template>
-    <MainSec01 />
-    <MainSec02 />
-    <MainSec03 />
-    <MainSec04 />
-    <MainSec05 />
-    <MainSec06 />
-    <MainSec07 />
+    <div class="main-wrapper">
+        <MainSec01 />
+        <MainSec02 />
+        <MainSec03 />
+        <MainSec04 />
+        <MainSec05 />
+        <MainSec06 />
+        <MainSec07 />
+    </div>
 </template>
 
 <script>
@@ -31,4 +33,10 @@ export default {
 };
 </script>
 
-<style scoped src="@/assets/styles/pages/main-css/sec-01.css"></style>
+<style scoped>
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+</style>

@@ -143,7 +143,7 @@ footer.container {
     left: 50%;
     padding: 0;
     transform: translateX(-50%);
-    z-index: 9999;
+    z-index: 20;
 }
 
 footer .row {
