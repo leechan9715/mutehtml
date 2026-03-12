@@ -44,11 +44,10 @@ header {
 header.container {
     padding: 20px 25px;
     gap: 25px;
-    border-radius: 0 0 20px 20px;
     background-color: #fff;
     box-shadow:
         inset 0px -7px 10px var(--color-shadow),
-        0px -3px 10px var(--color-accent-blue);
+        0px -3px 10px var(--color-shadow);
 }
 
 header .row:nth-child(1) {
