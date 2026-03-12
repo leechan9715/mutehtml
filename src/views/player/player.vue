@@ -2,6 +2,7 @@
     <h2 class="hidden">플레이어</h2>
     <div
         id="player-wrap"
+        :class="{ 'overlay-mode': overlayMode }"
         ref="playerWrap"
         :style="playerWrapStyle"
         @mousedown="onSheetAreaMouseDown"
@@ -116,6 +117,13 @@ const PLAYER_STATE_KEY = 'mute-player-state';
 
 export default {
     name: 'Player',
+    props: {
+        overlayMode: {
+            type: Boolean,
+            default: false
+        }
+    },
+    emits: ['close'],
 
     data() {
         return {
@@ -146,6 +154,7 @@ export default {
             coverDeltaY: 0,
             coverGestureMode: 'undecided',
             lastPersistAt: 0,
+            persistIntervalMs: 2000,
             miniVisible: false,
             keepPlayingOnMini: false
         };
@@ -177,27 +186,43 @@ export default {
     async mounted() {
         this.miniVisible = false;
         this.keepPlayingOnMini = false;
-        this.savePlayerState({ miniVisible: false });
 
-        const term = this.$route.query.term?.trim();
-        if (!term) {
-            this.restoreFromSavedState();
-            return;
-        }
-
-        await this.loadInitialTrack(term);
+        const initialOffset = window.innerHeight || document.documentElement.clientHeight || 0;
+        this.sheetOffsetY = initialOffset;
+        this.$nextTick(() => {
+            requestAnimationFrame(() => {
+                this.sheetOffsetY = 0;
+            });
+        });
 
         window.addEventListener('mousemove', this.onWindowMouseMove);
         window.addEventListener('mouseup', this.onWindowMouseUp);
         window.addEventListener('touchmove', this.onWindowTouchMove, { passive: false });
         window.addEventListener('touchend', this.onWindowTouchEnd);
+
+        const term = this.overlayMode ? '' : this.$route.query.term?.trim();
+        if (!term) {
+            await this.restoreFromSavedState();
+            return;
+        }
+
+        await this.loadInitialTrack(term);
     },
 
     beforeUnmount() {
-        this.savePlayerState();
-
         const audio = this.$refs.audio;
-        if (audio && !this.keepPlayingOnMini) audio.pause();
+        const shouldHandoffToMini = this.overlayMode && this.isPlaying && !this.keepPlayingOnMini;
+
+        if (shouldHandoffToMini) {
+            const handoffTime = audio?.currentTime ?? this.currentTime ?? 0;
+            this.currentTime = handoffTime;
+            this.savePlayerState({ miniVisible: true, isPlaying: true });
+            window.dispatchEvent(new CustomEvent('mute-player-request-mini-resume', { detail: { currentTime: handoffTime } }));
+            if (audio) audio.pause();
+        } else {
+            this.savePlayerState();
+            if (audio && !this.keepPlayingOnMini) audio.pause();
+        }
 
         if (this.rafId) cancelAnimationFrame(this.rafId);
 
@@ -265,9 +290,9 @@ export default {
             this.currentTime = this.$refs.audio?.currentTime ?? 0;
 
             const now = Date.now();
-            if (now - this.lastPersistAt > 400) {
+            if (now - this.lastPersistAt > this.persistIntervalMs) {
                 this.lastPersistAt = now;
-                this.savePlayerState();
+                this.savePlayerState({}, false);
             }
         },
 
@@ -299,17 +324,23 @@ export default {
         },
 
         async playNext() {
-            if (this.currentIndex >= this.tracks.length - 1) return;
+            if (!this.tracks.length) return;
 
-            this.currentIndex++;
+            const isLastTrack = this.currentIndex >= this.tracks.length - 1;
+            this.currentIndex = isLastTrack ? 0 : this.currentIndex + 1;
             this.updateTrackMeta();
 
             await this.$nextTick();
+            const audio = this.$refs.audio;
+            if (audio) {
+                audio.currentTime = 0;
+                audio.load();
+            }
             await this.startPlay();
             this.savePlayerState();
         },
 
-        playPrev() {
+        async playPrev() {
             const audio = this.$refs.audio;
             if (!audio) return;
 
@@ -319,6 +350,12 @@ export default {
             } else {
                 this.currentIndex--;
                 this.updateTrackMeta();
+                if (this.isPlaying) {
+                    await this.$nextTick();
+                    audio.currentTime = 0;
+                    audio.load();
+                    await this.startPlay();
+                }
             }
 
             this.savePlayerState();
@@ -338,6 +375,8 @@ export default {
             this.songName = track.trackName;
             this.singerName = track.artistName;
             this.albumCover = track.albumCover ?? this.albumCover;
+            this.currentTime = 0;
+            this.totalDuration = 0;
             this.savePlayerState();
         },
 
@@ -345,6 +384,22 @@ export default {
             const audio = this.$refs.audio;
             if (!audio) return;
             try {
+                let handoffTime = null;
+                if (this.overlayMode) {
+                    window.dispatchEvent(
+                        new CustomEvent('mute-player-request-mini-handoff', {
+                            detail: {
+                                consume: (time) => {
+                                    handoffTime = time;
+                                }
+                            }
+                        })
+                    );
+                    if (Number.isFinite(handoffTime) && Math.abs(audio.currentTime - handoffTime) > 0.2) {
+                        audio.currentTime = handoffTime;
+                        this.currentTime = handoffTime;
+                    }
+                }
                 await audio.play();
                 this.isPlaying = true;
                 this.savePlayerState();
@@ -552,12 +607,27 @@ export default {
             this.isHandleDragging = false;
 
             if (shouldClose) {
-                this.isPlaying = !(this.$refs.audio?.paused ?? true);
+                const audio = this.$refs.audio;
+                const handoffTime = audio?.currentTime ?? this.currentTime ?? 0;
+                this.isPlaying = !(audio?.paused ?? true);
                 this.sheetOffsetY = wrapHeight;
                 this.miniVisible = true;
                 this.keepPlayingOnMini = true;
-                this.savePlayerState({ miniVisible: true });
-                setTimeout(() => this.$router.back(), 220);
+                this.currentTime = handoffTime;
+                this.savePlayerState({ miniVisible: true, isPlaying: this.isPlaying });
+                if (this.isPlaying && audio) {
+                    audio.pause();
+                }
+                window.dispatchEvent(new CustomEvent('mute-player-request-mini-resume', { detail: { currentTime: handoffTime } }));
+
+                const closeDelay = this.overlayMode ? 0 : 220;
+                setTimeout(() => {
+                    if (this.overlayMode) {
+                        this.$emit('close');
+                        return;
+                    }
+                    this.$router.back();
+                }, closeDelay);
                 return;
             }
 
@@ -650,22 +720,25 @@ export default {
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         },
 
-        savePlayerState(override = {}) {
+        savePlayerState(override = {}, force = true) {
+            const now = Date.now();
+            if (!force && now - this.lastPersistAt < this.persistIntervalMs) return;
             const payload = {
                 tracks: this.tracks,
                 currentIndex: this.currentIndex,
                 songName: this.songName,
                 singerName: this.singerName,
                 albumCover: this.albumCover,
-                currentTime: this.currentTime,
                 totalDuration: this.totalDuration,
                 isPlaying: this.isPlaying,
                 miniVisible: this.miniVisible,
                 playerPath: this.buildPlayerPath(),
-                updatedAt: Date.now(),
+                updatedAt: now,
                 ...override
             };
             localStorage.setItem(PLAYER_STATE_KEY, JSON.stringify(payload));
+            window.dispatchEvent(new CustomEvent('mute-player-state-updated', { detail: payload }));
+            this.lastPersistAt = now;
         },
 
         buildPlayerPath() {
@@ -687,14 +760,14 @@ export default {
                 this.songName = saved.songName ?? this.songName;
                 this.singerName = saved.singerName ?? this.singerName;
                 this.albumCover = saved.albumCover ?? this.albumCover;
-                this.currentTime = saved.currentTime ?? 0;
+                this.currentTime = 0;
                 this.isPlaying = !!saved.isPlaying;
 
                 await this.$nextTick();
                 const audio = this.$refs.audio;
                 if (!audio || !this.currentTrack?.previewUrl) return;
 
-                audio.currentTime = this.currentTime || 0;
+                audio.currentTime = 0;
                 if (this.isPlaying) {
                     await this.startPlay();
                 }

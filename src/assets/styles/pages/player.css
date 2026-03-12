@@ -1,16 +1,29 @@
 /* Player layout is bounded by parent <main> height */
 #player-wrap {
-    position: relative;
+    position: fixed;
+    inset: 0;
     width: 100%;
-    height: 100%;
-    min-height: 100%;
-    max-height: 100%;
+    height: 100dvh;
+    min-height: 100dvh;
+    max-height: 100dvh;
     display: grid;
     grid-template-rows: 59.1% 40.9%;
     overflow: hidden;
     background: #0f1013;
     will-change: transform;
     cursor: grab;
+    z-index: 10000;
+}
+
+#player-wrap.overlay-mode {
+    top: 56px;
+    inset: auto 0 0 0;
+    height: calc(100dvh - 56px);
+    min-height: calc(100dvh - 56px);
+    max-height: calc(100dvh - 56px);
+    border-top-left-radius: 22px;
+    border-top-right-radius: 22px;
+    box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.32);
 }
 
 #player-wrap:active {
@@ -142,11 +155,11 @@
 }
 
 .progress-bar {
+    --track-h: 3px;
+    --hit-h: 20px;
     position: relative;
     width: 100%;
-    height: 3px;
-    border-radius: 999px;
-    background: rgba(0, 0, 0, 0.2);
+    height: var(--hit-h);
     margin-bottom: 6px;
     cursor: pointer;
     touch-action: none;
@@ -157,14 +170,28 @@
     cursor: pointer;
 }
 
+.progress-bar::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: var(--track-h);
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.2);
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+
 .progress-fill {
     position: absolute;
     left: 0;
-    top: 0;
-    height: 100%;
+    top: 50%;
+    height: var(--track-h);
     width: 0;
     border-radius: inherit;
     background: var(--color-primary-4);
+    transform: translateY(-50%);
     pointer-events: none;
 }
 
@@ -317,7 +344,7 @@
 
 @media (min-width: 900px) {
     #player-wrap {
-        max-width: 680px;
+        max-width: 500px;
         margin-inline: auto;
     }
 

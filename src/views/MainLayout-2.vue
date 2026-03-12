@@ -1,10 +1,10 @@
 <template>
     <div id="wrap">
         <AppHeader :isProfile="isProfile" />
-        <main :class="{ 'no-profile': !isProfile }">
+        <main :class="{ 'no-profile': !isProfile, 'player-page': isPlayerPage }">
             <router-view />
         </main>
-        <AppFooter />
+        <AppFooter v-if="!isPlayerPage" />
     </div>
 </template>
 
@@ -25,6 +25,9 @@ export default {
     computed: {
         isProfile() {
             return this.$route.matched.some((r) => r.meta?.isProfile === true);
+        },
+        isPlayerPage() {
+            return this.$route.path.startsWith('/main/player/');
         }
     },
     mounted() {
@@ -58,5 +61,11 @@ export default {
     position: relative;
     top: 30px;
     height: calc(100vh - 136px);
+}
+#wrap main.no-profile.player-page {
+    top: 0;
+    height: 100vh;
+    transform: none;
+    overflow: visible;
 }
 </style>
