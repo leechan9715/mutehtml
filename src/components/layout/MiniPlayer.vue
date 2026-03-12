@@ -17,13 +17,13 @@
             <p class="mini-artist">{{ hasTrack ? state.singerName || '아티스트' : '재생 버튼으로 시작해 주세요' }}</p>
         </div>
         <div class="mini-controls">
-            <button type="button" @click.stop="playPrev" :disabled="!hasTrack">
+            <button type="button" @click.stop="onPrevClick" :disabled="!hasTrack">
                 <img class="arrow" :src="prevIcon" alt="prev-track" />
             </button>
-            <button type="button" @click.stop="togglePlay" :disabled="!hasTrack">
+            <button type="button" @click.stop="onTogglePlayClick" :disabled="!hasTrack">
                 <img :src="state.isPlaying ? pauseIcon : playIcon" alt="toggle-play" />
             </button>
-            <button type="button" @click.stop="playNext" :disabled="!hasTrack">
+            <button type="button" @click.stop="onNextClick" :disabled="!hasTrack">
                 <img class="arrow" :src="nextIcon" alt="next-track" />
             </button>
         </div>
@@ -82,7 +82,8 @@ export default {
             isMiniDragging: false,
             miniStartX: 0,
             miniDeltaX: 0,
-            miniDragMoved: false
+            miniDragMoved: false,
+            suppressClickByDrag: false
         };
     },
     computed: {
@@ -156,12 +157,10 @@ export default {
     methods: {
         onMiniMouseDown(e) {
             if (e.button !== 0) return;
-            if (e.target?.closest?.('.mini-controls button')) return;
             this.startMiniDrag(e.clientX);
         },
 
         onMiniTouchStart(e) {
-            if (e.target?.closest?.('.mini-controls button')) return;
             this.startMiniDrag(e.touches[0].clientX);
         },
 
@@ -185,7 +184,10 @@ export default {
 
         updateMiniDrag(currentX) {
             this.miniDeltaX = currentX - this.miniStartX;
-            if (Math.abs(this.miniDeltaX) > 6) this.miniDragMoved = true;
+            if (Math.abs(this.miniDeltaX) > 6) {
+                this.miniDragMoved = true;
+                this.suppressClickByDrag = true;
+            }
         },
 
         onMiniMouseUp() {
@@ -207,6 +209,28 @@ export default {
 
             this.miniStartX = 0;
             this.miniDeltaX = 0;
+        },
+
+        shouldSkipClickByDrag() {
+            if (!this.suppressClickByDrag) return false;
+            this.suppressClickByDrag = false;
+            this.miniDragMoved = false;
+            return true;
+        },
+
+        onPrevClick() {
+            if (this.shouldSkipClickByDrag()) return;
+            this.playPrev();
+        },
+
+        onTogglePlayClick() {
+            if (this.shouldSkipClickByDrag()) return;
+            this.togglePlay();
+        },
+
+        onNextClick() {
+            if (this.shouldSkipClickByDrag()) return;
+            this.playNext();
         },
 
         dismissAndClearPlayerState() {
@@ -522,10 +546,7 @@ export default {
         },
 
         openFullPlayer() {
-            if (this.miniDragMoved) {
-                this.miniDragMoved = false;
-                return;
-            }
+            if (this.shouldSkipClickByDrag()) return;
             if (!this.hasTrack) return;
             const audio = this.$refs.audio;
             if (audio) {
