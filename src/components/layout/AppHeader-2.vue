@@ -1,7 +1,7 @@
 <template>
-    <header class="container">
+    <header class="container" v-if="isProfile">
         <!-- 시간출력 부분 -->
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-2">
                 <p class="time">{{ time }}</p>
             </div>
@@ -10,9 +10,9 @@
                 <span class="material-symbols-outlined"> wifi </span>
                 <span class="material-symbols-outlined"> battery_android_frame_full </span>
             </div>
-        </div>
+        </div> -->
         <!-- 프로필 헤더 부분 -->
-        <div class="row" v-if="isProfile">
+        <div class="row">
             <div class="col-2">
                 <img :src="logo" alt="logo" />
             </div>
@@ -60,34 +60,34 @@ header.container {
         0px -3px 10px var(--color-shadow);
 }
 
-header .row:nth-child(1) {
+/* header .row:nth-child(1) {
     justify-content: space-between;
 }
 
 header .row:nth-child(1) .col-2:nth-child(2) {
     display: flex;
     gap: 7px;
-}
+} */
 
-header .row:nth-child(2) {
+header .row:nth-child(1) {
     justify-content: space-between;
     align-items: center;
 }
 
-header .row:nth-child(2) .col-2:nth-child(1) {
+header .row:nth-child(1) .col-2:nth-child(1) {
     max-width: 90px;
 }
 
-header .row:nth-child(2) .col-2:nth-child(1) img {
+header .row:nth-child(1) .col-2:nth-child(1) img {
     width: 100%;
 }
 
-header .row:nth-child(2) .col-2:nth-child(2) {
+header .row:nth-child(1) .col-2:nth-child(2) {
     border-radius: 12px;
     width: 42px;
 }
 
-header .row:nth-child(2) .col-2:nth-child(2) img {
+header .row:nth-child(1) .col-2:nth-child(2) img {
     object-fit: cover;
     border-radius: 12px;
 }

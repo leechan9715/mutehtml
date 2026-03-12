@@ -17,7 +17,7 @@ export const searchApi = ({ term, country, media, entity, limit }) =>
         }
     });
 
-export const lastfmAlbumInfoApi = ({ apiKey, artist, album, format = 'json', autocorrect = 1 }) =>
+export const lastfmAlbumInfoApi = ({ apiKey, artist, album, format, autocorrect = 1 }) =>
     publicApi.get('/lastfm/lastfm.php', {
         params: {
             method: 'album.getinfo',

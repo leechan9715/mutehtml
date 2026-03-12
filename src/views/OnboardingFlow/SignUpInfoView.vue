@@ -466,7 +466,7 @@ export default {
                 `선택값: ${this.selectedYear}년 ${this.selectedMonth}월 ${this.selectedDay}일, ${this.selectedGender}`
             );
 
-            this.$router.push('/artistselect');
+            this.$router.push('/main');
         }
     }
 };

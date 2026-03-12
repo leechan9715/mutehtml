@@ -62,7 +62,7 @@ export default {
         // 사용자가 클릭한 곡 제목(trackName)을 받아서
         // 플레이어 페이지로 이동시키는 함수
         async play(trackName, artistName) {
-            const keyword = `${trackName}${artistName}`;
+            const keyword = `${trackName} ${artistName}`;
             this.$router.push({
                 // 이동할 주소
                 // 현재는 /main/player/:id 로 되어 있는데
