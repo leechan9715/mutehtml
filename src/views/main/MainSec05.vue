@@ -24,6 +24,7 @@
             <div class="chart korea-chart" v-show="activeTab === 'korea'">
                 <MainListItem
                     v-for="(list, index) in kpop"
+                    @click.prevent="playFromChart(list)"
                     :key="index"
                     :img="list.artworkUrl100"
                     :title="list.name"
@@ -35,6 +36,7 @@
             <div class="chart global-chart" v-show="activeTab === 'global'">
                 <MainListItem
                     v-for="(list, index) in global"
+                    @click.prevent="playFromChart(list)"
                     :key="index"
                     :img="list.artworkUrl100"
                     :title="list.name"
@@ -51,7 +53,7 @@
 </template>
 
 <script>
-import { mainGlobalApi, mainKpopApi } from '@/api/_music_api';
+import { lastfmKoreaTopTracksApi, mainGlobalApi, searchApi } from '@/api/_music_api';
 import MainListItem from '@/components/layout/MainListItem.vue';
 export default {
     name: 'HotChartSection',
@@ -67,16 +69,63 @@ export default {
         };
     },
     methods: {
+        playFromChart(track) {
+            const title = track?.trackName || track?.name || '';
+            const singer = track?.artistName || '';
+            const keyword = `${title} ${singer}`.trim();
+            if (!keyword) return;
+
+            this.$router.push({
+                path: '/main/player/0',
+                query: { term: keyword }
+            });
+        },
+        getLastfmArtistName(track) {
+            if (!track?.artist) return '';
+            if (typeof track.artist === 'string') return track.artist;
+            return track.artist?.name || '';
+        },
         async getKpopResults() {
             try {
-                const { data } = await mainKpopApi();
-                this.kpop = data?.feed?.results?.slice(0, 4) || [];
+                const { data } = await lastfmKoreaTopTracksApi();
+                const topTracks = data?.tracks?.track?.slice(0, 4) || [];
+                const enrichedTracks = await Promise.all(
+                    topTracks.map(async (track) => {
+                        const title = track?.name || '';
+                        const singer = this.getLastfmArtistName(track);
+
+                        try {
+                            const { data: itunesData } = await searchApi({
+                                term: `${singer} ${title}`,
+                                country: 'KR',
+                                media: 'music',
+                                entity: 'song',
+                                limit: 1
+                            });
+                            const hit = itunesData?.results?.[0];
+                            return {
+                                name: title,
+                                artistName: singer,
+                                artworkUrl100: hit?.artworkUrl100 || ''
+                            };
+                        } catch (itunesError) {
+                            console.error('itunes enrich error:', itunesError);
+                            return {
+                                name: title,
+                                artistName: singer,
+                                artworkUrl100: ''
+                            };
+                        }
+                    })
+                );
+                this.kpop = enrichedTracks;
                 console.log(this.kpop);
             } catch (error) {
                 console.error('getKpopResults error:', error);
                 this.kpop = [];
             }
         },
+
         async getGlobalResults() {
             try {
                 const { data } = await mainGlobalApi();

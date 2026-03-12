@@ -28,3 +28,15 @@ export const lastfmAlbumInfoApi = ({ apiKey, artist, album, format, autocorrect 
             autocorrect
         }
     });
+
+export const lastfmKoreaTopTracksApi = ({ page = 1, limit = 50 } = {}) =>
+    publicApi.get('/lastfm/lastfm.php', {
+        params: {
+            method: 'geo.gettoptracks',
+            country: 'Korea, Republic of',
+            api_key: process.env.VUE_APP_LASTFM_API_KEY,
+            format: 'json',
+            limit,
+            page
+        }
+    });

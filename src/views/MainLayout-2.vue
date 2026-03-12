@@ -51,7 +51,7 @@ export default {
     padding: 0;
 }
 #wrap main {
-    height: calc(100vh - 200px);
+    height: calc(100vh - var(--main-offset, 136px));
     overflow: hidden;
     overflow-y: auto;
     scrollbar-width: none;
@@ -60,12 +60,22 @@ export default {
 #wrap main.no-profile {
     position: relative;
     top: 30px;
-    height: calc(100vh - 136px);
+    height: calc(100vh - var(--main-no-profile-offset, 83px));
 }
 #wrap main.no-profile.player-page {
     top: 0;
     height: 100vh;
     transform: none;
     overflow: visible;
+}
+
+:global(body) {
+    --main-offset: 136px;
+    --main-no-profile-offset: 83px;
+}
+
+:global(body.has-mini-player) {
+    --main-offset: 220px;
+    --main-no-profile-offset: 160px;
 }
 </style>
