@@ -19,6 +19,8 @@
     justify-content: center;
     margin-bottom: 16px;
     font-size: 22px;
+    font-weight: var(--fw-600);
+    color: var(--color-black);
 }
 
 .card-stack {
