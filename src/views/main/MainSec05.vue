@@ -24,6 +24,7 @@
             <div class="chart korea-chart" v-show="activeTab === 'korea'">
                 <MainListItem
                     v-for="(list, index) in kpop"
+                    @click.prevent="playFromChart(list)"
                     :key="index"
                     :img="list.artworkUrl100"
                     :title="list.name"
@@ -35,6 +36,7 @@
             <div class="chart global-chart" v-show="activeTab === 'global'">
                 <MainListItem
                     v-for="(list, index) in global"
+                    @click.prevent="playFromChart(list)"
                     :key="index"
                     :img="list.artworkUrl100"
                     :title="list.name"
@@ -51,8 +53,9 @@
 </template>
 
 <script>
-import { mainGlobalApi, mainKpopApi } from '@/api/_music_api';
+import { lastfmKoreaTopTracksApi, lastfmGlobalTopTracksApi, searchApi } from '@/api/_music_api';
 import MainListItem from '@/components/layout/MainListItem.vue';
+import { useIsLoadingStore } from '@/store/api_loading';
 export default {
     name: 'HotChartSection',
     components: {
@@ -60,6 +63,7 @@ export default {
     },
     data() {
         return {
+            store: useIsLoadingStore(),
             activeTab: 'korea',
             keywords: ['kpop', 'POP'],
             kpop: [],
@@ -67,30 +71,84 @@ export default {
         };
     },
     methods: {
+        playFromChart(track) {
+            const title = track?.trackName || track?.name || '';
+            const singer = track?.artistName || '';
+            const keyword = `${title} ${singer}`.trim();
+            if (!keyword) return;
+
+            this.$router.push({
+                path: '/main/player/0',
+                query: { term: keyword }
+            });
+        },
+        getLastfmArtistName(track) {
+            if (!track?.artist) return '';
+            if (typeof track.artist === 'string') return track.artist;
+            return track.artist?.name || '';
+        },
+        async buildChartItemsFromLastfm(topTracks = [], country = 'KR') {
+            const selectedTracks = topTracks.slice(0, 4);
+            return Promise.all(
+                selectedTracks.map(async (track) => {
+                    const title = track?.name || '';
+                    const singer = this.getLastfmArtistName(track);
+
+                    try {
+                        const { data: itunesData } = await searchApi({
+                            term: `${singer} ${title}`.trim(),
+                            country,
+                            media: 'music',
+                            entity: 'song',
+                            limit: 1
+                        });
+                        const hit = itunesData?.results?.[0];
+                        return {
+                            name: title,
+                            artistName: singer,
+                            artworkUrl100: hit?.artworkUrl100 || ''
+                        };
+                    } catch (itunesError) {
+                        console.error('itunes enrich error:', itunesError);
+                        return {
+                            name: title,
+                            artistName: singer,
+                            artworkUrl100: ''
+                        };
+                    }
+                })
+            );
+        },
         async getKpopResults() {
             try {
-                const { data } = await mainKpopApi();
-                this.kpop = data?.feed?.results?.slice(0, 4) || [];
-                console.log(this.kpop);
+                const { data } = await lastfmKoreaTopTracksApi();
+                const topTracks = data?.tracks?.track || [];
+                this.kpop = await this.buildChartItemsFromLastfm(topTracks, 'KR');
             } catch (error) {
                 console.error('getKpopResults error:', error);
                 this.kpop = [];
             }
         },
+
         async getGlobalResults() {
             try {
-                const { data } = await mainGlobalApi();
-                this.global = data?.results?.slice(0, 4) || [];
-                console.log(this.global);
+                const { data } = await lastfmGlobalTopTracksApi();
+                const topTracks = data?.tracks?.track || [];
+                this.global = await this.buildChartItemsFromLastfm(topTracks, 'US');
             } catch (error) {
                 console.error('getGlobalResults error:', error);
                 this.global = [];
             }
         }
     },
-    mounted() {
-        this.getKpopResults();
-        this.getGlobalResults();
+    async mounted() {
+        this.store.setLoading(true);
+        try {
+            await Promise.all([this.getKpopResults(), this.getGlobalResults()]);
+        } finally {
+            this.store.setLoading(false);
+            console.log('메인섹션5', this.store.isLoading);
+        }
     }
 };
 </script>

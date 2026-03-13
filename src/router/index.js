@@ -48,7 +48,8 @@ const routes = [
             { path: 'playlist', component: Playlist, meta: { isProfile: false } },
             { path: 'player/:id', component: Player, meta: { isProfile: false } },
             { path: 'artist-info', component: ArtistInfo, meta: { isProfile: false } },
-            { path: 'search-result', component: SearchResult, meta: { isProfile: false } }
+            { path: 'search-result', component: SearchResult, meta: { isProfile: false } },
+            { path: 'chart', component: ChartView, meta: { isProfile: false } }
         ]
     },
     // {
