@@ -117,14 +117,22 @@ const logout = () => {
     }
 };
 
-const localLogout = async () => {
+const clearClientState = () => {
     localStorage.removeItem('login-check');
+    localStorage.removeItem('selectedArtists');
+    localStorage.removeItem('mute-player-state');
+    localStorage.removeItem('track');
+    window.dispatchEvent(new CustomEvent('mute-player-state-updated'));
+};
+
+const localLogout = async () => {
+    clearClientState();
     await logoutApi();
     alert('로컬 정상적으로 로그아웃되었습니다.');
     router.push('/');
 };
 const googleLogout = async () => {
-    localStorage.removeItem('login-check');
+    clearClientState();
     await logoutApi();
     alert('구글 정상적으로 로그아웃되었습니다.');
     router.push('/');
@@ -147,8 +155,7 @@ const kakaoLogout = async () => {
         await logoutApi();
 
         // 3. 클라이언트 저장값 제거
-        localStorage.removeItem('login-check');
-
+        clearClientState();
         alert('카카오 정상적으로 로그아웃되었습니다.');
         router.push('/');
     } catch (error) {
@@ -170,7 +177,7 @@ const naverLogout = async () => {
 
     // ✅ 네이버 SDK가 저장한 sessionStorage 직접 삭제
 
-    localStorage.removeItem('login-check');
+    clearClientState();
     await logoutApi();
     alert('네이버 정상적으로 로그아웃되었습니다.');
     router.push('/');

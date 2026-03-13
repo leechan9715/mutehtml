@@ -106,9 +106,7 @@ export default {
         },
         filteredArtists() {
             const keyword = this.searchText.trim();
-
             if (!keyword) return this.artists;
-
             return this.artists.filter((artist) => artist.name.includes(keyword));
         }
     },
@@ -120,6 +118,7 @@ export default {
                 .filter((artist) => this.selectedArtists.includes(artist.id))
                 .map((artist) => artist.name);
 
+            localStorage.setItem('selectedArtists', JSON.stringify(selectedNames));
             alert(selectedNames.join(', '));
             this.$router.push('/signup-info');
         },

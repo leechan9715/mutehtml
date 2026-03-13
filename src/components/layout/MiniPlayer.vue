@@ -45,6 +45,17 @@ import nextIcon from '@/assets/images/player/next.png';
 
 const PLAYER_STATE_KEY = 'mute-player-state';
 const ONBOARDING_PATHS = ['/splash', '/signup', '/signup-info', '/welcome', '/artist-select', '/loading'];
+const EMPTY_PLAYER_STATE = {
+    tracks: [],
+    currentIndex: 0,
+    songName: '',
+    singerName: '',
+    albumCover: '',
+    currentTime: 0,
+    isPlaying: false,
+    miniVisible: false,
+    playerPath: ''
+};
 
 export default {
     name: 'MiniPlayer',
@@ -61,17 +72,7 @@ export default {
             playIcon,
             prevIcon,
             nextIcon,
-            state: {
-                tracks: [],
-                currentIndex: 0,
-                songName: '',
-                singerName: '',
-                albumCover: '',
-                currentTime: 0,
-                isPlaying: false,
-                miniVisible: false,
-                playerPath: ''
-            },
+            state: { ...EMPTY_PLAYER_STATE },
             syncing: false,
             lastPersistAt: 0,
             persistIntervalMs: 2000,
@@ -288,18 +289,7 @@ export default {
         dismissAndClearPlayerState() {
             const audio = this.$refs.audio;
             if (audio) audio.pause();
-            this.state = {
-                ...this.state,
-                tracks: [],
-                currentIndex: 0,
-                songName: '',
-                singerName: '',
-                albumCover: '',
-                currentTime: 0,
-                isPlaying: false,
-                miniVisible: false,
-                playerPath: ''
-            };
+            this.state = { ...this.state, ...EMPTY_PLAYER_STATE };
             localStorage.removeItem(PLAYER_STATE_KEY);
             this.syncBodyMiniPlayerClass(false);
         },
@@ -357,7 +347,13 @@ export default {
         hydrateFromStorage() {
             try {
                 const raw = localStorage.getItem(PLAYER_STATE_KEY);
-                if (!raw) return;
+                if (!raw) {
+                    const audio = this.$refs.audio;
+                    if (audio) audio.pause();
+                    this.state = { ...this.state, ...EMPTY_PLAYER_STATE };
+                    this.syncBodyMiniPlayerClass(false);
+                    return;
+                }
                 const saved = JSON.parse(raw);
                 const { currentTime: _ignoredCurrentTime, ...savedWithoutTime } = saved || {};
                 this.state = {
@@ -630,7 +626,7 @@ export default {
     background: var(--gradient-key);
     color: var(--color-white);
     backdrop-filter: blur(8px);
-    z-index: 30;
+    z-index: 2;
     cursor: grab;
     touch-action: none;
     user-select: none;
