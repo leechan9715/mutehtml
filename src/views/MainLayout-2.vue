@@ -1,7 +1,7 @@
 <template>
     <div id="wrap">
         <AppHeader :isProfile="isProfile" />
-        <main :class="{ 'no-profile': !isProfile, 'player-page': isPlayerPage }">
+        <main :class="{ 'no-profile': !isProfile, 'player-page': isPlayerPage, 'scroll-lock': store.isLoading }">
             <router-view v-show="!store.isLoading" />
             <div v-if="store.isLoading" class="loading-wrap">
                 <DotLottieVue class="loading-lottie" autoplay loop :data="loadingDots" />
@@ -82,10 +82,13 @@ export default {
     transform: none;
     overflow: visible;
 }
+#wrap main.scroll-lock {
+    overflow: hidden;
+}
 .loading-wrap {
     position: sticky;
     inset: 0;
-    z-index: 20;
+    z-index: 30;
     background: rgba(255, 255, 255, 0.7);
     min-height: 100%;
     display: flex;

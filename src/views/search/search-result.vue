@@ -86,8 +86,11 @@ export default {
             immediate: true,
             async handler() {
                 this.store.setLoading(true);
-                await this.getSearchResults();
-                this.store.setLoading(false);
+                try {
+                    await this.getSearchResults();
+                } finally {
+                    this.store.setLoading(false);
+                }
             }
         }
     }
