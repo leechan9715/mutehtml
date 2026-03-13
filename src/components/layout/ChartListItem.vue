@@ -69,12 +69,13 @@ export default {
 
 .col-3 .music-singer p:first-child {
     font-size: var(--font-16);
+    color: var(--color-black);
 }
 
 .col-3 .music-singer p:last-child {
     font-size: var(--font-16);
     padding-top: 5px;
-    color: #737886;
+    color: var(--color-gray);
 }
 
 .col-3 > p {

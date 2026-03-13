@@ -89,7 +89,7 @@
                 :img="item.artworkUrl100 || fallbackCover"
                 :title="item.name"
                 :singer="item.artistName"
-                trend="up"
+                :trend="item.trend"
                 @click.prevent="playFromChart(item)"
             />
         </template>
@@ -254,7 +254,8 @@ export default {
                         name: cached.name || title,
                         artistName: cached.artistName || artistName,
                         artworkUrl100: cached.artworkUrl100 || lastfmImage,
-                        previewUrl: cached.previewUrl || ''
+                        previewUrl: cached.previewUrl || '',
+                        trend: Math.random() > 0.5 ? 'up' : 'down'
                     });
                     continue;
                 }
@@ -265,7 +266,8 @@ export default {
                         name: title,
                         artistName,
                         artworkUrl100: lastfmImage,
-                        previewUrl: ''
+                        previewUrl: '',
+                        trend: Math.random() > 0.5 ? 'up' : 'down'
                     });
                     continue;
                 }
@@ -294,7 +296,8 @@ export default {
                         name: hit?.trackName || title,
                         artistName: hit?.artistName || artistName,
                         artworkUrl100: hit?.artworkUrl100 || lastfmImage,
-                        previewUrl: hit?.previewUrl || ''
+                        previewUrl: hit?.previewUrl || '',
+                        trend: Math.random() > 0.5 ? 'up' : 'down'
                     });
                 } catch (error) {
                     const status = error?.response?.status;
@@ -314,7 +317,8 @@ export default {
                         name: title,
                         artistName,
                         artworkUrl100: lastfmImage,
-                        previewUrl: ''
+                        previewUrl: '',
+                        trend: Math.random() > 0.5 ? 'up' : 'down'
                     });
                 }
 

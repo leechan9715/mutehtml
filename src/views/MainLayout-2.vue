@@ -69,7 +69,6 @@ export default {
     overflow: hidden;
     overflow-y: auto;
     scrollbar-width: none;
-    transform: translateY(-30px);
 }
 #wrap main.no-profile {
     position: relative;
@@ -101,7 +100,7 @@ export default {
 }
 
 :global(body) {
-    --main-offset: 136px;
+    --main-offset: 166px;
     --main-no-profile-offset: 83px;
 }
 
