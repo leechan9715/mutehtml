@@ -1,5 +1,13 @@
 <template>
-    <div v-if="shouldRender" class="mini-player" @click="openFullPlayer">
+    <div
+        v-if="shouldRender"
+        class="mini-player"
+        :class="{ 'is-dragging': isMiniDragging }"
+        :style="miniDragStyle"
+        @click="openFullPlayer"
+        @mousedown="onMiniMouseDown"
+        @touchstart.passive="onMiniTouchStart"
+    >
         <div class="mini-cover">
             <img v-if="hasTrack" :src="state.albumCover" alt="mini-cover" />
             <div v-else class="mini-cover-placeholder"></div>
@@ -9,13 +17,13 @@
             <p class="mini-artist">{{ hasTrack ? state.singerName || '아티스트' : '재생 버튼으로 시작해 주세요' }}</p>
         </div>
         <div class="mini-controls">
-            <button type="button" @click.stop="playPrev" :disabled="!hasTrack">
+            <button type="button" @click.stop="onPrevClick" :disabled="!hasTrack">
                 <img class="arrow" :src="prevIcon" alt="prev-track" />
             </button>
-            <button type="button" @click.stop="togglePlay" :disabled="!hasTrack">
+            <button type="button" @click.stop="onTogglePlayClick" :disabled="!hasTrack">
                 <img :src="state.isPlaying ? pauseIcon : playIcon" alt="toggle-play" />
             </button>
-            <button type="button" @click.stop="playNext" :disabled="!hasTrack">
+            <button type="button" @click.stop="onNextClick" :disabled="!hasTrack">
                 <img class="arrow" :src="nextIcon" alt="next-track" />
             </button>
         </div>
@@ -70,7 +78,16 @@ export default {
             resumeRetryTimer: null,
             resumeRetryCount: 0,
             waitingUserGestureForPlay: false,
-            hasAutoplayErrorLogged: false
+            hasAutoplayErrorLogged: false,
+            isMiniDragging: false,
+            miniStartX: 0,
+            miniStartY: 0,
+            miniDeltaX: 0,
+            miniDeltaY: 0,
+            miniDragMode: 'undecided',
+            miniDragMoved: false,
+            suppressClickByDrag: false,
+            miniGlobalEventsBound: false
         };
     },
     computed: {
@@ -78,6 +95,8 @@ export default {
             if (this.fullPlayerOpen) return false;
             if (ONBOARDING_PATHS.some((path) => this.$route.path.startsWith(path))) return false;
             if (this.$route.path.startsWith('/main/player/')) return false;
+            if (!this.state.miniVisible) return false;
+            if (!this.hasTrack) return false;
             return true;
         },
         currentTrack() {
@@ -85,6 +104,17 @@ export default {
         },
         hasTrack() {
             return !!this.currentTrack?.previewUrl;
+        },
+        miniDragStyle() {
+            const dragX = Math.min(0, this.miniDeltaX);
+            const dragY = Math.min(0, this.miniDeltaY);
+            const expandHeight = Math.min(160, Math.max(0, -dragY * 0.9));
+            return {
+                '--mini-drag-x': `${dragX}px`,
+                '--mini-expand-h': `${expandHeight}px`,
+                opacity: this.isMiniDragging ? Math.max(0.35, 1 - Math.abs(dragX) / 220) : 1,
+                transition: this.isMiniDragging ? 'none' : 'transform 180ms ease, height 180ms ease, opacity 180ms ease'
+            };
         }
     },
     mounted() {
@@ -93,13 +123,16 @@ export default {
         window.addEventListener('mute-player-state-updated', this.onSameTabStateUpdated);
         window.addEventListener('mute-player-request-mini-resume', this.onMiniResumeRequest);
         window.addEventListener('mute-player-request-mini-handoff', this.onMiniHandoffRequest);
+        this.syncBodyMiniPlayerClass(this.shouldRender);
     },
     beforeUnmount() {
         window.removeEventListener('storage', this.onStorageChange);
         window.removeEventListener('mute-player-state-updated', this.onSameTabStateUpdated);
         window.removeEventListener('mute-player-request-mini-resume', this.onMiniResumeRequest);
         window.removeEventListener('mute-player-request-mini-handoff', this.onMiniHandoffRequest);
+        this.unbindMiniDragEvents();
         this.detachUserGestureListeners();
+        this.syncBodyMiniPlayerClass(false);
         if (this.resumeRetryTimer) {
             clearTimeout(this.resumeRetryTimer);
             this.resumeRetryTimer = null;
@@ -110,6 +143,7 @@ export default {
             this.hydrateFromStorage();
         },
         shouldRender(next) {
+            this.syncBodyMiniPlayerClass(next);
             if (next && this.state.isPlaying) {
                 this.ensurePlaybackResume();
             }
@@ -121,6 +155,155 @@ export default {
         }
     },
     methods: {
+        bindMiniDragEvents() {
+            if (this.miniGlobalEventsBound) return;
+            window.addEventListener('mousemove', this.onMiniMouseMove);
+            window.addEventListener('mouseup', this.onMiniMouseUp);
+            window.addEventListener('touchmove', this.onMiniTouchMove, { passive: false });
+            window.addEventListener('touchend', this.onMiniTouchEnd);
+            window.addEventListener('touchcancel', this.onMiniTouchEnd);
+            this.miniGlobalEventsBound = true;
+        },
+
+        unbindMiniDragEvents() {
+            if (!this.miniGlobalEventsBound) return;
+            window.removeEventListener('mousemove', this.onMiniMouseMove);
+            window.removeEventListener('mouseup', this.onMiniMouseUp);
+            window.removeEventListener('touchmove', this.onMiniTouchMove);
+            window.removeEventListener('touchend', this.onMiniTouchEnd);
+            window.removeEventListener('touchcancel', this.onMiniTouchEnd);
+            this.miniGlobalEventsBound = false;
+        },
+
+        onMiniMouseDown(e) {
+            if (e.button !== 0) return;
+            this.startMiniDrag(e.clientX, e.clientY);
+        },
+
+        onMiniTouchStart(e) {
+            this.startMiniDrag(e.touches[0].clientX, e.touches[0].clientY);
+        },
+
+        startMiniDrag(startX, startY) {
+            this.bindMiniDragEvents();
+            this.isMiniDragging = true;
+            this.miniStartX = startX;
+            this.miniStartY = startY;
+            this.miniDeltaX = 0;
+            this.miniDeltaY = 0;
+            this.miniDragMode = 'undecided';
+            this.miniDragMoved = false;
+        },
+
+        onMiniMouseMove(e) {
+            if (!this.isMiniDragging) return;
+            this.updateMiniDrag(e.clientX, e.clientY);
+        },
+
+        onMiniTouchMove(e) {
+            if (!this.isMiniDragging) return;
+            this.updateMiniDrag(e.touches[0].clientX, e.touches[0].clientY);
+            e.preventDefault();
+        },
+
+        updateMiniDrag(currentX, currentY) {
+            const dx = currentX - this.miniStartX;
+            const dy = currentY - this.miniStartY;
+
+            if (this.miniDragMode === 'undecided') {
+                const absX = Math.abs(dx);
+                const absY = Math.abs(dy);
+                if (absX < 6 && absY < 6) return;
+                this.miniDragMode = absX >= absY ? 'horizontal' : 'vertical';
+            }
+
+            if (this.miniDragMode === 'horizontal') {
+                this.miniDeltaX = dx;
+                this.miniDeltaY = 0;
+            } else {
+                this.miniDeltaX = 0;
+                this.miniDeltaY = dy;
+            }
+
+            if (Math.abs(this.miniDeltaX) > 6 || Math.abs(this.miniDeltaY) > 6) {
+                this.miniDragMoved = true;
+                this.suppressClickByDrag = true;
+            }
+        },
+
+        onMiniMouseUp() {
+            this.finishMiniDrag();
+        },
+
+        onMiniTouchEnd() {
+            this.finishMiniDrag();
+        },
+
+        finishMiniDrag() {
+            if (!this.isMiniDragging) return;
+            const absX = Math.abs(this.miniDeltaX);
+            const absY = Math.abs(this.miniDeltaY);
+            const isHorizontal = absX > absY;
+            const isVertical = absY > absX;
+            const shouldDismiss = isHorizontal && this.miniDeltaX <= -90;
+            const shouldOpenPlayer = isVertical && this.miniDeltaY <= -45;
+            this.isMiniDragging = false;
+
+            if (shouldDismiss) {
+                this.dismissAndClearPlayerState();
+            } else if (shouldOpenPlayer) {
+                this.openFullPlayer(true);
+            }
+
+            this.miniStartX = 0;
+            this.miniStartY = 0;
+            this.miniDeltaX = 0;
+            this.miniDeltaY = 0;
+            this.miniDragMode = 'undecided';
+            this.unbindMiniDragEvents();
+        },
+
+        shouldSkipClickByDrag() {
+            if (!this.suppressClickByDrag) return false;
+            this.suppressClickByDrag = false;
+            this.miniDragMoved = false;
+            return true;
+        },
+
+        onPrevClick() {
+            if (this.shouldSkipClickByDrag()) return;
+            this.playPrev();
+        },
+
+        onTogglePlayClick() {
+            if (this.shouldSkipClickByDrag()) return;
+            this.togglePlay();
+        },
+
+        onNextClick() {
+            if (this.shouldSkipClickByDrag()) return;
+            this.playNext();
+        },
+
+        dismissAndClearPlayerState() {
+            const audio = this.$refs.audio;
+            if (audio) audio.pause();
+            this.state = {
+                ...this.state,
+                tracks: [],
+                currentIndex: 0,
+                songName: '',
+                singerName: '',
+                albumCover: '',
+                currentTime: 0,
+                isPlaying: false,
+                miniVisible: false,
+                playerPath: ''
+            };
+            localStorage.removeItem(PLAYER_STATE_KEY);
+            this.syncBodyMiniPlayerClass(false);
+        },
+
         onAudioLoadedMetadata() {
             const audio = this.$refs.audio;
             if (!audio) return;
@@ -248,6 +431,10 @@ export default {
             localStorage.setItem(PLAYER_STATE_KEY, JSON.stringify(persistedState));
             this.syncing = false;
             this.lastPersistAt = now;
+        },
+
+        syncBodyMiniPlayerClass(visible) {
+            document.body.classList.toggle('has-mini-player', !!visible);
         },
 
         attachUserGestureListeners() {
@@ -410,7 +597,8 @@ export default {
             }
         },
 
-        openFullPlayer() {
+        openFullPlayer(fromSwipe = false) {
+            if (!fromSwipe && this.shouldSkipClickByDrag()) return;
             if (!this.hasTrack) return;
             const audio = this.$refs.audio;
             if (audio) {
@@ -431,9 +619,9 @@ export default {
     left: 50%;
     width: calc(100% - 24px);
     max-width: 500px;
-    transform: translateX(-50%);
+    transform: translateX(calc(-50% + var(--mini-drag-x, 0px)));
     bottom: 82px;
-    height: 82px;
+    height: calc(82px + var(--mini-expand-h, 0px));
     display: grid;
     grid-template-columns: 46px 1fr auto;
     align-items: center;
@@ -443,6 +631,14 @@ export default {
     color: var(--color-white);
     backdrop-filter: blur(8px);
     z-index: 30;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.mini-player.is-dragging {
+    cursor: grabbing;
 }
 
 .mini-cover {
