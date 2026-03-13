@@ -9,6 +9,7 @@
                         muted
                         loop
                         playsinline
+                        preload="metadata"
                         class="video"
                         :src="post.short_url"
                     ></video>
@@ -50,7 +51,6 @@ export default {
             try {
                 const { data } = await mainShortsApi();
                 this.posts = data.posts || [];
-                console.log(this.posts);
             } catch (error) {
                 console.error('게시글 불러오기 실패:', error);
             }

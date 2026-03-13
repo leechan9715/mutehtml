@@ -122,7 +122,6 @@ export default {
                 const { data } = await lastfmKoreaTopTracksApi();
                 const topTracks = data?.tracks?.track || [];
                 this.kpop = await this.buildChartItemsFromLastfm(topTracks, 'KR');
-                console.log(this.kpop);
             } catch (error) {
                 console.error('getKpopResults error:', error);
                 this.kpop = [];
@@ -134,7 +133,6 @@ export default {
                 const { data } = await lastfmGlobalTopTracksApi();
                 const topTracks = data?.tracks?.track || [];
                 this.global = await this.buildChartItemsFromLastfm(topTracks, 'US');
-                console.log(this.global);
             } catch (error) {
                 console.error('getGlobalResults error:', error);
                 this.global = [];

@@ -76,7 +76,7 @@
 
         <div class="row chart-list">
             <div class="col-2">
-                <p>Top 100</p>
+                <p>Top {{ chartLimit }}</p>
                 <a href="#" @click.prevent="playAllFromChart">
                     <span>전체듣기</span>
                     <img src="@/assets/images/icon/right-arrow.png" width="24" alt="" />
@@ -88,6 +88,7 @@
                 v-for="(item, index) in activeTopList"
                 :key="`${selectedType}-${item.rank || index}`"
                 :index="index"
+                :rank="item.rank"
                 :img="item.artworkUrl100 || fallbackCover"
                 :title="item.name"
                 :singer="item.artistName"
@@ -105,6 +106,7 @@ import goldenCover from '@/assets/images/chart/golden.png';
 import { lastfmKoreaTopTracksApi, lastfmGlobalTopTracksApi, searchApi } from '@/api/_music_api';
 
 const PLAYER_STATE_KEY = 'mute-player-state';
+const ITUNES_CACHE_KEY = 'mute-chart-itunes-cache-v1';
 
 export default {
     name: 'ChartView',
@@ -117,11 +119,9 @@ export default {
             fallbackCover,
             goldenCover,
             chartLimit: 20,
-            itunesDisabledByCountry: {
-                KR: false,
-                US: false
-            },
-            hasLoggedGlobalItunes: false,
+            maxItunesRequestsPerLoad: 8,
+            itunesBlocked: false,
+            itunesCache: {},
             countryTopOne: null,
             countryTopList: [],
             globalTopOne: null,
@@ -129,9 +129,6 @@ export default {
         };
     },
     computed: {
-        isProfile() {
-            return this.$route.matched.some((r) => r.meta?.isProfile === true);
-        },
         activeTopOne() {
             return this.selectedType === 'global' ? this.globalTopOne : this.countryTopOne;
         },
@@ -153,13 +150,33 @@ export default {
         }
     },
     mounted() {
-        // legacy global flag cleanup: keep iTunes availability independent per country
-        sessionStorage.removeItem('chart-itunes-disabled');
+        this.hydrateItunesCache();
         this.ensureChartData();
     },
     methods: {
         sleep(ms) {
             return new Promise((resolve) => setTimeout(resolve, ms));
+        },
+
+        buildItunesCacheKey(country, artistName, title) {
+            return `${country}::${(artistName || '').trim().toLowerCase()}::${(title || '').trim().toLowerCase()}`;
+        },
+
+        hydrateItunesCache() {
+            try {
+                const raw = sessionStorage.getItem(ITUNES_CACHE_KEY);
+                this.itunesCache = raw ? JSON.parse(raw) : {};
+            } catch {
+                this.itunesCache = {};
+            }
+        },
+
+        persistItunesCache() {
+            try {
+                sessionStorage.setItem(ITUNES_CACHE_KEY, JSON.stringify(this.itunesCache));
+            } catch {
+                // ignore storage quota errors
+            }
         },
 
         getLastfmImage(track) {
@@ -206,18 +223,6 @@ export default {
                 });
 
                 const enriched = await this.enrichWithItunes(tracks, country);
-                if (country === 'US' && !this.hasLoggedGlobalItunes) {
-                    console.log(
-                        '[ChartView] Global chart iTunes mapped data:',
-                        enriched.map((item) => ({
-                            rank: item.rank,
-                            title: item.name,
-                            artist: item.artistName,
-                            cover: item.artworkUrl100
-                        }))
-                    );
-                    this.hasLoggedGlobalItunes = true;
-                }
                 const [topOne, ...rest] = enriched;
                 return { topOne: topOne || null, topList: rest };
             } catch (error) {
@@ -227,38 +232,43 @@ export default {
         },
 
         async enrichWithItunes(tracks, country) {
-            // Backend iTunes proxy currently returns frequent 403 for US terms.
-            // Skip iTunes enrichment for global chart to avoid console/network error spam.
-            if (country === 'US') {
-                return tracks.map((track) => ({
-                    rank: Number(track?.['@attr']?.rank || 0),
-                    name: track?.name || '',
-                    artistName: this.getLastfmArtistName(track),
-                    artworkUrl100: this.getLastfmImage(track)
-                }));
-            }
-
             const result = [];
-            let isBlocked = this.itunesDisabledByCountry[country] === true;
+            let isBlocked = this.itunesBlocked;
             let failCount = 0;
+            let requestCount = 0;
 
             for (const track of tracks) {
                 const title = track?.name || '';
                 const artistName = this.getLastfmArtistName(track);
                 const rank = Number(track?.['@attr']?.rank || 0);
                 const lastfmImage = this.getLastfmImage(track);
+                const cacheKey = this.buildItunesCacheKey(country, artistName, title);
+                const cached = this.itunesCache[cacheKey];
 
-                if (isBlocked) {
+                if (cached) {
+                    result.push({
+                        rank,
+                        name: cached.name || title,
+                        artistName: cached.artistName || artistName,
+                        artworkUrl100: cached.artworkUrl100 || lastfmImage,
+                        previewUrl: cached.previewUrl || ''
+                    });
+                    continue;
+                }
+
+                if (isBlocked || requestCount >= this.maxItunesRequestsPerLoad) {
                     result.push({
                         rank,
                         name: title,
                         artistName,
-                        artworkUrl100: lastfmImage
+                        artworkUrl100: lastfmImage,
+                        previewUrl: ''
                     });
                     continue;
                 }
 
                 try {
+                    requestCount += 1;
                     const { data: itunesData } = await searchApi({
                         term: `${artistName} ${title}`.trim(),
                         country,
@@ -268,6 +278,14 @@ export default {
                     });
                     const hit = itunesData?.results?.[0];
                     failCount = 0;
+
+                    this.itunesCache[cacheKey] = {
+                        name: hit?.trackName || title,
+                        artistName: hit?.artistName || artistName,
+                        artworkUrl100: hit?.artworkUrl100 || '',
+                        previewUrl: hit?.previewUrl || ''
+                    };
+
                     result.push({
                         rank,
                         name: hit?.trackName || title,
@@ -286,7 +304,7 @@ export default {
                     // Do not block immediately; only block after repeated failures
                     if (failCount >= 6) {
                         isBlocked = true;
-                        this.itunesDisabledByCountry[country] = true;
+                        this.itunesBlocked = true;
                     }
                     result.push({
                         rank,
@@ -298,9 +316,10 @@ export default {
                 }
 
                 // Small pacing delay to reduce iTunes proxy rate-limit bursts
-                if (!isBlocked) await this.sleep(120);
+                if (!isBlocked) await this.sleep(80);
             }
 
+            this.persistItunesCache();
             return result;
         },
 

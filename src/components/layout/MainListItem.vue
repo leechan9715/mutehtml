@@ -1,6 +1,6 @@
 ﻿<template>
     <a href="javascript:void(0)" class="col-2">
-        <img :src="img || trackImg" alt="album_cover" />
+        <img :src="img || trackImg" alt="album_cover" loading="lazy" decoding="async" draggable="false" />
         <div class="box col-2">
             <div class="artist-name-box">
                 <p>{{ title }}</p>

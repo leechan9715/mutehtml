@@ -6,7 +6,7 @@
         :style="miniDragStyle"
         @click="openFullPlayer"
         @mousedown="onMiniMouseDown"
-        @touchstart="onMiniTouchStart"
+        @touchstart.passive="onMiniTouchStart"
     >
         <div class="mini-cover">
             <img v-if="hasTrack" :src="state.albumCover" alt="mini-cover" />
@@ -86,7 +86,8 @@ export default {
             miniDeltaY: 0,
             miniDragMode: 'undecided',
             miniDragMoved: false,
-            suppressClickByDrag: false
+            suppressClickByDrag: false,
+            miniGlobalEventsBound: false
         };
     },
     computed: {
@@ -122,10 +123,6 @@ export default {
         window.addEventListener('mute-player-state-updated', this.onSameTabStateUpdated);
         window.addEventListener('mute-player-request-mini-resume', this.onMiniResumeRequest);
         window.addEventListener('mute-player-request-mini-handoff', this.onMiniHandoffRequest);
-        window.addEventListener('mousemove', this.onMiniMouseMove);
-        window.addEventListener('mouseup', this.onMiniMouseUp);
-        window.addEventListener('touchmove', this.onMiniTouchMove, { passive: false });
-        window.addEventListener('touchend', this.onMiniTouchEnd);
         this.syncBodyMiniPlayerClass(this.shouldRender);
     },
     beforeUnmount() {
@@ -133,10 +130,7 @@ export default {
         window.removeEventListener('mute-player-state-updated', this.onSameTabStateUpdated);
         window.removeEventListener('mute-player-request-mini-resume', this.onMiniResumeRequest);
         window.removeEventListener('mute-player-request-mini-handoff', this.onMiniHandoffRequest);
-        window.removeEventListener('mousemove', this.onMiniMouseMove);
-        window.removeEventListener('mouseup', this.onMiniMouseUp);
-        window.removeEventListener('touchmove', this.onMiniTouchMove);
-        window.removeEventListener('touchend', this.onMiniTouchEnd);
+        this.unbindMiniDragEvents();
         this.detachUserGestureListeners();
         this.syncBodyMiniPlayerClass(false);
         if (this.resumeRetryTimer) {
@@ -161,6 +155,26 @@ export default {
         }
     },
     methods: {
+        bindMiniDragEvents() {
+            if (this.miniGlobalEventsBound) return;
+            window.addEventListener('mousemove', this.onMiniMouseMove);
+            window.addEventListener('mouseup', this.onMiniMouseUp);
+            window.addEventListener('touchmove', this.onMiniTouchMove, { passive: false });
+            window.addEventListener('touchend', this.onMiniTouchEnd);
+            window.addEventListener('touchcancel', this.onMiniTouchEnd);
+            this.miniGlobalEventsBound = true;
+        },
+
+        unbindMiniDragEvents() {
+            if (!this.miniGlobalEventsBound) return;
+            window.removeEventListener('mousemove', this.onMiniMouseMove);
+            window.removeEventListener('mouseup', this.onMiniMouseUp);
+            window.removeEventListener('touchmove', this.onMiniTouchMove);
+            window.removeEventListener('touchend', this.onMiniTouchEnd);
+            window.removeEventListener('touchcancel', this.onMiniTouchEnd);
+            this.miniGlobalEventsBound = false;
+        },
+
         onMiniMouseDown(e) {
             if (e.button !== 0) return;
             this.startMiniDrag(e.clientX, e.clientY);
@@ -171,6 +185,7 @@ export default {
         },
 
         startMiniDrag(startX, startY) {
+            this.bindMiniDragEvents();
             this.isMiniDragging = true;
             this.miniStartX = startX;
             this.miniStartY = startY;
@@ -245,6 +260,7 @@ export default {
             this.miniDeltaX = 0;
             this.miniDeltaY = 0;
             this.miniDragMode = 'undecided';
+            this.unbindMiniDragEvents();
         },
 
         shouldSkipClickByDrag() {
@@ -616,6 +632,9 @@ export default {
     backdrop-filter: blur(8px);
     z-index: 30;
     cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .mini-player.is-dragging {

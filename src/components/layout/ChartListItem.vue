@@ -1,6 +1,6 @@
 <template>
     <a href="javascript:void(0)" class="col-2">
-        <img :src="img" alt="album_cover1" width="80" />
+        <img :src="img" alt="album_cover1" width="80" loading="lazy" decoding="async" draggable="false" />
         <div class="col-3">
             <div class="upDown">
                 {{ index + 2 }}<br />

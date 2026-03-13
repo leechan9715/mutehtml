@@ -10,9 +10,9 @@
         </div>
         <div class="row">
             <MainListItem
-                v-for="(list, index) in this.results"
+                v-for="(list, index) in results"
                 @click.prevent="play(list.trackName, list.artistName)"
-                :key="index"
+                :key="list.trackId || `${list.trackName}-${list.artistName}-${index}`"
                 :title="list.trackName"
                 :singer="list.artistName"
                 :img="list.artworkUrl100"
@@ -53,10 +53,11 @@ export default {
         },
         // 검색 결과 페이지에서 다시 검색했을 때 실행되는 함수
         handleSearch() {
-            console.log(this.searchText);
+            const nextTerm = (this.searchText || '').trim();
+            if (!nextTerm || nextTerm === this.$route.query.term) return;
             this.$router.push({
                 path: '/main/search-result',
-                query: { term: this.searchText }
+                query: { term: nextTerm }
             });
         },
         // 사용자가 클릭한 곡 제목(trackName)을 받아서
@@ -77,13 +78,13 @@ export default {
             });
         }
     },
-    mounted() {
-        this.getSearchResults();
-    },
-    // 라우터의 쿼리값의 term이 변경되면 결과값출력 함수 재실행
     watch: {
-        '$route.query.term'() {
-            this.getSearchResults();
+        // 라우터의 쿼리값 term 변경 시 검색 재실행
+        '$route.query.term': {
+            immediate: true,
+            handler() {
+                this.getSearchResults();
+            }
         }
     }
 };

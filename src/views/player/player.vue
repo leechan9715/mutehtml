@@ -6,7 +6,7 @@
         ref="playerWrap"
         :style="playerWrapStyle"
         @mousedown="onSheetAreaMouseDown"
-        @touchstart="onSheetAreaTouchStart"
+        @touchstart.passive="onSheetAreaTouchStart"
     >
         <section class="container album-cover" ref="artistImgBox">
             <!-- <div class="row down-handle">
@@ -156,7 +156,8 @@ export default {
             lastPersistAt: 0,
             persistIntervalMs: 2000,
             miniVisible: false,
-            keepPlayingOnMini: false
+            keepPlayingOnMini: false,
+            globalDragEventsBound: false
         };
     },
 
@@ -195,11 +196,6 @@ export default {
             });
         });
 
-        window.addEventListener('mousemove', this.onWindowMouseMove);
-        window.addEventListener('mouseup', this.onWindowMouseUp);
-        window.addEventListener('touchmove', this.onWindowTouchMove, { passive: false });
-        window.addEventListener('touchend', this.onWindowTouchEnd);
-
         const term = this.overlayMode ? '' : this.$route.query.term?.trim();
         if (!term) {
             await this.restoreFromSavedState();
@@ -228,13 +224,35 @@ export default {
 
         if (this.rafId) cancelAnimationFrame(this.rafId);
 
-        window.removeEventListener('mousemove', this.onWindowMouseMove);
-        window.removeEventListener('mouseup', this.onWindowMouseUp);
-        window.removeEventListener('touchmove', this.onWindowTouchMove);
-        window.removeEventListener('touchend', this.onWindowTouchEnd);
+        this.unbindGlobalDragEvents();
     },
 
     methods: {
+        bindGlobalDragEvents() {
+            if (this.globalDragEventsBound) return;
+            window.addEventListener('mousemove', this.onWindowMouseMove);
+            window.addEventListener('mouseup', this.onWindowMouseUp);
+            window.addEventListener('touchmove', this.onWindowTouchMove, { passive: false });
+            window.addEventListener('touchend', this.onWindowTouchEnd);
+            window.addEventListener('touchcancel', this.onWindowTouchEnd);
+            this.globalDragEventsBound = true;
+        },
+
+        unbindGlobalDragEvents() {
+            if (!this.globalDragEventsBound) return;
+            window.removeEventListener('mousemove', this.onWindowMouseMove);
+            window.removeEventListener('mouseup', this.onWindowMouseUp);
+            window.removeEventListener('touchmove', this.onWindowTouchMove);
+            window.removeEventListener('touchend', this.onWindowTouchEnd);
+            window.removeEventListener('touchcancel', this.onWindowTouchEnd);
+            this.globalDragEventsBound = false;
+        },
+
+        maybeReleaseGlobalDragEvents() {
+            if (this.isDragging || this.isHandleDragging || this.isCoverSwiping) return;
+            this.unbindGlobalDragEvents();
+        },
+
         // ─── 초기화 ────────────────────────────────────────────────
 
         async loadInitialTrack(term) {
@@ -413,6 +431,7 @@ export default {
         // ─── 진행바 제어 ───────────────────────────────────────────
 
         onProgressMouseDown(e) {
+            this.bindGlobalDragEvents();
             this.isDragging = true;
             this.seekFromEvent(e.clientX);
         },
@@ -444,6 +463,7 @@ export default {
         },
 
         onProgressTouchStart(e) {
+            this.bindGlobalDragEvents();
             this.isDragging = true;
             this.seekFromEvent(e.touches[0].clientX);
         },
@@ -487,6 +507,7 @@ export default {
         },
 
         startCoverSwipe(startX, startY) {
+            this.bindGlobalDragEvents();
             this.isCoverSwiping = true;
             this.coverStartX = startX;
             this.coverStartY = startY;
@@ -534,6 +555,7 @@ export default {
             this.coverDeltaX = 0;
             this.coverDeltaY = 0;
             this.coverGestureMode = 'undecided';
+            this.maybeReleaseGlobalDragEvents();
 
             if (shouldNext) {
                 await this.playNext();
@@ -592,6 +614,7 @@ export default {
         },
 
         startHandleDrag(startY) {
+            this.bindGlobalDragEvents();
             this.isHandleDragging = true;
             this.handleStartY = startY;
         },
@@ -632,10 +655,12 @@ export default {
                     }
                     this.$router.back();
                 }, closeDelay);
+                this.maybeReleaseGlobalDragEvents();
                 return;
             }
 
             this.sheetOffsetY = 0;
+            this.maybeReleaseGlobalDragEvents();
         },
 
         stopDragging() {
@@ -645,6 +670,7 @@ export default {
                 cancelAnimationFrame(this.rafId);
                 this.rafId = null;
             }
+            this.maybeReleaseGlobalDragEvents();
         },
 
         seekFromEvent(clientX) {
