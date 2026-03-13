@@ -15,7 +15,7 @@
                 </router-link>
             </div>
             <div class="col-5">
-                <a href="#">
+                <router-link to="/main/chart">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <g>
                             <path
@@ -25,7 +25,7 @@
                         </g>
                     </svg>
                     <p>차트</p>
-                </a>
+                </router-link>
             </div>
             <!--  -->
             <div class="logo_box">
@@ -83,6 +83,7 @@
 import Logo from '@/components/ui/Logo.vue';
 import circle from '@/assets/images/common/circle.png';
 import circle2 from '@/assets/images/common/circle_2.png';
+import router from '@/router';
 
 export default {
     name: 'AppFooter',

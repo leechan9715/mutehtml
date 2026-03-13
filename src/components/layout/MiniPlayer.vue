@@ -84,6 +84,7 @@ export default {
             miniStartY: 0,
             miniDeltaX: 0,
             miniDeltaY: 0,
+            miniDragMode: 'undecided',
             miniDragMoved: false,
             suppressClickByDrag: false
         };
@@ -175,6 +176,7 @@ export default {
             this.miniStartY = startY;
             this.miniDeltaX = 0;
             this.miniDeltaY = 0;
+            this.miniDragMode = 'undecided';
             this.miniDragMoved = false;
         },
 
@@ -190,8 +192,24 @@ export default {
         },
 
         updateMiniDrag(currentX, currentY) {
-            this.miniDeltaX = currentX - this.miniStartX;
-            this.miniDeltaY = currentY - this.miniStartY;
+            const dx = currentX - this.miniStartX;
+            const dy = currentY - this.miniStartY;
+
+            if (this.miniDragMode === 'undecided') {
+                const absX = Math.abs(dx);
+                const absY = Math.abs(dy);
+                if (absX < 6 && absY < 6) return;
+                this.miniDragMode = absX >= absY ? 'horizontal' : 'vertical';
+            }
+
+            if (this.miniDragMode === 'horizontal') {
+                this.miniDeltaX = dx;
+                this.miniDeltaY = 0;
+            } else {
+                this.miniDeltaX = 0;
+                this.miniDeltaY = dy;
+            }
+
             if (Math.abs(this.miniDeltaX) > 6 || Math.abs(this.miniDeltaY) > 6) {
                 this.miniDragMoved = true;
                 this.suppressClickByDrag = true;
@@ -226,6 +244,7 @@ export default {
             this.miniStartY = 0;
             this.miniDeltaX = 0;
             this.miniDeltaY = 0;
+            this.miniDragMode = 'undecided';
         },
 
         shouldSkipClickByDrag() {
