@@ -391,22 +391,31 @@ export default {
 
             const onMouseDown = (e) => {
                 e.preventDefault();
+                window.addEventListener('mousemove', onMouseMove);
+                window.addEventListener('mouseup', onMouseUp);
                 onDown(e.clientY);
             };
             const onMouseMove = (e) => onMove(e.clientY);
-            const onMouseUp = () => onUp();
+            const onMouseUp = () => {
+                onUp();
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('mouseup', onMouseUp);
+            };
 
             const onTouchStart = (e) => onDown(e.touches[0].clientY);
-            const onTouchMove = (e) => onMove(e.touches[0].clientY);
+            const onTouchMove = (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                onMove(e.touches[0].clientY);
+            };
             const onTouchEnd = () => onUp();
 
             wheel.addEventListener('mousedown', onMouseDown);
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('mouseup', onMouseUp);
 
             wheel.addEventListener('touchstart', onTouchStart, { passive: true });
-            wheel.addEventListener('touchmove', onTouchMove, { passive: true });
+            wheel.addEventListener('touchmove', onTouchMove, { passive: false });
             wheel.addEventListener('touchend', onTouchEnd, { passive: true });
+            wheel.addEventListener('touchcancel', onTouchEnd, { passive: true });
 
             return () => {
                 wheel.removeEventListener('mousedown', onMouseDown);
@@ -416,6 +425,7 @@ export default {
                 wheel.removeEventListener('touchstart', onTouchStart);
                 wheel.removeEventListener('touchmove', onTouchMove);
                 wheel.removeEventListener('touchend', onTouchEnd);
+                wheel.removeEventListener('touchcancel', onTouchEnd);
 
                 stopInertia();
             };

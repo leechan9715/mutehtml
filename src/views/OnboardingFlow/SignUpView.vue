@@ -123,6 +123,7 @@ const NAVER_CLIENT_ID = process.env.VUE_APP_NAVER_CLIENT_ID;
 const NAVER_LOCAL_CALLBACK_URL = process.env.VUE_APP_LOCAL_NAVER_CALLBACK_URL;
 const NAVER_DOTHOME_CALLBACK_URL = process.env.VUE_APP_DOTHOME_NAVER_CALLBACK_URL;
 const KAKAO_JS_KEY = process.env.VUE_APP_KAKAO_JS_KEY;
+const isHtmlPayload = (value) => typeof value === 'string' && value.trim().toLowerCase().startsWith('<!doctype html');
 
 //  구글 로그인 //
 const isGoogleLoading = ref(false);
@@ -179,6 +180,10 @@ function initNaverButton() {
     const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
     const callbackUrl = isLocal ? NAVER_LOCAL_CALLBACK_URL : NAVER_DOTHOME_CALLBACK_URL;
     try {
+        if (!NAVER_CLIENT_ID || !callbackUrl) {
+            console.error('네이버 환경변수(clientId/callbackUrl)를 확인하세요.');
+            return;
+        }
         if (!window?.naver?.LoginWithNaverId) {
             console.error('네이버 SDK가 아직 로드되지 않았습니다.');
             return;
@@ -187,7 +192,6 @@ function initNaverButton() {
             clientId: NAVER_CLIENT_ID,
             callbackUrl: callbackUrl, // 콜백 URL로 이동
             isPopup: false, // 팝업 방식
-
             loginButton: { color: 'green', type: 3, height: 60 }
         });
 
@@ -195,10 +199,10 @@ function initNaverButton() {
 
         naverLogin.value.getLoginStatus((status) => {
             if (status) checkLoginStatus();
-            else console.log('로그인되지 않은 상태입니다.');
+            else console.info('네이버 로그인 상태 아님');
         });
     } catch (e) {
-        console.log('네이버 로그인 초기화 오류:', e);
+        console.error('네이버 로그인 초기화 오류:', e);
     }
 }
 async function checkLoginStatus() {
@@ -209,10 +213,10 @@ async function checkLoginStatus() {
 
     naverLogin.value.getLoginStatus(async (status) => {
         if (!status) {
-            console.log('callback 처리에 실패하였습니다.');
+            console.warn('callback 처리 실패');
             return;
         }
-
+        const nickname = naverLogin.value.user?.getNickName?.() || '';
         const email = naverLogin.value.user?.getEmail?.();
         if (!email) {
             alert('이메일은 필수정보입니다. 정보제공을 동의해주세요');
@@ -222,13 +226,28 @@ async function checkLoginStatus() {
 
         // access token 저장 (SDK 구조가 케이스마다 달라서 안전하게)
 
-        const token = naverLogin.value.accessToken?.accessToken || naverLogin.value.accessToken || null;
+        const token =
+            naverLogin.value.accessToken?.accessToken ||
+            naverLogin.value.accessToken ||
+            naverLogin.value.oauthParams?.access_token ||
+            null;
+
+        if (!token || typeof token !== 'string') {
+            console.error('네이버 access token 추출 실패:', token);
+            return;
+        }
+
         auth.provider = 'naver';
         const { data } = await socialLoginApi({ provider: auth.provider, accesstoken: token });
+        if (isHtmlPayload(data)) {
+            throw new Error('네이버 로그인 API가 HTML을 반환했습니다. API 경로/프록시 확인 필요');
+        }
+        if (!data?.success) {
+            throw new Error(data?.message || '네이버 서버 로그인 실패');
+        }
         auth.setLocalStroge();
-        console.log(data);
         router.push('/welcome');
-        console.log('로그인 성공!', email);
+        console.info('네이버 로그인 성공:', email, nickname);
     });
 }
 
@@ -315,8 +334,6 @@ async function kakaoLogin() {
         isKakaoLoading.value = false;
     }
 }
-console.log('저장된 값:', JSON.parse(localStorage.getItem('login-check')));
-
 onMounted(async () => {
     await nextTick();
     initNaverButton();
@@ -329,7 +346,6 @@ watch(nickname, () => {
 });
 const handleNicknameCheck = async () => {
     const value = nickname.value.trim();
-    console.log(value);
     if (!value) {
         alert('닉네임을 입력하세요.');
         return;
@@ -355,7 +371,7 @@ const handleNicknameCheck = async () => {
             alert(res.data.message || '중복확인 실패');
         }
     } catch (e) {
-        console.log('닉네임 중복확인 에러:', e);
+        console.error('닉네임 중복확인 에러:', e);
         nicknameChecked.value = false;
         nicknameCheckText.value = '중복확인';
         alert('중복확인 실패');

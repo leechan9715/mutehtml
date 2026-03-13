@@ -967,6 +967,18 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.5.tgz#4fc56c15c580b9adb7dc3c333a134e540b44bfb1"
   integrity sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==
 
+"@lottiefiles/dotlottie-vue@^0.11.5":
+  version "0.11.5"
+  resolved "https://registry.yarnpkg.com/@lottiefiles/dotlottie-vue/-/dotlottie-vue-0.11.5.tgz#4083571074ed02e39c26228fb2ab77c00c0db30e"
+  integrity sha512-n8q2kx+Ui2kNDwv/2J+8cQteq43GdY5Aez2WLwKUrRJGYOwEWp8YcVyB1Nz2WucS66qaoay8wIFKneKQw5Piyw==
+  dependencies:
+    "@lottiefiles/dotlottie-web" "0.66.1"
+
+"@lottiefiles/dotlottie-web@0.66.1":
+  version "0.66.1"
+  resolved "https://registry.yarnpkg.com/@lottiefiles/dotlottie-web/-/dotlottie-web-0.66.1.tgz#dae1de65afed3b9094ff9f3510087209a9d90cd9"
+  integrity sha512-DhXVlWpnTLmlrDamqSJR/PsMFTFBhe4a04MRojAsgtk3FmEEbIluWA6qbYAKbjvj8o6Nju8f+R9fhOxL+iWd1w==
+
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
   resolved "https://registry.yarnpkg.com/@nicolo-ribaudo/eslint-scope-5-internals/-/eslint-scope-5-internals-5.1.1-v1.tgz#dbf733a965ca47b1973177dc0bb6c889edcfb129"
