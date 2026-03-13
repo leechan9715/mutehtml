@@ -1,7 +1,7 @@
 <template>
     <div style="padding: 16px">
         <MainContainer title="아티스트 모먼트">
-            <Swiper class="song-swiper" :slides-per-view="3.2" :space-between="16">
+            <Swiper class="song-swiper" :slides-per-view="2.5" :space-between="16">
                 <SwiperSlide v-for="post in posts" :key="post.id" class="shorts" @click="linkTo(post.id)">
                     <video
                         style="object-fit: cover"
