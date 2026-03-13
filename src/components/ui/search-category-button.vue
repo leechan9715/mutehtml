@@ -24,3 +24,8 @@ export default {
     }
 };
 </script>
+<style scoped>
+.category-container {
+    background-color: aqua;
+}
+</style>

@@ -3,7 +3,7 @@
         <section class="container" id="section1">
             <div class="row">
                 <div class="col-1">
-                    <h2 class="font-20 fw-medium">검색하기</h2>
+                    <p class="fw-semibold">검색하기</p>
                 </div>
             </div>
             <div class="row">
@@ -18,8 +18,8 @@
                 </form>
             </div>
             <div class="row">
-                <Swiper class="lsc-swiper-1" :slides-per-view="4" :space-between="10">
-                    <SwiperSlide v-for="(genre, i) in genres" :key="i">
+                <Swiper class="lsc-swiper-1" :slides-per-view="'auto'" :space-between="10">
+                    <SwiperSlide v-for="(genre, i) in genres" class="tag-slide" :key="i" @click="selectTag($event)">
                         <h3>{{ genre }}</h3>
                     </SwiperSlide>
                 </Swiper>
@@ -69,7 +69,7 @@
         <section class="container" id="section3">
             <div class="row">
                 <div class="col-1">
-                    <h2 class="font-20 fw-medium">장르 탐색</h2>
+                    <p class="sec03-p fw-semibold">장르 탐색</p>
                 </div>
             </div>
             <div class="row g-20">
@@ -108,23 +108,7 @@ export default {
             searchText: '',
             albumModules: [Pagination, EffectCoverflow],
 
-            genres: [
-                '클래식',
-                '하드메탈',
-                '보사노바',
-                '팝',
-                '락',
-                '클래식',
-                '하드메탈',
-                '보사노바',
-                '팝',
-                '락',
-                '클래식',
-                '하드메탈',
-                '보사노바',
-                '팝',
-                '락'
-            ],
+            genres: ['케이팝', '보사노바', '재즈', 'EDM', '록 & 메탈', '클래식', '하드메탈', '트로트'],
 
             genreList: [
                 { label: 'Pop', bgImg: getImg('pop') },
