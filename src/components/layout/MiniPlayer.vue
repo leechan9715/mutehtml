@@ -630,7 +630,7 @@ export default {
     background: var(--gradient-key);
     color: var(--color-white);
     backdrop-filter: blur(8px);
-    z-index: 30;
+    z-index: 2;
     cursor: grab;
     touch-action: none;
     user-select: none;
