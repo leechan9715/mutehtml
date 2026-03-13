@@ -1,9 +1,8 @@
 <template>
-    <div class="song-card">
+    <div class="song-card" @click="click">
         <div class="album-cover">
             <img v-if="coverImage" :src="coverImage" :alt="title" />
         </div>
-
         <p class="title">{{ title }}</p>
         <p class="artist">{{ artist }}</p>
     </div>
@@ -15,7 +14,8 @@ export default {
     props: {
         title: { type: String, default: 'Song-name' },
         artist: { type: String, default: 'Artist' },
-        coverImage: { type: String, default: '' }
+        coverImage: { type: String, default: '' },
+        click: { type: Function, default: () => {} }
     }
 };
 </script>
@@ -28,6 +28,7 @@ export default {
     gap: 6px;
     /* overflow: hidden; */
     flex-shrink: 0;
+    cursor: pointer;
 }
 
 .album-cover {

@@ -93,7 +93,6 @@ export default {
                 selectedTracks.map(async (track) => {
                     const title = track?.name || '';
                     const singer = this.getLastfmArtistName(track);
-
                     try {
                         const { data: itunesData } = await searchApi({
                             term: `${singer} ${title}`.trim(),
