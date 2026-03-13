@@ -2,13 +2,20 @@
     <div id="wrap">
         <AppHeader :isProfile="isProfile" />
         <main :class="{ 'no-profile': !isProfile, 'player-page': isPlayerPage }">
-            <router-view />
+            <router-view v-show="!store.isLoading" />
+            <div v-if="store.isLoading" class="loading-wrap">
+                <DotLottieVue class="loading-lottie" autoplay loop :data="loadingDots" />
+            </div>
         </main>
+
         <AppFooter v-if="!isPlayerPage" />
     </div>
 </template>
 
 <script>
+import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
+import { useIsLoadingStore } from '@/store/api_loading';
+import loadingDots from '@/assets/lottie/Loading_Dots_Blue.json';
 import AppFooter from '@/components/layout/AppFooter.vue';
 import AppHeader from '@/components/layout/AppHeader-2.vue';
 import playlistInfo from '@/components/ui/playlist-info.vue';
@@ -16,7 +23,14 @@ import VibeSelectBtn from '@/components/ui/VibeSelectBtn.vue';
 
 export default {
     name: 'MainLayout2',
+    data() {
+        return {
+            loadingDots,
+            store: useIsLoadingStore()
+        };
+    },
     components: {
+        DotLottieVue,
         AppHeader,
         AppFooter,
         playlistInfo,
@@ -33,7 +47,6 @@ export default {
     mounted() {
         // this.loginCheck();
     },
-
     methods: {
         loginCheck() {
             const auth_check = localStorage.getItem('login-check');
@@ -51,6 +64,7 @@ export default {
     padding: 0;
 }
 #wrap main {
+    position: relative;
     height: calc(100vh - var(--main-offset, 136px));
     overflow: hidden;
     overflow-y: auto;
@@ -67,6 +81,20 @@ export default {
     height: 100vh;
     transform: none;
     overflow: visible;
+}
+.loading-wrap {
+    position: sticky;
+    inset: 0;
+    z-index: 20;
+    background: rgba(255, 255, 255, 0.7);
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.loading-lottie {
+    width: 100%;
+    height: 100%;
 }
 
 :global(body) {

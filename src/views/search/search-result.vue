@@ -24,6 +24,7 @@
 <script>
 import MainListItem from '@/components/layout/MainListItem.vue';
 import { searchApi } from '@/api/_music_api';
+import { useIsLoadingStore } from '@/store/api_loading';
 
 export default {
     name: 'search-result',
@@ -32,7 +33,8 @@ export default {
         return {
             term: '',
             results: [],
-            searchText: ''
+            searchText: '',
+            store: useIsLoadingStore()
         };
     },
     methods: {
@@ -82,8 +84,10 @@ export default {
         // 라우터의 쿼리값 term 변경 시 검색 재실행
         '$route.query.term': {
             immediate: true,
-            handler() {
-                this.getSearchResults();
+            async handler() {
+                this.store.setLoading(true);
+                await this.getSearchResults();
+                this.store.setLoading(false);
             }
         }
     }

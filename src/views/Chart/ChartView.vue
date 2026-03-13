@@ -104,6 +104,7 @@ import ChartListItem from '@/components/layout/ChartListItem.vue';
 import fallbackCover from '@/assets/images/main/1.png';
 import goldenCover from '@/assets/images/chart/golden.png';
 import { lastfmKoreaTopTracksApi, lastfmGlobalTopTracksApi, searchApi } from '@/api/_music_api';
+import { useIsLoadingStore } from '@/store/api_loading';
 
 const PLAYER_STATE_KEY = 'mute-player-state';
 const ITUNES_CACHE_KEY = 'mute-chart-itunes-cache-v1';
@@ -125,7 +126,8 @@ export default {
             countryTopOne: null,
             countryTopList: [],
             globalTopOne: null,
-            globalTopList: []
+            globalTopList: [],
+            store: useIsLoadingStore()
         };
     },
     computed: {
@@ -149,9 +151,13 @@ export default {
             this.ensureChartData();
         }
     },
-    mounted() {
-        this.hydrateItunesCache();
-        this.ensureChartData();
+    async mounted() {
+        this.store.setLoading(true);
+        try {
+            await Promise.all([this.hydrateItunesCache(), this.ensureChartData()]);
+        } finally {
+            this.store.setLoading(false);
+        }
     },
     methods: {
         sleep(ms) {

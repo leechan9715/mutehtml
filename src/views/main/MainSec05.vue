@@ -55,6 +55,7 @@
 <script>
 import { lastfmKoreaTopTracksApi, lastfmGlobalTopTracksApi, searchApi } from '@/api/_music_api';
 import MainListItem from '@/components/layout/MainListItem.vue';
+import { useIsLoadingStore } from '@/store/api_loading';
 export default {
     name: 'HotChartSection',
     components: {
@@ -62,6 +63,7 @@ export default {
     },
     data() {
         return {
+            store: useIsLoadingStore(),
             activeTab: 'korea',
             keywords: ['kpop', 'POP'],
             kpop: [],
@@ -139,9 +141,14 @@ export default {
             }
         }
     },
-    mounted() {
-        this.getKpopResults();
-        this.getGlobalResults();
+    async mounted() {
+        this.store.setLoading(true);
+        try {
+            await Promise.all([this.getKpopResults(), this.getGlobalResults()]);
+        } finally {
+            this.store.setLoading(false);
+            console.log('메인섹션5', this.store.isLoading);
+        }
     }
 };
 </script>
