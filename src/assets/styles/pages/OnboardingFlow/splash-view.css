@@ -105,6 +105,7 @@
    - opacity는 3초부터 페이드 인 (3~4s)
 ========================================================= */
 #splash>.container>.logo-2>.row>img.logo-mute-img {
+
     opacity: 0;
     margin-bottom: 0;
     max-height: 0;
@@ -141,7 +142,7 @@
 
 #splash>.container>.logo-2>.row>.tagline.is-load {
     opacity: 1;
-    margin-bottom: 100px;
+    margin-bottom: 30px;
     /* 필요하면 여기서 조절 */
     max-height: 500px;
 }
@@ -184,7 +185,6 @@
     padding: 21px 24px;
     box-shadow: 0px 2px 4px 0px var(--color-shadow);
     margin-bottom: 15px;
-    color: var(--color-key);
 }
 
 #splash>.container>.logo-2>.row>.login-form>.login-form-field .login-form-label {

@@ -15,7 +15,7 @@ main {
             rgb(232, 244, 255) 62.01%,
             rgb(220, 235, 255) 85.57%),
         linear-gradient(to left, #ffffff, #ffffff);
-    padding: 60px 40px 0px 40px;
+    padding: 30px 40px 0px 40px;
 }
 
 #lsc.container {
