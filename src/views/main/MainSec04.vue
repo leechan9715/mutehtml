@@ -9,6 +9,10 @@
                 :centered-slides-bounds="true"
                 :slides-per-view="'auto'"
                 :initial-slide="3"
+                :observer="true"
+                :observe-parents="true"
+                :update-on-window-resize="true"
+                :watch-overflow="true"
                 :coverflow-effect="{
                     rotate: 0,
                     stretch: 50,

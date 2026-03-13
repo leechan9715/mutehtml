@@ -10,7 +10,6 @@
                                 ? require('@/assets/images/icon/country_checked.png')
                                 : require('@/assets/images/icon/country.png')
                         "
-                        width="70"
                     />
                     <span>국내</span>
                 </label>
@@ -23,7 +22,6 @@
                                 ? require('@/assets/images/icon/globe_checked.png')
                                 : require('@/assets/images/icon/globe.png')
                         "
-                        width="70"
                     />
                     <span>해외</span>
                 </label>
@@ -36,7 +34,6 @@
                                 ? require('@/assets/images/icon/heart_checked.png')
                                 : require('@/assets/images/icon/heart.png')
                         "
-                        width="70"
                     />
                     <span>나만</span>
                 </label>
@@ -44,7 +41,7 @@
         </div>
 
         <div class="row time-select">
-            <div class="col-4">
+            <div class="col-4 color-black">
                 <input type="radio" id="daily" name="period" checked />
                 <label for="daily">일간</label>
 
@@ -75,7 +72,7 @@
         </div>
 
         <div class="row chart-list">
-            <div class="col-2">
+            <div class="col-2 color-black">
                 <p>Top {{ chartLimit }}</p>
                 <a href="#" @click.prevent="playAllFromChart">
                     <span>전체듣기</span>
