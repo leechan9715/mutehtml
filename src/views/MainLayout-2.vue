@@ -47,7 +47,7 @@ export default {
         }
     },
     mounted() {
-        // this.loginCheck();
+        this.loginCheck();
     },
     methods: {
         loginCheck() {
