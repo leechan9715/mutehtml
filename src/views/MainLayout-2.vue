@@ -2,9 +2,11 @@
     <div id="wrap">
         <AppHeader :isProfile="isProfile" />
         <main :class="{ 'no-profile': !isProfile, 'player-page': isPlayerPage, 'scroll-lock': store.isLoading }">
-            <router-view v-show="!store.isLoading" />
+            <div v-show="!store.isLoading">
+                <router-view />
+            </div>
             <div v-if="store.isLoading" class="loading-wrap">
-                <DotLottieVue class="loading-lottie" autoplay loop :data="loadingDots" />
+                <DotLottieVue class="loading-lottie" autoplay loop :data="loadingDotsData" />
             </div>
         </main>
 
@@ -25,7 +27,7 @@ export default {
     name: 'MainLayout2',
     data() {
         return {
-            loadingDots,
+            loadingDotsData: JSON.stringify(loadingDots),
             store: useIsLoadingStore()
         };
     },
@@ -105,7 +107,7 @@ export default {
 }
 
 :global(body.has-mini-player) {
-    --main-offset: 220px;
-    --main-no-profile-offset: 160px;
+    --main-offset: 253px;
+    --main-no-profile-offset: 163px;
 }
 </style>

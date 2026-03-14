@@ -6,10 +6,10 @@
                 <h3 class="sub-title">프로필</h3>
             </div>
             <div class="col-1 profile_container">
-                <img :src="profileImg" alt="user_img" />
+                <img :src="checkAuthData.user?.profileImg || defaultProfileImg" alt="user_img" />
                 <div class="profile_box">
-                    <p class="font-14 fw-medium">홍길동</p>
-                    <p class="color-gray font-14 fw-medium">1234@google.com</p>
+                    <p class="font-14 fw-medium">{{ checkAuthData.user?.nickname }}</p>
+                    <p class="color-gray font-14 fw-medium">{{ checkAuthData.user?.email }}</p>
                 </div>
                 <span class="material-symbols-outlined"> arrow_forward_ios </span>
             </div>
@@ -60,9 +60,9 @@ import Logo from '@/components/ui/Logo.vue';
 import AppTopBar2 from '@/components/layout/AppTopBar2.vue';
 import MenuListItem from '@/components/ui/MenuListItem.vue';
 import profileImgSrc from '@/assets/images/mypage/test.jpg';
-import { checkAuthApi, checkSocialLogin, logoutApi } from '@/api/_auth_api';
+import { checkAuthApi, logoutApi } from '@/api/_auth_api';
 const router = useRouter();
-const profileImg = profileImgSrc;
+const defaultProfileImg = profileImgSrc;
 
 const settingsMenus = ref([
     { icon: 'notifications', title: '알림', to: '#' },
@@ -74,44 +74,37 @@ const settingsMenus = ref([
     { icon: 'info', title: '버전정보', to: '#' }
 ]);
 
-const localLoginData = ref({});
-const socialLoginData = ref({});
+const checkAuthData = ref({});
 const naverAccessToken = ref();
+
 onMounted(async () => {
     try {
         const { data } = await checkAuthApi();
-        localLoginData.value = data;
-        console.log(localLoginData.value);
+        checkAuthData.value = data;
+        console.log(checkAuthData.value);
     } catch (e) {
-        console.error('로컬 로그인 체크 실패', e);
-    }
-    try {
-        const { data } = await checkSocialLogin();
-        socialLoginData.value = data;
-        naverAccessToken.value = data.accesstoken;
-    } catch (e) {
-        console.error('소셜 로그인 체크 실패', e);
+        console.error('로그인이 안되있습니다.', e);
     }
 });
 
 const logout = () => {
-    if (socialLoginData.value?.provider === 'kakao') {
+    if (checkAuthData.value?.provider === 'kakao') {
         kakaoLogout();
 
         return;
     }
 
-    if (socialLoginData.value?.provider === 'naver') {
+    if (checkAuthData.value?.provider === 'naver') {
         naverLogout();
         return;
     }
 
-    if (socialLoginData.value?.provider === 'google') {
+    if (checkAuthData.value?.provider === 'google') {
         googleLogout();
         return;
     }
 
-    if (localLoginData.value?.provider === 'local') {
+    if (checkAuthData.value?.provider === 'local') {
         localLogout();
         return;
     }
@@ -164,6 +157,7 @@ const kakaoLogout = async () => {
     }
 };
 const naverLogout = async () => {
+    naverAccessToken.value = checkAuthData.value?.accessToken;
     if (!naverAccessToken.value) {
         alert('로그인 상태가 아닙니다.');
         return;
@@ -182,7 +176,5 @@ const naverLogout = async () => {
     alert('네이버 정상적으로 로그아웃되었습니다.');
     router.push('/');
 };
-
-console.log(naverAccessToken.value);
 </script>
 <style scoped src="@/assets/styles/pages/mypage.css"></style>

@@ -34,6 +34,9 @@ export default {
         };
     },
     methods: {
+        goNext() {
+            console.log('헤더 클릭!');
+        },
         async getArtistToSearch() {
             const storedArtists = localStorage.getItem('selectedArtists');
             this.selectedArtists = storedArtists ? JSON.parse(storedArtists) : [];
