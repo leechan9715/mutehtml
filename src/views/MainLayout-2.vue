@@ -22,15 +22,13 @@ import AppFooter from '@/components/layout/AppFooter.vue';
 import AppHeader from '@/components/layout/AppHeader-2.vue';
 import playlistInfo from '@/components/ui/playlist-info.vue';
 import VibeSelectBtn from '@/components/ui/VibeSelectBtn.vue';
-import { checkAuthApi } from '@/api/_auth_api';
 
 export default {
     name: 'MainLayout2',
     data() {
         return {
             loadingDotsData: JSON.stringify(loadingDots),
-            store: useIsLoadingStore(),
-            authData: null
+            store: useIsLoadingStore()
         };
     },
     components: {
@@ -50,7 +48,6 @@ export default {
     },
     mounted() {
         // this.loginCheck();
-        this.checkAuthData();
     },
     methods: {
         loginCheck() {
@@ -59,11 +56,6 @@ export default {
                 alert('로그인을 해주세요');
                 this.$router.push('/');
             }
-        },
-        async checkAuthData() {
-            const { data } = await checkAuthApi();
-            this.authData = data;
-            console.log('로그인한 데이터 ', data);
         }
     }
 };
@@ -97,7 +89,7 @@ export default {
 .loading-wrap {
     position: sticky;
     inset: 0;
-    z-index: 30;
+    z-index: 19;
     background: rgba(255, 255, 255, 0.7);
     min-height: 100%;
     display: flex;
@@ -115,7 +107,7 @@ export default {
 }
 
 :global(body.has-mini-player) {
-    --main-offset: 253px;
+    --main-offset: 249px;
     --main-no-profile-offset: 163px;
 }
 </style>
