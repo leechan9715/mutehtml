@@ -42,30 +42,30 @@ export default {
             cards: [
                 {
                     id: 1,
-                    name: 'Sabrina Carpenter',
-                    meta: '26 | 여성 | 미국',
-                    feature: '밝고 경쾌한 팝 사운드와 위트 있는 가사가 특징인 트렌디한 아티스트.',
+                    name: 'Rosé',
+                    meta: '29 | 여성 | 한국인',
+                    feature: '독특한 음색과 감성적인 보컬이 특징이며 팝·록 기반의 서정적인 음악 스타일을 가진 아티스트',
                     mainImage: img01
                 },
                 {
                     id: 2,
                     name: 'Olivia Rodrigo',
                     meta: '23 | 여성 | 미국',
-                    feature: '감정선을 강하게 살린 팝·팝록 스타일로 공감을 얻는 싱어송라이터.',
+                    feature: '감정선을 강하게 살린 팝·팝록 스타일로 공감을 얻는 아티스트',
                     mainImage: img03
                 },
                 {
                     id: 3,
                     name: '아이유',
                     meta: '34 | 여성 | 대한민국',
-                    feature: '서정적인 멜로디와 감성적인 보컬이 강점인 대표적인 아티스트.',
+                    feature: '서정적인 멜로디와 감성적인 보컬이 강점인 대표적인 아티스트',
                     mainImage: img05
                 },
                 {
                     id: 4,
                     name: '윤하',
                     meta: '36 | 여성 | 대한민국',
-                    feature: '록 기반 사운드와 시원한 고음이 인상적인 여성 보컬 아티스트.',
+                    feature: '록 기반 사운드와 시원한 고음이 인상적인 여성 보컬 아티스트',
                     mainImage: img07
                 }
             ]
@@ -106,6 +106,7 @@ export default {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: top; /* 위쪽 기준 */
     display: block;
 }
 
