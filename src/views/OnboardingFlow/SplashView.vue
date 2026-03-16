@@ -75,8 +75,8 @@ export default {
             isLoad: false,
             logo_1: logo1,
             /* 일반 로그인 */
-            email: '',
-            password: ''
+            email: 'test@naver.com',
+            password: 'test'
         };
     },
     async mounted() {
@@ -99,7 +99,6 @@ export default {
                     password,
                     provider: auth.provider
                 });
-                console.log('data', data);
                 if (!data?.success) {
                     alert(data?.message || '회원가입하신 후 이용해주세요.');
                     return;

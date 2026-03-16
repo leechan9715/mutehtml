@@ -1,6 +1,6 @@
 import api from './api';
 
-export const checkAuthApi = () => api.get('/auth/check_login.php');
+export const checkAuthApi = () => api.get('/auth/checkAuth.php');
 
 export const checkSocialLogin = () => api.get('/auth/check_social_login.php');
 
@@ -8,10 +8,13 @@ export const checkNicknameApi = (nickname) => api.post('/auth/check_nickname.php
 
 export const loginApi = ({ email, password, provider }) => api.post('/auth/login.php', { email, password, provider });
 
-export const socialLoginApi = ({ provider, accesstoken }) =>
+export const socialLoginApi = ({ provider, accessToken, nickname, profileImg, email }) =>
     api.post('/auth/social_login.php', {
         provider,
-        accesstoken
+        accessToken,
+        nickname,
+        profileImg,
+        email
     });
 
 export const registerApi = ({ username, password, email, phone, nickname }) =>
