@@ -1,21 +1,27 @@
 ﻿<template>
-    <a href="javascript:void(0)" class="col-2">
+    <a href="javascript:void(0)" class="col-2" @click="onItemClick">
         <img :src="img || trackImg" alt="album_cover" loading="lazy" decoding="async" draggable="false" />
         <div class="box col-2">
             <div class="artist-name-box">
                 <p>{{ title }}</p>
                 <p>{{ singer }}</p>
             </div>
-            <p class="more-btn">...</p>
+            <p class="more-btn" @click.stop="openModal">⁝</p>
         </div>
     </a>
+    <Modal v-model="isModalOpen" :track="trackInfo" />
 </template>
 
 <script>
 import trackImg from '@/assets/images/main/1.png';
+import Modal from '@/components/layout/Modal.vue';
 
 export default {
     name: 'MainListItem',
+    emits: ['click'],
+    components: {
+        Modal
+    },
     props: {
         title: { type: String, default: '' },
         singer: { type: String, default: '' },
@@ -23,8 +29,26 @@ export default {
     },
     data() {
         return {
-            trackImg
+            trackImg,
+            isModalOpen: false
         };
+    },
+    computed: {
+        trackInfo() {
+            return {
+                img: this.img || this.trackImg,
+                title: this.title || '제목 없음',
+                artist: this.singer || '아티스트 없음'
+            };
+        }
+    },
+    methods: {
+        onItemClick(event) {
+            this.$emit('click', event);
+        },
+        openModal() {
+            this.isModalOpen = true;
+        }
     }
 };
 </script>
@@ -63,7 +87,8 @@ a > img {
 .box .more-btn {
     font-size: var(--font-24);
     cursor: pointer;
-    transform: rotate(90deg);
+
+    padding: 0 0 0 10px;
 }
 
 img {

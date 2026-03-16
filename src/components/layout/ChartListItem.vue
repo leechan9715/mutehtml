@@ -1,5 +1,5 @@
 <template>
-    <a href="javascript:void(0)" class="col-2">
+    <a href="javascript:void(0)" class="col-2" @click="onItemClick">
         <img :src="img" alt="album_cover1" width="80" loading="lazy" decoding="async" draggable="false" />
         <div class="col-3">
             <div class="upDown">
@@ -12,20 +12,51 @@
                 <p>{{ title }}</p>
                 <p>{{ singer }}</p>
             </div>
-            <p>⁝</p>
+            <p class="more-btn" @click.stop="openModal">⁝</p>
         </div>
     </a>
+    <Modal v-model="isModalOpen" :track="trackInfo" />
 </template>
 
 <script>
+import fallbackCover from '@/assets/images/main/1.png';
+import Modal from '@/components/layout/Modal.vue';
+
 export default {
     name: 'ChartListItem',
+    emits: ['click'],
+    components: {
+        Modal
+    },
     props: {
         title: { type: String, default: '' },
         singer: { type: String, default: '' },
         img: { type: String, default: '' },
         trend: { type: String, default: '' },
         index: { type: Number, default: 0 }
+    },
+    data() {
+        return {
+            fallbackCover,
+            isModalOpen: false
+        };
+    },
+    computed: {
+        trackInfo() {
+            return {
+                img: this.img || this.fallbackCover,
+                title: this.title || '제목 없음',
+                artist: this.singer || '아티스트 없음'
+            };
+        }
+    },
+    methods: {
+        onItemClick(event) {
+            this.$emit('click', event);
+        },
+        openModal() {
+            this.isModalOpen = true;
+        }
     }
 };
 </script>
@@ -83,5 +114,11 @@ export default {
     margin-right: 20px;
     font-size: var(--font-24);
     align-self: center;
+    cursor: pointer;
+}
+.more-btn {
+    font-size: var(--font-24);
+    cursor: pointer;
+    padding: 0 0 0 10px;
 }
 </style>
