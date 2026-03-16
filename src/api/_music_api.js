@@ -51,3 +51,18 @@ export const lastfmGlobalTopTracksApi = ({ page = 1, limit = 50 } = {}) =>
             page
         }
     });
+
+export const getVideoApi = (id) =>
+    publicApi.get('/music/videos.php', {
+        params: {
+            id
+        }
+    });
+export const commentAddApi = ({ postid, writer, content }) =>
+    publicApi.post('/auth/comment_insert.php', {
+        post_id: postid,
+        writer: writer,
+        content: content
+    });
+
+export const getCommentsApi = (id) => publicApi.get(`/auth/comment_list.php?post_id=${id}`);

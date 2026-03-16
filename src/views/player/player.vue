@@ -114,6 +114,7 @@ import play from '@/assets/images/player/play.png';
 import { searchApi } from '@/api/_music_api';
 
 const PLAYER_STATE_KEY = 'mute-player-state';
+const MY_PLAYLIST_KEY = 'my-playlist';
 
 export default {
     name: 'Player',
@@ -332,6 +333,7 @@ export default {
                 try {
                     await audio.play();
                     this.isPlaying = true;
+                    this.appendCurrentTrackToMyPlaylist();
                     this.savePlayerState();
                 } catch (e) {
                     console.error('재생 실패:', e);
@@ -422,6 +424,7 @@ export default {
                 }
                 await audio.play();
                 this.isPlaying = true;
+                this.appendCurrentTrackToMyPlaylist();
                 this.savePlayerState();
             } catch (e) {
                 console.error('재생 실패:', e);
@@ -748,6 +751,28 @@ export default {
             const mins = Math.floor(seconds / 60);
             const secs = Math.floor(seconds % 60);
             return `${mins}:${secs.toString().padStart(2, '0')}`;
+        },
+
+        appendCurrentTrackToMyPlaylist() {
+            const track = this.currentTrack;
+            if (!track) return;
+
+            const playlistItem = {
+                previewUrl: track.previewUrl || '',
+                trackName: track.trackName || this.songName || '',
+                artistName: track.artistName || this.singerName || '',
+                albumCover: track.albumCover || this.albumCover || '',
+                playedAt: Date.now()
+            };
+
+            try {
+                const raw = localStorage.getItem(MY_PLAYLIST_KEY);
+                const playlist = raw ? JSON.parse(raw) : [];
+                const nextPlaylist = Array.isArray(playlist) ? [...playlist, playlistItem] : [playlistItem];
+                localStorage.setItem(MY_PLAYLIST_KEY, JSON.stringify(nextPlaylist));
+            } catch (e) {
+                console.error('my-playlist 저장 실패:', e);
+            }
         },
 
         savePlayerState(override = {}, force = true) {

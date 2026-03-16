@@ -23,9 +23,9 @@
 </template>
 
 <script setup>
-import { $api } from '@/mixins/mixins.js';
 import { useRoute } from 'vue-router';
 import { ref, onMounted } from 'vue';
+import { commentAddApi, getCommentsApi, getVideoApi } from '@/api/_music_api';
 
 const route = useRoute();
 const id = route.params.id;
@@ -36,26 +36,23 @@ const comment = ref('');
 const comments = ref([]);
 
 async function getVideo() {
-    const data = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/auth/videos.php`, 'GET', { id });
+    const { data } = await getVideoApi(id);
     result.value = data;
 }
 
 async function comment_ADD() {
-    const data = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/auth/comment_insert.php`, 'POST', {
-        post_id: id,
+    const { data } = await commentAddApi({
+        postid: id,
         writer: username.value,
         content: comment.value
     });
-
     alert('테스트성공');
     console.log(data);
-
     comment.value = '';
     await getComments();
 }
-
 async function getComments() {
-    const data = await $api(`${process.env.VUE_APP_BASE_DOTHOME_URL}/api/auth/comment_list.php?post_id=${id}`, 'GET');
+    const { data } = await getCommentsApi(id);
     console.log(data);
     comments.value = data.comments || [];
 }
