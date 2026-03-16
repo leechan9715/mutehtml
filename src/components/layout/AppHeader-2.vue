@@ -17,7 +17,9 @@
                 <img :src="logo" alt="logo" />
             </div>
             <div class="col-2">
-                <router-link to="/main/mypage"> <img :src="test" alt="test-img" /></router-link>
+                <router-link to="/main/mypage">
+                    <img :src="authData?.user?.profileImg || defaultImg" alt="test-img" />
+                </router-link>
             </div>
         </div>
     </header>
@@ -26,7 +28,8 @@
 <script>
 import clockMixin from '@/mixins/clockMixin';
 import logo from '@/assets/images/common/logo.png';
-import test from '@/assets/images/common/test.jpg';
+import defaultImg from '@/assets/images/mypage/test.jpg';
+import { checkAuthApi } from '@/api/_auth_api';
 export default {
     name: 'AppHeader',
     mixins: [clockMixin],
@@ -40,8 +43,19 @@ export default {
     data() {
         return {
             logo,
-            test
+            defaultImg,
+            authData: null
         };
+    },
+    mounted() {
+        this.checkAuthData();
+    },
+    methods: {
+        async checkAuthData() {
+            const { data } = await checkAuthApi();
+            this.authData = data;
+            console.log('로그인한 데이터 ', data);
+        }
     }
 };
 </script>

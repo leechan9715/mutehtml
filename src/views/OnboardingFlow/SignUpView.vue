@@ -127,6 +127,7 @@ const isHtmlPayload = (value) => typeof value === 'string' && value.trim().toLow
 
 //  구글 로그인 //
 const isGoogleLoading = ref(false);
+
 const startGoogleLogin = () => {
     if (isGoogleLoading.value) return;
 
@@ -149,13 +150,27 @@ const startGoogleLogin = () => {
                         return;
                     }
 
-                    console.log('구글 로그인 성공', response);
+                    // 사용자 정보 조회
+                    const userRes = await fetch('https://openidconnect.googleapis.com/v1/userinfo', {
+                        headers: {
+                            Authorization: `Bearer ${accessToken}`
+                        }
+                    });
 
+                    if (!userRes.ok) {
+                        throw new Error('구글 사용자 정보 조회 실패');
+                    }
+                    const googleUser = await userRes.json();
+                    const email = googleUser.email || '';
+                    const nickname = googleUser.name || '';
+                    const profileImg = googleUser.picture || '';
                     auth.provider = 'google';
-
                     const { data } = await socialLoginApi({
                         provider: 'google',
-                        accesstoken: accessToken
+                        accessToken,
+                        email,
+                        nickname,
+                        profileImg
                     });
 
                     console.log('구글 서버 저장 결과:', data);
@@ -216,8 +231,13 @@ async function checkLoginStatus() {
             console.warn('callback 처리 실패');
             return;
         }
-        const nickname = naverLogin.value.user?.getNickName?.() || '';
+        const name = naverLogin.value.user?.getName?.() || '';
         const email = naverLogin.value.user?.getEmail?.();
+        const profileImg = naverLogin.value.user?.profile_image || '';
+
+        console.log(naverLogin.value.user);
+        console.log('프로필이미지', profileImg);
+
         if (!email) {
             alert('이메일은 필수정보입니다. 정보제공을 동의해주세요');
             naverLogin.value.reprompt?.();
@@ -238,7 +258,13 @@ async function checkLoginStatus() {
         }
 
         auth.provider = 'naver';
-        const { data } = await socialLoginApi({ provider: auth.provider, accesstoken: token });
+        const { data } = await socialLoginApi({
+            provider: auth.provider,
+            accessToken: token,
+            nickname: name,
+            profileImg: profileImg,
+            email: email
+        });
         if (isHtmlPayload(data)) {
             throw new Error('네이버 로그인 API가 HTML을 반환했습니다. API 경로/프록시 확인 필요');
         }
@@ -247,7 +273,7 @@ async function checkLoginStatus() {
         }
         auth.setLocalStroge();
         router.push('/welcome');
-        console.info('네이버 로그인 성공:', email, nickname);
+        console.info('네이버 로그인 성공:', email, name);
     });
 }
 
@@ -277,7 +303,7 @@ function ensureKakaoInit() {
 function kakaoAuthLogin() {
     return new Promise((resolve, reject) => {
         window.Kakao.Auth.login({
-            scope: 'profile_nickname,profile_image',
+            scope: 'profile_nickname,profile_image,account_email',
             success: resolve,
             fail: reject
         });
@@ -311,12 +337,18 @@ async function kakaoLogin() {
         }
 
         const kakaoUser = await kakaoGetUserMe();
-        console.log('kakao user:', kakaoUser);
+        console.log('kakao usersss:', kakaoUser.properties);
+        const email = kakaoUser?.kakao_account?.email;
+        const nickname = kakaoUser?.kakao_account?.profile.nickname;
+        const profileImage = kakaoUser?.kakao_account?.profile.profile_image_url;
 
         auth.provider = 'kakao';
         const { data } = await socialLoginApi({
             provider: auth.provider,
-            accesstoken: accessToken
+            accesstoken: accessToken,
+            nickname: nickname,
+            profileImg: profileImage,
+            email: email
         });
 
         if (!data?.success) {
