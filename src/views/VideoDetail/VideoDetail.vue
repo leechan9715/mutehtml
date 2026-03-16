@@ -3,7 +3,7 @@
         <!-- 상단 고정 영역 -->
         <div class="top-fixed">
             <div class="video-wrap">
-                <video autoplay loop controls class="video" :src="result.post.video_url"></video>
+                <video autoplay muted playsinline loop controls class="video" :src="result.post.video_url"></video>
             </div>
 
             <div class="info-section">
@@ -11,17 +11,32 @@
                 <p class="artist">{{ artistName }}</p>
 
                 <div class="action-buttons">
-                    <button type="button" class="action-btn">
+                    <button
+                        type="button"
+                        class="action-btn like-btn"
+                        :class="{ active: isPostLiked, popping: isLikeAnimating }"
+                        @click="togglePostLike"
+                    >
+                        <span class="burst burst-1"></span>
+                        <span class="burst burst-2"></span>
+                        <span class="burst burst-3"></span>
+                        <span class="burst burst-4"></span>
+
                         <span class="material-symbols-outlined btn-icon">thumb_up</span>
                         <span>좋아요</span>
                     </button>
 
-                    <button type="button" class="action-btn">
+                    <button type="button" class="action-btn" :class="{ active: isShareActive }" @click="toggleShare">
                         <span class="material-symbols-outlined btn-icon">share</span>
                         <span>공유</span>
                     </button>
 
-                    <button type="button" class="action-btn">
+                    <button
+                        type="button"
+                        class="action-btn"
+                        :class="{ active: isDownloadActive }"
+                        @click="toggleDownload"
+                    >
                         <span class="material-symbols-outlined btn-icon">download</span>
                         <span>다운로드</span>
                     </button>
@@ -29,7 +44,6 @@
             </div>
         </div>
 
-        <!-- 댓글 영역 -->
         <!-- 댓글 영역 -->
         <div class="comment-section">
             <div class="comment-scroll">
@@ -41,7 +55,7 @@
                 <div v-if="comments.length > 0" class="comment-list">
                     <div v-for="item in comments" :key="item.id" class="comment-item">
                         <div class="profile-img-wrap">
-                            <div class="profile-img"></div>
+                            <img :src="getCommentProfileImg(item)" alt="comment profile" class="profile-img" />
                         </div>
 
                         <div class="comment-body">
@@ -62,13 +76,15 @@
             </div>
 
             <form class="comment-form" @submit.prevent="comment_ADD">
-                <button type="button" class="input-profile-btn" @click="changeUsername">
-                    <div class="input-profile"></div>
-                </button>
+                <div class="input-profile-btn">
+                    <img :src="userInfo.user?.profileImg || defaultProfileImg" alt="my profile" class="input-profile" />
+                </div>
 
                 <input v-model="comment" placeholder="댓글을 입력하세요" type="text" class="comment-input" />
 
-                <button type="submit" class="submit-btn">작성 완료</button>
+                <button type="submit" class="submit-btn" :disabled="isSubmitting">
+                    {{ isSubmitting ? '등록 중...' : '작성 완료' }}
+                </button>
             </form>
         </div>
     </div>
@@ -78,15 +94,27 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { commentAddApi, getCommentsApi, getVideoApi } from '@/api/_music_api';
+import { checkAuthApi } from '@/api/_auth_api';
+import profileImgSrc from '@/assets/images/mypage/test.jpg';
 
 const route = useRoute();
 const id = route.params.id;
 
 const result = ref(null);
-const username = ref(localStorage.getItem('comment_username') || '홍길동');
+const userInfo = ref({});
+const defaultProfileImg = profileImgSrc;
+
+const username = ref('홍길동');
 const comment = ref('');
 const comments = ref([]);
 const likedComments = ref({});
+const commentProfileMap = ref({});
+
+const isPostLiked = ref(false);
+const isShareActive = ref(false);
+const isDownloadActive = ref(false);
+const isLikeAnimating = ref(false);
+const isSubmitting = ref(false);
 
 const artistName = computed(() => {
     if (!result.value?.post) return '';
@@ -100,13 +128,88 @@ const artistName = computed(() => {
     );
 });
 
+function getPostLikeStorageKey() {
+    return `post_like_${id}`;
+}
+
+function getShareStorageKey() {
+    return `post_share_${id}`;
+}
+
+function getDownloadStorageKey() {
+    return `post_download_${id}`;
+}
+
+function getCommentLikeStorageKey() {
+    return `liked_comments_${id}`;
+}
+
+function getCommentProfileMapKey() {
+    return `comment_profile_map_${id}`;
+}
+
+function loadPostLike() {
+    isPostLiked.value = localStorage.getItem(getPostLikeStorageKey()) === 'true';
+}
+
+function savePostLike() {
+    localStorage.setItem(getPostLikeStorageKey(), String(isPostLiked.value));
+}
+
+function loadShareState() {
+    isShareActive.value = localStorage.getItem(getShareStorageKey()) === 'true';
+}
+
+function saveShareState() {
+    localStorage.setItem(getShareStorageKey(), String(isShareActive.value));
+}
+
+function loadDownloadState() {
+    isDownloadActive.value = localStorage.getItem(getDownloadStorageKey()) === 'true';
+}
+
+function saveDownloadState() {
+    localStorage.setItem(getDownloadStorageKey(), String(isDownloadActive.value));
+}
+
+function togglePostLike() {
+    isPostLiked.value = !isPostLiked.value;
+    savePostLike();
+
+    if (isPostLiked.value) {
+        isLikeAnimating.value = false;
+
+        requestAnimationFrame(() => {
+            isLikeAnimating.value = true;
+        });
+
+        setTimeout(() => {
+            isLikeAnimating.value = false;
+        }, 500);
+    }
+}
+
+function toggleShare() {
+    isShareActive.value = !isShareActive.value;
+    saveShareState();
+}
+
+function toggleDownload() {
+    isDownloadActive.value = !isDownloadActive.value;
+    saveDownloadState();
+}
+
 function loadLikedComments() {
-    const saved = localStorage.getItem(`liked_comments_${id}`);
-    likedComments.value = saved ? JSON.parse(saved) : {};
+    try {
+        const saved = localStorage.getItem(getCommentLikeStorageKey());
+        likedComments.value = saved ? JSON.parse(saved) : {};
+    } catch (error) {
+        likedComments.value = {};
+    }
 }
 
 function saveLikedComments() {
-    localStorage.setItem(`liked_comments_${id}`, JSON.stringify(likedComments.value));
+    localStorage.setItem(getCommentLikeStorageKey(), JSON.stringify(likedComments.value));
 }
 
 function isLiked(commentId) {
@@ -114,7 +217,7 @@ function isLiked(commentId) {
 }
 
 function getLikeCount(item) {
-    const baseCount = item.likes || item.like_count || 0;
+    const baseCount = Number(item.likes || item.like_count || 0);
     return isLiked(item.id) ? baseCount + 1 : baseCount;
 }
 
@@ -124,13 +227,53 @@ function toggleLike(item) {
     saveLikedComments();
 }
 
-function changeUsername() {
-    const newName = prompt('작성자 이름을 입력하세요', username.value);
+function loadCommentProfileMap() {
+    try {
+        const saved = localStorage.getItem(getCommentProfileMapKey());
+        commentProfileMap.value = saved ? JSON.parse(saved) : {};
+    } catch (error) {
+        commentProfileMap.value = {};
+    }
+}
 
-    if (!newName || !newName.trim()) return;
+function saveCommentProfileMap() {
+    localStorage.setItem(getCommentProfileMapKey(), JSON.stringify(commentProfileMap.value));
+}
 
-    username.value = newName.trim();
-    localStorage.setItem('comment_username', username.value);
+function getMyProfileImg() {
+    return userInfo.value?.user?.profileImg || defaultProfileImg;
+}
+
+function getCommentProfileImg(item) {
+    return (
+        item.profileImg ||
+        item.profile_img ||
+        item.user?.profileImg ||
+        commentProfileMap.value[item.writer] ||
+        defaultProfileImg
+    );
+}
+
+function saveWriterProfile(writer, profileImg) {
+    if (!writer) return;
+
+    commentProfileMap.value[writer] = profileImg || defaultProfileImg;
+    saveCommentProfileMap();
+}
+
+async function getUserInfo() {
+    try {
+        const { data } = await checkAuthApi();
+        userInfo.value = data;
+
+        if (data?.user?.nickname) {
+            username.value = data.user.nickname;
+        }
+
+        saveWriterProfile(username.value, getMyProfileImg());
+    } catch (error) {
+        console.error('사용자 정보 불러오기 실패', error);
+    }
 }
 
 async function getVideo() {
@@ -160,22 +303,35 @@ async function comment_ADD() {
         return;
     }
 
+    if (isSubmitting.value) return;
+
     try {
+        isSubmitting.value = true;
+
+        saveWriterProfile(username.value, getMyProfileImg());
+
         await commentAddApi({
             postid: id,
             writer: username.value,
-            content: comment.value
+            content: comment.value.trim()
         });
 
         comment.value = '';
         await getComments();
     } catch (error) {
         console.error('댓글 등록 실패', error);
+    } finally {
+        isSubmitting.value = false;
     }
 }
 
 onMounted(() => {
+    loadPostLike();
+    loadShareState();
+    loadDownloadState();
     loadLikedComments();
+    loadCommentProfileMap();
+    getUserInfo();
     getVideo();
     getComments();
 });
@@ -197,28 +353,29 @@ onMounted(() => {
 
 .video {
     width: 100%;
+    display: block;
 }
 
 .info-section {
     position: relative;
-    padding: 24px 30px 28px;
+    padding: 24px 26px 24px;
     background: var(--gradient-light);
     border-bottom: 1px solid #d6e3ff;
     box-shadow: 0 4px 4px 0 #dae5ff;
 }
 
 .title {
-    font-size: var(--font-26);
+    font-size: 32px;
     font-weight: var(--fw-800);
     color: var(--color-black);
     padding-bottom: 3px;
 }
 
 .artist {
-    font-size: var(--font-20);
-    font-weight: var(--fw-400);
+    font-size: 20px;
+    font-weight: 400;
     color: #566789;
-    padding-bottom: 20px;
+    padding-bottom: 22px;
 }
 
 .action-buttons {
@@ -231,25 +388,141 @@ onMounted(() => {
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 48px 10px 43px;
+    padding: 10px 50px 10px 45px;
     border: 1px solid var(--color-accent-blue);
     border-radius: 20px;
     background: var(--color-white);
     color: var(--color-black);
-    font-size: var(--font-18);
-    font-weight: var(--fw-400);
+    font-size: 18px;
+    font-weight: 400;
     box-shadow: 0 2px 6px rgba(132, 167, 255, 0.18);
     cursor: pointer;
+    transition:
+        background 0.2s,
+        border-color 0.2s,
+        color 0.2s,
+        box-shadow 0.2s,
+        transform 0.2s;
 }
 
-.btn-icon {
-    font-size: var(--font-24);
+.action-btn .btn-icon {
+    font-size: 24px;
     color: var(--color-key);
     font-variation-settings:
         'FILL' 0,
         'wght' 600,
         'GRAD' 0,
         'opsz' 24;
+    transition: color 0.2s;
+}
+
+.action-btn.active {
+    background: #eef4ff;
+    border-color: #87a8ff;
+    box-shadow: 0 4px 10px rgba(132, 167, 255, 0.25);
+}
+
+.action-btn.active .btn-icon {
+    color: #4f7dff;
+    font-variation-settings:
+        'FILL' 1,
+        'wght' 600,
+        'GRAD' 0,
+        'opsz' 24;
+}
+
+.like-btn {
+    position: relative;
+    overflow: visible;
+}
+
+.like-btn.popping {
+    animation: likePop 0.45s ease;
+}
+
+.like-btn .burst {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #8fb2ff;
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -50%) scale(0.4);
+}
+
+.like-btn.popping .burst-1 {
+    animation: burst1 0.5s ease-out;
+}
+
+.like-btn.popping .burst-2 {
+    animation: burst2 0.5s ease-out;
+}
+
+.like-btn.popping .burst-3 {
+    animation: burst3 0.5s ease-out;
+}
+
+.like-btn.popping .burst-4 {
+    animation: burst4 0.5s ease-out;
+}
+
+@keyframes likePop {
+    0% {
+        transform: scale(1);
+    }
+    35% {
+        transform: scale(1.12);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes burst1 {
+    0% {
+        opacity: 0.9;
+        transform: translate(-50%, -50%) translate(0, 0) scale(0.4);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translate(-24px, -18px) scale(1);
+    }
+}
+
+@keyframes burst2 {
+    0% {
+        opacity: 0.9;
+        transform: translate(-50%, -50%) translate(0, 0) scale(0.4);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translate(24px, -16px) scale(1);
+    }
+}
+
+@keyframes burst3 {
+    0% {
+        opacity: 0.9;
+        transform: translate(-50%, -50%) translate(0, 0) scale(0.4);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translate(-18px, 18px) scale(1);
+    }
+}
+
+@keyframes burst4 {
+    0% {
+        opacity: 0.9;
+        transform: translate(-50%, -50%) translate(0, 0) scale(0.4);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) translate(22px, 16px) scale(1);
+    }
 }
 
 .comment-section {
@@ -257,7 +530,7 @@ onMounted(() => {
     min-height: 0;
     display: flex;
     flex-direction: column;
-    padding: 16px 30px;
+    padding: 16px 26px;
     background: var(--color-white);
 }
 
@@ -277,23 +550,19 @@ onMounted(() => {
     display: flex;
     align-items: baseline;
     gap: 4px;
-    padding: 20px 0;
-    font-size: var(--font-24);
+    padding: 20px 0 16px;
+    font-size: 24px;
     font-weight: var(--fw-700);
     color: var(--color-black);
 }
 
 .comment-count {
     color: #566789;
-    font-weight: var(--fw-400);
+    font-weight: 400;
 }
 
 .comment-list {
     padding: 12px 12px 5px 12px;
-}
-
-.comment-list::-webkit-scrollbar {
-    display: none;
 }
 
 .comment-item {
@@ -305,12 +574,16 @@ onMounted(() => {
 
 .profile-img-wrap {
     flex-shrink: 0;
+    padding-top: 4px;
 }
 
 .profile-img {
-    width: 46px;
-    height: 46px;
+    width: 44px;
+    height: 44px;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
+    object-fit: cover;
+    display: block;
     background: gray;
     flex-shrink: 0;
 }
@@ -321,16 +594,15 @@ onMounted(() => {
 }
 
 .comment-writer {
-    font-size: var(--font-18);
-    font-weight: var(--fw-500);
+    font-size: 18px;
+    font-weight: 500;
     color: var(--color-black);
-    padding-bottom: 2px;
 }
 
 .comment-content {
     margin: 0;
-    font-size: var(--font-18);
-    font-weight: var(--fw-400);
+    font-size: 18px;
+    font-weight: 400;
     color: var(--color-black);
     word-break: break-word;
 }
@@ -340,16 +612,17 @@ onMounted(() => {
     align-items: center;
     gap: 4px;
     margin-top: 6px;
+    padding: 0;
     border: none;
     background: transparent;
-    font-size: var(--font-16);
-    font-weight: var(--fw-400);
+    font-size: 16px;
+    font-weight: 400;
     color: var(--color-gray);
     cursor: pointer;
 }
 
 .heart-icon {
-    font-size: var(--font-18);
+    font-size: 18px;
     color: #b8c7ea;
     font-variation-settings:
         'FILL' 1,
@@ -372,7 +645,7 @@ onMounted(() => {
 .comment-form {
     flex-shrink: 0;
     display: grid;
-    grid-template-columns: 36px 1fr auto;
+    grid-template-columns: 42px 1fr auto;
     align-items: center;
     gap: 20px;
     margin-top: 10px;
@@ -393,11 +666,13 @@ onMounted(() => {
 }
 
 .input-profile {
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
+    aspect-ratio: 1 / 1;
     margin-left: 10px;
     border-radius: 50%;
-    background: #d9d9d9;
+    object-fit: cover;
+    display: block;
     flex-shrink: 0;
 }
 
@@ -406,7 +681,7 @@ onMounted(() => {
     border: none;
     outline: none;
     background: transparent;
-    font-size: var(--font-18);
+    font-size: 18px;
     color: var(--color-black);
     text-indent: 18px;
 }
@@ -423,8 +698,54 @@ onMounted(() => {
     border-radius: 49px;
     background: #ffffff;
     color: var(--color-black);
-    font-size: var(--font-16);
-    font-weight: var(--fw-400);
+    font-size: 16px;
+    font-weight: 400;
     cursor: pointer;
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 24px;
+    }
+
+    .artist {
+        font-size: 15px;
+    }
+
+    .action-buttons {
+        gap: 8px;
+    }
+
+    .action-btn {
+        height: 42px;
+        padding: 0 14px;
+        font-size: 13px;
+    }
+
+    .comment-section {
+        padding: 14px;
+    }
+
+    .comment-form {
+        grid-template-columns: 32px 1fr auto;
+        gap: 10px;
+        padding: 8px 10px;
+    }
+
+    .input-profile {
+        width: 32px;
+        height: 32px;
+        margin-left: 0;
+    }
+
+    .submit-btn {
+        padding: 0 12px;
+        font-size: 12px;
+    }
 }
 </style>
