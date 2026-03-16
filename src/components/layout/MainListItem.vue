@@ -57,6 +57,7 @@ export default {
 a > img {
     border-radius: 5px;
     width: 80px;
+    box-shadow: 0px 2px 4px var(--color-shadow);
 }
 
 .col-2 {
@@ -68,10 +69,11 @@ a > img {
 .box {
     display: flex;
     align-items: center;
-    margin-left: 20px;
+    margin-left: 15px;
     padding: 15px 20px;
     border-radius: 5px;
-    border: 1px solid #bbd1ff;
+    box-shadow: 0px 2px 4px var(--color-shadow);
+    border: 1px solid var(--color-accent-blue);
     background: #ffffff;
 }
 .box .artist-name-box p:first-child {
@@ -82,7 +84,7 @@ a > img {
 
 .box .artist-name-box p:last-child {
     font-size: var(--font-14);
-    color: #737886;
+    color: var(--color-gray);
 }
 .box .more-btn {
     font-size: var(--font-24);
@@ -92,7 +94,7 @@ a > img {
 }
 
 img {
-    border: 1px solid #bbd1ff;
+    border: 1px solid var(--color-accent-blue);
 }
 .artist-name-box p {
     min-width: 160px;
@@ -100,5 +102,37 @@ img {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+@media (max-width: 500px) {
+    a > img {
+        width: clamp(56px, 18vw, 80px);
+        border-radius: clamp(4px, 1.5vw, 5px);
+    }
+
+    .box {
+        margin-left: clamp(8px, 3vw, 15px);
+        padding: clamp(10px, 3vw, 15px) clamp(12px, 4vw, 20px);
+        border-radius: clamp(4px, 1.5vw, 5px);
+    }
+
+    .box .artist-name-box p:first-child {
+        font-size: clamp(13px, 3.6vw, var(--font-16));
+        margin-bottom: clamp(3px, 1vw, 5px);
+    }
+
+    .box .artist-name-box p:last-child {
+        font-size: clamp(11px, 3.2vw, var(--font-14));
+    }
+
+    .box .more-btn {
+        font-size: clamp(18px, 5vw, var(--font-24));
+        transform: rotate(90deg) translateY(clamp(-5px, -1.6vw, -8px));
+    }
+
+    .artist-name-box p {
+        min-width: clamp(90px, 28vw, 160px);
+        max-width: clamp(90px, 28vw, 150px);
+    }
 }
 </style>

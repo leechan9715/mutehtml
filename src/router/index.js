@@ -42,14 +42,12 @@ const routes = [
             { path: 'search', component: Search, meta: { isProfile: true } },
             { path: 'chart', component: ChartView, meta: { isProfile: true } },
             { path: 'mypage', component: MyPageView, meta: { isProfile: false } },
-            { path: 'chart', component: ChartView, meta: { isProfile: false } },
             { path: 'ticket-select', component: TicketSelect, meta: { isProfile: false } },
-            { path: 'library', component: Library, meta: { isProfile: false } },
+            { path: 'library', component: Library, meta: { isProfile: true } },
             { path: 'playlist', component: Playlist, meta: { isProfile: false } },
             { path: 'player/:id', component: Player, meta: { isProfile: false } },
             { path: 'artist-info', component: ArtistInfo, meta: { isProfile: false } },
-            { path: 'search-result', component: SearchResult, meta: { isProfile: true } },
-            { path: 'chart', component: ChartView, meta: { isProfile: false } }
+            { path: 'search-result', component: SearchResult, meta: { isProfile: true } }
         ]
     },
     // {
