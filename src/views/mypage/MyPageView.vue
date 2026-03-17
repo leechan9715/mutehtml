@@ -3,28 +3,28 @@
         <AppTopBar2 title="마이페이지"></AppTopBar2>
         <div class="row">
             <div class="col-1">
-                <h3 class="sub-title">프로필</h3>
+                <h3 class="sub-title profile-title">프로필</h3>
             </div>
             <div class="col-1 profile_container">
                 <img :src="checkAuthData.user?.profileImg || defaultProfileImg" alt="user_img" />
                 <div class="profile_box">
-                    <p class="font-14 fw-medium">{{ checkAuthData.user?.nickname }}</p>
-                    <p class="color-gray font-14 fw-medium">{{ checkAuthData.user?.email }}</p>
+                    <p class="fw-medium">{{ checkAuthData.user?.nickname }}</p>
+                    <p class="color-gray fw-medium">{{ checkAuthData.user?.email }}</p>
                 </div>
                 <span class="material-symbols-outlined"> arrow_forward_ios </span>
             </div>
         </div>
         <div class="row">
             <div class="col-2">
-                <h3 class="sub-title">이용권 관리</h3>
+                <h3 class="sub-title use-title">이용권 관리</h3>
             </div>
             <div class="col-2">
-                <span class="material-symbols-outlined font-18 rag color-primary-3"> arrow_forward_ios </span>
+                <span class="material-symbols-outlined rag"> arrow_forward_ios </span>
             </div>
             <div class="col-1 ticket-container">
                 <div class="ticket-box">
-                    <h3 class="font-20 fw-bold">Free</h3>
-                    <p class="font-14">
+                    <h3>Free</h3>
+                    <p>
                         지금 이용권을 구매하고<br />
                         무제한으로 음악을 즐기세요.
                     </p>
@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="row">
-            <h3 class="col-1 sub-title fw-800">설정</h3>
+            <h3 class="col-1 sub-title">설정</h3>
             <ul>
                 <MenuListItem
                     v-for="(menu, index) in settingsMenus"

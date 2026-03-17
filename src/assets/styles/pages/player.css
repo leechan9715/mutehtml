@@ -136,6 +136,7 @@
 
 .artist-img img {
     width: clamp(120px, 46vw, 370px);
+    height: auto;
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 50%;
