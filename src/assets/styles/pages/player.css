@@ -1,4 +1,18 @@
-/* Player layout is bounded by parent <main> height */
+/* =============================================
+   MUSIC PLAYER — RESPONSIVE CSS
+   Breakpoints:
+     xs  : ~360px 이하 (소형 폰)
+     sm  : 361px ~ 480px
+     md  : 481px ~ 768px (태블릿 세로)
+     lg  : 769px ~ 1024px (태블릿 가로 / 소형 데스크탑)
+     xl  : 1025px+
+   Height tiers:
+     h-xs : max-height 560px
+     h-sm : max-height 680px
+     h-md : max-height 760px
+   ============================================= */
+
+/* ── Base (mobile-first) ── */
 #player-wrap {
     position: fixed;
     inset: 0;
@@ -7,7 +21,8 @@
     min-height: 100dvh;
     max-height: 100dvh;
     display: grid;
-    grid-template-rows: 50% 40.9%;
+    grid-template-rows: 50% 50%;
+    /* 정확히 절반씩 */
     overflow: hidden;
     background: var(--color-white);
     will-change: transform;
@@ -16,8 +31,8 @@
 }
 
 #player-wrap.overlay-mode {
-    top: 56px;
     inset: auto 0 0 0;
+    top: 56px;
     height: calc(100dvh - 56px);
     min-height: calc(100dvh - 56px);
     max-height: calc(100dvh - 56px);
@@ -47,14 +62,19 @@
     cursor: pointer;
 }
 
+/* ── Album cover row ── */
 .album-cover {
     min-height: 0;
-    display: grid;
-    grid-template-rows: 1fr;
+    display: flex;
+    /* grid → flex로 변경 */
+    flex-direction: column;
     overflow: hidden;
 }
 
+/* ── Down-handle ── */
 .down-handle {
+    flex-shrink: 0;
+    /* 추가: 높이 고정 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -64,9 +84,9 @@
 }
 
 .down-handle img {
-    width: clamp(128px, 22vw, 180px);
+    width: clamp(100px, 20vw, 180px);
     margin: 0;
-    padding: clamp(6px, 1.2vh, 10px) 0;
+    padding: clamp(5px, 1.2vh, 10px) 0;
     user-select: none;
     cursor: grab;
 }
@@ -75,6 +95,7 @@
     cursor: grabbing;
 }
 
+/* ── Artist image ── */
 .player-img,
 .player-img .col-1 {
     min-height: 0;
@@ -82,11 +103,16 @@
 }
 
 .player-img {
+    flex: 1 1 0;
+    /* 남은 높이 전부 차지 */
+    min-height: 0;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    /* 세로 중앙 */
 }
+
 
 .player-img .col-1 {
     flex: 1 1 100%;
@@ -97,26 +123,32 @@
 }
 
 .artist-img {
-    display: grid;
-    place-items: center;
+    display: flex;
+    /* grid → flex */
+    justify-content: center;
+    align-items: center;
     width: 100%;
     height: 100%;
-    padding: clamp(8px, 1.8vh, 14px);
+    padding: clamp(6px, 1.6vh, 14px);
+    box-sizing: border-box;
+    /* padding이 크기에 포함되도록 */
 }
 
 .artist-img img {
-    width: min(48vw, 370px);
+    width: clamp(120px, 46vw, 370px);
     aspect-ratio: 1 / 1;
-    margin: 0;
-    padding: 0;
     object-fit: cover;
     border-radius: 50%;
+    /* height: auto 대신 max-height로 넘침 방지 */
+    max-height: min(46vw, 370px);
     height: auto;
-    max-height: 100%;
     display: block;
     cursor: default;
+    margin: 0;
+    padding: 0;
 }
 
+/* ── Color / info box row ── */
 .color-box {
     min-height: 0;
     display: flex;
@@ -125,8 +157,9 @@
     background-color: var(--color-white);
 }
 
+/* ── Song info ── */
 .player-info {
-    padding: 20px 24px;
+    padding: clamp(10px, 2.2vh, 20px) clamp(16px, 5vw, 24px) clamp(6px, 1.2vh, 12px);
     color: var(--color-black);
 }
 
@@ -141,7 +174,7 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    font-size: clamp(18px, 4.5vw, 32px);
+    font-size: clamp(16px, 4.2vw, 32px);
     font-weight: var(--fw-semibold);
     line-height: 1.2;
 }
@@ -168,7 +201,7 @@
 
 .song-name-copy {
     display: inline-block;
-    font-size: clamp(18px, 4.5vw, 32px);
+    font-size: clamp(16px, 4.2vw, 32px);
     font-weight: var(--fw-semibold);
     line-height: 1.2;
     white-space: nowrap;
@@ -197,14 +230,15 @@
 
 .singer-name {
     margin: 0;
-    padding-top: 4px;
-    font-size: clamp(14px, 3.8vw, 20px);
+    padding-top: clamp(2px, 0.6vh, 4px);
+    font-size: clamp(13px, 3.6vw, 20px);
     font-weight: var(--fw-medium);
 }
 
+/* ── Progress bar ── */
 .music-progress-container {
     width: 100%;
-    padding: 20px 24px;
+    padding: clamp(10px, 2vh, 20px) clamp(16px, 5vw, 24px);
 }
 
 .progress-bar {
@@ -272,13 +306,15 @@
 .total-time {
     color: var(--color-black);
     font-weight: var(--fw-normal);
-    font-size: clamp(14px, 2.8vw, 16px);
+    font-size: clamp(12px, 2.6vw, 16px);
 }
 
+/* ── Player buttons ── */
 .player-buttons {
     margin-top: auto;
-    padding-top: 20px;
-    padding-bottom: 30 px;
+    padding-top: clamp(4px, 1.2vh, 20px);
+    padding-bottom: clamp(8px, 2vh, 20px);
+    /* typo 수정: '30 px' → clamp */
 }
 
 .player-buttons-top {
@@ -286,8 +322,8 @@
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     align-items: center;
-    gap: clamp(6px, 1.2vw, 10px);
-    padding: 20px 0 30px 0;
+    gap: clamp(4px, 1vw, 10px);
+    padding: clamp(6px, 1.4vh, 20px) 0 clamp(10px, 2vh, 30px);
 }
 
 .player-buttons-top button,
@@ -295,16 +331,16 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: clamp(28px, 4vh, 38px);
+    min-height: clamp(26px, 3.8vh, 38px);
 }
 
 .player-buttons-top img {
-    width: clamp(18px, 2.5vh, 24px);
+    width: clamp(16px, 2.4vh, 24px);
     height: auto;
 }
 
 .play-pause-img {
-    width: clamp(18px, 2.5vh, 24px) !important;
+    width: clamp(16px, 2.4vh, 24px) !important;
 }
 
 .player-buttons-bottom {
@@ -312,13 +348,13 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: center;
-    gap: clamp(6px, 1.2vw, 10px);
+    gap: clamp(4px, 1vw, 10px);
     margin: 0;
-    padding: clamp(8px, 1.4vh, 12px) 14px clamp(12px, 2vh, 18px);
+    padding: clamp(6px, 1.2vh, 12px) clamp(10px, 3vw, 14px) clamp(8px, 1.8vh, 18px);
 }
 
 .player-buttons-bottom img {
-    width: clamp(18px, 2.5vh, 24px);
+    width: clamp(16px, 2.4vh, 24px);
     height: auto;
 }
 
@@ -326,99 +362,122 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: clamp(40px, 7vw, 56px);
-    min-height: clamp(24px, 3.2vh, 30px);
-    padding: 0 10px;
+    min-width: clamp(36px, 6.5vw, 56px);
+    min-height: clamp(22px, 3vh, 30px);
+    padding: 0 clamp(6px, 1.5vw, 10px);
     border-radius: 999px;
     border: 1px solid rgba(0, 0, 0, 0.16);
     background: rgba(255, 255, 255, 0.56);
-    font-size: clamp(12px, 3.2vw, 14px);
+    font-size: clamp(11px, 2.8vw, 14px);
     font-weight: var(--fw-medium);
 }
 
+/* =============================================
+   HEIGHT BREAKPOINTS
+   (화면 높이가 낮을수록 이미지·패딩 축소)
+   ============================================= */
+
 @media (max-height: 760px) {
     #player-wrap {
-        grid-template-rows: 59.1% 40.9%;
+        grid-template-rows: 58% 42%;
     }
 
     .artist-img img {
-        width: min(42vw, 340px);
+        width: clamp(110px, 40vw, 340px);
     }
 }
 
 @media (max-height: 680px) {
     #player-wrap {
-        grid-template-rows: 59.1% 40.9%;
+        grid-template-rows: 57% 43%;
     }
 
     .artist-img {
-        padding: 6px;
+        padding: clamp(4px, 0.8vh, 8px);
     }
 
     .artist-img img {
-        width: min(36vw, 300px);
-    }
-
-    .singer-name {
-        padding-top: 2px;
-    }
-
-    .player-buttons {
-        padding-top: 6px;
-        padding-bottom: 8px;
-    }
-
-    .player-buttons-top {
-        padding-top: 8px;
-    }
-
-    .player-buttons-bottom {
-        padding-top: 6px;
-        padding-bottom: 10px;
+        width: clamp(100px, 34vw, 300px);
     }
 }
 
 @media (max-height: 560px) {
     #player-wrap {
-        grid-template-rows: 59.1% 40.9%;
+        grid-template-rows: 55% 45%;
     }
 
     .down-handle img {
-        padding-block: 4px;
+        padding-block: 3px;
     }
 
     .artist-img img {
-        width: min(30vw, 270px);
+        width: clamp(80px, 28vw, 260px);
     }
 
     .player-info {
         padding-top: 4px;
         padding-bottom: 2px;
     }
+}
+
+/* =============================================
+   LANDSCAPE — 가로 모드 (높이 560px 이하)
+   앨범 이미지 | 컨트롤 을 좌우로 나눔
+   ============================================= */
+@media (orientation: landscape) and (max-height: 560px) {
+    #player-wrap {
+        grid-template-rows: none;
+        grid-template-columns: 44% 56%;
+        /* 앨범 | 컨트롤 */
+    }
+
+    .album-cover {
+        grid-template-rows: auto 1fr;
+        border-right: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .artist-img img {
+        width: clamp(70px, 22vh, 200px);
+    }
+
+    .color-box {
+        justify-content: center;
+    }
+
+    .player-info {
+        padding: 8px 14px 4px;
+    }
+
+    .music-progress-container {
+        padding: 6px 14px;
+    }
 
     .player-buttons-top {
-        gap: 6px;
-        padding-top: 4px;
+        padding: 4px 0 6px;
     }
 
     .player-buttons-bottom {
-        gap: 6px;
-        padding-top: 4px;
-        padding-bottom: 6px;
-    }
-
-    .player-buttons {
-        padding-top: 2px;
-        padding-bottom: 4px;
+        padding: 4px 10px 6px;
     }
 }
 
-@media (orientation: landscape) and (max-height: 560px) {
+/* =============================================
+   TABLET — 세로 (min-width: 600px)
+   ============================================= */
+@media (min-width: 600px) and (orientation: portrait) {
     #player-wrap {
-        grid-template-rows: 59.1% 40.9%;
+        max-width: 480px;
+        margin-inline: auto;
+    }
+
+    .artist-img img {
+        width: clamp(140px, 36vw, 380px);
     }
 }
 
+/* =============================================
+   DESKTOP / 넓은 태블릿 (min-width: 900px)
+   ============================================= */
 @media (min-width: 900px) {
     #player-wrap {
         max-width: 500px;
@@ -426,6 +485,46 @@
     }
 
     .artist-img img {
-        width: min(24vw, 390px);
+        width: clamp(160px, 22vw, 390px);
+    }
+
+    /* 데스크탑에서는 clamp 폰트 상한을 살짝 높임 */
+    .song-name,
+    .song-name-copy {
+        font-size: clamp(18px, 2.4vw, 34px);
+    }
+
+    .singer-name {
+        font-size: clamp(14px, 1.8vw, 22px);
+    }
+}
+
+/* =============================================
+   EXTRA-SMALL PHONES (max-width: 360px)
+   ============================================= */
+@media (max-width: 360px) {
+    .player-info {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .music-progress-container {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .song-name,
+    .song-name-copy {
+        font-size: clamp(14px, 4vw, 20px);
+    }
+
+    .singer-name {
+        font-size: clamp(12px, 3.4vw, 16px);
+    }
+
+    .player-buttons-top img,
+    .play-pause-img,
+    .player-buttons-bottom img {
+        width: clamp(14px, 2vh, 20px);
     }
 }
