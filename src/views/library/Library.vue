@@ -23,6 +23,7 @@
 import LibraryItem from '@/components/layout/LibraryItem.vue';
 import { saveLibraryItems, getLibraryItems } from '@/utils/libraryStorage';
 import { searchApi } from '@/api/_music_api';
+import { useMusicImageStore } from '@/store/music';
 
 export default {
     name: 'Library',
@@ -33,7 +34,8 @@ export default {
         return {
             libraryItems: [],
             fallbackImage: require('@/assets/images/player/player-img1.png'),
-            fallbackArtistImage: require('@/assets/images/artist-select/1.png')
+            fallbackArtistImage: require('@/assets/images/artist-select/1.png'),
+            musicImageStore: useMusicImageStore()
         };
     },
     methods: {
@@ -103,7 +105,8 @@ export default {
                         id: `${keyword}-${index}`,
                         title: hit?.trackName || keyword,
                         artistName: hit?.artistName || '',
-                        artworkUrl100: this.upgradeArtwork(hit?.artworkUrl100 || '', 600) || this.fallbackImage,
+                        artworkUrl100:
+                            useMusicImageStore.upgradeArtwork(hit?.artworkUrl100 || '', 600) || this.fallbackImage,
                         durationMs: hit?.trackTimeMillis || 0,
                         durationText: this.formatDuration(hit?.trackTimeMillis),
                         previewUrl: hit?.previewUrl || ''
@@ -134,7 +137,9 @@ export default {
                         id: `artist-${index}`,
                         type: 'artist',
                         name: artistName,
-                        image: this.upgradeArtwork(hit?.artworkUrl100 || '', 300) || this.fallbackArtistImage,
+                        image:
+                            useMusicImageStore.upgradeArtwork(hit?.artworkUrl100 || '', 300) ||
+                            this.fallbackArtistImage,
                         representativeTrack: hit?.trackName || '',
                         representativeArtist: hit?.artistName || artistName
                     };

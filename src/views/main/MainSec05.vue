@@ -56,6 +56,7 @@
 import { lastfmKoreaTopTracksApi, lastfmGlobalTopTracksApi, searchApi } from '@/api/_music_api';
 import MainListItem from '@/components/layout/MainListItem.vue';
 import { useIsLoadingStore } from '@/store/api_loading';
+import { useMusicImageStore } from '@/store/music';
 export default {
     name: 'HotChartSection',
     components: {
@@ -64,6 +65,7 @@ export default {
     data() {
         return {
             store: useIsLoadingStore(),
+            musicImageStore: useMusicImageStore(),
             activeTab: 'korea',
             keywords: ['kpop', 'POP'],
             kpop: [],
@@ -71,6 +73,9 @@ export default {
         };
     },
     methods: {
+        upgradeArtwork600(url = '') {
+            return this.musicImageStore.upgradeArtwork(url, 600);
+        },
         playFromChart(track) {
             const title = track?.trackName || track?.name || '';
             const singer = track?.artistName || '';
@@ -105,7 +110,7 @@ export default {
                         return {
                             name: title,
                             artistName: singer,
-                            artworkUrl100: hit?.artworkUrl100 || ''
+                            artworkUrl100: this.upgradeArtwork600(hit?.artworkUrl100 || '')
                         };
                     } catch (itunesError) {
                         console.error('itunes enrich error:', itunesError);

@@ -102,6 +102,7 @@ import fallbackCover from '@/assets/images/main/1.png';
 import goldenCover from '@/assets/images/chart/golden.png';
 import { lastfmKoreaTopTracksApi, lastfmGlobalTopTracksApi, searchApi } from '@/api/_music_api';
 import { useIsLoadingStore } from '@/store/api_loading';
+import { useMusicImageStore } from '@/store/music';
 
 const PLAYER_STATE_KEY = 'mute-player-state';
 const ITUNES_CACHE_KEY = 'mute-chart-itunes-cache-v1';
@@ -120,6 +121,7 @@ export default {
             maxItunesRequestsPerLoad: 8,
             itunesBlocked: false,
             itunesCache: {},
+            musicImageStore: useMusicImageStore(),
             countryTopOne: null,
             countryTopList: [],
             globalTopOne: null,
@@ -157,6 +159,10 @@ export default {
         }
     },
     methods: {
+        upgradeArtwork600(url = '') {
+            return this.musicImageStore.upgradeArtwork(url, 600);
+        },
+
         sleep(ms) {
             return new Promise((resolve) => setTimeout(resolve, ms));
         },
@@ -253,7 +259,7 @@ export default {
                         rank,
                         name: cached.name || title,
                         artistName: cached.artistName || artistName,
-                        artworkUrl100: cached.artworkUrl100 || lastfmImage,
+                        artworkUrl100: this.upgradeArtwork600(cached.artworkUrl100 || lastfmImage),
                         previewUrl: cached.previewUrl || '',
                         trend: Math.random() > 0.5 ? 'up' : 'down'
                     });
@@ -265,7 +271,7 @@ export default {
                         rank,
                         name: title,
                         artistName,
-                        artworkUrl100: lastfmImage,
+                        artworkUrl100: this.upgradeArtwork600(lastfmImage),
                         previewUrl: '',
                         trend: Math.random() > 0.5 ? 'up' : 'down'
                     });
@@ -287,7 +293,7 @@ export default {
                     this.itunesCache[cacheKey] = {
                         name: hit?.trackName || title,
                         artistName: hit?.artistName || artistName,
-                        artworkUrl100: hit?.artworkUrl100 || '',
+                        artworkUrl100: this.upgradeArtwork600(hit?.artworkUrl100 || ''),
                         previewUrl: hit?.previewUrl || ''
                     };
 
@@ -295,7 +301,7 @@ export default {
                         rank,
                         name: hit?.trackName || title,
                         artistName: hit?.artistName || artistName,
-                        artworkUrl100: hit?.artworkUrl100 || lastfmImage,
+                        artworkUrl100: this.upgradeArtwork600(hit?.artworkUrl100 || lastfmImage),
                         previewUrl: hit?.previewUrl || '',
                         trend: Math.random() > 0.5 ? 'up' : 'down'
                     });
@@ -316,7 +322,7 @@ export default {
                         rank,
                         name: title,
                         artistName,
-                        artworkUrl100: lastfmImage,
+                        artworkUrl100: this.upgradeArtwork600(lastfmImage),
                         previewUrl: '',
                         trend: Math.random() > 0.5 ? 'up' : 'down'
                     });
@@ -345,7 +351,7 @@ export default {
                     previewUrl: item?.previewUrl || '',
                     artistName: item?.artistName || '',
                     trackName: item?.name || '',
-                    albumCover: item?.artworkUrl100 || ''
+                    albumCover: this.upgradeArtwork600(item?.artworkUrl100 || '')
                 }))
                 .filter((item) => item.trackName);
 

@@ -21,6 +21,7 @@ import SongCard from '@/components/ui/main-album-component.vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
 import { searchApi } from '@/api/_music_api';
+import { useMusicImageStore } from '@/store/music';
 
 const PLAYER_STATE_KEY = 'mute-player-state';
 
@@ -30,10 +31,14 @@ export default {
     data() {
         return {
             selectedArtists: [],
-            songs: []
+            songs: [],
+            musicImageStore: useMusicImageStore()
         };
     },
     methods: {
+        upgradeArtwork600(url = '') {
+            return this.musicImageStore.upgradeArtwork(url, 600);
+        },
         goNext() {
             console.log('헤더 클릭!');
         },
@@ -51,7 +56,7 @@ export default {
                 .map((item) => ({
                     trackName: item.trackName || '',
                     artistName: item.artistName || '',
-                    albumCover: item.artworkUrl100 || '',
+                    albumCover: this.upgradeArtwork600(item.artworkUrl100 || ''),
                     previewUrl: item.previewUrl || ''
                 }));
             // 로컬 스토리지에서 가져온 아티스트 목록을 searchApi를 활용하여 데이터 가져오기
@@ -73,7 +78,7 @@ export default {
                         previewUrl: item?.previewUrl || '',
                         artistName: item?.artistName || '',
                         trackName: item?.trackName || '',
-                        albumCover: item?.artworkUrl100 || ''
+                        albumCover: this.upgradeArtwork600(item?.artworkUrl100 || '')
                     }))
                     .filter((item) => item.trackName);
 
