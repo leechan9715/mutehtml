@@ -31,8 +31,8 @@
         </div>
 
         <div class="action-row">
-            <button type="button" class="action-btn">셔플듣기</button>
-            <button type="button" class="action-btn">전체듣기</button>
+            <button type="button" class="action-btn" @click="playShuffleTracks">셔플듣기</button>
+            <button type="button" class="action-btn" @click="playAllTracks">전체듣기</button>
         </div>
 
         <div class="add-row">
@@ -76,13 +76,17 @@
 <script>
 import { getLibraryItemById, getLibraryItems, saveLibraryItems } from '@/utils/libraryStorage';
 import { searchApi } from '@/api/_music_api';
+import { useMusicImageStore } from '@/store/music';
+
+const PLAYER_STATE_KEY = 'mute-player-state';
 
 export default {
     name: 'PlaylistDetailView',
     data() {
         return {
             playlist: null,
-            fallbackImage: require('@/assets/images/player/player-img1.png')
+            fallbackImage: require('@/assets/images/player/player-img1.png'),
+            musicImageStore: useMusicImageStore()
         };
     },
     computed: {
@@ -123,8 +127,7 @@ export default {
     },
     methods: {
         upgradeArtwork(url = '', size = 600) {
-            if (!url) return '';
-            return url.replace(/\/\d+x\d+bb\.jpg$/, `/${size}x${size}bb.jpg`);
+            return this.musicImageStore.upgradeArtwork(url, size);
         },
 
         formatDuration(ms) {
@@ -186,16 +189,32 @@ export default {
                     country: 'KR',
                     media: 'music',
                     entity: 'song',
-                    limit: 1
+                    limit: 10
                 });
 
-                const hit = data?.results?.[0];
+                const hits = data?.results || [];
 
-                if (!hit) {
+                if (!hits.length) {
                     alert('검색 결과가 없습니다.');
                     return;
                 }
 
+                const optionsText = hits
+                    .slice(0, 10)
+                    .map((item, index) => `${index + 1}. ${item.trackName || '-'} - ${item.artistName || '-'}`)
+                    .join('\n');
+                const selected = window.prompt(
+                    `추가할 곡 번호를 입력해주세요.\n\n${optionsText}\n\n(예: 1, 취소: 빈값)`
+                );
+                if (!selected || !selected.trim()) return;
+
+                const selectedIndex = Number(selected) - 1;
+                if (!Number.isInteger(selectedIndex) || selectedIndex < 0 || selectedIndex >= hits.length) {
+                    alert('올바른 번호를 입력해주세요.');
+                    return;
+                }
+
+                const hit = hits[selectedIndex];
                 const newTrack = {
                     id: String(hit.trackId || Date.now()),
                     title: hit.trackName || keyword.trim(),
@@ -205,6 +224,17 @@ export default {
                     durationText: this.formatDuration(hit.trackTimeMillis || 0),
                     previewUrl: hit.previewUrl || ''
                 };
+
+                const duplicated = (this.playlist.tracks || []).some(
+                    (track) =>
+                        String(track.id) === String(newTrack.id) ||
+                        (track.title || '').trim().toLowerCase() === newTrack.title.trim().toLowerCase() &&
+                            (track.artistName || '').trim().toLowerCase() === newTrack.artistName.trim().toLowerCase()
+                );
+                if (duplicated) {
+                    alert('이미 추가된 곡입니다.');
+                    return;
+                }
 
                 const updatedPlaylist = {
                     ...this.playlist,
@@ -217,6 +247,57 @@ export default {
                 console.error('addMusicToPlaylist error:', error);
                 alert('음악 추가 중 오류가 발생했습니다.');
             }
+        },
+        buildPlayerTracks() {
+            return (this.playlist?.tracks || [])
+                .map((track) => ({
+                    previewUrl: track?.previewUrl || '',
+                    artistName: track?.artistName || '',
+                    trackName: track?.title || track?.trackName || '',
+                    albumCover: this.upgradeArtwork(track?.artworkUrl100 || '', 600) || this.fallbackImage
+                }))
+                .filter((track) => track.trackName);
+        },
+        startPlayback(tracks = []) {
+            if (!tracks.length) {
+                alert('재생할 곡이 없습니다.');
+                return;
+            }
+
+            let currentIndex = 0;
+            if (!tracks[currentIndex]?.previewUrl) {
+                const playableIndex = tracks.findIndex((track) => !!track.previewUrl);
+                if (playableIndex >= 0) currentIndex = playableIndex;
+            }
+
+            const currentTrack = tracks[currentIndex] || tracks[0];
+            const payload = {
+                tracks,
+                currentIndex,
+                songName: currentTrack?.trackName || '',
+                singerName: currentTrack?.artistName || '',
+                albumCover: currentTrack?.albumCover || '',
+                totalDuration: 0,
+                isPlaying: true,
+                miniVisible: false,
+                playerPath: `/main/player/${currentIndex}`,
+                updatedAt: Date.now()
+            };
+
+            localStorage.setItem(PLAYER_STATE_KEY, JSON.stringify(payload));
+            window.dispatchEvent(new CustomEvent('mute-player-state-updated', { detail: payload }));
+            this.$router.push({ path: `/main/player/${currentIndex}` });
+        },
+        playAllTracks() {
+            this.startPlayback(this.buildPlayerTracks());
+        },
+        playShuffleTracks() {
+            const tracks = [...this.buildPlayerTracks()];
+            for (let i = tracks.length - 1; i > 0; i -= 1) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
+            }
+            this.startPlayback(tracks);
         },
 
         persistPlaylist(updatedPlaylist) {

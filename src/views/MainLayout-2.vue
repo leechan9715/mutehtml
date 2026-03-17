@@ -103,11 +103,11 @@ export default {
 
 :global(body) {
     --main-offset: 166px;
-    --main-no-profile-offset: 83px;
+    --main-no-profile-offset: 120px;
 }
 
 :global(body.has-mini-player) {
     --main-offset: 249px;
-    --main-no-profile-offset: 163px;
+    --main-no-profile-offset: 190px;
 }
 </style>
