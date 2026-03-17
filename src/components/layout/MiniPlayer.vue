@@ -42,8 +42,10 @@ import pauseIcon from '@/assets/images/player/pause.png';
 import playIcon from '@/assets/images/player/play.png';
 import prevIcon from '@/assets/images/player/prev.png';
 import nextIcon from '@/assets/images/player/next.png';
+import { useMusicImageStore } from '@/store/music';
 
 const PLAYER_STATE_KEY = 'mute-player-state';
+const MY_PLAYLIST_KEY = 'my-playlist';
 const ONBOARDING_PATHS = ['/splash', '/signup', '/signup-info', '/welcome', '/artist-select', '/loading'];
 const EMPTY_PLAYER_STATE = {
     tracks: [],
@@ -73,6 +75,7 @@ export default {
             prevIcon,
             nextIcon,
             state: { ...EMPTY_PLAYER_STATE },
+            musicImageStore: useMusicImageStore(),
             syncing: false,
             lastPersistAt: 0,
             persistIntervalMs: 2000,
@@ -156,6 +159,10 @@ export default {
         }
     },
     methods: {
+        upgradeArtwork600(url = '') {
+            return this.musicImageStore.upgradeArtwork(url, 600);
+        },
+
         bindMiniDragEvents() {
             if (this.miniGlobalEventsBound) return;
             window.addEventListener('mousemove', this.onMiniMouseMove);
@@ -356,9 +363,17 @@ export default {
                 }
                 const saved = JSON.parse(raw);
                 const { currentTime: _ignoredCurrentTime, ...savedWithoutTime } = saved || {};
+                const normalizedTracks = Array.isArray(savedWithoutTime?.tracks)
+                    ? savedWithoutTime.tracks.map((track) => ({
+                          ...track,
+                          albumCover: this.upgradeArtwork600(track?.albumCover || '')
+                      }))
+                    : [];
                 this.state = {
                     ...this.state,
-                    ...savedWithoutTime
+                    ...savedWithoutTime,
+                    tracks: normalizedTracks,
+                    albumCover: this.upgradeArtwork600(savedWithoutTime?.albumCover || '')
                 };
 
                 if (!this.state.playerPath) {
@@ -463,6 +478,7 @@ export default {
                 }
                 await audio.play();
                 this.state.isPlaying = true;
+                this.appendCurrentTrackToMyPlaylist();
                 this.waitingUserGestureForPlay = false;
                 this.hasAutoplayErrorLogged = false;
                 this.detachUserGestureListeners();
@@ -484,6 +500,39 @@ export default {
                     return;
                 }
                 console.error('Mini player play failed:', err);
+            }
+        },
+
+        appendCurrentTrackToMyPlaylist() {
+            const track = this.currentTrack;
+            if (!track) return;
+
+            const playlistItem = {
+                previewUrl: track.previewUrl || '',
+                trackName: track.trackName || this.state.songName || '',
+                artistName: track.artistName || this.state.singerName || '',
+                albumCover: this.upgradeArtwork600(track.albumCover || this.state.albumCover || ''),
+                playedAt: Date.now()
+            };
+
+            try {
+                const raw = localStorage.getItem(MY_PLAYLIST_KEY);
+                const playlist = raw ? JSON.parse(raw) : [];
+                const safePlaylist = Array.isArray(playlist) ? playlist : [];
+                const isDuplicated = safePlaylist.some((item) => {
+                    const samePreview = item?.previewUrl && playlistItem.previewUrl && item.previewUrl === playlistItem.previewUrl;
+                    const sameMeta =
+                        (item?.trackName || '').trim().toLowerCase() === playlistItem.trackName.trim().toLowerCase() &&
+                        (item?.artistName || '').trim().toLowerCase() === playlistItem.artistName.trim().toLowerCase();
+                    return samePreview || sameMeta;
+                });
+                if (isDuplicated) return;
+
+                const nextPlaylist = [...safePlaylist, playlistItem];
+                localStorage.setItem(MY_PLAYLIST_KEY, JSON.stringify(nextPlaylist));
+                window.dispatchEvent(new CustomEvent('my-playlist-updated', { detail: nextPlaylist }));
+            } catch (e) {
+                console.error('my-playlist 저장 실패:', e);
             }
         },
 
@@ -547,7 +596,7 @@ export default {
             if (nextTrack) {
                 this.state.songName = nextTrack.trackName || this.state.songName;
                 this.state.singerName = nextTrack.artistName || this.state.singerName;
-                this.state.albumCover = nextTrack.albumCover || this.state.albumCover;
+                this.state.albumCover = this.upgradeArtwork600(nextTrack.albumCover) || this.state.albumCover;
             }
             this.state.currentTime = 0;
             this.state.playerPath = `/main/player/${this.state.currentIndex || 0}`;
@@ -580,7 +629,7 @@ export default {
             if (prevTrack) {
                 this.state.songName = prevTrack.trackName || this.state.songName;
                 this.state.singerName = prevTrack.artistName || this.state.singerName;
-                this.state.albumCover = prevTrack.albumCover || this.state.albumCover;
+                this.state.albumCover = this.upgradeArtwork600(prevTrack.albumCover) || this.state.albumCover;
             }
             this.state.currentTime = 0;
             this.state.playerPath = `/main/player/${this.state.currentIndex || 0}`;

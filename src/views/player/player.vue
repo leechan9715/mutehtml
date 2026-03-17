@@ -9,15 +9,6 @@
         @touchstart.passive="onSheetAreaTouchStart"
     >
         <section class="container album-cover" ref="artistImgBox">
-            <!-- <div class="row down-handle">
-                <img
-                    src="@/assets/images/popupdown/slidedown.png"
-                    alt="slidedowns"
-                    :class="{ 'is-grabbing': isHandleDragging }"
-                    @mousedown.prevent="onHandleMouseDown"
-                    @touchstart.prevent="onHandleTouchStart"
-                />
-            </div> -->
             <div class="row player-img">
                 <div class="col-1">
                     <div
@@ -114,7 +105,7 @@
                 <button>
                     <span>가사</span>
                 </button>
-                <button>
+                <button @click="goToPlayList">
                     <img src="../../assets/images/player/list.png" alt="list-button" />
                 </button>
             </div>
@@ -126,6 +117,7 @@
 import pause from '@/assets/images/player/pause_blue.png';
 import play from '@/assets/images/player/play_blue.png';
 import { searchApi } from '@/api/_music_api';
+import { useMusicImageStore } from '@/store/music';
 
 const PLAYER_STATE_KEY = 'mute-player-state';
 const MY_PLAYLIST_KEY = 'my-playlist';
@@ -151,6 +143,7 @@ export default {
             songName: '곡 제목',
             singerName: '가수명',
             albumCover: null,
+            musicImageStore: useMusicImageStore(),
 
             totalDuration: 0,
             currentTime: 0,
@@ -264,24 +257,32 @@ export default {
     },
 
     methods: {
-        checkSongNameOverflow() {
-            const wrap = this.$refs.songNameWrap;
-            const text = this.$refs.songNameText;
+        goToPlayList() {
+            const audio = this.$refs.audio;
+            const handoffTime = audio?.currentTime ?? this.currentTime ?? 0;
+            const isCurrentlyPlaying = audio ? !audio.paused : this.isPlaying;
 
-            if (!wrap || !text) return;
+            this.currentTime = handoffTime;
+            this.isPlaying = isCurrentlyPlaying;
+            this.miniVisible = true;
+            this.keepPlayingOnMini = true;
 
-            const wrapWidth = Math.ceil(wrap.getBoundingClientRect().width);
-            const textWidth = Math.ceil(text.scrollWidth);
-            const overflow = textWidth - wrapWidth;
+            this.savePlayerState({ miniVisible: true, isPlaying: isCurrentlyPlaying });
 
-            if (overflow > 2) {
-                this.isSongNameOverflow = true;
-                this.songNameOverflowDistance = `${textWidth + 32}px`;
-            } else {
-                this.isSongNameOverflow = false;
-                this.songNameOverflowDistance = '0px';
+            if (isCurrentlyPlaying && audio) {
+                audio.pause();
             }
+
+            window.dispatchEvent(
+                new CustomEvent('mute-player-request-mini-resume', { detail: { currentTime: handoffTime } })
+            );
+
+            if (this.overlayMode) {
+                this.$emit('close');
+            }
+            this.$router.push('/main/playlist');
         },
+
         bindGlobalDragEvents() {
             if (this.globalDragEventsBound) return;
             window.addEventListener('mousemove', this.onWindowMouseMove);
@@ -309,13 +310,17 @@ export default {
 
         // ─── 초기화 ────────────────────────────────────────────────
 
+        upgradeArtwork600(url = '') {
+            return this.musicImageStore.upgradeArtwork(url, 600);
+        },
+
         async loadInitialTrack(term) {
             const song = await this.fetchFirstSong(term);
             if (!song) return;
 
             this.songName = song.trackName;
             this.singerName = song.artistName;
-            this.albumCover = song.artworkUrl100 || '';
+            this.albumCover = this.upgradeArtwork600(song.artworkUrl100);
 
             const artistTracks = await this.fetchArtistTracks(song.artistName);
             this.tracks = [
@@ -323,7 +328,7 @@ export default {
                     previewUrl: song.previewUrl,
                     artistName: song.artistName,
                     trackName: song.trackName,
-                    albumCover: song.artworkUrl100
+                    albumCover: this.upgradeArtwork600(song.artworkUrl100)
                 },
                 ...artistTracks
             ];
@@ -348,7 +353,7 @@ export default {
                 previewUrl: t.previewUrl,
                 artistName: t.artistName,
                 trackName: t.trackName,
-                albumCover: t.artworkUrl100
+                albumCover: this.upgradeArtwork600(t.artworkUrl100)
             }));
         },
 
@@ -449,7 +454,7 @@ export default {
             if (!track) return;
             this.songName = track.trackName;
             this.singerName = track.artistName;
-            this.albumCover = track.albumCover ?? this.albumCover;
+            this.albumCover = this.upgradeArtwork600(track.albumCover) || this.albumCover;
             this.currentTime = 0;
             this.totalDuration = 0;
             this.savePlayerState();
@@ -814,15 +819,27 @@ export default {
                 previewUrl: track.previewUrl || '',
                 trackName: track.trackName || this.songName || '',
                 artistName: track.artistName || this.singerName || '',
-                albumCover: track.albumCover || this.albumCover || '',
+                albumCover: this.upgradeArtwork600(track.albumCover || this.albumCover || ''),
                 playedAt: Date.now()
             };
 
             try {
                 const raw = localStorage.getItem(MY_PLAYLIST_KEY);
                 const playlist = raw ? JSON.parse(raw) : [];
-                const nextPlaylist = Array.isArray(playlist) ? [...playlist, playlistItem] : [playlistItem];
+                const safePlaylist = Array.isArray(playlist) ? playlist : [];
+                const isDuplicated = safePlaylist.some((item) => {
+                    const samePreview =
+                        item?.previewUrl && playlistItem.previewUrl && item.previewUrl === playlistItem.previewUrl;
+                    const sameMeta =
+                        (item?.trackName || '').trim().toLowerCase() === playlistItem.trackName.trim().toLowerCase() &&
+                        (item?.artistName || '').trim().toLowerCase() === playlistItem.artistName.trim().toLowerCase();
+                    return samePreview || sameMeta;
+                });
+                if (isDuplicated) return;
+
+                const nextPlaylist = [...safePlaylist, playlistItem];
                 localStorage.setItem(MY_PLAYLIST_KEY, JSON.stringify(nextPlaylist));
+                window.dispatchEvent(new CustomEvent('my-playlist-updated', { detail: nextPlaylist }));
             } catch (e) {
                 console.error('my-playlist 저장 실패:', e);
             }
@@ -863,11 +880,14 @@ export default {
                 const saved = JSON.parse(raw);
                 if (!saved?.tracks?.length) return;
 
-                this.tracks = saved.tracks;
+                this.tracks = saved.tracks.map((track) => ({
+                    ...track,
+                    albumCover: this.upgradeArtwork600(track?.albumCover || '')
+                }));
                 this.currentIndex = saved.currentIndex ?? 0;
                 this.songName = saved.songName ?? this.songName;
                 this.singerName = saved.singerName ?? this.singerName;
-                this.albumCover = saved.albumCover ?? this.albumCover;
+                this.albumCover = this.upgradeArtwork600(saved.albumCover) || this.albumCover;
                 this.currentTime = 0;
                 this.isPlaying = !!saved.isPlaying;
 

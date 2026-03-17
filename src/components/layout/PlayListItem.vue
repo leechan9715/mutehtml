@@ -1,10 +1,16 @@
 <template>
-    <a href="javascript:void(0)" class="col-2" v-for="(track, index) in tracks" :key="index">
-        <img :src="track.img" alt="album_cover1" width="80" />
+    <a
+        href="javascript:void(0)"
+        class="col-2"
+        v-for="(track, index) in normalizedTracks"
+        :key="`${track.trackName}-${track.artistName}-${index}`"
+        @click.prevent="$emit('select-track', index)"
+    >
+        <img :src="track.albumCover" alt="album_cover" width="80" />
         <div class="col-2 type">
             <div class="music-singer">
-                <p>{{ track.title }}</p>
-                <p>{{ track.singer }}</p>
+                <p>{{ track.trackName }}</p>
+                <p>{{ track.artistName }}</p>
             </div>
             <p>⁝</p>
         </div>
@@ -12,18 +18,25 @@
 </template>
 
 <script>
-import trackImg from '@/assets/images/playlist/1.png';
+import fallbackCover from '@/assets/images/playlist/1.png';
+
 export default {
     name: 'PlayListItem',
-    data() {
-        return {
-            trackImg,
-            tracks: Array.from({ length: 12 }, () => ({
-                img: trackImg,
-                title: '404(New Era)',
-                singer: 'KiiiKiii (키키) / 2:59'
-            }))
-        };
+    emits: ['select-track'],
+    props: {
+        tracks: {
+            type: Array,
+            default: () => []
+        }
+    },
+    computed: {
+        normalizedTracks() {
+            return (this.tracks || []).map((track) => ({
+                trackName: track?.trackName || track?.title || '제목 없음',
+                artistName: track?.artistName || track?.singer || '아티스트 정보 없음',
+                albumCover: track?.albumCover || track?.artworkUrl100 || track?.img || fallbackCover
+            }));
+        }
     }
 };
 </script>

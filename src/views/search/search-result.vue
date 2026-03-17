@@ -25,6 +25,7 @@
 import MainListItem from '@/components/layout/MainListItem.vue';
 import { searchApi } from '@/api/_music_api';
 import { useIsLoadingStore } from '@/store/api_loading';
+import { useMusicImageStore } from '@/store/music';
 
 export default {
     name: 'search-result',
@@ -34,10 +35,14 @@ export default {
             term: '',
             results: [],
             searchText: '',
-            store: useIsLoadingStore()
+            store: useIsLoadingStore(),
+            musicImageStore: useMusicImageStore()
         };
     },
     methods: {
+        upgradeArtwork600(url = '') {
+            return this.musicImageStore.upgradeArtwork(url, 600);
+        },
         async getSearchResults() {
             // 현재 주소의 query 값 중 term을 가져옴
             // 예: /main/search-result?term=아이유
@@ -51,7 +56,10 @@ export default {
                 entity: 'song',
                 limit: 12
             });
-            this.results = result?.data?.results;
+            this.results = (result?.data?.results || []).map((item) => ({
+                ...item,
+                artworkUrl100: this.upgradeArtwork600(item?.artworkUrl100 || '')
+            }));
         },
         // 검색 결과 페이지에서 다시 검색했을 때 실행되는 함수
         handleSearch() {
