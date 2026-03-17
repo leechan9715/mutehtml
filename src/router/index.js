@@ -47,7 +47,8 @@ const routes = [
             { path: 'playlist', component: Playlist, meta: { isProfile: false } },
             { path: 'player/:id', component: Player, meta: { isProfile: false } },
             { path: 'artist-info', component: ArtistInfo, meta: { isProfile: false } },
-            { path: 'search-result', component: SearchResult, meta: { isProfile: true } }
+            { path: 'search-result', component: SearchResult, meta: { isProfile: true } },
+            { path: '/video-detail/:id', component: VideoDetail, meta: { isProfile: false } }
         ]
     },
     // {
