@@ -42,8 +42,22 @@
         </section>
         <section class="container color-box">
             <div class="player-info">
-                <p class="song-name">{{ songName }}</p>
-                <p class="singer-name">{{ singerName }}</p>
+                <div class="song-name-wrap" :class="{ 'is-overflow': isSongNameOverflow }" ref="songNameWrap">
+                    <p v-if="!isSongNameOverflow" class="song-name">
+                        <span class="song-name-text" ref="songNameText">
+                            {{ songName }}
+                        </span>
+                    </p>
+
+                    <div v-else class="song-name-marquee" :style="{ '--marquee-distance': songNameOverflowDistance }">
+                        <div class="song-name-track">
+                            <span class="song-name-copy" ref="songNameText">{{ songName }}</span>
+                            <span class="song-name-gap" aria-hidden="true">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <span class="song-name-copy" aria-hidden="true">{{ songName }}</span>
+                        </div>
+                    </div>
+                    <p class="singer-name">{{ singerName }}</p>
+                </div>
             </div>
             <audio
                 ref="audio"
@@ -109,8 +123,8 @@
 </template>
 
 <script>
-import pause from '@/assets/images/player/pause.png';
-import play from '@/assets/images/player/play.png';
+import pause from '@/assets/images/player/pause_blue.png';
+import play from '@/assets/images/player/play_blue.png';
 import { searchApi } from '@/api/_music_api';
 
 const PLAYER_STATE_KEY = 'mute-player-state';
@@ -143,6 +157,9 @@ export default {
             isPlaying: false,
             isDragging: false,
             rafId: null,
+
+            isSongNameOverflow: false,
+            songNameOverflowDistance: '0px',
 
             isHandleDragging: false,
             handleStartY: 0,
@@ -184,16 +201,32 @@ export default {
             };
         }
     },
+    watch: {
+        songName() {
+            this.$nextTick(() => {
+                requestAnimationFrame(() => {
+                    this.checkSongNameOverflow();
+                });
+            });
+        }
+    },
 
     async mounted() {
         this.miniVisible = false;
         this.keepPlayingOnMini = false;
+
+        window.addEventListener('resize', this.checkSongNameOverflow);
 
         const initialOffset = window.innerHeight || document.documentElement.clientHeight || 0;
         this.sheetOffsetY = initialOffset;
         this.$nextTick(() => {
             requestAnimationFrame(() => {
                 this.sheetOffsetY = 0;
+                this.checkSongNameOverflow();
+
+                setTimeout(() => {
+                    this.checkSongNameOverflow();
+                }, 100);
             });
         });
 
@@ -209,6 +242,8 @@ export default {
     beforeUnmount() {
         const audio = this.$refs.audio;
         const shouldHandoffToMini = this.overlayMode && this.isPlaying && !this.keepPlayingOnMini;
+
+        window.removeEventListener('resize', this.checkSongNameOverflow);
 
         if (shouldHandoffToMini) {
             const handoffTime = audio?.currentTime ?? this.currentTime ?? 0;
@@ -229,6 +264,24 @@ export default {
     },
 
     methods: {
+        checkSongNameOverflow() {
+            const wrap = this.$refs.songNameWrap;
+            const text = this.$refs.songNameText;
+
+            if (!wrap || !text) return;
+
+            const wrapWidth = Math.ceil(wrap.getBoundingClientRect().width);
+            const textWidth = Math.ceil(text.scrollWidth);
+            const overflow = textWidth - wrapWidth;
+
+            if (overflow > 2) {
+                this.isSongNameOverflow = true;
+                this.songNameOverflowDistance = `${textWidth + 32}px`;
+            } else {
+                this.isSongNameOverflow = false;
+                this.songNameOverflowDistance = '0px';
+            }
+        },
         bindGlobalDragEvents() {
             if (this.globalDragEventsBound) return;
             window.addEventListener('mousemove', this.onWindowMouseMove);
