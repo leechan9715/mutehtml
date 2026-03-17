@@ -43,7 +43,6 @@
                 </div>
             </div>
         </div>
-
         <!-- 댓글 영역 -->
         <div class="comment-section">
             <div class="comment-scroll">

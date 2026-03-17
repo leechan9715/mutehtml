@@ -51,7 +51,7 @@ export default {
         },
 
         linkTo(id) {
-            this.$router.push(`/videos/${id}`);
+            this.$router.push(`/video-detail/${id}`);
         }
     },
     mounted() {
