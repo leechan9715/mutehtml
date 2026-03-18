@@ -340,7 +340,7 @@ onMounted(() => {
 .detail-page {
     max-width: 600px;
     margin: 0 auto;
-    height: 100dvh;
+    height: calc(100dvh - 83px);
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -463,19 +463,19 @@ onMounted(() => {
     flex-direction: column;
     overflow: hidden;
     background: var(--color-white);
-    padding: 16px 26px 0;
+    padding: 16px 26px 12px;
     position: relative;
 }
 
 .comment-scroll {
-    height: calc(100% - 150px); /* 입력창 높이만큼 제외 */
+    flex: 1;
     min-height: 0;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
     padding-right: 2px;
-    padding-bottom: 0;
+    padding-bottom: 12px;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
 }
@@ -501,6 +501,9 @@ onMounted(() => {
 }
 
 .comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
     padding: 4px 0 0;
 }
 
@@ -508,7 +511,6 @@ onMounted(() => {
     display: flex;
     align-items: flex-start;
     gap: 16px;
-    padding-bottom: 20px;
 }
 
 .profile-img-wrap {
@@ -581,17 +583,16 @@ onMounted(() => {
 }
 
 .comment-form {
-    position: fixed;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: 108px;
-    width: min(calc(100% - 52px), 480px);
-    z-index: 50;
-
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    z-index: 2;
     display: grid;
     grid-template-columns: 42px 1fr auto;
     align-items: center;
     gap: 12px;
+    bottom: 10px;
     min-height: 60px;
     padding: 10px 12px;
     border: 1px solid var(--color-accent-blue);
