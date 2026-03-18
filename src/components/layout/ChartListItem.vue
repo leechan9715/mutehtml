@@ -72,7 +72,7 @@ export default {
 .col-2 img {
     border-radius: 10px;
     border: 2px solid #ffffff;
-    box-shadow: 0px 2px 4px #58648d;
+    box-shadow: 0px 2px 4px var(--color-shadow);
 }
 
 .col-3 {

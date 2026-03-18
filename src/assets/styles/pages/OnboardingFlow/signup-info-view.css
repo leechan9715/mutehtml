@@ -144,16 +144,9 @@ main .gender {
     background-color: rgb(255, 255, 255);
 }
 
-main .gender:has(#female:checked) {
-    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(248, 220, 255, 1) 100%);
-    border: 1px solid var(--color-pink-2);
-}
+main .gender:has(#female:checked) {}
 
-main .gender:has(#male:checked) {
-    background: linear-gradient(180deg, rgba(200, 218, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
-    border: 1px solid var(--color-primary-7);
-
-}
+main .gender:has(#male:checked) {}
 
 img {
     width: 100px;
