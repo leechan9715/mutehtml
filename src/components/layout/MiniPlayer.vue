@@ -520,7 +520,8 @@ export default {
                 const playlist = raw ? JSON.parse(raw) : [];
                 const safePlaylist = Array.isArray(playlist) ? playlist : [];
                 const isDuplicated = safePlaylist.some((item) => {
-                    const samePreview = item?.previewUrl && playlistItem.previewUrl && item.previewUrl === playlistItem.previewUrl;
+                    const samePreview =
+                        item?.previewUrl && playlistItem.previewUrl && item.previewUrl === playlistItem.previewUrl;
                     const sameMeta =
                         (item?.trackName || '').trim().toLowerCase() === playlistItem.trackName.trim().toLowerCase() &&
                         (item?.artistName || '').trim().toLowerCase() === playlistItem.artistName.trim().toLowerCase();
@@ -672,8 +673,9 @@ export default {
     align-items: center;
     gap: 20px;
     padding: 8px 20px;
-    background: var(--gradient-key);
-    color: var(--color-white);
+    background: var(--gradient-light);
+    color: var(--color-black);
+    border: 1px solid var(--color-accent-blue);
     backdrop-filter: blur(8px);
     z-index: 2;
     cursor: grab;
@@ -704,7 +706,6 @@ export default {
     width: 100%;
     height: 100%;
     border-radius: 5px;
-    background: white;
 }
 
 .mini-meta {
@@ -720,13 +721,12 @@ export default {
 }
 
 .mini-title {
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 600;
 }
 
 .mini-artist {
-    font-size: 11px;
-    color: var(--color-white);
+    font-size: 14px;
     margin-top: 3px;
 }
 
