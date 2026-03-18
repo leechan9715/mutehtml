@@ -2,7 +2,7 @@
     <div id="wrap">
         <AppHeader :isProfile="isProfile" />
         <main :class="{ 'no-profile': !isProfile, 'player-page': isPlayerPage, 'scroll-lock': store.isLoading }">
-            <div v-show="!store.isLoading">
+            <div v-show="!store.isLoading" class="wrap">
                 <router-view />
             </div>
             <div v-if="store.isLoading" class="loading-wrap">
@@ -62,6 +62,9 @@ export default {
 </script>
 
 <style scoped>
+.wrap {
+    height: 100%;
+}
 #wrap {
     padding: 0;
 }

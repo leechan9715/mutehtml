@@ -3,7 +3,6 @@ import OnboardingLayout from '@/views/OnboardingFlow/OnboardingLayout.vue';
 import SplashView from '@/views/OnboardingFlow/SplashView.vue';
 import SignUp from '@/views/OnboardingFlow/SignUpView.vue';
 import WelcomeView from '@/views/OnboardingFlow/WelcomeView.vue';
-import MainLayout from '@/views/MainLayout.vue';
 import MainLayout2 from '@/views/MainLayout-2.vue';
 import MainView from '@/views/main/MainView.vue';
 import ArtistSelectView from '@/views/OnboardingFlow/ArtistSelectView.vue';
@@ -20,6 +19,7 @@ import Playlist from '@/views/playlist/playlist.vue';
 import Player from '@/views/player/player.vue';
 import ArtistInfo from '@/views/artistinfo/ArtistInfo.vue';
 import VideoDetail from '@/views/VideoDetail/VideoDetail.vue';
+import Ai from '@/views/ai/Ai.vue';
 
 const routes = [
     {
@@ -51,9 +51,10 @@ const routes = [
             { path: 'artist-info', component: ArtistInfo, meta: { isProfile: false } },
             { path: 'search-result', component: SearchResult, meta: { isProfile: true } },
             { path: '/video-detail/:id', component: VideoDetail, meta: { isProfile: false } },
-            { path: 'library', component: Library, meta: { isProfile: true } }
+            { path: 'library', component: Library, meta: { isProfile: true } },
+            { path: 'ai', component: Ai, meta: { isProfile: false } }
         ]
-    },
+    }
     // {
     //     path: '/main',
     //     component: MainLayout,
@@ -68,11 +69,6 @@ const routes = [
     //         { path: 'search-result', component: SearchResult }
     //     ]
     // },
-    {
-        path: '/videos/:id',
-        name: 'videoDetail',
-        component: VideoDetail
-    }
 ];
 
 const router = createRouter({

@@ -28,28 +28,30 @@
                 </router-link>
             </div>
             <!--  -->
-            <div class="logo_box">
-                <!-- 1행 -->
-                <div class="face">
-                    <div class="block"></div>
-                    <div></div>
-                    <div></div>
-                    <div></div>
-                    <div class="block"></div>
-                    <!-- 2행 -->
-                    <div class="block"></div>
-                    <div class="block eye"></div>
-                    <div></div>
-                    <div class="block eye"></div>
-                    <div class="block"></div>
-                    <!-- 3행 -->
-                    <div class="block"></div>
-                    <div></div>
-                    <div class="block mouth"></div>
-                    <div></div>
-                    <div class="block"></div>
+            <router-link to="/main/ai" class="logo-link">
+                <div class="logo_box">
+                    <!-- 1행 -->
+                    <div class="face">
+                        <div class="block"></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div class="block"></div>
+                        <!-- 2행 -->
+                        <div class="block"></div>
+                        <div class="block eye"></div>
+                        <div></div>
+                        <div class="block eye"></div>
+                        <div class="block"></div>
+                        <!-- 3행 -->
+                        <div class="block"></div>
+                        <div></div>
+                        <div class="block mouth"></div>
+                        <div></div>
+                        <div class="block"></div>
+                    </div>
                 </div>
-            </div>
+            </router-link>
             <div class="col-5">
                 <router-link to="/main/search" href="#">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -203,8 +205,7 @@ a:focus p {
 
 footer .logo_box {
     position: relative;
-    max-width: 70px;
-    width: 100%;
+    width: 70px;
     height: 70px;
     top: -30px;
     overflow: visible;
@@ -213,6 +214,10 @@ footer .logo_box {
         inset 0px -7px 10px var(--color-accent-blue),
         0px 3px 10px var(--color-shadow);
     border-radius: 50%;
+}
+footer .logo-link {
+    display: block;
+    flex: 0 0 70px;
 }
 
 footer .face {
