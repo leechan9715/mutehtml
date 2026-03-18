@@ -1,16 +1,10 @@
 <template>
     <section class="container">
-        <AppTopBar />
-
         <div class="row playlist-info">
-            <p class="p-1">다가올 여름, 뮤트의 추천 플레이리스트</p>
-            <p class="p-2">
-                올여름 차트를 점령할 숨은 명곡부터 청량감 넘치는 비트까지,<br />
-                뮤트와 함께 가장 힙한 여름을 즐겨보세요.
-            </p>
+            <p class="p-1">최근 들은 곡</p>
             <img src="../../assets/images//main/playlist/1.png" alt="" />
             <div class="info-type">
-                <PlaylistInfo text="제작자 - 홍길동" />
+                <PlaylistInfo text="제작자 - 작성자" />
                 <PlaylistInfo :text="playlistMetaText" />
             </div>
         </div>
@@ -57,9 +51,7 @@ export default {
         totalDurationMs() {
             return this.tracks.reduce((sum, track) => {
                 const duration =
-                    Number(track?.trackTimeMillis) ||
-                    Number(track?.durationMs) ||
-                    (track?.previewUrl ? 30000 : 0);
+                    Number(track?.trackTimeMillis) || Number(track?.durationMs) || (track?.previewUrl ? 30000 : 0);
                 return sum + (Number.isFinite(duration) ? duration : 0);
             }, 0);
         },

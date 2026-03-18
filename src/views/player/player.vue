@@ -257,6 +257,24 @@ export default {
     },
 
     methods: {
+        checkSongNameOverflow() {
+            const wrap = this.$refs.songNameWrap;
+            const text = this.$refs.songNameText;
+
+            if (!wrap || !text) {
+                this.isSongNameOverflow = false;
+                this.songNameOverflowDistance = '0px';
+                return;
+            }
+
+            const wrapWidth = wrap.clientWidth;
+            const textWidth = text.scrollWidth;
+
+            const isOverflow = textWidth > wrapWidth;
+
+            this.isSongNameOverflow = isOverflow;
+            this.songNameOverflowDistance = isOverflow ? `${textWidth + 32}px` : '0px';
+        },
         goToPlayList() {
             const audio = this.$refs.audio;
             const handoffTime = audio?.currentTime ?? this.currentTime ?? 0;

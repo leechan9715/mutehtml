@@ -90,12 +90,12 @@ export default {
 }
 .up {
     display: inline-block;
-    color: rgb(40, 176, 255);
+    color: rgb(255, 40, 40);
 }
 
 .down {
     display: inline-block;
-    color: rgb(255, 40, 40);
+    color: rgb(40, 176, 255);
 }
 
 .col-3 .music-singer p:first-child {

@@ -135,14 +135,11 @@
 }
 
 .artist-img img {
-    width: clamp(120px, 46vw, 370px);
-    height: auto;
+    width: clamp(180px, 58vw, 430px);
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 50%;
-    /* height: auto 대신 max-height로 넘침 방지 */
-    max-height: min(46vw, 370px);
-    height: auto;
+    max-height: min(58vw, 430px);
     display: block;
     cursor: default;
     margin: 0;
@@ -384,7 +381,8 @@
     }
 
     .artist-img img {
-        width: clamp(110px, 40vw, 340px);
+        width: clamp(190px, 58vw, 360px);
+        max-height: min(58vw, 360px);
     }
 }
 
@@ -398,7 +396,8 @@
     }
 
     .artist-img img {
-        width: clamp(100px, 34vw, 300px);
+        width: clamp(180px, 54vw, 340px);
+        max-height: min(54vw, 340px);
     }
 }
 
@@ -412,12 +411,20 @@
     }
 
     .artist-img img {
-        width: clamp(80px, 28vw, 260px);
+        width: clamp(150px, 44vw, 280px);
+        max-height: min(44vw, 280px);
     }
 
     .player-info {
         padding-top: 4px;
         padding-bottom: 2px;
+    }
+}
+
+@media (max-width: 480px) {
+    .artist-img img {
+        width: min(72vw, 320px);
+        max-height: min(72vw, 320px);
     }
 }
 

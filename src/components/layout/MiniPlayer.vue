@@ -688,9 +688,8 @@ export default {
     align-items: center;
     gap: 20px;
     padding: 8px 20px;
-    background: var(--gradient-light);
+    background: white;
     color: var(--color-black);
-    border: 1px solid var(--color-accent-blue);
     backdrop-filter: blur(8px);
     overflow: hidden;
     z-index: 2;
@@ -710,7 +709,7 @@ export default {
     left: 0;
     width: 100%;
     height: 3px;
-    background: #000;
+    background: var(--color-black);
 }
 
 .mini-timeline-fill {
@@ -718,7 +717,7 @@ export default {
     width: 0;
     background: linear-gradient(
         90deg,
-        rgba(111, 131, 247, 1) 64.90384340286255%,
+        rgba(111, 159, 247, 1) 64.90384340286255%,
         rgba(255, 255, 255, 0) 64.91384506225586%
     );
     transition: width 120ms linear;
