@@ -8,6 +8,9 @@
         @mousedown="onMiniMouseDown"
         @touchstart.passive="onMiniTouchStart"
     >
+        <div class="mini-timeline" aria-hidden="true">
+            <div class="mini-timeline-fill" :style="{ width: miniProgressPercent + '%' }"></div>
+        </div>
         <div class="mini-cover">
             <img v-if="hasTrack" :src="state.albumCover" alt="mini-cover" />
             <div v-else class="mini-cover-placeholder"></div>
@@ -83,6 +86,7 @@ export default {
             resumeRetryCount: 0,
             waitingUserGestureForPlay: false,
             hasAutoplayErrorLogged: false,
+            audioDuration: 0,
             isMiniDragging: false,
             miniStartX: 0,
             miniStartY: 0,
@@ -108,6 +112,12 @@ export default {
         },
         hasTrack() {
             return !!this.currentTrack?.previewUrl;
+        },
+        miniProgressPercent() {
+            if (!this.hasTrack) return 0;
+            if (!Number.isFinite(this.audioDuration) || this.audioDuration <= 0) return 0;
+            const ratio = (this.state.currentTime || 0) / this.audioDuration;
+            return Math.min(100, Math.max(0, ratio * 100));
         },
         miniDragStyle() {
             const dragX = Math.min(0, this.miniDeltaX);
@@ -304,12 +314,16 @@ export default {
         onAudioLoadedMetadata() {
             const audio = this.$refs.audio;
             if (!audio) return;
+            this.audioDuration = Number.isFinite(audio.duration) ? audio.duration : 0;
         },
 
         onAudioTimeUpdate() {
             const audio = this.$refs.audio;
             if (!audio) return;
             this.state.currentTime = audio.currentTime || 0;
+            if (Number.isFinite(audio.duration) && audio.duration > 0) {
+                this.audioDuration = audio.duration;
+            }
             this.persistState(false);
         },
 
@@ -394,6 +408,7 @@ export default {
             const audio = this.$refs.audio;
             if (!audio || !this.currentTrack?.previewUrl) return;
             if (audio.src !== this.currentTrack.previewUrl) {
+                this.audioDuration = 0;
                 audio.src = this.currentTrack.previewUrl;
                 audio.load();
             }
@@ -677,6 +692,7 @@ export default {
     color: var(--color-black);
     border: 1px solid var(--color-accent-blue);
     backdrop-filter: blur(8px);
+    overflow: hidden;
     z-index: 2;
     cursor: grab;
     touch-action: none;
@@ -686,6 +702,26 @@ export default {
 
 .mini-player.is-dragging {
     cursor: grabbing;
+}
+
+.mini-timeline {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #000;
+}
+
+.mini-timeline-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(
+        90deg,
+        rgba(111, 131, 247, 1) 64.90384340286255%,
+        rgba(255, 255, 255, 0) 64.91384506225586%
+    );
+    transition: width 120ms linear;
 }
 
 .mini-cover {
