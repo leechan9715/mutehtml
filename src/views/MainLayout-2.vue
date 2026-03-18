@@ -74,7 +74,6 @@ export default {
 }
 #wrap main.no-profile {
     position: relative;
-    top: 30px;
     height: calc(100vh - var(--main-no-profile-offset, 83px));
 }
 #wrap main.no-profile.player-page {

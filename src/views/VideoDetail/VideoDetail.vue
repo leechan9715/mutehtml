@@ -45,12 +45,12 @@
         </div>
         <!-- 댓글 영역 -->
         <div class="comment-section">
-            <div class="comment-scroll">
-                <h3 class="comment-title">
-                    <span class="comment-label">댓글</span>
-                    <span class="comment-count">{{ comments.length }}</span>
-                </h3>
+            <h3 class="comment-title">
+                <span class="comment-label">댓글</span>
+                <span class="comment-count">{{ comments.length }}</span>
+            </h3>
 
+            <div class="comment-scroll">
                 <div v-if="comments.length > 0" class="comment-list">
                     <div v-for="item in comments" :key="item.id" class="comment-item">
                         <div class="profile-img-wrap">
@@ -340,14 +340,15 @@ onMounted(() => {
 .detail-page {
     max-width: 600px;
     margin: 0 auto;
-    height: 100vh;
+    height: calc(100dvh - 83px);
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position: relative;
 }
 
 .top-fixed {
-    flex-shrink: 0;
+    flex: 0 0 auto;
 }
 
 .video {
@@ -455,37 +456,28 @@ onMounted(() => {
     transform: translate(-50%, -50%) scale(0.4);
 }
 
-.like-btn.popping .burst-1 {
-    animation: burst1 0.5s ease-out;
-}
-
-.like-btn.popping .burst-2 {
-    animation: burst2 0.5s ease-out;
-}
-
-.like-btn.popping .burst-3 {
-    animation: burst3 0.5s ease-out;
-}
-
-.like-btn.popping .burst-4 {
-    animation: burst4 0.5s ease-out;
-}
-
 .comment-section {
     flex: 1;
     min-height: 0;
     display: flex;
     flex-direction: column;
-    padding: 16px 26px calc(16px + 80px);
+    overflow: hidden;
     background: var(--color-white);
+    padding: 16px 26px 12px;
+    position: relative;
 }
 
 .comment-scroll {
     flex: 1;
     min-height: 0;
     overflow-y: auto;
+    overflow-x: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    padding-right: 2px;
+    padding-bottom: 12px;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
 }
 
 .comment-scroll::-webkit-scrollbar {
@@ -493,10 +485,11 @@ onMounted(() => {
 }
 
 .comment-title {
+    flex-shrink: 0;
     display: flex;
     align-items: baseline;
     gap: 4px;
-    padding: 20px 0 16px;
+    padding: 8px 0 12px;
     font-size: var(--font-20);
     font-weight: var(--fw-700);
     color: var(--color-black);
@@ -508,14 +501,16 @@ onMounted(() => {
 }
 
 .comment-list {
-    padding: 12px 12px 5px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 4px 0 0;
 }
 
 .comment-item {
     display: flex;
     align-items: flex-start;
     gap: 16px;
-    padding-bottom: 20px;
 }
 
 .profile-img-wrap {
@@ -583,23 +578,27 @@ onMounted(() => {
 }
 
 .empty-comment {
-    flex: 1;
     color: var(--color-gray);
     font-size: var(--font-14);
 }
 
 .comment-form {
-    flex-shrink: 0;
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    z-index: 2;
     display: grid;
     grid-template-columns: 42px 1fr auto;
     align-items: center;
-    gap: 20px;
-    margin-top: 10px;
-    margin-bottom: 8px;
+    gap: 12px;
+    bottom: 10px;
+    min-height: 60px;
     padding: 10px 12px;
     border: 1px solid var(--color-accent-blue);
     border-radius: 30px;
     background: var(--color-white);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.04);
 }
 
 .input-profile-btn {
@@ -616,21 +615,22 @@ onMounted(() => {
     width: 40px;
     height: 40px;
     aspect-ratio: 1 / 1;
-    margin-left: 10px;
     border-radius: 50%;
     object-fit: cover;
     display: block;
     flex-shrink: 0;
+    margin-left: 0;
 }
 
 .comment-input {
     width: 100%;
+    min-width: 0;
     border: none;
     outline: none;
     background: transparent;
     font-size: var(--font-16);
     color: var(--color-black);
-    text-indent: 18px;
+    text-indent: 0;
 }
 
 .comment-input::placeholder {
@@ -656,6 +656,22 @@ onMounted(() => {
 }
 
 /* ----------------좋아요 버튼 클릭 애니메이션---------------- */
+
+.like-btn.popping .burst-1 {
+    animation: burst1 0.5s ease-out;
+}
+
+.like-btn.popping .burst-2 {
+    animation: burst2 0.5s ease-out;
+}
+
+.like-btn.popping .burst-3 {
+    animation: burst3 0.5s ease-out;
+}
+
+.like-btn.popping .burst-4 {
+    animation: burst4 0.5s ease-out;
+}
 
 @keyframes likePop {
     0% {
