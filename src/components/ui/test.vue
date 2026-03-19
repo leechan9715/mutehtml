@@ -1,6 +1,6 @@
 <template>
     <div style="padding: 16px">
-        <MainContainer title="최근 들은 곡" @click="goNext">
+        <MainContainer title="내 취향에서 찾은 음악" @click="goNext">
             <Swiper class="song-swiper" :slides-per-view="3.2" :space-between="16">
                 <SwiperSlide v-for="(song, i) in this.songs" :key="i">
                     <SongCard
@@ -40,7 +40,7 @@ export default {
             return this.musicImageStore.upgradeArtwork(url, 600);
         },
         goNext() {
-            console.log('헤더 클릭!');
+            console.log('이동');
         },
         async getArtistToSearch() {
             const storedArtists = localStorage.getItem('selectedArtists');

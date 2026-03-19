@@ -1,6 +1,6 @@
 <template>
     <div style="padding: 16px">
-        <MainContainer title="오늘의 장르 추천 : 힙합" @click="goNext">
+        <MainContainer title="오늘의 장르 추천 : 힙합" @click="goNext" :showArrow="false">
             <Swiper
                 class="genre-swiper"
                 effect="coverflow"
