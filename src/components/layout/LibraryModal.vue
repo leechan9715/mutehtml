@@ -67,8 +67,7 @@
 
 <script>
 import coverImg from '@/assets/images/chart/1.png';
-
-const MY_PLAYLIST_KEY = 'my-playlist';
+import { getLibraryItems, saveLibraryItems } from '@/utils/libraryStorage';
 
 export default {
     name: 'BottomSheetMenu',
@@ -109,51 +108,25 @@ export default {
         this.removeDragListeners();
     },
     methods: {
-        addTrackToMyPlaylist() {
-            const trackName = (this.track?.title || '').trim();
-            const artistName = (this.track?.artist || '').trim();
-            const previewUrl = (this.track?.previewUrl || '').trim();
-            const albumCover = this.track?.img || '';
-            const playedAt = Number(this.track?.playedAt) || Date.now();
-
-            if (!trackName || !artistName || !previewUrl) {
-                alert('이 곡은 플레이리스트에 담을 수 없습니다.');
+        deleteLibraryItem() {
+            const targetId = this.track?.id;
+            if (targetId === undefined || targetId === null) {
+                alert('삭제할 라이브러리 정보를 찾을 수 없습니다.');
                 return;
             }
 
-            const newItem = {
-                albumCover,
-                artistName,
-                playedAt,
-                previewUrl,
-                trackName
-            };
+            const confirmed = window.confirm('이 라이브러리를 삭제할까요?');
+            if (!confirmed) return;
 
             try {
-                const raw = localStorage.getItem(MY_PLAYLIST_KEY);
-                const playlist = raw ? JSON.parse(raw) : [];
-                const safePlaylist = Array.isArray(playlist) ? playlist : [];
+                const items = getLibraryItems();
+                const safeItems = Array.isArray(items) ? items : [];
+                const nextItems = safeItems.filter((item) => String(item?.id) !== String(targetId));
 
-                const isDuplicated = safePlaylist.some((item) => {
-                    const samePreview =
-                        item?.previewUrl && newItem.previewUrl && item.previewUrl === newItem.previewUrl;
-                    const sameMeta =
-                        (item?.trackName || '').trim().toLowerCase() === newItem.trackName.trim().toLowerCase() &&
-                        (item?.artistName || '').trim().toLowerCase() === newItem.artistName.trim().toLowerCase();
-                    return samePreview || sameMeta;
-                });
-
-                if (isDuplicated) {
-                    alert('이미 플레이리스트에 담긴 곡입니다.');
-                    return;
-                }
-
-                const nextPlaylist = [...safePlaylist, newItem];
-                localStorage.setItem(MY_PLAYLIST_KEY, JSON.stringify(nextPlaylist));
-                window.dispatchEvent(new CustomEvent('my-playlist-updated', { detail: nextPlaylist }));
-                alert('플레이리스트에 담았습니다.');
+                saveLibraryItems(nextItems);
+                window.dispatchEvent(new CustomEvent('library-items-updated', { detail: nextItems }));
             } catch (error) {
-                console.error('my-playlist 저장 실패:', error);
+                console.error('library 삭제 실패:', error);
             }
         },
         close() {
@@ -226,7 +199,7 @@ export default {
         },
         onAction(type) {
             if (type === 'download') {
-                this.addTrackToMyPlaylist();
+                this.deleteLibraryItem();
             }
             this.$emit('action', type);
             // 보통 메뉴 누르면 닫힘
