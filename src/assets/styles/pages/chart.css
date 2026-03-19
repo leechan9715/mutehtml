@@ -90,7 +90,7 @@
     width: 70%;
     max-width: 500px;
     aspect-ratio: 1/1;
-    background: var(--color-accent-blue);
+    background: var(--gradient-key);
     border-radius: 50%;
     box-shadow: 0px 4px 10px var(--color-gray);
 }
@@ -121,7 +121,7 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: var(--color-key);
+    color: var(--color-white);
     font-weight: var(--fw-700);
     font-style: italic;
 }

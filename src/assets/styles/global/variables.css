@@ -14,8 +14,8 @@
 
     /* 그라데이션 */
     --gradient-light: linear-gradient(0deg, #dfeaff 0%, #ffffff 100%);
-    --gradient-deep: linear-gradient(180deg, #0d2656 0%, #0d2656 100%);
-    --gradient-key: linear-gradient(180deg, #6f9ff7 0%, #6f9ff7 100%);
+    --gradient-deep: linear-gradient(180deg, #2B4C9E 0%, #0d2656 100%);
+    --gradient-key: linear-gradient(180deg, #9AC6FF 0%, #6f9ff7 100%);
     --gradient-border: linear-gradient(180deg, #dae5ff 0%, #bbd1ff 100%);
 
     /* 폰트사이즈 */

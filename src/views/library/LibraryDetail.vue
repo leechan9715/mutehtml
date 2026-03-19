@@ -23,7 +23,6 @@
             </div>
 
             <div class="playlist-summary">
-                <p class="playlist-type">플레이리스트</p>
                 <h2 class="playlist-title">{{ playlist.title }}</h2>
                 <p class="playlist-meta">제작자 · {{ playlist.owner }}</p>
                 <p class="playlist-meta">{{ playlist.tracks?.length || 0 }}곡 · {{ totalDurationText }}</p>
@@ -31,8 +30,23 @@
         </div>
 
         <div class="action-row">
-            <button type="button" class="action-btn" @click="playShuffleTracks">셔플듣기</button>
-            <button type="button" class="action-btn" @click="playAllTracks">전체듣기</button>
+            <button
+                type="button"
+                class="action-btn"
+                :class="{ active: activeAction === 'shuffle' }"
+                @click="handleAction('shuffle')"
+            >
+                셔플듣기
+            </button>
+
+            <button
+                type="button"
+                class="action-btn"
+                :class="{ active: activeAction === 'all' }"
+                @click="handleAction('all')"
+            >
+                전체듣기
+            </button>
         </div>
 
         <div class="add-row">
@@ -85,6 +99,7 @@ export default {
     data() {
         return {
             playlist: null,
+            activeAction: '',
             fallbackImage: require('@/assets/images/player/player-img1.png'),
             musicImageStore: useMusicImageStore()
         };
@@ -126,6 +141,15 @@ export default {
         }
     },
     methods: {
+        handleAction(type) {
+            this.activeAction = type;
+
+            if (type === 'shuffle') {
+                this.playShuffleTracks();
+            } else {
+                this.playAllTracks();
+            }
+        },
         upgradeArtwork(url = '', size = 600) {
             return this.musicImageStore.upgradeArtwork(url, size);
         },
@@ -228,8 +252,8 @@ export default {
                 const duplicated = (this.playlist.tracks || []).some(
                     (track) =>
                         String(track.id) === String(newTrack.id) ||
-                        (track.title || '').trim().toLowerCase() === newTrack.title.trim().toLowerCase() &&
-                            (track.artistName || '').trim().toLowerCase() === newTrack.artistName.trim().toLowerCase()
+                        ((track.title || '').trim().toLowerCase() === newTrack.title.trim().toLowerCase() &&
+                            (track.artistName || '').trim().toLowerCase() === newTrack.artistName.trim().toLowerCase())
                 );
                 if (duplicated) {
                     alert('이미 추가된 곡입니다.');
@@ -343,7 +367,8 @@ export default {
 
 <style scoped>
 .playlist-detail-page {
-    padding: 16px;
+    padding: 30px 40px;
+    color: var(--color-black);
 }
 
 .top-area {
@@ -353,11 +378,9 @@ export default {
 }
 
 .top-cover-wrap {
-    width: 100%;
+    width: 90%;
     max-width: 320px;
     aspect-ratio: 1 / 1;
-    overflow: hidden;
-    background: #d9d9d9;
     margin-bottom: 20px;
 }
 
@@ -373,7 +396,10 @@ export default {
 }
 
 .empty-cover {
-    background: #d9d9d9;
+    background: var(--color-white);
+    border-radius: 10px;
+    border: 1px solid var(--color-accent-blue);
+    box-shadow: 0px 2px 4px var(--color-shadow);
 }
 
 .collage-cover {
@@ -402,8 +428,6 @@ export default {
 .collage-cell {
     width: 100%;
     height: 100%;
-    overflow: hidden;
-    background: #d9d9d9;
 }
 
 .collage-cell img {
@@ -420,24 +444,37 @@ export default {
 .playlist-type,
 .playlist-meta {
     margin: 0 0 6px;
+    font-size: 16px;
+    color: var(--color-gray);
+    font-weight: 600;
 }
 
 .playlist-title {
+    font-weight: 600;
+    font-size: 20px;
     margin: 0 0 8px;
 }
 
 .action-row {
     display: flex;
     gap: 12px;
-    margin: 24px 0 12px;
+    margin: 20px 0;
 }
 
 .action-btn {
     flex: 1;
-    height: 44px;
-    border: 1px solid #d7dbe8;
+    padding: 7px 20px;
+    border: 1px solid var(--color-accent-blue);
+    box-shadow: 0px 2px 4px var(--color-shadow);
+    border-radius: 999px;
     background: #fff;
-    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+/* 클릭된 상태 */
+.action-btn.active {
+    background: var(--gradient-key);
+    color: #fff;
 }
 
 .add-row {
@@ -447,9 +484,8 @@ export default {
 .add-music-btn {
     width: 100%;
     height: 44px;
-    border: 1px dashed #b9c4e3;
+    border: 1px dashed var(--color-accent-blue);
     background: #fff;
-    color: #4d6bb3;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
@@ -463,7 +499,6 @@ export default {
     margin: 0 0 16px;
     font-size: 18px;
     font-weight: 700;
-    color: #111;
 }
 
 .track-list {
@@ -483,7 +518,6 @@ export default {
     height: 56px;
     object-fit: cover;
     border-radius: 6px;
-    background: #d9d9d9;
 }
 
 .track-info {
@@ -495,13 +529,11 @@ export default {
     margin: 0 0 4px;
     font-size: 14px;
     font-weight: 600;
-    color: #111;
 }
 
 .track-artist {
     margin: 0;
     font-size: 12px;
-    color: #666;
 }
 
 .track-more-btn {
@@ -513,7 +545,6 @@ export default {
 
 .empty-track-box {
     padding: 20px 0;
-    color: #888;
     text-align: center;
 }
 </style>
