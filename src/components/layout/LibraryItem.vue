@@ -56,7 +56,7 @@ export default {
     data() {
         return {
             playlistFallbackImage: require('@/assets/images/player/player-img1.png'),
-            artistFallbackImage: require('@/assets/images/artist-select/1.png')
+            artistFallbackImage: require('@/assets/images/artist-select/default.png')
         };
     },
     computed: {
@@ -165,8 +165,8 @@ export default {
 }
 
 .title {
-    margin: 0 0 4px;
-    font-size: 14px;
+    margin: 0 0 5px;
+    font-size: 16px;
     font-weight: 600;
     color: #1c274c;
     white-space: nowrap;
@@ -176,17 +176,13 @@ export default {
 
 .sub {
     margin: 0;
-    font-size: 12px;
+    font-size: 14px;
     color: #666;
 }
 
 .more-btn {
-    width: 32px;
-    height: 32px;
-    border: 0;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: var(--font-24);
+    cursor: pointer;
+    padding: 0 0 0 10px;
 }
 </style>

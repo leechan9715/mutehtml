@@ -45,7 +45,7 @@ const routes = [
             { path: 'mypage', component: MyPageView, meta: { isProfile: false } },
             { path: 'ticket-select', component: TicketSelect, meta: { isProfile: false } },
             { path: 'library', component: Library, meta: { isProfile: true } },
-            { path: 'library/:id', component: PlaylistDetailView, meta: { isProfile: false } },
+            { path: 'library/:id', component: PlaylistDetailView, meta: { isProfile: true } },
             { path: 'playlist', component: Playlist, meta: { isProfile: false } },
             { path: 'player/:id', component: Player, meta: { isProfile: false } },
             { path: 'artist-info', component: ArtistInfo, meta: { isProfile: false } },
