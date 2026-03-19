@@ -63,6 +63,7 @@
 </template>
 
 <script>
+import BaseButton from '@/components/ui/BaseButton.vue';
 import ArtistSelectBtn from '@/components/ui/ArtistSelectBtn.vue';
 import img1 from '@/assets/images/artist-select/1.png';
 import img2 from '@/assets/images/artist-select/2.png';
