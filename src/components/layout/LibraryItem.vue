@@ -40,9 +40,7 @@
             </p>
         </div>
 
-        <button class="more-btn" type="button" @click.stop>
-            <span class="material-symbols-outlined">more_vert</span>
-        </button>
+        <p class="more-btn" @click.stop="openModal">⁝</p>
     </article>
 </template>
 
@@ -113,19 +111,19 @@ export default {
 .library-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 20px;
     width: 100%;
-    padding: 8px 0;
     cursor: pointer;
 }
 
 .cover-wrap {
-    width: 56px;
-    height: 56px;
+    width: 80px;
     flex-shrink: 0;
     overflow: hidden;
-    background: #d9d9d9;
-    border-radius: 8px;
+    border: 1px solid var(--color-accent-blue);
+    box-shadow: 0px 2px 4px var(--color-shadow);
+    background: var(--color-white);
+    border-radius: 5px;
 }
 
 .cover-wrap.artist {
