@@ -67,6 +67,9 @@
 
 <script>
 import coverImg from '@/assets/images/chart/1.png';
+
+const MY_PLAYLIST_KEY = 'my-playlist';
+
 export default {
     name: 'BottomSheetMenu',
     props: {
@@ -106,6 +109,52 @@ export default {
         this.removeDragListeners();
     },
     methods: {
+        addTrackToMyPlaylist() {
+            const trackName = (this.track?.title || '').trim();
+            const artistName = (this.track?.artist || '').trim();
+            const previewUrl = (this.track?.previewUrl || '').trim();
+            const albumCover = this.track?.img || '';
+            const playedAt = Number(this.track?.playedAt) || Date.now();
+
+            if (!trackName || !artistName || !previewUrl) {
+                alert('이 곡은 플레이리스트에 담을 수 없습니다.');
+                return;
+            }
+
+            const newItem = {
+                albumCover,
+                artistName,
+                playedAt,
+                previewUrl,
+                trackName
+            };
+
+            try {
+                const raw = localStorage.getItem(MY_PLAYLIST_KEY);
+                const playlist = raw ? JSON.parse(raw) : [];
+                const safePlaylist = Array.isArray(playlist) ? playlist : [];
+
+                const isDuplicated = safePlaylist.some((item) => {
+                    const samePreview = item?.previewUrl && newItem.previewUrl && item.previewUrl === newItem.previewUrl;
+                    const sameMeta =
+                        (item?.trackName || '').trim().toLowerCase() === newItem.trackName.trim().toLowerCase() &&
+                        (item?.artistName || '').trim().toLowerCase() === newItem.artistName.trim().toLowerCase();
+                    return samePreview || sameMeta;
+                });
+
+                if (isDuplicated) {
+                    alert('이미 플레이리스트에 담긴 곡입니다.');
+                    return;
+                }
+
+                const nextPlaylist = [...safePlaylist, newItem];
+                localStorage.setItem(MY_PLAYLIST_KEY, JSON.stringify(nextPlaylist));
+                window.dispatchEvent(new CustomEvent('my-playlist-updated', { detail: nextPlaylist }));
+                alert('플레이리스트에 담았습니다.');
+            } catch (error) {
+                console.error('my-playlist 저장 실패:', error);
+            }
+        },
         close() {
             this.resetDrag();
             this.$emit('update:modelValue', false);
@@ -175,6 +224,9 @@ export default {
             this.removeDragListeners();
         },
         onAction(type) {
+            if (type === 'download') {
+                this.addTrackToMyPlaylist();
+            }
             this.$emit('action', type);
             // 보통 메뉴 누르면 닫힘
             this.close();

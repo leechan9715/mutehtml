@@ -29,6 +29,8 @@
                     :img="list.artworkUrl100"
                     :title="list.name"
                     :singer="list.artistName"
+                    :preview-url="list.previewUrl"
+                    :played-at="list.playedAt"
                 />
             </div>
 
@@ -41,6 +43,8 @@
                     :img="list.artworkUrl100"
                     :title="list.name"
                     :singer="list.artistName"
+                    :preview-url="list.previewUrl"
+                    :played-at="list.playedAt"
                 />
             </div>
 
@@ -95,7 +99,7 @@ export default {
         async buildChartItemsFromLastfm(topTracks = [], country = 'KR') {
             const selectedTracks = topTracks.slice(0, 4);
             return Promise.all(
-                selectedTracks.map(async (track) => {
+                selectedTracks.map(async (track, index) => {
                     const title = track?.name || '';
                     const singer = this.getLastfmArtistName(track);
                     try {
@@ -110,14 +114,18 @@ export default {
                         return {
                             name: title,
                             artistName: singer,
-                            artworkUrl100: this.upgradeArtwork600(hit?.artworkUrl100 || '')
+                            artworkUrl100: this.upgradeArtwork600(hit?.artworkUrl100 || ''),
+                            previewUrl: hit?.previewUrl || '',
+                            playedAt: Date.now() + index
                         };
                     } catch (itunesError) {
                         console.error('itunes enrich error:', itunesError);
                         return {
                             name: title,
                             artistName: singer,
-                            artworkUrl100: ''
+                            artworkUrl100: '',
+                            previewUrl: '',
+                            playedAt: Date.now() + index
                         };
                     }
                 })

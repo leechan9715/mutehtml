@@ -40,6 +40,8 @@
                             :title="song.trackName || song.title"
                             :singer="song.artistName || song.artist"
                             :img="song.albumCover || song.artworkUrl100"
+                            :preview-url="song.previewUrl"
+                            :played-at="song.playedAt"
                         />
                     </div>
                 </div>
@@ -92,7 +94,7 @@ export default {
     },
     computed: {
         visibleSongs() {
-            return this.songs.slice(0, 4);
+            return this.songs.slice(0, 10);
         }
     },
     methods: {
@@ -267,6 +269,7 @@ export default {
                 return;
             }
             this.showEmotionSuggestions = false;
+            this.songs = [];
             this.aiLoading = true;
             try {
                 console.log('[AI] request payload:', { emotion: trimmedEmotion });
