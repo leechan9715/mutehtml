@@ -6,18 +6,22 @@
                 <h2>오늘은 어떤 음악을 원하시나요?</h2>
             </div>
             <div class="col-1 ai-hero-visual">
-                <Logo />
-                <img src="@/assets/images/ai/shadow.png" alt="" />
+                <div class="ai-logo-float">
+                    <Logo />
+                </div>
+                <img class="ai-logo-shadow" src="@/assets/images/ai/shadow.png" alt="" />
             </div>
         </div>
         <form class="row g-24 ai-form" @submit.prevent="submitEmotion">
             <div class="row g-16 ai-suggest">
-                <div class="col-1">
-                    <p>이런 음악은 어떠세요 ?</p>
-                </div>
-                <div class="col-1" v-for="(item, index) in emotion" :key="index">
-                    <button type="button" @click="selectEmotion(item)">{{ item }}</button>
-                </div>
+                <template v-if="showEmotionSuggestions">
+                    <div class="col-1">
+                        <p>이런 음악은 어떠세요 ?</p>
+                    </div>
+                    <div class="col-1" v-for="(item, index) in emotion" :key="index">
+                        <button type="button" @click="selectEmotion(item)">{{ item }}</button>
+                    </div>
+                </template>
                 <div class="col-1 ai-inline-loading" v-if="aiLoading">
                     <DotLottieVue class="ai-loading-lottie" autoplay loop :data="loadingDotsData" />
                 </div>
@@ -43,8 +47,8 @@
             <div class="row ai-input">
                 <div class="col-1">
                     <input type="text" placeholder="원하는 장르를 검색하세요" v-model="emotionInput" />
+                    <button type="submit" :disabled="aiLoading">전송</button>
                 </div>
-                <button type="submit">전송</button>
             </div>
         </form>
     </section>
@@ -76,6 +80,7 @@ export default {
             emotionInput: '',
             songs: [],
             aiLoading: false,
+            showEmotionSuggestions: true,
             loadingDotsData: JSON.stringify(loadingDots),
             musicImageStore: useMusicImageStore()
         };
@@ -261,6 +266,7 @@ export default {
             if (!trimmedEmotion) {
                 return;
             }
+            this.showEmotionSuggestions = false;
             this.aiLoading = true;
             try {
                 console.log('[AI] request payload:', { emotion: trimmedEmotion });
@@ -290,3 +296,43 @@ export default {
 </script>
 
 <style scoped src="@/assets/styles/pages/ai.css"></style>
+<style scoped>
+.ai-logo-float {
+    display: inline-block;
+    animation: ai-logo-float 3.8s ease-in-out infinite;
+    will-change: transform;
+}
+
+.ai-logo-shadow {
+    transform-origin: center center;
+    animation: ai-logo-shadow-breathe 3.8s ease-in-out infinite;
+    will-change: transform;
+}
+
+@keyframes ai-logo-float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+@keyframes ai-logo-shadow-breathe {
+    0%,
+    100% {
+        transform: scale(0.85);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ai-logo-float,
+    .ai-logo-shadow {
+        animation: none;
+    }
+}
+</style>
