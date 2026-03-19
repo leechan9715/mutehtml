@@ -811,6 +811,26 @@ export default {
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         },
 
+        checkSongNameOverflow() {
+            const wrap = this.$refs.songNameWrap;
+            const textRef = this.$refs.songNameText;
+            const text = Array.isArray(textRef) ? textRef[0] : textRef;
+
+            if (!wrap || !text) {
+                this.isSongNameOverflow = false;
+                this.songNameOverflowDistance = '0px';
+                return;
+            }
+
+            const wrapWidth = wrap.clientWidth || 0;
+            const textWidth = text.scrollWidth || 0;
+            const gapWidth = 32;
+            const isOverflow = textWidth - wrapWidth > 1;
+
+            this.isSongNameOverflow = isOverflow;
+            this.songNameOverflowDistance = isOverflow ? `${textWidth + gapWidth}px` : '0px';
+        },
+
         appendCurrentTrackToMyPlaylist() {
             const track = this.currentTrack;
             if (!track) return;
