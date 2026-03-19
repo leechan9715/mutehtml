@@ -33,8 +33,8 @@
 
                         <li>
                             <button class="menu-item" type="button" @click="onAction('download')">
-                                <img class="icon" src="@/assets/images/icon/download.png" alt="download" />
-                                <span class="label">다운로드</span>
+                                <img class="icon" src="@/assets/images/icon/playlist.png" alt="playlist" />
+                                <span class="label">기존 플레이리스트에 담기</span>
                             </button>
                         </li>
 
@@ -246,13 +246,13 @@ export default {
     margin: 0;
     font-size: 15px;
     font-weight: 700;
-    color: #111827;
+    color: var(--color-black);
 }
 
 .meta .artist {
     margin: 4px 0 0;
     font-size: 13px;
-    color: #6b7280;
+    color: var(--color-gray);
 }
 
 .menu {
@@ -287,7 +287,7 @@ export default {
 .label {
     font-size: 16px;
     font-weight: 600;
-    color: #111827;
+    color: var(--color-black);
 }
 
 .sheet-fade-enter-active,

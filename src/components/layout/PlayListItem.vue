@@ -52,7 +52,7 @@ export default {
 
 .col-2 img {
     border-radius: 5px;
-    border: 1px solid #bbd1ff;
+    border: 1px solid var(--color-accent-blue);
 }
 
 .type {
@@ -61,6 +61,7 @@ export default {
     border-radius: 5px;
     font-weight: 600;
     padding: 20px;
+    color: var(--color-black);
 }
 
 .type .music-singer p:first-child {
@@ -70,7 +71,7 @@ export default {
 .type .music-singer p:last-child {
     font-size: var(--font-14);
     padding-top: 5px;
-    color: #737886;
+    color: var(--color-gray);
 }
 
 .type > p {

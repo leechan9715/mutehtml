@@ -101,7 +101,7 @@
 
 #section2 {
     gap: 20px;
-    background: linear-gradient(180deg, rgb(187, 228, 255) 0%, rgb(230, 249, 255) 80%, rgb(255, 255, 255) 100%);
+    background: linear-gradient(180deg, rgb(187, 214, 255) 0%, rgb(230, 249, 255) 80%, rgb(255, 255, 255) 100%);
     padding: 40px 0;
     width: 100%;
 }

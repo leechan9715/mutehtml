@@ -72,7 +72,7 @@ export default {
 .col-2 img {
     border-radius: 10px;
     border: 2px solid #ffffff;
-    box-shadow: 0px 2px 4px #58648d;
+    box-shadow: 0px 2px 4px var(--color-shadow);
 }
 
 .col-3 {
@@ -90,12 +90,12 @@ export default {
 }
 .up {
     display: inline-block;
-    color: rgb(40, 176, 255);
+    color: rgb(255, 40, 40);
 }
 
 .down {
     display: inline-block;
-    color: rgb(255, 40, 40);
+    color: rgb(40, 176, 255);
 }
 
 .col-3 .music-singer p:first-child {

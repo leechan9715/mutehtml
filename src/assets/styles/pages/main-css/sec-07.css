@@ -1,10 +1,9 @@
 .shorts {
     width: 160px;
-    height: 284px;
+    height: auto;
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
-    margin-top: 14px;
     background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(102, 102, 102, 1) 100%);
     border-radius: 10px;
 
@@ -24,7 +23,7 @@
     width: 30px;
     height: 30px;
     margin-right: 5px;
-    border: 1px solid var(--color-primary-6);
+    border: 1px solid var(--color-accent-blue);
 }
 
 .artist {
@@ -43,11 +42,14 @@
 }
 
 .artist_song {
-    font-size: var(--font-12);
+    font-size: var(--font-10);
+    padding-bottom: 3px;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 1);
 }
 
 .artist_name {
-    font-size: var(--font-10);
+    font-size: var(--font-12);
+    text-shadow: 0 0 6px rgba(0, 0, 0, 1);
 }
 
 .buttons {

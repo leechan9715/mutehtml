@@ -535,7 +535,8 @@ export default {
                 const playlist = raw ? JSON.parse(raw) : [];
                 const safePlaylist = Array.isArray(playlist) ? playlist : [];
                 const isDuplicated = safePlaylist.some((item) => {
-                    const samePreview = item?.previewUrl && playlistItem.previewUrl && item.previewUrl === playlistItem.previewUrl;
+                    const samePreview =
+                        item?.previewUrl && playlistItem.previewUrl && item.previewUrl === playlistItem.previewUrl;
                     const sameMeta =
                         (item?.trackName || '').trim().toLowerCase() === playlistItem.trackName.trim().toLowerCase() &&
                         (item?.artistName || '').trim().toLowerCase() === playlistItem.artistName.trim().toLowerCase();
@@ -687,8 +688,8 @@ export default {
     align-items: center;
     gap: 20px;
     padding: 8px 20px;
-    background: var(--gradient-key);
-    color: var(--color-white);
+    background: white;
+    color: var(--color-black);
     backdrop-filter: blur(8px);
     overflow: hidden;
     z-index: 2;
@@ -708,7 +709,7 @@ export default {
     left: 0;
     width: 100%;
     height: 3px;
-    background: #000;
+    background: var(--color-black);
 }
 
 .mini-timeline-fill {
@@ -716,7 +717,7 @@ export default {
     width: 0;
     background: linear-gradient(
         90deg,
-        rgba(111, 131, 247, 1) 64.90384340286255%,
+        rgba(111, 159, 247, 1) 64.90384340286255%,
         rgba(255, 255, 255, 0) 64.91384506225586%
     );
     transition: width 120ms linear;
@@ -740,7 +741,6 @@ export default {
     width: 100%;
     height: 100%;
     border-radius: 5px;
-    background: white;
 }
 
 .mini-meta {
@@ -756,13 +756,12 @@ export default {
 }
 
 .mini-title {
-    font-size: 13px;
+    font-size: 16px;
     font-weight: 600;
 }
 
 .mini-artist {
-    font-size: 11px;
-    color: var(--color-white);
+    font-size: 14px;
     margin-top: 3px;
 }
 
