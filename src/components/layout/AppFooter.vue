@@ -78,6 +78,11 @@
                 </router-link>
             </div>
         </div>
+        <transition name="help-bubble">
+            <div v-if="showHelpMessage" class="row help-bubble">
+                <p>도움이 필요하시면 눌러주세요.</p>
+            </div>
+        </transition>
     </footer>
 </template>
 
@@ -93,10 +98,14 @@ export default {
             circle2,
             blinkIntervalId: null,
             mouthIntervalId: null,
-            mouthTimers: []
+            mouthTimers: [],
+            showHelpMessage: false,
+            helpTimerId: null
         };
     },
     mounted() {
+        this.startHelpMessageTimer();
+
         const root = this.$el;
         const eyes = root?.querySelectorAll('.eye') || [];
         const mouth = root?.querySelector('.mouth');
@@ -145,6 +154,21 @@ export default {
         if (this.mouthIntervalId) clearInterval(this.mouthIntervalId);
         this.mouthTimers.forEach((id) => clearTimeout(id));
         this.mouthTimers = [];
+        this.clearHelpMessageTimer();
+    },
+    methods: {
+        startHelpMessageTimer() {
+            this.clearHelpMessageTimer();
+            this.showHelpMessage = true;
+            this.helpTimerId = setTimeout(() => {
+                this.showHelpMessage = false;
+            }, 10000);
+        },
+        clearHelpMessageTimer() {
+            if (!this.helpTimerId) return;
+            clearTimeout(this.helpTimerId);
+            this.helpTimerId = null;
+        }
     }
 };
 </script>
@@ -161,7 +185,7 @@ footer.container {
     z-index: 20;
 }
 
-footer .row {
+footer .row:nth-child(1) {
     padding: 5px 40px;
     align-items: center;
     justify-content: center;
@@ -282,5 +306,69 @@ footer .eye.smile-eye {
         padding: 8px 20px;
         flex-wrap: nowrap;
     }
+}
+
+footer .help-bubble {
+    max-width: 300px;
+    width: 100%;
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    padding: 0 20px;
+    border-radius: 20px;
+    background: #ffffff;
+    border: 1px solid var(--color-accent-blue);
+    box-shadow: 0px 2px 4px var(--color-shadow);
+}
+footer .help-bubble::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: 50%;
+    bottom: -12px;
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+    border-top: 12px solid var(--color-accent-blue);
+    transform: translateX(-50%);
+}
+footer .help-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    bottom: -12px;
+    transform: translateX(-50%);
+    border-left: 11px solid transparent;
+    border-right: 11px solid transparent;
+    border-top: 11px solid #ffffff;
+}
+footer .help-bubble p {
+    text-align: center;
+    font-size: var(--font-16);
+    width: 100%;
+    padding: 10px 0;
+}
+
+.help-bubble-enter-active,
+.help-bubble-leave-active {
+    transition:
+        opacity 0.5s ease,
+        transform 0.5s ease;
+}
+
+.help-bubble-enter-from,
+.help-bubble-leave-to {
+    opacity: 0;
+    transform: translate(-50%, 12px) scale(0.92);
+}
+
+.help-bubble-enter-to,
+.help-bubble-leave-from {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
 }
 </style>
