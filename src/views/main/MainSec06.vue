@@ -5,16 +5,18 @@
         </div>
 
         <Swiper class="artist-swiper" :slides-per-view="1.35" :space-between="14">
-            <SwiperSlide v-for="artist in cards" :key="artist.id">
-                <div class="artist-card">
-                    <div class="card-top">
-                        <img :src="artist.mainImage" :alt="`${artist.name} 대표 이미지`" />
-                    </div>
+            <SwiperSlide v-for="(artist, index) in cards" :key="artist.id">
+                <div :class="['card-wrapper', { clickable: index === 0 }]" @click="handleClick(index)">
+                    <div class="artist-card">
+                        <div class="card-top">
+                            <img :src="artist.mainImage" :alt="`${artist.name} 대표 이미지`" />
+                        </div>
 
-                    <div class="card-bottom">
-                        <h2 class="artist-name">{{ artist.name }}</h2>
-                        <p class="artist-meta">{{ artist.meta }}</p>
-                        <p class="artist-feature">{{ artist.feature }}</p>
+                        <div class="card-bottom">
+                            <h2 class="artist-name">{{ artist.name }}</h2>
+                            <p class="artist-meta">{{ artist.meta }}</p>
+                            <p class="artist-feature">{{ artist.feature }}</p>
+                        </div>
                     </div>
                 </div>
             </SwiperSlide>
@@ -36,6 +38,13 @@ export default {
     components: {
         Swiper,
         SwiperSlide
+    },
+    methods: {
+        handleClick(index) {
+            if (index === 0) {
+                this.$router.push('/main/artist-info');
+            }
+        }
     },
     data() {
         return {
@@ -74,74 +83,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.artist-section {
-    margin: 0 16px;
-    padding: 20px 0 32px;
-}
-
-.title-explain {
-    margin-bottom: 14px;
-    font-size: clamp(16px, 4.5vw, 22px);
-}
-
-.artist-swiper {
-    padding-right: 32px;
-}
-
-.artist-card {
-    overflow: hidden;
-    border-radius: 12px;
-    border: 1px solid var(--color-accent-blue);
-    box-shadow: 0 4px 6px var(--color-shadow);
-    background: #fff;
-}
-
-.card-top {
-    aspect-ratio: 16 / 10;
-    overflow: hidden;
-}
-
-.card-top img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top; /* 위쪽 기준 */
-    display: block;
-}
-
-.card-bottom {
-    padding: 14px;
-}
-
-.artist-name {
-    margin: 0 0 8px;
-    font-size: clamp(16px, 4vw, 18px);
-    font-weight: 700;
-    color: var(--color-black);
-}
-
-.artist-meta {
-    margin: 0 0 8px;
-    font-size: clamp(12px, 3.2vw, 14px);
-    color: var(--color-gray);
-}
-
-.artist-feature {
-    margin: 0;
-    font-size: clamp(12px, 3.2vw, 14px);
-    line-height: 1.45;
-    color: var(--color-black);
-
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-@media (min-width: 768px) {
-    .artist-swiper {
-        padding-right: 40px;
-    }
-}
-</style>
+<style scoped src="../../assets/styles/pages/main-css/sec-06.css"></style>

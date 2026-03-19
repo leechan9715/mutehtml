@@ -1,6 +1,6 @@
 <template>
     <div style="padding: 16px">
-        <MainContainer title="자주 듣는 플레이리스트" @click="goNext">
+        <MainContainer title="자주 듣는 플레이리스트" @click="goNext" :showArrow="true">
             <Swiper class="song-swiper" :slides-per-view="3.2" :space-between="16">
                 <SwiperSlide v-for="(song, i) in songs" :key="i">
                     <SongCard :title="song.title" :artist="song.artist" :coverImage="song.cover" />
@@ -39,7 +39,7 @@ export default {
     },
     methods: {
         goNext() {
-            console.log('헤더 클릭!');
+            this.$router.push('/main/library');
         }
     }
 };

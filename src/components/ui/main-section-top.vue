@@ -1,7 +1,7 @@
 <template>
-    <div class="row" @click="$emit('click')">
+    <div class="row">
         <p class="title">{{ title }}</p>
-        <button class="icon-btn" type="button" aria-label="이동" @click.stop="$emit('click')">
+        <button v-if="showArrow" class="icon-btn" type="button" aria-label="이동" @click="handleClick">
             <img src="../../assets/images/icon/right-arrow.png" alt="go" />
         </button>
     </div>
@@ -11,12 +11,20 @@
 <script>
 export default {
     props: {
-        title: { type: String, default: '' }
+        title: { type: String, default: '' },
+        showArrow: {
+            type: Boolean,
+            default: false
+        }
     },
-    emits: ['click']
+    emits: ['click'],
+    methods: {
+        handleClick() {
+            this.$emit('click');
+        }
+    }
 };
 </script>
-
 <style scoped>
 .row {
     display: flex;

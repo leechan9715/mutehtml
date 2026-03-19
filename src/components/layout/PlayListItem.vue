@@ -12,30 +12,59 @@
                 <p>{{ track.trackName }}</p>
                 <p>{{ track.artistName }}</p>
             </div>
-            <p>⁝</p>
+            <p class="more-btn" @click.stop="openModal(track)">⁝</p>
         </div>
     </a>
+    <PlayListModal v-model="isModalOpen" :track="modalTrack" />
 </template>
 
 <script>
 import fallbackCover from '@/assets/images/playlist/1.png';
+import PlayListModal from '@/components/layout/PlayListModal.vue';
 
 export default {
     name: 'PlayListItem',
     emits: ['select-track'],
+    components: {
+        PlayListModal
+    },
     props: {
         tracks: {
             type: Array,
             default: () => []
         }
     },
+    data() {
+        return {
+            isModalOpen: false,
+            selectedTrack: null
+        };
+    },
     computed: {
         normalizedTracks() {
             return (this.tracks || []).map((track) => ({
                 trackName: track?.trackName || track?.title || '제목 없음',
                 artistName: track?.artistName || track?.singer || '아티스트 정보 없음',
-                albumCover: track?.albumCover || track?.artworkUrl100 || track?.img || fallbackCover
+                albumCover: track?.albumCover || track?.artworkUrl100 || track?.img || fallbackCover,
+                previewUrl: track?.previewUrl || '',
+                playedAt: Number(track?.playedAt) || Date.now()
             }));
+        },
+        modalTrack() {
+            const track = this.selectedTrack || {};
+            return {
+                img: track?.albumCover || fallbackCover,
+                title: track?.trackName || '제목 없음',
+                artist: track?.artistName || '아티스트 정보 없음',
+                previewUrl: track?.previewUrl || '',
+                playedAt: Number(track?.playedAt) || Date.now()
+            };
+        }
+    },
+    methods: {
+        openModal(track) {
+            this.selectedTrack = track;
+            this.isModalOpen = true;
         }
     }
 };
