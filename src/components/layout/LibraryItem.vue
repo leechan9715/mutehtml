@@ -64,7 +64,7 @@ export default {
     data() {
         return {
             playlistFallbackImage: require('@/assets/images/player/player-img1.png'),
-            artistFallbackImage: require('@/assets/images/artist-select/1.png'),
+            artistFallbackImage: require('@/assets/images/artist-select/default.png'),
             isModalOpen: false
         };
     },
