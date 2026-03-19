@@ -40,9 +40,7 @@
             </p>
         </div>
 
-        <button class="more-btn" type="button" @click.stop>
-            <span class="material-symbols-outlined">more_vert</span>
-        </button>
+        <p class="more-btn" @click.stop="openModal">⁝</p>
     </article>
 </template>
 
@@ -58,7 +56,7 @@ export default {
     data() {
         return {
             playlistFallbackImage: require('@/assets/images/player/player-img1.png'),
-            artistFallbackImage: require('@/assets/images/artist-select/1.png')
+            artistFallbackImage: require('@/assets/images/artist-select/default.png')
         };
     },
     computed: {
@@ -113,19 +111,19 @@ export default {
 .library-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 20px;
     width: 100%;
-    padding: 8px 0;
     cursor: pointer;
 }
 
 .cover-wrap {
-    width: 56px;
-    height: 56px;
+    width: 80px;
     flex-shrink: 0;
     overflow: hidden;
-    background: #d9d9d9;
-    border-radius: 8px;
+    border: 1px solid var(--color-accent-blue);
+    box-shadow: 0px 2px 4px var(--color-shadow);
+    background: var(--color-white);
+    border-radius: 5px;
 }
 
 .cover-wrap.artist {
@@ -167,8 +165,8 @@ export default {
 }
 
 .title {
-    margin: 0 0 4px;
-    font-size: 14px;
+    margin: 0 0 5px;
+    font-size: 16px;
     font-weight: 600;
     color: #1c274c;
     white-space: nowrap;
@@ -178,17 +176,13 @@ export default {
 
 .sub {
     margin: 0;
-    font-size: 12px;
+    font-size: 14px;
     color: #666;
 }
 
 .more-btn {
-    width: 32px;
-    height: 32px;
-    border: 0;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: var(--font-24);
+    cursor: pointer;
+    padding: 0 0 0 10px;
 }
 </style>
