@@ -6,7 +6,7 @@
     justify-content: flex-start;
     background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(102, 102, 102, 1) 100%);
     border-radius: 10px;
-
+    cursor: pointer;
 }
 
 .information {
@@ -16,10 +16,9 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px;
-
 }
 
-.information>img {
+.information > img {
     width: 30px;
     height: 30px;
     margin-right: 5px;

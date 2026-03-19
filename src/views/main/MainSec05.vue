@@ -13,9 +13,9 @@
                     <label for="mine">나만</label>
                 </div>
 
-                <a href="#">
+                <router-link to="/main/chart">
                     <img src="@/assets/images/icon/right-arrow.png" width="30" alt="right-arrow" />
-                </a>
+                </router-link>
             </div>
         </div>
 
