@@ -16,6 +16,8 @@
                 :title="list.trackName"
                 :singer="list.artistName"
                 :img="list.artworkUrl100"
+                :preview-url="list.previewUrl"
+                :played-at="list.playedAt"
             />
         </div>
     </section>
@@ -56,9 +58,11 @@ export default {
                 entity: 'song',
                 limit: 12
             });
-            this.results = (result?.data?.results || []).map((item) => ({
+            this.results = (result?.data?.results || []).map((item, index) => ({
                 ...item,
-                artworkUrl100: this.upgradeArtwork600(item?.artworkUrl100 || '')
+                artworkUrl100: this.upgradeArtwork600(item?.artworkUrl100 || ''),
+                previewUrl: item?.previewUrl || '',
+                playedAt: Date.now() + index
             }));
         },
         // 검색 결과 페이지에서 다시 검색했을 때 실행되는 함수
