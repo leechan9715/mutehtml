@@ -26,35 +26,35 @@
                     <ul class="menu">
                         <li>
                             <button class="menu-item" type="button" @click="onAction('share')">
-                                <img class="icon" src="@/assets/images/icon/share.png" alt="share" />
+                                <span class="material-symbols-outlined font-26"> share </span>
                                 <span class="label">공유</span>
                             </button>
                         </li>
 
                         <li>
                             <button class="menu-item" type="button" @click="onAction('download')">
-                                <img class="icon" src="@/assets/images/icon/playlist.png" alt="playlist" />
-                                <span class="label">기존 플레이리스트에 담기</span>
+                                <span class="material-symbols-outlined font-26"> delete </span>
+                                <span class="label">플레이리스트 삭제</span>
                             </button>
                         </li>
 
                         <li>
                             <button class="menu-item" type="button" @click="onAction('artist')">
-                                <img class="icon" src="@/assets/images/icon/artist.png" alt="artist" />
+                                <span class="material-symbols-outlined font-26"> artist </span>
                                 <span class="label">아티스트 정보</span>
                             </button>
                         </li>
 
                         <li>
                             <button class="menu-item" type="button" @click="onAction('song')">
-                                <img class="icon" src="@/assets/images/icon/info.png" alt="info" />
+                                <span class="material-symbols-outlined font-26"> info </span>
                                 <span class="label">곡 정보</span>
                             </button>
                         </li>
 
                         <li>
                             <button class="menu-item" type="button" @click="onAction('block_reco')">
-                                <img class="icon" src="@/assets/images/icon/block.png" alt="block" />
+                                <span class="material-symbols-outlined font-26"> thumb_down </span>
                                 <span class="label">노래 추천에 뜨지 않기</span>
                             </button>
                         </li>
@@ -135,7 +135,8 @@ export default {
                 const safePlaylist = Array.isArray(playlist) ? playlist : [];
 
                 const isDuplicated = safePlaylist.some((item) => {
-                    const samePreview = item?.previewUrl && newItem.previewUrl && item.previewUrl === newItem.previewUrl;
+                    const samePreview =
+                        item?.previewUrl && newItem.previewUrl && item.previewUrl === newItem.previewUrl;
                     const sameMeta =
                         (item?.trackName || '').trim().toLowerCase() === newItem.trackName.trim().toLowerCase() &&
                         (item?.artistName || '').trim().toLowerCase() === newItem.artistName.trim().toLowerCase();

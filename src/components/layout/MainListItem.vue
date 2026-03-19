@@ -14,7 +14,7 @@
 
 <script>
 import trackImg from '@/assets/images/main/1.png';
-import Modal from '@/components/layout/Modal.vue';
+import Modal from '@/components/layout/ListModal.vue';
 
 export default {
     name: 'MainListItem',
