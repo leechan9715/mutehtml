@@ -20,7 +20,7 @@ export default {
 <style scoped>
 .btn {
     width: 100%;
-    padding: 19px 0;
+    padding: 14px 16px;
     border-radius: 50px;
     box-shadow: 0px 2px 4px 0px var(--color-shadow);
     font-size: var(--font-20);
