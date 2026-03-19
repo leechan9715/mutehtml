@@ -25,7 +25,9 @@ export default {
     props: {
         title: { type: String, default: '' },
         singer: { type: String, default: '' },
-        img: { type: String, default: '' }
+        img: { type: String, default: '' },
+        previewUrl: { type: String, default: '' },
+        playedAt: { type: Number, default: 0 }
     },
     data() {
         return {
@@ -38,7 +40,9 @@ export default {
             return {
                 img: this.img || this.trackImg,
                 title: this.title || '제목 없음',
-                artist: this.singer || '아티스트 없음'
+                artist: this.singer || '아티스트 없음',
+                previewUrl: this.previewUrl || '',
+                playedAt: Number(this.playedAt) || 0
             };
         }
     },

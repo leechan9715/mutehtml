@@ -33,7 +33,9 @@ export default {
         singer: { type: String, default: '' },
         img: { type: String, default: '' },
         trend: { type: String, default: '' },
-        index: { type: Number, default: 0 }
+        index: { type: Number, default: 0 },
+        previewUrl: { type: String, default: '' },
+        playedAt: { type: Number, default: 0 }
     },
     data() {
         return {
@@ -46,7 +48,9 @@ export default {
             return {
                 img: this.img || this.fallbackCover,
                 title: this.title || '제목 없음',
-                artist: this.singer || '아티스트 없음'
+                artist: this.singer || '아티스트 없음',
+                previewUrl: this.previewUrl || '',
+                playedAt: Number(this.playedAt) || 0
             };
         }
     },

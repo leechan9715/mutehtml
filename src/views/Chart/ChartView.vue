@@ -90,6 +90,8 @@
                 :title="item.name"
                 :singer="item.artistName"
                 :trend="item.trend"
+                :preview-url="item.previewUrl"
+                :played-at="item.playedAt"
                 @click.prevent="playFromChart(item)"
             />
         </template>
@@ -261,6 +263,7 @@ export default {
                         artistName: cached.artistName || artistName,
                         artworkUrl100: this.upgradeArtwork600(cached.artworkUrl100 || lastfmImage),
                         previewUrl: cached.previewUrl || '',
+                        playedAt: Date.now() + rank,
                         trend: Math.random() > 0.5 ? 'up' : 'down'
                     });
                     continue;
@@ -273,6 +276,7 @@ export default {
                         artistName,
                         artworkUrl100: this.upgradeArtwork600(lastfmImage),
                         previewUrl: '',
+                        playedAt: Date.now() + rank,
                         trend: Math.random() > 0.5 ? 'up' : 'down'
                     });
                     continue;
@@ -303,6 +307,7 @@ export default {
                         artistName: hit?.artistName || artistName,
                         artworkUrl100: this.upgradeArtwork600(hit?.artworkUrl100 || lastfmImage),
                         previewUrl: hit?.previewUrl || '',
+                        playedAt: Date.now() + rank,
                         trend: Math.random() > 0.5 ? 'up' : 'down'
                     });
                 } catch (error) {
@@ -324,6 +329,7 @@ export default {
                         artistName,
                         artworkUrl100: this.upgradeArtwork600(lastfmImage),
                         previewUrl: '',
+                        playedAt: Date.now() + rank,
                         trend: Math.random() > 0.5 ? 'up' : 'down'
                     });
                 }
