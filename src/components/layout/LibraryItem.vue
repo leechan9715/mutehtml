@@ -40,13 +40,21 @@
             </p>
         </div>
 
-        <p class="more-btn" @click.stop="openModal">⁝</p>
+        <button class="more-btn" type="button" @click.stop="openModal">
+            <span class="material-symbols-outlined">more_vert</span>
+        </button>
     </article>
+    <LibraryModal v-model="isModalOpen" :track="modalTrack" />
 </template>
 
 <script>
+import LibraryModal from '@/components/layout/LibraryModal.vue';
+
 export default {
     name: 'LibraryItem',
+    components: {
+        LibraryModal
+    },
     props: {
         item: {
             type: Object,
@@ -56,7 +64,8 @@ export default {
     data() {
         return {
             playlistFallbackImage: require('@/assets/images/player/player-img1.png'),
-            artistFallbackImage: require('@/assets/images/artist-select/default.png')
+            artistFallbackImage: require('@/assets/images/artist-select/1.png'),
+            isModalOpen: false
         };
     },
     computed: {
@@ -79,6 +88,20 @@ export default {
             }
 
             return result;
+        },
+        modalTrack() {
+            const isArtist = this.item?.type === 'artist';
+            const title = isArtist ? this.item?.name || '아티스트' : this.item?.title || '플레이리스트';
+            const artist = isArtist ? 'Artist' : this.item?.owner || 'Playlist';
+            const coverImage = isArtist
+                ? this.item?.image || this.artistFallbackImage
+                : this.item?.coverImage || this.collageImages[0] || this.playlistFallbackImage;
+
+            return {
+                img: coverImage,
+                title,
+                artist
+            };
         }
     },
     methods: {
@@ -102,6 +125,9 @@ export default {
         },
         handleArtistImageError(event) {
             event.target.src = this.artistFallbackImage;
+        },
+        openModal() {
+            this.isModalOpen = true;
         }
     }
 };
