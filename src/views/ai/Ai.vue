@@ -1,6 +1,6 @@
 <template>
-    <section class="container ai-page">
-        <div class="row g-43 ai-hero">
+    <section class="container ai-page" :class="{ 'ai-searched': isSearched }">
+        <div class="row g-43 ai-hero ai-reveal ai-reveal-1">
             <div class="col-1 ai-hero-copy">
                 <h1>뮤직 도우미</h1>
                 <h2>오늘은 어떤 음악을 원하시나요?</h2>
@@ -13,7 +13,7 @@
             </div>
         </div>
         <form class="row g-24 ai-form" @submit.prevent="submitEmotion">
-            <div class="row g-16 ai-suggest">
+            <div class="row g-16 ai-suggest ai-reveal ai-reveal-2">
                 <template v-if="showEmotionSuggestions">
                     <div class="col-1">
                         <p>이런 음악은 어떠세요 ?</p>
@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="row ai-input">
-                <div class="col-1">
+                <div class="col-1 ai-reveal ai-reveal-3">
                     <input type="text" placeholder="원하는 장르를 검색하세요" v-model="emotionInput" />
                     <button type="submit" :disabled="aiLoading">전송</button>
                 </div>
@@ -93,6 +93,9 @@ export default {
         DotLottieVue
     },
     computed: {
+        isSearched() {
+            return !this.showEmotionSuggestions;
+        },
         visibleSongs() {
             return this.songs.slice(0, 10);
         }
@@ -336,6 +339,42 @@ export default {
     .ai-logo-float,
     .ai-logo-shadow {
         animation: none;
+    }
+
+    .ai-reveal {
+        animation: none;
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.ai-reveal {
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: ai-reveal-up 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    will-change: opacity, transform;
+}
+
+.ai-reveal-1 {
+    animation-delay: 0.04s;
+}
+
+.ai-reveal-2 {
+    animation-delay: 0.16s;
+}
+
+.ai-reveal-3 {
+    animation-delay: 0.28s;
+}
+
+@keyframes ai-reveal-up {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
 </style>

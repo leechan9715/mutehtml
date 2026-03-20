@@ -47,8 +47,14 @@
 
             <div class="bottom">
                 <div class="button-bg"></div>
-
-                <button
+                <BaseButton
+                    label="넘어가기"
+                    :class="{ active: selectedArtists.length >= 3 }"
+                    :disabled="selectedArtists.length < 3"
+                    class="login-btn"
+                    @click="testButton"
+                />
+                <!-- <button
                     type="button"
                     class="login-btn"
                     :class="{ active: selectedArtists.length >= 3 }"
@@ -56,7 +62,7 @@
                     @click="testButton"
                 >
                     넘어가기
-                </button>
+                </button> -->
             </div>
         </form>
     </main>
@@ -76,10 +82,11 @@ import img9 from '@/assets/images/artist-select/9.png';
 import img10 from '@/assets/images/artist-select/10.png';
 import img11 from '@/assets/images/artist-select/11.png';
 import img12 from '@/assets/images/artist-select/12.png';
+import BaseButton from '@/components/ui/BaseButton.vue';
 
 export default {
     name: 'ArtistSelectView',
-    components: { ArtistSelectBtn },
+    components: { ArtistSelectBtn, BaseButton },
     data() {
         return {
             searchText: '',
@@ -147,7 +154,7 @@ export default {
 
 .login-btn:disabled {
     cursor: not-allowed;
-    background-color: var(--color-gray);
+    background: var(--color-gray);
 }
 
 .input::placeholder {

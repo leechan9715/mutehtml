@@ -199,6 +199,12 @@ export default {
 
         async initLibrary() {
             try {
+                const storedItems = getLibraryItems();
+                if (Array.isArray(storedItems) && storedItems.length) {
+                    this.libraryItems = storedItems;
+                    return;
+                }
+
                 const apiLibrary = await this.buildApiLibrary();
                 saveLibraryItems(apiLibrary);
                 this.libraryItems = apiLibrary;
@@ -206,6 +212,13 @@ export default {
                 console.error('initLibrary error:', error);
                 this.libraryItems = getLibraryItems();
             }
+        },
+        onLibraryItemsUpdated(event) {
+            if (event?.detail && Array.isArray(event.detail)) {
+                this.libraryItems = event.detail;
+                return;
+            }
+            this.libraryItems = getLibraryItems();
         },
 
         addPlaylist() {
@@ -229,76 +242,12 @@ export default {
     },
     mounted() {
         this.initLibrary();
+        window.addEventListener('library-items-updated', this.onLibraryItemsUpdated);
+    },
+    beforeUnmount() {
+        window.removeEventListener('library-items-updated', this.onLibraryItemsUpdated);
     }
 };
 </script>
 
-<style scoped>
-.library-page {
-    padding-top: 12px;
-    padding-bottom: 24px;
-}
-
-.library-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-}
-
-.recent-box {
-    width: 168px;
-    height: 32px;
-    border: 1px solid #cdd6ee;
-    border-radius: 999px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 12px;
-    background: #fff;
-}
-
-.recent-box p {
-    margin: 0;
-    font-size: 13px;
-    color: #1c274c;
-}
-
-.recent-box img {
-    width: 18px;
-    height: 18px;
-}
-
-.grid-btn {
-    width: 32px;
-    height: 32px;
-    border: 0;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.grid-btn img {
-    width: 18px;
-    height: 18px;
-}
-
-.library-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.add-playlist-btn {
-    width: 100%;
-    height: 48px;
-    margin-top: 8px;
-    border: 1px dashed #b9c4e3;
-    border-radius: 10px;
-    background: #fff;
-    color: #4d6bb3;
-    font-size: 14px;
-    font-weight: 600;
-}
-</style>
+<style scoped src="@/assets/styles/pages/library.css"></style>

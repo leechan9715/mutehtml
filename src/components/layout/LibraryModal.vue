@@ -26,35 +26,35 @@
                     <ul class="menu">
                         <li>
                             <button class="menu-item" type="button" @click="onAction('share')">
-                                <img class="icon" src="@/assets/images/icon/share.png" alt="share" />
+                                <span class="material-symbols-outlined font-26"> share </span>
                                 <span class="label">공유</span>
                             </button>
                         </li>
 
                         <li>
                             <button class="menu-item" type="button" @click="onAction('download')">
-                                <img class="icon" src="@/assets/images/icon/playlist.png" alt="playlist" />
-                                <span class="label">기존 플레이리스트에 담기</span>
+                                <span class="material-symbols-outlined font-26"> delete </span>
+                                <span class="label">라이브러리 삭제</span>
                             </button>
                         </li>
 
                         <li>
                             <button class="menu-item" type="button" @click="onAction('artist')">
-                                <img class="icon" src="@/assets/images/icon/artist.png" alt="artist" />
+                                <span class="material-symbols-outlined font-26"> artist </span>
                                 <span class="label">아티스트 정보</span>
                             </button>
                         </li>
 
                         <li>
                             <button class="menu-item" type="button" @click="onAction('song')">
-                                <img class="icon" src="@/assets/images/icon/info.png" alt="info" />
+                                <span class="material-symbols-outlined font-26"> info </span>
                                 <span class="label">곡 정보</span>
                             </button>
                         </li>
 
                         <li>
                             <button class="menu-item" type="button" @click="onAction('block_reco')">
-                                <img class="icon" src="@/assets/images/icon/block.png" alt="block" />
+                                <span class="material-symbols-outlined font-26"> thumb_down </span>
                                 <span class="label">노래 추천에 뜨지 않기</span>
                             </button>
                         </li>
@@ -67,8 +67,7 @@
 
 <script>
 import coverImg from '@/assets/images/chart/1.png';
-
-const MY_PLAYLIST_KEY = 'my-playlist';
+import { getLibraryItems, saveLibraryItems } from '@/utils/libraryStorage';
 
 export default {
     name: 'BottomSheetMenu',
@@ -109,50 +108,25 @@ export default {
         this.removeDragListeners();
     },
     methods: {
-        addTrackToMyPlaylist() {
-            const trackName = (this.track?.title || '').trim();
-            const artistName = (this.track?.artist || '').trim();
-            const previewUrl = (this.track?.previewUrl || '').trim();
-            const albumCover = this.track?.img || '';
-            const playedAt = Number(this.track?.playedAt) || Date.now();
-
-            if (!trackName || !artistName || !previewUrl) {
-                alert('이 곡은 플레이리스트에 담을 수 없습니다.');
+        deleteLibraryItem() {
+            const targetId = this.track?.id;
+            if (targetId === undefined || targetId === null) {
+                alert('삭제할 라이브러리 정보를 찾을 수 없습니다.');
                 return;
             }
 
-            const newItem = {
-                albumCover,
-                artistName,
-                playedAt,
-                previewUrl,
-                trackName
-            };
+            const confirmed = window.confirm('이 라이브러리를 삭제할까요?');
+            if (!confirmed) return;
 
             try {
-                const raw = localStorage.getItem(MY_PLAYLIST_KEY);
-                const playlist = raw ? JSON.parse(raw) : [];
-                const safePlaylist = Array.isArray(playlist) ? playlist : [];
+                const items = getLibraryItems();
+                const safeItems = Array.isArray(items) ? items : [];
+                const nextItems = safeItems.filter((item) => String(item?.id) !== String(targetId));
 
-                const isDuplicated = safePlaylist.some((item) => {
-                    const samePreview = item?.previewUrl && newItem.previewUrl && item.previewUrl === newItem.previewUrl;
-                    const sameMeta =
-                        (item?.trackName || '').trim().toLowerCase() === newItem.trackName.trim().toLowerCase() &&
-                        (item?.artistName || '').trim().toLowerCase() === newItem.artistName.trim().toLowerCase();
-                    return samePreview || sameMeta;
-                });
-
-                if (isDuplicated) {
-                    alert('이미 플레이리스트에 담긴 곡입니다.');
-                    return;
-                }
-
-                const nextPlaylist = [...safePlaylist, newItem];
-                localStorage.setItem(MY_PLAYLIST_KEY, JSON.stringify(nextPlaylist));
-                window.dispatchEvent(new CustomEvent('my-playlist-updated', { detail: nextPlaylist }));
-                alert('플레이리스트에 담았습니다.');
+                saveLibraryItems(nextItems);
+                window.dispatchEvent(new CustomEvent('library-items-updated', { detail: nextItems }));
             } catch (error) {
-                console.error('my-playlist 저장 실패:', error);
+                console.error('library 삭제 실패:', error);
             }
         },
         close() {
@@ -225,7 +199,7 @@ export default {
         },
         onAction(type) {
             if (type === 'download') {
-                this.addTrackToMyPlaylist();
+                this.deleteLibraryItem();
             }
             this.$emit('action', type);
             // 보통 메뉴 누르면 닫힘

@@ -40,15 +40,21 @@
             </p>
         </div>
 
-        <button class="more-btn" type="button" @click.stop>
+        <button class="more-btn" type="button" @click.stop="openModal">
             <span class="material-symbols-outlined">more_vert</span>
         </button>
     </article>
+    <LibraryModal v-model="isModalOpen" :track="modalTrack" />
 </template>
 
 <script>
+import LibraryModal from '@/components/layout/LibraryModal.vue';
+
 export default {
     name: 'LibraryItem',
+    components: {
+        LibraryModal
+    },
     props: {
         item: {
             type: Object,
@@ -58,7 +64,8 @@ export default {
     data() {
         return {
             playlistFallbackImage: require('@/assets/images/player/player-img1.png'),
-            artistFallbackImage: require('@/assets/images/artist-select/1.png')
+            artistFallbackImage: require('@/assets/images/artist-select/default.png'),
+            isModalOpen: false
         };
     },
     computed: {
@@ -81,6 +88,22 @@ export default {
             }
 
             return result;
+        },
+        modalTrack() {
+            const isArtist = this.item?.type === 'artist';
+            const title = isArtist ? this.item?.name || '아티스트' : this.item?.title || '플레이리스트';
+            const artist = isArtist ? 'Artist' : this.item?.owner || 'Playlist';
+            const coverImage = isArtist
+                ? this.item?.image || this.artistFallbackImage
+                : this.item?.coverImage || this.collageImages[0] || this.playlistFallbackImage;
+
+            return {
+                id: this.item?.id,
+                type: this.item?.type || 'playlist',
+                img: coverImage,
+                title,
+                artist
+            };
         }
     },
     methods: {
@@ -104,6 +127,9 @@ export default {
         },
         handleArtistImageError(event) {
             event.target.src = this.artistFallbackImage;
+        },
+        openModal() {
+            this.isModalOpen = true;
         }
     }
 };
@@ -113,19 +139,19 @@ export default {
 .library-item {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 20px;
     width: 100%;
-    padding: 8px 0;
     cursor: pointer;
 }
 
 .cover-wrap {
-    width: 56px;
-    height: 56px;
+    width: 80px;
     flex-shrink: 0;
     overflow: hidden;
-    background: #d9d9d9;
-    border-radius: 8px;
+    border: 1px solid var(--color-accent-blue);
+    box-shadow: 0px 2px 4px var(--color-shadow);
+    background: var(--color-white);
+    border-radius: 5px;
 }
 
 .cover-wrap.artist {
@@ -167,8 +193,8 @@ export default {
 }
 
 .title {
-    margin: 0 0 4px;
-    font-size: 14px;
+    margin: 0 0 5px;
+    font-size: 16px;
     font-weight: 600;
     color: #1c274c;
     white-space: nowrap;
@@ -178,17 +204,13 @@ export default {
 
 .sub {
     margin: 0;
-    font-size: 12px;
+    font-size: 14px;
     color: #666;
 }
 
 .more-btn {
-    width: 32px;
-    height: 32px;
-    border: 0;
-    background: transparent;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-size: var(--font-24);
+    cursor: pointer;
+    padding: 0 10px;
 }
 </style>

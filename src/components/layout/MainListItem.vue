@@ -14,7 +14,7 @@
 
 <script>
 import trackImg from '@/assets/images/main/1.png';
-import Modal from '@/components/layout/Modal.vue';
+import Modal from '@/components/layout/ListModal.vue';
 
 export default {
     name: 'MainListItem',
@@ -93,7 +93,6 @@ a > img {
 .box .more-btn {
     font-size: var(--font-24);
     cursor: pointer;
-
     padding: 0 10px;
 }
 

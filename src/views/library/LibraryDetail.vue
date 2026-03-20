@@ -23,7 +23,6 @@
             </div>
 
             <div class="playlist-summary">
-                <p class="playlist-type">플레이리스트</p>
                 <h2 class="playlist-title">{{ playlist.title }}</h2>
                 <p class="playlist-meta">제작자 · {{ playlist.owner }}</p>
                 <p class="playlist-meta">{{ playlist.tracks?.length || 0 }}곡 · {{ totalDurationText }}</p>
@@ -31,8 +30,23 @@
         </div>
 
         <div class="action-row">
-            <button type="button" class="action-btn" @click="playShuffleTracks">셔플듣기</button>
-            <button type="button" class="action-btn" @click="playAllTracks">전체듣기</button>
+            <button
+                type="button"
+                class="action-btn"
+                :class="{ active: activeAction === 'shuffle' }"
+                @click="handleAction('shuffle')"
+            >
+                셔플듣기
+            </button>
+
+            <button
+                type="button"
+                class="action-btn"
+                :class="{ active: activeAction === 'all' }"
+                @click="handleAction('all')"
+            >
+                전체듣기
+            </button>
         </div>
 
         <div class="add-row">
@@ -85,6 +99,7 @@ export default {
     data() {
         return {
             playlist: null,
+            activeAction: '',
             fallbackImage: require('@/assets/images/player/player-img1.png'),
             musicImageStore: useMusicImageStore()
         };
@@ -126,6 +141,15 @@ export default {
         }
     },
     methods: {
+        handleAction(type) {
+            this.activeAction = type;
+
+            if (type === 'shuffle') {
+                this.playShuffleTracks();
+            } else {
+                this.playAllTracks();
+            }
+        },
         upgradeArtwork(url = '', size = 600) {
             return this.musicImageStore.upgradeArtwork(url, size);
         },
