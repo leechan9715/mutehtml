@@ -14,22 +14,15 @@
             </div>
         </div>
         <div class="row use-auto">
-            <div class="col-2">
-                <h3 class="sub-title use-title">이용권 관리</h3>
-            </div>
-            <div class="col-2">
-                <img :src="require('@/assets/images/icon/right-arrow.png')" class="arrow" />
-            </div>
-            <div class="col-1 ticket-container">
-                <div class="ticket-box">
-                    <h3>Free</h3>
-                    <p>
-                        지금 이용권을 구매하고<br />
-                        무제한으로 음악을 즐기세요.
-                    </p>
+            <div class="auto">
+                <div class="col-2">
+                    <h3 class="sub-title use-title">이용권 관리</h3>
                 </div>
-                <div class="logo_here"><Logo /></div>
+                <div class="col-2">
+                    <img :src="require('@/assets/images/icon/right-arrow.png')" class="arrow" />
+                </div>
             </div>
+            <div class="col-1 ticket-container"></div>
         </div>
         <div class="row">
             <h3 class="col-1 sub-title">설정</h3>
@@ -55,7 +48,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import Logo from '@/components/ui/Logo.vue';
 import AppTopBar2 from '@/components/layout/AppTopBar2.vue';
 import MenuListItem from '@/components/ui/MenuListItem.vue';
 import profileImgSrc from '@/assets/images/mypage/test.jpg';

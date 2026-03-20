@@ -46,7 +46,7 @@ const routes = [
             { path: 'ticket-select', component: TicketSelect, meta: { isProfile: false } },
             { path: 'library', component: Library, meta: { isProfile: true } },
             { path: 'library/:id', component: PlaylistDetailView, meta: { isProfile: true } },
-            { path: 'playlist', component: Playlist, meta: { isProfile: false } },
+            { path: 'playlist', component: Playlist, meta: { isProfile: true } },
             { path: 'player/:id', component: Player, meta: { isProfile: false } },
             { path: 'artist-info', component: ArtistInfo, meta: { isProfile: true } },
             { path: 'search-result', component: SearchResult, meta: { isProfile: true } },

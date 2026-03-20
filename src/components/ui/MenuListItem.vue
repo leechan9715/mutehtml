@@ -38,18 +38,18 @@ li a {
 }
 
 li span:first-child {
-    text-indent: 20px;
+    text-indent: 5px;
     font-size: 24px;
 }
 li p {
-    text-indent: 20px;
+    text-indent: 5px;
     font-size: 16px;
     font-weight: var(--fw-medium);
 }
 
 li span:last-child {
     margin-left: auto;
-    text-indent: 20px;
+    text-indent: 5px;
     font-size: 24px;
 }
 .is-danger {
