@@ -11,15 +11,14 @@
                     <p class="fw-medium">{{ checkAuthData.user?.nickname }}</p>
                     <p class="color-gray fw-medium">{{ checkAuthData.user?.email }}</p>
                 </div>
-                <span class="material-symbols-outlined"> arrow_forward_ios </span>
             </div>
         </div>
-        <div class="row">
+        <div class="row use-auto">
             <div class="col-2">
                 <h3 class="sub-title use-title">이용권 관리</h3>
             </div>
             <div class="col-2">
-                <span class="material-symbols-outlined rag"> arrow_forward_ios </span>
+                <img :src="require('@/assets/images/icon/right-arrow.png')" class="arrow" />
             </div>
             <div class="col-1 ticket-container">
                 <div class="ticket-box">
@@ -29,7 +28,7 @@
                         무제한으로 음악을 즐기세요.
                     </p>
                 </div>
-                <Logo />
+                <div class="logo_here"><Logo /></div>
             </div>
         </div>
         <div class="row">
@@ -44,9 +43,9 @@
                 />
                 <li>
                     <router-link to="/" @click.prevent="logout">
-                        <span class="material-symbols-outlined color-red bold">logout</span>
+                        <span class="material-symbols-outlined color-red bold logicon">logout</span>
                         <p>로그아웃</p>
-                        <span class="material-symbols-outlined font-18 thin"> arrow_forward_ios </span>
+                        <img :src="require('@/assets/images/icon/right-arrow.png')" class="arrow" />
                     </router-link>
                 </li>
             </ul>
