@@ -14,7 +14,7 @@
         <div class="row library-list">
             <LibraryItem v-for="item in libraryItems" :key="item.id" :item="item" />
 
-            <button type="button" class="add-playlist-btn" @click="addPlaylist">+ 플레이리스트 추가하기</button>
+            <button type="button" class="add-playlist-btn" @click="addPlaylist">+ 라이브러리 추가하기</button>
         </div>
     </section>
 </template>
@@ -222,7 +222,7 @@ export default {
         },
 
         addPlaylist() {
-            const title = window.prompt('플레이리스트 이름을 입력해주세요.');
+            const title = window.prompt('라이브러리 이름을 입력해주세요.');
 
             if (!title || !title.trim()) return;
 
