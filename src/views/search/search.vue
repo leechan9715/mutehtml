@@ -14,7 +14,9 @@
                         v-model="searchText"
                         placeholder="가수 · 노래제목 · 가사를 적어주세요"
                     />
-                    <button type="submit"><span class="material-symbols-outlined bold"> search </span></button>
+                    <button type="submit">
+                        <span class="material-symbols-outlined bold"> search </span>
+                    </button>
                 </form>
             </div>
             <div class="row">
