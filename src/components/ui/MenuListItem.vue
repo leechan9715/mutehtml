@@ -3,7 +3,7 @@
         <router-link :to="link">
             <span class="material-symbols-outlined bold" :class="{ 'is-danger': danger }">{{ icon }}</span>
             <p>{{ title }}</p>
-            <span class="material-symbols-outlined font-18 thin"> arrow_forward_ios </span>
+            <img :src="require('@/assets/images/icon/right-arrow.png')" class="arrow" />
         </router-link>
     </li>
 </template>
@@ -21,6 +21,10 @@ export default {
 </script>
 
 <style scoped>
+.arrow {
+    width: 20px;
+    margin-left: auto;
+}
 li {
     padding: 18px 0;
     border-bottom: 1px solid var(--color-primary-5);
@@ -35,18 +39,18 @@ li a {
 
 li span:first-child {
     text-indent: 20px;
-    font-size: var(--font-21);
+    font-size: 24px;
 }
 li p {
     text-indent: 20px;
-    font-size: var(--font-16);
+    font-size: 16px;
     font-weight: var(--fw-medium);
 }
 
 li span:last-child {
     margin-left: auto;
     text-indent: 20px;
-    font-size: var(--font-18);
+    font-size: 24px;
 }
 .is-danger {
     color: var(--color-red);
