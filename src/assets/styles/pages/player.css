@@ -44,7 +44,7 @@
     cursor: grabbing;
 }
 
-#player-wrap>.container {
+#player-wrap > .container {
     width: 100%;
     max-width: none;
     margin: 0;
@@ -112,7 +112,6 @@
     align-items: center;
     /* 세로 중앙 */
 }
-
 
 .player-img .col-1 {
     flex: 1 1 100%;
