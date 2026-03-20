@@ -75,7 +75,7 @@
                 <p>Top {{ chartLimit }}</p>
                 <a href="#" @click.prevent="playAllFromChart">
                     <span>전체듣기</span>
-                    <img src="@/assets/images/icon/right-arrow.png" width="24" alt="" />
+                    <img src="@/assets/images/icon/right-arrow.png" width="20" height="20" alt="play_button" />
                 </a>
             </div>
         </div>
