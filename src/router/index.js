@@ -48,9 +48,9 @@ const routes = [
             { path: 'library/:id', component: PlaylistDetailView, meta: { isProfile: true } },
             { path: 'playlist', component: Playlist, meta: { isProfile: false } },
             { path: 'player/:id', component: Player, meta: { isProfile: false } },
-            { path: 'artist-info', component: ArtistInfo, meta: { isProfile: false } },
+            { path: 'artist-info', component: ArtistInfo, meta: { isProfile: true } },
             { path: 'search-result', component: SearchResult, meta: { isProfile: true } },
-            { path: '/video-detail/:id', component: VideoDetail, meta: { isProfile: false } },
+            { path: '/video-detail/:id', component: VideoDetail, meta: { isProfile: true } },
             { path: 'library', component: Library, meta: { isProfile: true } },
             { path: 'ai', component: Ai, meta: { isProfile: false } }
         ]
