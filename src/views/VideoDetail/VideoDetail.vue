@@ -340,7 +340,7 @@ onMounted(() => {
 .detail-page {
     max-width: 600px;
     margin: 0 auto;
-    height: calc(100dvh - 83px);
+    height: calc(100dvh - 170px);
     display: flex;
     flex-direction: column;
     overflow: hidden;
