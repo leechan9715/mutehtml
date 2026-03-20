@@ -60,10 +60,7 @@
                         <p class="track-title">{{ getTrackTitle(track) }}</p>
                         <p class="track-artist">{{ getTrackArtist(track) }}</p>
                     </div>
-
-                    <button type="button" class="track-more-btn" @click.stop>
-                        <span class="material-symbols-outlined">more_vert</span>
-                    </button>
+                    <p class="more-btn" @click.stop="openModal(track)">⁝</p>
                 </article>
             </div>
 
@@ -76,11 +73,14 @@
     <section v-else class="container playlist-detail-page">
         <p>플레이리스트를 불러오지 못했습니다.</p>
     </section>
+
+    <Modal v-model="isModalOpen" :track="modalTrack" />
 </template>
 
 <script>
 import { searchApi } from '@/api/_music_api';
 import { useMusicImageStore } from '@/store/music';
+import Modal from '@/components/layout/PlayListModal.vue';
 
 const MY_PLAYLIST_KEY = 'my-playlist';
 const PLAYER_STATE_KEY = 'mute-player-state';
@@ -91,8 +91,18 @@ export default {
         return {
             playlist: null,
             fallbackImage: require('@/assets/images/player/player-img1.png'),
-            musicImageStore: useMusicImageStore()
+            musicImageStore: useMusicImageStore(),
+            isModalOpen: false,
+            modalTrack: {
+                img: '',
+                title: '',
+                artist: '',
+                previewUrl: ''
+            }
         };
+    },
+    components: {
+        Modal
     },
     computed: {
         collageImages() {
@@ -131,6 +141,15 @@ export default {
         }
     },
     methods: {
+        openModal(track) {
+            this.modalTrack = {
+                img: this.getTrackCover(track),
+                title: this.getTrackTitle(track),
+                artist: this.getTrackArtist(track),
+                previewUrl: track?.previewUrl || ''
+            };
+            this.isModalOpen = true;
+        },
         upgradeArtwork(url = '', size = 600) {
             return this.musicImageStore.upgradeArtwork(url, size);
         },
