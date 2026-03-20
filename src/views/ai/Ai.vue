@@ -33,6 +33,8 @@
                         </button>
                         <button type="button" class="ai-add-btn" @click="addAllToLibrary">라이브러리에 담기</button>
                     </div>
+                </div>
+                <div class="col-1">
                     <div class="row g-12 ai-result-list">
                         <MainListItem
                             v-for="(song, index) in visibleSongs"
