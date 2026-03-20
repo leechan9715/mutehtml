@@ -98,6 +98,8 @@ export default {
                 : this.item?.coverImage || this.collageImages[0] || this.playlistFallbackImage;
 
             return {
+                id: this.item?.id,
+                type: this.item?.type || 'playlist',
                 img: coverImage,
                 title,
                 artist
@@ -209,6 +211,6 @@ export default {
 .more-btn {
     font-size: var(--font-24);
     cursor: pointer;
-    padding: 0 0 0 10px;
+    padding: 0 10px;
 }
 </style>

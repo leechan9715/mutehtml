@@ -199,6 +199,12 @@ export default {
 
         async initLibrary() {
             try {
+                const storedItems = getLibraryItems();
+                if (Array.isArray(storedItems) && storedItems.length) {
+                    this.libraryItems = storedItems;
+                    return;
+                }
+
                 const apiLibrary = await this.buildApiLibrary();
                 saveLibraryItems(apiLibrary);
                 this.libraryItems = apiLibrary;
@@ -206,6 +212,13 @@ export default {
                 console.error('initLibrary error:', error);
                 this.libraryItems = getLibraryItems();
             }
+        },
+        onLibraryItemsUpdated(event) {
+            if (event?.detail && Array.isArray(event.detail)) {
+                this.libraryItems = event.detail;
+                return;
+            }
+            this.libraryItems = getLibraryItems();
         },
 
         addPlaylist() {
@@ -229,6 +242,10 @@ export default {
     },
     mounted() {
         this.initLibrary();
+        window.addEventListener('library-items-updated', this.onLibraryItemsUpdated);
+    },
+    beforeUnmount() {
+        window.removeEventListener('library-items-updated', this.onLibraryItemsUpdated);
     }
 };
 </script>

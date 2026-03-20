@@ -123,6 +123,6 @@ export default {
 .more-btn {
     font-size: var(--font-24);
     cursor: pointer;
-    padding: 0 0 0 10px;
+    padding: 0 10px;
 }
 </style>
