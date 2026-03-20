@@ -25,7 +25,6 @@
                     />
                     <span>해외</span>
                 </label>
-
                 <label class="column">
                     <input class="icon-radio" type="radio" value="heart" v-model="selectedType" name="select-type" />
                     <img
@@ -81,19 +80,27 @@
             </div>
         </div>
         <template v-if="selectedType !== 'heart'">
-            <ChartListItem
-                v-for="(item, index) in activeTopList"
-                :key="`${selectedType}-${item.rank || index}`"
-                :index="index"
-                :rank="item.rank"
-                :img="item.artworkUrl100 || fallbackCover"
-                :title="item.name"
-                :singer="item.artistName"
-                :trend="item.trend"
-                :preview-url="item.previewUrl"
-                :played-at="item.playedAt"
-                @click.prevent="playFromChart(item)"
-            />
+            <div
+                v-if="(selectedType === 'global' && store.isLoading) || (selectedType === 'country' && store.isLoading)"
+                class="loading-wrap"
+            >
+                <DotLottieVue class="loading-lottie" autoplay loop :data="loadingDotsData" />
+            </div>
+            <template v-else>
+                <ChartListItem
+                    v-for="(item, index) in activeTopList"
+                    :key="`${selectedType}-${item.rank || index}`"
+                    :index="index"
+                    :rank="item.rank"
+                    :img="item.artworkUrl100 || fallbackCover"
+                    :title="item.name"
+                    :singer="item.artistName"
+                    :trend="item.trend"
+                    :preview-url="item.previewUrl"
+                    :played-at="item.playedAt"
+                    @click.prevent="playFromChart(item)"
+                />
+            </template>
         </template>
     </section>
 </template>
@@ -102,9 +109,11 @@
 import ChartListItem from '@/components/layout/ChartListItem.vue';
 import fallbackCover from '@/assets/images/main/1.png';
 import goldenCover from '@/assets/images/chart/golden.png';
+import loadingDots from '@/assets/lottie/Loading_Dots_Blue.json';
 import { lastfmKoreaTopTracksApi, lastfmGlobalTopTracksApi, searchApi } from '@/api/_music_api';
-import { useIsLoadingStore } from '@/store/api_loading';
 import { useMusicImageStore } from '@/store/music';
+import { DotLottieVue } from '@lottiefiles/dotlottie-vue';
+import { useIsLoadingStore } from '@/store/api_loading';
 
 const PLAYER_STATE_KEY = 'mute-player-state';
 const ITUNES_CACHE_KEY = 'mute-chart-itunes-cache-v1';
@@ -112,11 +121,14 @@ const ITUNES_CACHE_KEY = 'mute-chart-itunes-cache-v1';
 export default {
     name: 'ChartView',
     components: {
-        ChartListItem
+        ChartListItem,
+        DotLottieVue
     },
     data() {
         return {
             selectedType: 'country',
+            loadingDotsData: JSON.stringify(loadingDots),
+            store: useIsLoadingStore(),
             fallbackCover,
             goldenCover,
             chartLimit: 20,
@@ -127,8 +139,7 @@ export default {
             countryTopOne: null,
             countryTopList: [],
             globalTopOne: null,
-            globalTopList: [],
-            store: useIsLoadingStore()
+            globalTopList: []
         };
     },
     computed: {
@@ -153,12 +164,8 @@ export default {
         }
     },
     async mounted() {
-        this.store.setLoading(true);
-        try {
-            await Promise.all([this.hydrateItunesCache(), this.ensureChartData()]);
-        } finally {
-            this.store.setLoading(false);
-        }
+        this.hydrateItunesCache();
+        await this.ensureChartData();
     },
     methods: {
         upgradeArtwork600(url = '') {
@@ -207,15 +214,22 @@ export default {
             if (this.selectedType === 'global' && this.globalTopList.length) return;
 
             if (this.selectedType === 'country') {
+                this.store.isLoading = true;
                 const { topOne, topList } = await this.fetchTop100(lastfmKoreaTopTracksApi, 'KR');
                 this.countryTopOne = topOne;
                 this.countryTopList = topList;
+                this.store.isLoading = false;
                 return;
             }
 
-            const { topOne, topList } = await this.fetchTop100(lastfmGlobalTopTracksApi, 'KR');
-            this.globalTopOne = topOne;
-            this.globalTopList = topList;
+            this.store.isLoading = true;
+            try {
+                const { topOne, topList } = await this.fetchTop100(lastfmGlobalTopTracksApi, 'KR');
+                this.globalTopOne = topOne;
+                this.globalTopList = topList;
+            } finally {
+                this.store.isLoading = false;
+            }
         },
 
         getLastfmArtistName(track) {
@@ -408,3 +422,20 @@ export default {
 };
 </script>
 <style scoped src="@/assets/styles/pages/chart.css"></style>
+<style scoped>
+.loading-wrap {
+    position: sticky;
+    inset: 0;
+    z-index: 19;
+    background: rgba(255, 255, 255, 1);
+    min-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+.loading-lottie {
+    width: 100%;
+    height: 100%;
+}
+</style>
