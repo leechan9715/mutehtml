@@ -1,6 +1,6 @@
 <template>
     <article class="library-item" @click="handleClick">
-        <div class="col-2 cover-wrap" :class="{ artist: item.type === 'artist' }">
+        <div class="col-2 cover-wrap" :class="{ artist: item.type === 'artist' }" @click.stop="openFilePicker">
             <template v-if="item.type === 'artist'">
                 <img
                     class="artist-cover"
@@ -9,6 +9,7 @@
                     @error="handleArtistImageError"
                 />
             </template>
+
             <template v-else-if="item.coverImage">
                 <img
                     class="playlist-cover"
@@ -17,8 +18,9 @@
                     @error="handlePlaylistImageError"
                 />
             </template>
-            <template v-else>
-                <div class="collage-cover">
+
+            <template v-else-if="collageImages.length">
+                <div class="collage-cover" :class="`count-${collageImages.length}`">
                     <div v-for="(cover, index) in collageImages" :key="`${item.id}-${index}`" class="collage-cell">
                         <img
                             :src="cover || playlistFallbackImage"
@@ -28,7 +30,17 @@
                     </div>
                 </div>
             </template>
+
+            <template v-else>
+                <img
+                    class="playlist-cover"
+                    :src="playlistFallbackImage"
+                    :alt="item.title || 'empty-playlist'"
+                    @error="handlePlaylistImageError"
+                />
+            </template>
         </div>
+
         <div class="col-2 info-container">
             <div class="info">
                 <p class="title">{{ item.type === 'artist' ? item.name : item.title }}</p>
@@ -40,11 +52,15 @@
             <p class="more-btn" @click.stop="openModal">⁝</p>
         </div>
     </article>
+
+    <input ref="fileInput" type="file" accept="image/*" style="display: none" @change="handleImageChange" />
+
     <LibraryModal v-model="isModalOpen" :track="modalTrack" />
 </template>
 
 <script>
 import LibraryModal from '@/components/layout/LibraryModal.vue';
+import { getLibraryItems, saveLibraryItems } from '@/utils/libraryStorage';
 
 export default {
     name: 'LibraryItem',
@@ -66,24 +82,10 @@ export default {
     },
     computed: {
         collageImages() {
-            const covers = (this.item?.tracks || []).map((track) => track.artworkUrl100).filter(Boolean);
-
-            if (!covers.length) {
-                return [
-                    this.playlistFallbackImage,
-                    this.playlistFallbackImage,
-                    this.playlistFallbackImage,
-                    this.playlistFallbackImage
-                ];
-            }
-
-            const result = covers.slice(0, 4);
-
-            while (result.length < 4) {
-                result.push(result[result.length - 1]);
-            }
-
-            return result;
+            return (this.item?.tracks || [])
+                .map((track) => track.artworkUrl100)
+                .filter(Boolean)
+                .slice(0, 4);
         },
         modalTrack() {
             const isArtist = this.item?.type === 'artist';
@@ -118,105 +120,94 @@ export default {
                 });
             }
         },
+
         handlePlaylistImageError(event) {
             event.target.src = this.playlistFallbackImage;
         },
+
         handleArtistImageError(event) {
             event.target.src = this.artistFallbackImage;
         },
+
         openModal() {
             this.isModalOpen = true;
+        },
+
+        openFilePicker() {
+            if (this.item.type !== 'playlist') return;
+
+            // 이미 커버가 있으면 다시 누를 때 원복
+            if (this.item.coverImage) {
+                this.resetCoverImage();
+                return;
+            }
+
+            this.$refs.fileInput?.click();
+        },
+
+        handleImageChange(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                const base64 = reader.result;
+                const items = getLibraryItems();
+
+                const updatedItems = items.map((it) => {
+                    if (String(it.id) === String(this.item.id)) {
+                        return {
+                            ...it,
+                            coverImage: base64
+                        };
+                    }
+                    return it;
+                });
+
+                saveLibraryItems(updatedItems);
+
+                window.dispatchEvent(
+                    new CustomEvent('library-items-updated', {
+                        detail: updatedItems
+                    })
+                );
+
+                if (this.$refs.fileInput) {
+                    this.$refs.fileInput.value = '';
+                }
+            };
+
+            reader.readAsDataURL(file);
+        },
+
+        resetCoverImage() {
+            const items = getLibraryItems();
+
+            const updatedItems = items.map((it) => {
+                if (String(it.id) === String(this.item.id)) {
+                    return {
+                        ...it,
+                        coverImage: ''
+                    };
+                }
+                return it;
+            });
+
+            saveLibraryItems(updatedItems);
+
+            window.dispatchEvent(
+                new CustomEvent('library-items-updated', {
+                    detail: updatedItems
+                })
+            );
+
+            if (this.$refs.fileInput) {
+                this.$refs.fileInput.value = '';
+            }
         }
     }
 };
 </script>
 
-<style scoped>
-.library-item {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    width: 100%;
-    cursor: pointer;
-}
-
-.cover-wrap {
-    width: 80px;
-    height: 80px;
-    flex-shrink: 0;
-    overflow: hidden;
-    border: 1px solid var(--color-accent-blue);
-    box-shadow: 0px 2px 4px var(--color-shadow);
-    background: var(--color-white);
-    border-radius: 5px;
-}
-
-.cover-wrap.artist {
-    border-radius: 50%;
-}
-
-.artist-cover,
-.playlist-cover {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-}
-
-.collage-cover {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(2, 1fr);
-}
-
-.collage-cell {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-}
-
-.collage-cell img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-}
-.info-container {
-    display: flex;
-    align-items: center;
-    padding: 15px 20px;
-    border-radius: 5px;
-    box-shadow: 0px 2px 4px var(--color-shadow);
-    border: 1px solid var(--color-accent-blue);
-    background: #ffffff;
-    flex: 1 0 auto;
-}
-
-.info {
-    min-width: 160px;
-    max-width: 150px;
-}
-
-.title {
-    font-size: var(--font-16);
-    color: var(--color-black);
-    margin-bottom: 5px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.sub {
-    font-size: var(--font-14);
-    color: var(--color-gray);
-}
-
-.more-btn {
-    font-size: var(--font-24);
-    cursor: pointer;
-    padding: 0 10px;
-    margin-left: auto;
-}
-</style>
+<style scoped src="@/assets/styles/pages/LibraryItem.css"></style>
