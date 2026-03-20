@@ -50,7 +50,7 @@
 
             <!-- 나만 -->
             <div class="chart mine-chart" v-show="activeTab === 'mine'">
-                <MainListItem />
+                <LibraryItem v-for="item in mineLibraryItems" :key="item.id" :item="item" />
             </div>
         </div>
     </section>
@@ -58,13 +58,16 @@
 
 <script>
 import { lastfmKoreaTopTracksApi, lastfmGlobalTopTracksApi, searchApi } from '@/api/_music_api';
+import LibraryItem from '@/components/layout/LibraryItem.vue';
 import MainListItem from '@/components/layout/MainListItem.vue';
 import { useIsLoadingStore } from '@/store/api_loading';
 import { useMusicImageStore } from '@/store/music';
+import { getLibraryItems } from '@/utils/libraryStorage';
 export default {
     name: 'HotChartSection',
     components: {
-        MainListItem
+        MainListItem,
+        LibraryItem
     },
     data() {
         return {
@@ -73,10 +76,40 @@ export default {
             activeTab: 'korea',
             keywords: ['kpop', 'POP'],
             kpop: [],
-            global: []
+            global: [],
+            libraryItems: []
         };
     },
+    computed: {
+        mineLibraryItems() {
+            return (this.libraryItems || []).slice(0, 4);
+        }
+    },
+    async mounted() {
+        this.initLibrary();
+        window.addEventListener('library-items-updated', this.onLibraryItemsUpdated);
+        this.store.setLoading(true);
+        try {
+            await Promise.all([this.getKpopResults(), this.getGlobalResults()]);
+        } finally {
+            this.store.setLoading(false);
+            console.log('메인섹션5', this.store.isLoading);
+        }
+    },
+    beforeUnmount() {
+        window.removeEventListener('library-items-updated', this.onLibraryItemsUpdated);
+    },
     methods: {
+        initLibrary() {
+            this.libraryItems = getLibraryItems();
+        },
+        onLibraryItemsUpdated(event) {
+            if (event?.detail && Array.isArray(event.detail)) {
+                this.libraryItems = event.detail;
+                return;
+            }
+            this.libraryItems = getLibraryItems();
+        },
         upgradeArtwork600(url = '') {
             return this.musicImageStore.upgradeArtwork(url, 600);
         },
@@ -151,15 +184,6 @@ export default {
                 console.error('getGlobalResults error:', error);
                 this.global = [];
             }
-        }
-    },
-    async mounted() {
-        this.store.setLoading(true);
-        try {
-            await Promise.all([this.getKpopResults(), this.getGlobalResults()]);
-        } finally {
-            this.store.setLoading(false);
-            console.log('메인섹션5', this.store.isLoading);
         }
     }
 };
