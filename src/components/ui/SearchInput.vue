@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row">
             <div class="col-1">
-                <input type="text" placeholder="가수 · 노래제목 · 가사를 적어주세요" />
+                <input type="text" :placeholder="placeholder" />
                 <span class="material-symbols-outlined bold"> search </span>
             </div>
         </div>
@@ -11,7 +11,10 @@
 
 <script>
 export default {
-    name: 'SearchInput'
+    name: 'SearchInput',
+    props: {
+        placeholder: { type: String, default: '' }
+    }
 };
 </script>
 

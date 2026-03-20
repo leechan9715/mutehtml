@@ -3,14 +3,16 @@
         <form class="container" name="signup-info" @submit.prevent="handleSubmit">
             <div class="row">
                 <div class="col-1">
-                    <h2 class="fw-semibold text-center"><span class="color-primary-4">성별</span>을 알려주세요</h2>
+                    <h2 class="fw-semibold text-center color-black">
+                        <span class="color-key">성별</span>을 알려주세요
+                    </h2>
                 </div>
             </div>
 
             <div class="row g-24">
                 <label class="col-2 gender" for="female">
-                    <p class="fw-semibold color-black">여성</p>
-                    <img :src="female" alt="female" />
+                    <p class="fw-semibold color-black font-18">여성</p>
+                    <img :src="selectedGender === '여성' ? femaleActive : female" alt="female" />
                     <input
                         type="radio"
                         name="gender"
@@ -22,23 +24,23 @@
                 </label>
 
                 <label for="male" class="col-2 gender">
-                    <p class="fw-semibold color-black">남성</p>
-                    <img :src="male" alt="male" />
+                    <p class="fw-semibold color-black font-18">남성</p>
+                    <img :src="selectedGender === '남성' ? maleActive : male" alt="male" />
                     <input type="radio" name="gender" value="남성" id="male" class="hidden" v-model="selectedGender" />
                 </label>
             </div>
 
             <div class="row g-29">
                 <div class="col-1">
-                    <h2 class="fw-semibold text-center">
-                        <span class="text-center color-primary-3">생년월일</span>을 알려주세요.
+                    <h2 class="fw-semibold text-center color-black">
+                        <span class="text-center color-key">생년월일</span>을 알려주세요.
                     </h2>
                 </div>
 
                 <div class="col-1">
                     <div class="wheel-form">
                         <div class="wheel-card">
-                            <div class="wheel-grid">
+                            <div class="wheel-grid color-black">
                                 <div class="wheel" ref="yearWheelRef"></div>
                                 <div class="wheel" ref="monthWheelRef"></div>
                                 <div class="wheel" ref="dayWheelRef"></div>
@@ -56,7 +58,9 @@
 
 <script>
 import male from '@/assets/images/signup-info/gender-male.png';
+import maleActive from '@/assets/images/signup-info/gender-male-active.png';
 import female from '@/assets/images/signup-info/gender-female.png';
+import femaleActive from '@/assets/images/signup-info/gender-female-active.png';
 import BaseButton from '@/components/ui/BaseButton.vue';
 
 export default {
@@ -66,9 +70,10 @@ export default {
     data() {
         return {
             male,
+            maleActive,
             female,
+            femaleActive,
 
-            // 상태
             selectedGender: '여성',
             selectedYear: null,
             selectedMonth: null,
@@ -76,13 +81,11 @@ export default {
             prevYear: null,
             prevMonth: null,
 
-            // 상수/관리용
             MAX_YEAR: new Date().getFullYear(),
             scrollTimeouts: new Map(),
             cleanupFns: [],
             _timeouts: new Set(),
 
-            // DOM(휠 엘리먼트)
             yearWheel: null,
             monthWheel: null,
             dayWheel: null
@@ -90,7 +93,6 @@ export default {
     },
 
     mounted() {
-        // ref DOM 잡기
         this.yearWheel = this.$refs.yearWheelRef;
         this.monthWheel = this.$refs.monthWheelRef;
         this.dayWheel = this.$refs.dayWheelRef;
@@ -99,7 +101,6 @@ export default {
     },
 
     beforeUnmount() {
-        // 이벤트/타이머 정리
         this.cleanupFns.forEach((fn) => fn());
         this.cleanupFns = [];
 
@@ -117,9 +118,6 @@ export default {
             return id;
         },
 
-        /* =========================
-       UI 유틸
-    ========================= */
         getVisibleCount() {
             const v = getComputedStyle(document.documentElement).getPropertyValue('--visible').trim();
             const n = Number(v);
@@ -135,9 +133,6 @@ export default {
             return item ? item.getBoundingClientRect().height : 0;
         },
 
-        /* =========================
-       Wheel 생성
-    ========================= */
         buildWheel(wheel, values, formatter = (v) => String(v)) {
             if (!wheel) return;
             wheel.innerHTML = '';
@@ -213,9 +208,6 @@ export default {
             return centerValue;
         },
 
-        /* =========================
-       데이터 생성
-    ========================= */
         buildYears() {
             const years = [];
             for (let y = 1920; y <= this.MAX_YEAR; y++) years.push(y);
@@ -233,9 +225,6 @@ export default {
             this.buildWheel(this.dayWheel, days);
         },
 
-        /* =========================
-       핵심 업데이트
-    ========================= */
         updateValues() {
             const y = this.updateSelected(this.yearWheel);
             const m = this.updateSelected(this.monthWheel);
@@ -290,9 +279,6 @@ export default {
             this.updateValues();
         },
 
-        /* =========================
-       옵션1: PC 휠 1칸 이동
-    ========================= */
         attachWheelStepScroll(wheel) {
             let locked = false;
 
@@ -314,9 +300,6 @@ export default {
             return () => wheel.removeEventListener('wheel', handler);
         },
 
-        /* =========================
-       옵션2: 드래그 + 관성 + 스냅
-    ========================= */
         attachDragPickerWithInertia(wheel) {
             let isDown = false;
             let startY = 0;
@@ -408,22 +391,31 @@ export default {
 
             const onMouseDown = (e) => {
                 e.preventDefault();
+                window.addEventListener('mousemove', onMouseMove);
+                window.addEventListener('mouseup', onMouseUp);
                 onDown(e.clientY);
             };
             const onMouseMove = (e) => onMove(e.clientY);
-            const onMouseUp = () => onUp();
+            const onMouseUp = () => {
+                onUp();
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('mouseup', onMouseUp);
+            };
 
             const onTouchStart = (e) => onDown(e.touches[0].clientY);
-            const onTouchMove = (e) => onMove(e.touches[0].clientY);
+            const onTouchMove = (e) => {
+                if (!isDown) return;
+                e.preventDefault();
+                onMove(e.touches[0].clientY);
+            };
             const onTouchEnd = () => onUp();
 
             wheel.addEventListener('mousedown', onMouseDown);
-            window.addEventListener('mousemove', onMouseMove);
-            window.addEventListener('mouseup', onMouseUp);
 
             wheel.addEventListener('touchstart', onTouchStart, { passive: true });
-            wheel.addEventListener('touchmove', onTouchMove, { passive: true });
+            wheel.addEventListener('touchmove', onTouchMove, { passive: false });
             wheel.addEventListener('touchend', onTouchEnd, { passive: true });
+            wheel.addEventListener('touchcancel', onTouchEnd, { passive: true });
 
             return () => {
                 wheel.removeEventListener('mousedown', onMouseDown);
@@ -433,14 +425,12 @@ export default {
                 wheel.removeEventListener('touchstart', onTouchStart);
                 wheel.removeEventListener('touchmove', onTouchMove);
                 wheel.removeEventListener('touchend', onTouchEnd);
+                wheel.removeEventListener('touchcancel', onTouchEnd);
 
                 stopInertia();
             };
         },
 
-        /* =========================
-       init
-    ========================= */
         init() {
             this.buildYears();
             this.buildMonths();
@@ -459,7 +449,6 @@ export default {
             this.scrollToValue(this.monthWheel, this.selectedMonth, false);
             this.scrollToValue(this.dayWheel, this.selectedDay, false);
 
-            // wheel 3개 공통 이벤트 연결 + cleanup 등록
             [this.yearWheel, this.monthWheel, this.dayWheel].forEach((wheel) => {
                 const c1 = this.attachWheelStepScroll(wheel);
                 const c2 = this.attachDragPickerWithInertia(wheel);
@@ -477,9 +466,6 @@ export default {
             this.addTimeout(() => this.updateValues(), 0);
         },
 
-        /* =========================
-       submit
-    ========================= */
         handleSubmit() {
             if (!this.selectedYear || !this.selectedMonth || !this.selectedDay) {
                 alert('날짜를 선택해주세요.');
@@ -490,7 +476,7 @@ export default {
                 `선택값: ${this.selectedYear}년 ${this.selectedMonth}월 ${this.selectedDay}일, ${this.selectedGender}`
             );
 
-            this.$router.push('/artistselect');
+            this.$router.push('/main');
         }
     }
 };

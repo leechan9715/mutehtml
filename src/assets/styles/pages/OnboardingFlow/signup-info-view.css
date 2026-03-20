@@ -10,7 +10,7 @@
     background: #fff;
     border: 1px solid var(--color-primary-5);
     border-radius: var(--radius);
-    box-shadow: 0px 2px 4px 0px rgba(218, 229, 255, 1);
+    box-shadow: 0px 2px 4px 0px var(--color-accent-blue);
     overflow: hidden;
     margin-bottom: 68px;
 }
@@ -57,17 +57,19 @@
     justify-content: center;
     font-size: 24px;
     padding: 0 20px;
-    color: var(--color-primary-6);
     transition: all 0.15s ease;
     cursor: pointer;
     user-select: none;
+
 }
 
 .wheel :deep(.wheel-item.is-selected) {
-    color: rgba(0, 0, 0, 0.95);
+    color: var(--color-black);
     font-weight: 400;
     transform: scale(1.1);
+    background-color: rgb(255, 255, 255);
 }
+
 /* ✅ 중앙 선택 영역 표시(가이드 라인) */
 .wheel-highlight {
     position: absolute;
@@ -76,10 +78,10 @@
     top: 50%;
     height: var(--item-h);
     transform: translateY(-50%);
-    border-top: 1px solid var(--color-primary-5);
-    border-bottom: 1px solid var(--color-primary-5);
+    border-top: 1px solid var(--color-shadow);
+    border-bottom: 1px solid var(--color-shadow);
     pointer-events: none;
-    background: rgba(0, 0, 0, 0.02);
+    background: rgba(48, 103, 255, 0.05);
 }
 
 .preview {
@@ -87,7 +89,7 @@
     padding: 12px 14px;
     border: 1px solid var(--color-primary-5);
     border-radius: 14px;
-    background: #fafafa;
+    background: rgba(0, 0, 0, 0.02);
     font-size: 16px;
     text-align: center;
 }
@@ -96,8 +98,8 @@
     width: 100%;
     padding: 14px 16px;
     border: 0;
-    border-radius: 14px;
-    background: linear-gradient(180deg, rgba(111, 131, 247, 1) 0%, rgba(74, 99, 248, 1) 100%);
+    border-radius: 50px;
+    background: var(--gradient-key);
     color: #fff;
     cursor: pointer;
     transition: transform 0.1s ease;
@@ -106,6 +108,7 @@
 .btn:active {
     transform: scale(0.98);
 }
+
 /* ================= 
   생년월일 , 성별 선택 페이지 메인 Css파일
 =====================*/
@@ -118,10 +121,12 @@ main {
 main .row:nth-child(1) {
     margin-bottom: 20px;
 }
+
 main .row:nth-child(2) {
     display: flex;
     justify-content: center;
 }
+
 main .gender {
     display: flex;
     flex-direction: column;
@@ -135,13 +140,14 @@ main .gender {
     margin-bottom: 43px;
     cursor: pointer;
     background-color: transparent;
-    transition: background 1s ease-in-out;
+    transition: background 0.3s ease-in-out;
+    background-color: rgb(255, 255, 255);
 }
-main .gender:has(#female:checked) {
-    background: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(248, 220, 255, 1) 100%);
-    border: 1px solid var(--color-pink-2);
-}
-main .gender:has(#male:checked) {
-    background: linear-gradient(180deg, rgba(200, 218, 255, 1) 0%, rgba(255, 255, 255, 1) 100%);
-    border: 1px solid var(--color-primary-7);
+
+main .gender:has(#female:checked) {}
+
+main .gender:has(#male:checked) {}
+
+img {
+    width: 100px;
 }

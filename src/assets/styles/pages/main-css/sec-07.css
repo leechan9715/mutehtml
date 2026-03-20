@@ -1,0 +1,76 @@
+.shorts {
+    width: 160px;
+    height: auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 1) 0%, rgba(102, 102, 102, 1) 100%);
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.information {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.information > img {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+    border: 1px solid var(--color-accent-blue);
+}
+
+.artist {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    margin-right: auto;
+}
+
+.artist p {
+    margin: 0;
+    line-height: 1.1;
+    color: #ffffff;
+    font-weight: var(--fw-semibold);
+}
+
+.artist_song {
+    font-size: var(--font-10);
+    padding-bottom: 3px;
+    text-shadow: 0 0 6px rgba(0, 0, 0, 1);
+}
+
+.artist_name {
+    font-size: var(--font-12);
+    text-shadow: 0 0 6px rgba(0, 0, 0, 1);
+}
+
+.buttons {
+    width: 11px;
+    height: 11px;
+    position: relative;
+}
+
+.buttons img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+.buttons img:first-child {
+    display: none;
+}
+
+.video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}

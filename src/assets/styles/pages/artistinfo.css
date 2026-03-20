@@ -1,0 +1,137 @@
+.artist-info {
+    width: 20%;
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: var(--color-black);
+}
+
+.artist_img {
+    width: 100%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.artist_img img {
+    width: 80%;
+}
+
+.artist-name {
+    font-size: 32px;
+    font-weight: var(--fw-medium);
+    padding: 20px 0 0 0;
+}
+
+.artist-type {
+    font-size: 20px;
+    font-weight: var(--fw-medium);
+}
+
+.artist-fame {
+    font-size: 16px;
+    font-weight: var(--fw-medium);
+    color: var(--color-gray);
+    padding: 10px 0 20px 0;
+}
+
+.album-info {
+    padding: 59px 27px 0 27px;
+}
+
+.album-text {
+    font-size: var(--font-20);
+    font-weight: var(--fw-semibold);
+}
+
+.artist-info-swiper {
+    width: 100%;
+    height: auto;
+    padding-top: 16px;
+}
+
+.icon-toggle-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 40px 30px 40px;
+    padding: 15px 40px;
+    border-radius: 999px;
+    border: 1px solid var(--color-accent-blue);
+    box-shadow: 0px 2px 4px var(--color-shadow);
+    background: var(--gradient-light);
+}
+
+.icon-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 50%;
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.icon-btn:active {
+    transform: scale(0.9);
+}
+
+.material-symbols-outlined {
+    font-size: 28px;
+    color: var(--color-black);
+    transition:
+        color 0.25s ease,
+        transform 0.25s ease,
+        font-variation-settings 0.25s ease;
+}
+
+.icon-btn.active .material-symbols-outlined {
+    color: var(--color-key);
+}
+
+.icon-btn:hover .material-symbols-outlined {
+    transform: scale(1.08);
+}
+
+/* menu 버튼은 완전 예외 처리 */
+.menu-btn {
+    background: transparent !important;
+    transform: none !important;
+}
+
+.menu-btn:active {
+    transform: none !important;
+}
+
+.menu-btn:hover .material-symbols-outlined {
+    transform: none !important;
+}
+
+.menu-btn .material-symbols-outlined {
+    color: var(--color-black) !important;
+}
+
+.pop {
+    animation: heartPop 0.35s ease;
+}
+
+@keyframes heartPop {
+    0% {
+        transform: scale(1);
+    }
+
+    30% {
+        transform: scale(1.28);
+    }
+
+    60% {
+        transform: scale(0.92);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}

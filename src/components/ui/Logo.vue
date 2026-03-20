@@ -27,41 +27,62 @@
 <script>
 export default {
     name: 'Logo',
+    data() {
+        return {
+            blinkIntervalId: null,
+            mouthIntervalId: null,
+            mouthTimers: []
+        };
+    },
     mounted() {
-        const eyes = document.querySelectorAll('.eye');
-        const mouth = document.querySelector('.mouth');
+        const root = this.$el;
+        const eyes = root?.querySelectorAll('.eye') || [];
+        const mouth = root?.querySelector('.mouth');
+        if (!mouth || !eyes.length) return;
 
         // 눈 깜빡임
         function blink() {
             eyes.forEach((e) => (e.style.transform = 'scaleY(0.1)'));
-            setTimeout(() => {
+            const t = setTimeout(() => {
                 eyes.forEach((e) => (e.style.transform = 'scaleY(1)'));
             }, 150);
+            return t;
         }
-        setInterval(blink, 3000);
+        this.blinkIntervalId = setInterval(() => {
+            const timerId = blink();
+            this.mouthTimers.push(timerId);
+        }, 3000);
 
         // 입 애니메이션: 납작해졌다가 웃는 입으로 변신 후 원래대로
-        function mouthAnimation() {
+        const mouthAnimation = () => {
             // 1. 납작한 직선 입
             mouth.classList.add('flat');
             mouth.classList.remove('smile');
             eyes.forEach((e) => e.classList.remove('smile-eye'));
 
             // 2. 0.3초 후 웃는 입
-            setTimeout(() => {
+            const t1 = setTimeout(() => {
                 mouth.classList.remove('flat');
                 mouth.classList.add('smile');
                 eyes.forEach((e) => e.classList.add('smile-eye'));
             }, 300);
 
             // 3. 1.5초 후 기본 입으로 복귀
-            setTimeout(() => {
+            const t2 = setTimeout(() => {
                 mouth.classList.remove('smile');
                 eyes.forEach((e) => e.classList.remove('smile-eye'));
             }, 1800);
-        }
 
-        setInterval(mouthAnimation, 3000);
+            this.mouthTimers.push(t1, t2);
+        };
+
+        this.mouthIntervalId = setInterval(mouthAnimation, 3000);
+    },
+    beforeUnmount() {
+        if (this.blinkIntervalId) clearInterval(this.blinkIntervalId);
+        if (this.mouthIntervalId) clearInterval(this.mouthIntervalId);
+        this.mouthTimers.forEach((id) => clearTimeout(id));
+        this.mouthTimers = [];
     }
 };
 </script>
@@ -98,7 +119,7 @@ export default {
 .block {
     width: 10px;
     height: 10px;
-    background: black;
+    background: var(--color-black);
     z-index: 1;
     transition: all 0.3s ease;
     justify-self: center;

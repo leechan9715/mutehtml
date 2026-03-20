@@ -4,14 +4,12 @@
             <div class="row">
                 <Logo />
                 <div class="col-1">
-                    <h2 class="font-24 fw-800 welcome">WELCOME!</h2>
+                    <h2 class="font-24 fw-900 welcome">WELCOME!</h2>
                 </div>
                 <div class="col-1">
-                    <p class="text-center font-16 fw-400 welcome-des">
-                        환영합니다, 00님!<br />
-                        뮤트는 사용자의 취향을 분석하고<br />
-                        그에 맞게 환경을 설계합니다.<br />
-                        보다 몰입하며 음악을 즐겨보세요.
+                    <p class="text-center font-20 fw-600 welcome-des color-black" ref="welcome-des">
+                        안녕하세요<br />
+                        뮤트에 오신걸 환영합니다!
                     </p>
                 </div>
             </div>
@@ -21,12 +19,56 @@
 
 <script>
 import Logo from '@/components/ui/Logo.vue';
+import { checkAuthApi, checkSocialLogin } from '@/api/_auth_api';
 
 export default {
     name: 'WelcomeView',
-
+    data() {
+        return {
+            welcomeDes: null,
+            lines: [],
+            lineIndex: 0,
+            charIndex: 0,
+            typingTimer: null,
+            redirectTimer: null
+        };
+    },
     components: {
         Logo
+    },
+    async mounted() {
+        this.welcomeDes = this.$refs['welcome-des'];
+        this.lines = this.welcomeDes.innerHTML.split(/<br\b[^>]*>/i);
+        this.welcomeDes.innerHTML = '';
+        this.lineIndex = 0;
+        this.charIndex = 0;
+        this.redirectTimer = setTimeout(() => {
+            this.$router.push('/artist-select');
+        }, 2500); // 2.5초 후에 회원가입 페이지로 이동
+        this.typeLine();
+        const { data } = await checkAuthApi();
+        console.log('세션에 저장된 데이터', data);
+    },
+    beforeUnmount() {
+        clearTimeout(this.typingTimer);
+        clearTimeout(this.redirectTimer);
+    },
+
+    methods: {
+        typeLine() {
+            if (this.lineIndex < this.lines.length) {
+                if (this.charIndex < this.lines[this.lineIndex].length) {
+                    this.welcomeDes.innerHTML += this.lines[this.lineIndex][this.charIndex];
+                    this.charIndex++;
+                    this.typingTimer = setTimeout(() => this.typeLine(), 40); // 타이핑 속도 조절
+                } else {
+                    this.welcomeDes.innerHTML += '<br>';
+                    this.lineIndex++;
+                    this.charIndex = 0;
+                    this.typingTimer = setTimeout(() => this.typeLine(), 200); // 줄 바뀔 때 약간 텀
+                }
+            }
+        }
     }
 };
 </script>

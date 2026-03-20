@@ -1,0 +1,181 @@
+.playlist-detail-page {
+    padding: 30px 40px;
+    color: var(--color-black);
+}
+
+.top-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.top-cover-wrap {
+    width: 90%;
+    max-width: 320px;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 20px;
+}
+
+.single-cover,
+.empty-cover {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.single-cover {
+    object-fit: cover;
+}
+
+.empty-cover {
+    background: var(--color-white);
+    border-radius: 10px;
+    border: 1px solid var(--color-accent-blue);
+    box-shadow: 0px 2px 4px var(--color-shadow);
+}
+
+.collage-cover {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    gap: 0;
+}
+
+.collage-cover.count-1 {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+}
+
+.collage-cover.count-2 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+}
+
+.collage-cover.count-3,
+.collage-cover.count-4 {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+}
+
+.collage-cell {
+    width: 100%;
+    height: 100%;
+}
+
+.collage-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.playlist-summary {
+    text-align: center;
+}
+
+.playlist-type,
+.playlist-meta {
+    margin: 0 0 6px;
+    font-size: 16px;
+    color: var(--color-gray);
+    font-weight: 600;
+}
+
+.playlist-title {
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0 0 8px;
+}
+
+.action-row {
+    display: flex;
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.action-btn {
+    flex: 1;
+    padding: 7px 20px;
+    border: 1px solid var(--color-accent-blue);
+    box-shadow: 0px 2px 4px var(--color-shadow);
+    border-radius: 999px;
+    background: #fff;
+    transition: all 0.2s;
+}
+
+/* 클릭된 상태 */
+.action-btn.active {
+    background: var(--gradient-key);
+    color: #fff;
+}
+
+.add-row {
+    margin-bottom: 20px;
+}
+
+.add-music-btn {
+    width: 100%;
+    height: 44px;
+    border: 1px dashed var(--color-accent-blue);
+    background: #fff;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.track-section {
+    margin-top: 12px;
+}
+
+.section-title {
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.track-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.track-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.track-cover {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.track-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.track-title {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.track-artist {
+    margin: 0;
+    font-size: 12px;
+}
+
+.track-more-btn {
+    width: 32px;
+    height: 32px;
+    border: 0;
+    background: transparent;
+}
+
+.empty-track-box {
+    padding: 20px 0;
+    text-align: center;
+}

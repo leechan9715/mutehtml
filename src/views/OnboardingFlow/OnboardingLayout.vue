@@ -1,6 +1,5 @@
 <template>
     <div id="wrap">
-        <AuthHeader />
         <div class="box">
             <router-view />
         </div>
@@ -21,5 +20,11 @@ export default {
 .box {
     position: relative;
     top: 50px;
+}
+
+#wrap {
+    background-image: url(@/assets/images/bg/bg_big.png);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
 }
 </style>
