@@ -143,6 +143,7 @@
     cursor: default;
     margin: 0;
     padding: 0;
+    cursor: grab;
 }
 
 /* ── Color / info box row ── */

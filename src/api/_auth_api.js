@@ -2,8 +2,6 @@ import api from './api';
 
 export const checkAuthApi = () => api.get('/auth/checkAuth.php');
 
-export const checkSocialLogin = () => api.get('/auth/check_social_login.php');
-
 export const checkNicknameApi = (nickname) => api.post('/auth/check_nickname.php', { nickname });
 
 export const loginApi = ({ email, password, provider }) => api.post('/auth/login.php', { email, password, provider });

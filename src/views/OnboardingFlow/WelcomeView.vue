@@ -19,7 +19,6 @@
 
 <script>
 import Logo from '@/components/ui/Logo.vue';
-import { checkAuthApi, checkSocialLogin } from '@/api/_auth_api';
 
 export default {
     name: 'WelcomeView',
@@ -46,8 +45,6 @@ export default {
             this.$router.push('/artist-select');
         }, 2500); // 2.5초 후에 회원가입 페이지로 이동
         this.typeLine();
-        const { data } = await checkAuthApi();
-        console.log('세션에 저장된 데이터', data);
     },
     beforeUnmount() {
         clearTimeout(this.typingTimer);

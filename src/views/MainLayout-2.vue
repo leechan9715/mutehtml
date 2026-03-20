@@ -20,23 +20,21 @@ import { useIsLoadingStore } from '@/store/api_loading';
 import loadingDots from '@/assets/lottie/Loading_Dots_Blue.json';
 import AppFooter from '@/components/layout/AppFooter.vue';
 import AppHeader from '@/components/layout/AppHeader-2.vue';
-import playlistInfo from '@/components/ui/playlist-info.vue';
-import VibeSelectBtn from '@/components/ui/VibeSelectBtn.vue';
+import { useAuthStore } from '@/store/auth';
 
 export default {
     name: 'MainLayout2',
     data() {
         return {
             loadingDotsData: JSON.stringify(loadingDots),
-            store: useIsLoadingStore()
+            store: useIsLoadingStore(),
+            authStore: useAuthStore()
         };
     },
     components: {
         DotLottieVue,
         AppHeader,
-        AppFooter,
-        playlistInfo,
-        VibeSelectBtn
+        AppFooter
     },
     computed: {
         isProfile() {
@@ -47,15 +45,30 @@ export default {
         }
     },
     mounted() {
-        this.loginCheck();
+        this.initAuth();
     },
     methods: {
-        loginCheck() {
-            const auth_check = localStorage.getItem('login-check');
-            if (!auth_check) {
-                alert('로그인을 해주세요');
-                this.$router.push('/');
+        async initAuth() {
+            const loginCheck = localStorage.getItem('login-check');
+            if (!loginCheck) {
+                this.handleAuthFailure();
+                return;
             }
+            try {
+                await this.authStore.fetchAuthData();
+                if (!this.authStore.authData?.user) {
+                    throw new Error('유효한 사용자 정보가 없습니다.');
+                }
+            } catch (e) {
+                console.error('로그인이 안되있습니다.', e);
+                this.handleAuthFailure();
+            }
+        },
+        handleAuthFailure() {
+            this.authStore.clearAuthState();
+            localStorage.removeItem('login-check');
+            alert('로그인을 해주세요');
+            this.$router.replace('/');
         }
     }
 };

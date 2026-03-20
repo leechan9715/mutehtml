@@ -74,9 +74,13 @@
                 <div v-else class="empty-comment">댓글이 없습니다.</div>
             </div>
 
-            <form class="comment-form" @submit.prevent="comment_ADD">
+            <form class="comment-form" @submit.prevent="commentAdd">
                 <div class="input-profile-btn">
-                    <img :src="userInfo.user?.profileImg || defaultProfileImg" alt="my profile" class="input-profile" />
+                    <img
+                        :src="authData?.user?.profileImg || defaultProfileImg"
+                        alt="my profile"
+                        class="input-profile"
+                    />
                 </div>
 
                 <input v-model="comment" placeholder="댓글을 입력하세요" type="text" class="comment-input" />
@@ -93,14 +97,14 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { commentAddApi, getCommentsApi, getVideoApi } from '@/api/_music_api';
-import { checkAuthApi } from '@/api/_auth_api';
+import { useAuthStore } from '@/store/auth';
 import profileImgSrc from '@/assets/images/mypage/test.jpg';
-
+import { storeToRefs } from 'pinia';
+const authStore = useAuthStore();
+const { authData } = storeToRefs(authStore);
 const route = useRoute();
 const id = route.params.id;
-
 const result = ref(null);
-const userInfo = ref({});
 const defaultProfileImg = profileImgSrc;
 
 const username = ref('홍길동');
@@ -240,7 +244,7 @@ function saveCommentProfileMap() {
 }
 
 function getMyProfileImg() {
-    return userInfo.value?.user?.profileImg || defaultProfileImg;
+    return authData.value?.user?.profileImg || defaultProfileImg;
 }
 
 function getCommentProfileImg(item) {
@@ -262,11 +266,10 @@ function saveWriterProfile(writer, profileImg) {
 
 async function getUserInfo() {
     try {
-        const { data } = await checkAuthApi();
-        userInfo.value = data;
+        await authStore.fetchAuthData();
 
-        if (data?.user?.nickname) {
-            username.value = data.user.nickname;
+        if (authData.value?.user?.nickname) {
+            username.value = authData.value.user.nickname;
         }
 
         saveWriterProfile(username.value, getMyProfileImg());
@@ -296,7 +299,7 @@ async function getComments() {
     }
 }
 
-async function comment_ADD() {
+async function commentAdd() {
     if (!comment.value.trim()) {
         alert('댓글을 입력해주세요.');
         return;
@@ -324,15 +327,15 @@ async function comment_ADD() {
     }
 }
 
-onMounted(() => {
+onMounted(async () => {
     loadPostLike();
     loadShareState();
     loadDownloadState();
     loadLikedComments();
     loadCommentProfileMap();
-    getUserInfo();
-    getVideo();
-    getComments();
+    await getUserInfo();
+    await getVideo();
+    await getComments();
 });
 </script>
 
