@@ -1,6 +1,6 @@
 <template>
     <article class="library-item" @click="handleClick">
-        <div class="cover-wrap" :class="{ artist: item.type === 'artist' }">
+        <div class="col-2 cover-wrap" :class="{ artist: item.type === 'artist' }">
             <template v-if="item.type === 'artist'">
                 <img
                     class="artist-cover"
@@ -9,7 +9,6 @@
                     @error="handleArtistImageError"
                 />
             </template>
-
             <template v-else-if="item.coverImage">
                 <img
                     class="playlist-cover"
@@ -18,7 +17,6 @@
                     @error="handlePlaylistImageError"
                 />
             </template>
-
             <template v-else>
                 <div class="collage-cover">
                     <div v-for="(cover, index) in collageImages" :key="`${item.id}-${index}`" class="collage-cell">
@@ -31,18 +29,16 @@
                 </div>
             </template>
         </div>
-
-        <div class="info">
-            <p class="title">{{ item.type === 'artist' ? item.name : item.title }}</p>
-            <p class="sub">
-                <template v-if="item.type === 'artist'">Artist</template>
-                <template v-else>Playlist · {{ item.owner }} · {{ item.tracks?.length || 0 }}곡</template>
-            </p>
+        <div class="col-2 info-container">
+            <div class="info">
+                <p class="title">{{ item.type === 'artist' ? item.name : item.title }}</p>
+                <p class="sub">
+                    <template v-if="item.type === 'artist'">Artist</template>
+                    <template v-else>Playlist · {{ item.owner }} · {{ item.tracks?.length || 0 }}곡</template>
+                </p>
+            </div>
+            <p class="more-btn" @click.stop="openModal">⁝</p>
         </div>
-
-        <button class="more-btn" type="button" @click.stop="openModal">
-            <span class="material-symbols-outlined">more_vert</span>
-        </button>
     </article>
     <LibraryModal v-model="isModalOpen" :track="modalTrack" />
 </template>
@@ -139,13 +135,14 @@ export default {
 .library-item {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 15px;
     width: 100%;
     cursor: pointer;
 }
 
 .cover-wrap {
     width: 80px;
+    height: 80px;
     flex-shrink: 0;
     overflow: hidden;
     border: 1px solid var(--color-accent-blue);
@@ -186,31 +183,40 @@ export default {
     display: block;
     object-fit: cover;
 }
+.info-container {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0px 2px 4px var(--color-shadow);
+    border: 1px solid var(--color-accent-blue);
+    background: #ffffff;
+    flex: 1 0 auto;
+}
 
 .info {
-    flex: 1;
-    min-width: 0;
+    min-width: 160px;
+    max-width: 150px;
 }
 
 .title {
-    margin: 0 0 5px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #1c274c;
+    font-size: var(--font-16);
+    color: var(--color-black);
+    margin-bottom: 5px;
+    text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis;
 }
 
 .sub {
-    margin: 0;
-    font-size: 14px;
-    color: #666;
+    font-size: var(--font-14);
+    color: var(--color-gray);
 }
 
 .more-btn {
     font-size: var(--font-24);
     cursor: pointer;
     padding: 0 10px;
+    margin-left: auto;
 }
 </style>
