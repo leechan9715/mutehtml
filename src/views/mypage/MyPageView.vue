@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <AppTopBar2 title="마이페이지"></AppTopBar2>
+        <AppTopBar2 title="마이페이지" />
         <div class="row">
             <div class="col-1">
                 <h3 class="sub-title profile-title">프로필</h3>
@@ -19,7 +19,9 @@
                     <h3 class="sub-title use-title">이용권 관리</h3>
                 </div>
                 <div class="col-2">
-                    <img :src="require('@/assets/images/icon/right-arrow.png')" class="arrow" />
+                    <router-link to="ticket">
+                        <img :src="require('@/assets/images/icon/right-arrow.png')" class="arrow"
+                    /></router-link>
                 </div>
             </div>
             <div class="col-1 ticket-container"></div>

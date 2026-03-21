@@ -1,7 +1,9 @@
 <template>
     <div class="row">
         <div class="col-3">
-            <span class="material-symbols-outlined font-26 bold color-primary-3"> arrow_back </span>
+            <span @click="goBack" class="material-symbols-outlined font-26 bold color-primary-3 arrow_back">
+                arrow_back
+            </span>
         </div>
         <div class="col-3" style="margin: 0 auto">
             <h2 class="fw-semibold font-24 text-center">{{ title }}</h2>
@@ -17,6 +19,11 @@ export default {
     name: 'AppTopBar2',
     props: {
         title: { type: String, required: true }
+    },
+    methods: {
+        goBack() {
+            this.$router.go(-1);
+        }
     }
 };
 </script>
@@ -25,5 +32,8 @@ export default {
 .row:nth-of-type(1) {
     margin-bottom: 40px;
     align-items: center;
+}
+.arrow_back {
+    cursor: pointer;
 }
 </style>

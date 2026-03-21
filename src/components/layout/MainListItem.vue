@@ -130,7 +130,6 @@ img {
 
     .box .more-btn {
         font-size: clamp(18px, 5vw, var(--font-24));
-        transform: rotate(90deg) translateY(clamp(-5px, -1.6vw, -8px));
     }
 
     .artist-name-box p {

@@ -51,7 +51,8 @@ const routes = [
             { path: 'artist-info', component: ArtistInfo, meta: { isProfile: true } },
             { path: 'search-result', component: SearchResult, meta: { isProfile: true } },
             { path: 'video-detail/:id', component: VideoDetail, meta: { isProfile: true } },
-            { path: 'ai', component: Ai, meta: { isProfile: false } }
+            { path: 'ai', component: Ai, meta: { isProfile: false } },
+            { path: 'ticket', component: TicketSelect, meta: { isProfile: false } }
         ]
     }
     // {

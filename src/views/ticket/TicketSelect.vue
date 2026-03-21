@@ -1,16 +1,6 @@
 <template>
     <div class="container">
-        <div class="row">
-            <div class="col-3">
-                <span class="material-symbols-outlined font-26 bold color-primary-3"> arrow_back </span>
-            </div>
-            <div class="col-3" style="margin: 0 auto">
-                <h2 class="fw-semibold font-24 text-center">이용권 선택</h2>
-            </div>
-            <div class="col-3" style="visibility: hidden">
-                <span class="material-symbols-outlined font-26 bold color-primary-3"> arrow_back </span>
-            </div>
-        </div>
+        <AppTopBar2 title="이용권선택" />
         <div class="row g-37">
             <Logo />
             <div class="col-1">
@@ -36,13 +26,14 @@
         <ul class="row g-38">
             <TicketSelectList v-for="(list, index) in menuList" :key="index" :icon="list.icon" :label="list.label" />
             <div class="col-1 btn">
-                <button type="button" class="pay-btn" onclick="TestBtn()">결제하기</button>
+                <button type="button" class="pay-btn" @click="TestBtn">결제하기</button>
             </div>
         </ul>
     </form>
 </template>
 
 <script>
+import AppTopBar2 from '@/components/layout/AppTopBar2.vue';
 import Logo from '@/components/ui/Logo.vue';
 import TicketSelectList from '@/components/ui/TicketSelectList.vue';
 
@@ -50,7 +41,8 @@ export default {
     name: 'TicketSelect',
     components: {
         Logo,
-        TicketSelectList
+        TicketSelectList,
+        AppTopBar2
     },
     data() {
         return {
@@ -122,7 +114,18 @@ export default {
             if (!this.form) return;
             const checked = this.form.querySelector("input[name='ticket']:checked");
             const value = checked ? checked.value : '';
-            alert(value);
+            const messageMap = {
+                Basic: '베이직 결제가 완료되었습니다.',
+                Standard: '스탠다드 결제가 완료되었습니다.',
+                Premium: '프리미엄 결제가 완료되었습니다.'
+            };
+
+            if (!value) {
+                alert('이용권을 선택해주세요.');
+                return;
+            }
+
+            alert(messageMap[value] || `${value} 결제가 완료되었습니다.`);
         }
     }
 };

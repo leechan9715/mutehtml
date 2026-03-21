@@ -1,7 +1,10 @@
 <template>
     <div id="wrap">
         <AppHeader :isProfile="isProfile" />
-        <main :class="{ 'no-profile': !isProfile, 'player-page': isPlayerPage, 'scroll-lock': store.isLoading }">
+        <main
+            ref="mainScroller"
+            :class="{ 'no-profile': !isProfile, 'player-page': isPlayerPage, 'scroll-lock': store.isLoading }"
+        >
             <div v-show="!store.isLoading" class="wrap">
                 <router-view />
             </div>
@@ -47,7 +50,25 @@ export default {
     mounted() {
         this.initAuth();
     },
+    watch: {
+        '$route.fullPath'() {
+            this.$nextTick(() => {
+                this.scrollMainToTop();
+            });
+        }
+    },
     methods: {
+        scrollMainToTop() {
+            const mainEl = this.$refs.mainScroller;
+            if (!mainEl) return;
+
+            if (typeof mainEl.scrollTo === 'function') {
+                mainEl.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+                return;
+            }
+
+            mainEl.scrollTop = 0;
+        },
         async initAuth() {
             const loginCheck = localStorage.getItem('login-check');
             if (!loginCheck) {
