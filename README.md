@@ -1,7 +1,7 @@
 ﻿# MUTE-vue
 
-Vue 3 기반 음악 서비스 프론트엔드 프로젝트입니다.  
-온보딩, 소셜 로그인, 메인/검색/차트, 플레이어, 마이페이지까지 포함합니다.
+Vue 3 기반 음악 서비스 프론트엔드 프로젝트입니다.
+온보딩, 로컬/소셜 로그인, 메인/검색/차트, 플레이어, 라이브러리, 마이페이지, AI 페이지를 포함합니다.
 
 ## 1) 프로젝트 개요
 
@@ -9,13 +9,7 @@ Vue 3 기반 음악 서비스 프론트엔드 프로젝트입니다.
 - 프레임워크: `Vue 3` + `Vue CLI 5`
 - 상태관리: `Pinia`
 - 라우팅: `vue-router`
-- HTTP 통신: `axios`
-- 핵심 기능:
-- 온보딩 플로우 (`/splash`, `/signup`, `/signup-info`, `/welcome`, `/artist-select`, `/loading`)
-- 메인/검색/차트 (`/main`, `/main/search`, `/main/chart`, `/main/search-result`)
-- 플레이어 (`/main/player/:id`)
-- 쇼츠 상세 (`/videos/:id`)
-- 마이페이지/라이브러리/플레이리스트/이용권
+- 통신: `axios` (`withCredentials: true`)
 
 ## 2) 기술 스택
 
@@ -26,6 +20,7 @@ Vue 3 기반 음악 서비스 프론트엔드 프로젝트입니다.
 - `axios`
 - `swiper`
 - `vue3-google-login`
+- `@lottiefiles/dotlottie-vue`
 
 ## 3) 실행 방법
 
@@ -53,9 +48,7 @@ yarn build
 yarn lint
 ```
 
-## 4) 환경 변수(.env)
-
-프로젝트에서 사용하는 주요 변수:
+## 4) 환경 변수 (.env)
 
 ```env
 VUE_APP_OAUTH_CLIENT=
@@ -63,238 +56,258 @@ VUE_APP_NAVER_CLIENT_ID=
 VUE_APP_LOCAL_NAVER_CALLBACK_URL=
 VUE_APP_DOTHOME_NAVER_CALLBACK_URL=
 VUE_APP_KAKAO_JS_KEY=
+VUE_APP_NODE_ENV=development
 VUE_APP_LASTFM_API_KEY=
-VUE_APP_BASE_DOTHOME_URL=
 ```
 
 참고:
 
 - OAuth/API 키 등 민감 정보는 Git에 커밋하지 않는 것을 권장합니다.
-- 배포 시 `.env.production` 등 환경별 파일 분리를 권장합니다.
+- 환경별 설정은 `.env.development`, `.env.production` 분리를 권장합니다.
 
 ## 5) 라우팅 구조
 
-- 온보딩
+### 온보딩
+
 - `/splash`
 - `/signup`
 - `/signup-info`
 - `/welcome`
 - `/artist-select`
 - `/loading`
-- 메인 영역
+
+### 메인 영역
+
 - `/main`
 - `/main/search`
 - `/main/chart`
 - `/main/mypage`
 - `/main/ticket-select`
 - `/main/library`
+- `/main/library/:id`
 - `/main/playlist`
 - `/main/player/:id`
 - `/main/artist-info`
 - `/main/search-result`
-- 쇼츠 상세
-- `/videos/:id`
+- `/main/video-detail/:id`
+- `/main/ai`
+- `/main/ticket`
 
 라우터 파일: `src/router/index.js`
 
 ## 6) 인증/로그인 구조
 
 - 스토어: `src/store/auth.js`
-- 액션: `checkAuth`, `login`, `register`, `logout`
-- API 엔드포인트:
-- `POST /auth/login.php`
-- `POST /auth/register.php`
-- `GET /auth/check_login.php`
-- `POST /auth/logout.php`
-- `POST /auth/check_nickname.php`
+- 주요 메서드: `fetchAuthData`, `setLocalStroge`, `clearAuthState`
+- 인증 API: `src/api/_auth_api.js`
+    - `POST /auth/login.php`
+    - `POST /auth/social_login.php`
+    - `POST /auth/register.php`
+    - `GET /auth/checkAuth.php`
+    - `POST /auth/logout.php`
+    - `POST /auth/check_nickname.php`
 
-소셜 로그인:
+인증 동작 요약:
 
-- Google: `vue3-google-login`
-- Naver: 네이버 SDK
-- Kakao: 카카오 SDK
+- 소셜 로그인 닉네임(이름), 이메일 , 프로필 동의항목 추가
+- 로컬/소셜 로그인 성공 시 PHP 서버로 요청하여 세션 기반 인증을 유지합니다.
+- `axios`는 `withCredentials: true`로 세션 쿠키를 포함해 요청합니다.
+- `localStorage(login-check)`는 UI 보조 상태이며, 실제 로그인 판별은 `checkAuth.php` 응답을 기준으로 합니다.
+- 프론트엔드에서 로그인 요청(POST) 전송 → PHP 백엔드에서 사용자 데이터 검증 및 세션 저장 → 로그인 성공 응답 반환
 
-API 클라이언트: `src/api/index.js`
+## 7) API/프록시 설정
 
-- 개발: `http://localhost/backend/api`
-- 배포: `https://muteapp.dothome.co.kr/api`
-- `withCredentials: true`
+### API 클라이언트
 
-## 7) 개발 서버 프록시
+- 파일: `src/api/api.js`
+- 개발 API: `http://localhost/backend/api`
+- 배포 API: `/api` (devServer 프록시 사용)
+- 옵션: `withCredentials: true`
 
-`vue.config.js` 기준:
+### devServer 프록시 (`vue.config.js`)
 
-- `/api` -> `https://muteapp.dothome.co.kr`
+- `/api` -> `https://muteapp.dothome.co.kr/`
 - `/oauth2.0` -> `https://nid.naver.com`
+- `cookieDomainRewrite: 'localhost'`
 
-## 8) 최근 작업 요약 (2026-03-02 ~ 2026-03-08)
+## 8) 최근 작업 요약 (git-log.txt 기준)
 
-### feat (기능 구현)
+### 2026-03-16 ~ 2026-03-21
 
-- 플레이어 페이지 구현 및 검색 결과 페이지에서 플레이어 진입 후 재생 기능 추가
-- 메인페이지 쇼츠 기능 구현
-- 쇼츠 상세 페이지(`VideoDetail`) 영상 출력, 댓글/댓글 입력 기능 추가
-- 라이브러리/플레이리스트/이용권 선택 페이지 추가
-- 아티스트 소개 페이지 및 아티스트 선택 페이지 추가
+- 플레이리스트 모달 추가/수정 및 모달 담기 기능 확장
+- AI 페이지 기능 추가 및 모달 UI 보강
+- 인증/음악 API 및 사용자 데이터 상태관리 리팩토링 (`4df6683`)
+- 비디오 디테일/뮤직비디오 디테일 페이지 수정
+- 차트/검색/라이브러리/플레이어/마이페이지/티켓 화면 UI 및 동작 개선
+- 라이브러리 디테일 롤백 및 회귀 대응
 
-### fix (오류 수정)
+### 2026-03-02 ~ 2026-03-14
 
-- 소셜 로그인(구글/네이버/카카오) 동작 오류 수정
-- 배포 환경에서 플레이어 음원 재생이 안 되는 문제 수정
-- 배포 후 PHP 연결 문제 수정
-- API 요청 경로 정리 및 환경별 분기 수정
-- `.env` 기반 환경변수 적용으로 설정 방식 개선
-- 페이지 이동 시 다음 곡 자동 재생 로직 보완
-- 검색 결과의 영문 표기 및 다른 음악이 재생되는 오류 수정
-- 메인 인기차트/쇼츠 동작 관련 버그 수정
+- 온보딩/로그인/회원가입/소셜로그인(구글/네이버/카카오) 구축
+- 메인/검색/차트/플레이어/비디오 디테일 페이지 기능 추가
+- 미니플레이어/플레이어 전환 안정화 및 재생 로직 개선
+- 세션 기반 로그인 확인 흐름 정리 및 인증 관련 리팩토링
 
-## 8-1) 최근 작업 요약 (2026-03-12)
+## 9) 기능 구현 상세
 
-### feat (기능 구현)
+### 9-1-1) 로컬 로그인
 
-- 미니플레이어 클릭 시 라우트 이동 없이 전체 플레이어를 오버레이(슬라이드 업)로 표시
-- 오버레이 플레이어 반투명 백드롭 추가 및 백드롭 클릭 닫기 동작 추가
-- 미니플레이어에 이전곡 버튼 추가
-- 플레이어 열림 상태에서 헤더/푸터 숨김 처리
-- 화면 폭 축소 시 미니플레이어를 반응형으로 전체 폭 표시
+- 로그인 폼 제출 시 `src/views/OnboardingFlow/SplashView.vue`의 `handleLogin`이 실행됩니다.
+- 이메일/비밀번호 공백 검증 후 `loginApi`를 호출합니다.
+- 호출 API는 `src/api/_auth_api.js`의 `POST /auth/login.php`입니다.
+- 로그인 성공 시 `auth.provider = 'local'`로 설정하고 `setLocalStroge()`로 `localStorage(login-check)`를 저장합니다.
+- 화면은 `/welcome`으로 이동하고, 이후 헤더/마이페이지 등에서 `fetchAuthData()`로 서버 인증 상태를 다시 조회합니다.
 
-### fix (오류 수정)
+### 9-1-2) 소셜 로그인 (Google/Naver/Kakao)
 
-- 미니플레이어 디자인 수정
-- 플레이어 -> 미니플레이어 전환 시 현재 곡 메타(커버/제목/가수) 동기화 오류 수정
-- 플레이어 드래그 다운/강제 페이지 전환 시 재생 중단되는 문제 완화 및 handoff 로직 보강
-- 플레이어/미니플레이어 전환 시 중복 재생(두 오디오 겹침) 문제 수정
-- 마지막 곡에서 다음곡 이동 시 첫 곡으로 순환 재생되도록 수정
-- 트랙 변경 시 타임라인이 이전 곡 시간을 유지하던 버그 수정(0초부터 시작)
-- 브라우저 autoplay 정책(`NotAllowedError`)로 인한 반복 재생 시도/콘솔 스팸 로그 완화
-- 작은 브라우저 높이에서 플레이어 하단이 푸터에 가려지던 UI 문제 수정
+- 구현 파일은 `src/views/OnboardingFlow/SignUpView.vue`입니다.
+- Google:
+- `google.accounts.oauth2.initTokenClient`로 액세스 토큰을 받고 Google userinfo API로 사용자 정보를 조회합니다.
+- 조회한 `email/nickname/profileImg/accessToken`을 `socialLoginApi`로 전달합니다.
+- Naver:
+- 네이버 SDK(`LoginWithNaverId`) 초기화 후 로그인 상태 콜백에서 토큰을 추출합니다.
+- 토큰/프로필 정보를 `socialLoginApi`로 전달합니다.
+- Kakao:
+- `window.Kakao.Auth.login`으로 토큰 획득 후 `Kakao.API.request('/v2/user/me')`로 프로필 정보를 조회합니다.
+- 토큰/프로필 정보를 `socialLoginApi`로 전달합니다.
+- 공통 서버 엔드포인트는 `POST /auth/social_login.php`입니다.
+- 성공 시 `setLocalStroge()` 호출 후 `/welcome`으로 이동합니다.
 
-## 8-2) 최근 작업 요약 (2026-03-13)
+# fix
 
-### feat (기능 구현)
+- 세션에 저장된 값을 요청해 Pinia 상태로 관리하고, 만료 시간을 설정해 로그인 여부를 확인하며 불필요한 데이터 요청을 최소화
 
-- 메인페이지에서 선택한 가수의 앨범을 선택하면 그가수해당하는 노래 리스트 를 로컬스토리지에 저장시킨후 플레이
-- 아티스트 선택 페이지에서 원하는 가수 선택하면 메인에 선택한 가수의 앨범이 출력
-- 차트 페이지(`ChartView`)에서 차트 항목 클릭/전체듣기 시 현재 차트 목록을 `localStorage(mute-player-state.tracks)`에 저장하고 플레이어와 동기화
-- 차트 재생 시작 시 선택한 곡 인덱스를 `currentIndex`로 반영해 플레이어/미니플레이어에서 동일 재생 흐름 유지
-- Last.fm 차트 목록 기반 iTunes 메타(제목/가수/커버/미리듣기) 매핑 강화
+### 9-2) 아티스트 선택 페이지
 
-### perf (성능 최적화)
+- 사용자가 원하는 아티스트를 선택후 `LocalStorage` 에 저장 (최소 3개 이상 선택가능)
+- 선택한 아티스트정보(`LocalStorage`) 기준으로 메인 페이지에서 iTunes API에 아티스트명을 요청하고, 해당 아티스트의 곡 목록을 출력하도록 구현
 
-- 차트 iTunes 호출 최적화: 세션 캐시(`mute-chart-itunes-cache-v1`) 추가, 로드당 요청 상한 적용, 실패 시 폴백 유지
-- 플레이어/미니플레이어 드래그 이벤트 최적화: 전역 `move/end` 리스너를 드래그 중에만 동적 바인딩
-- `touchcancel` 처리 추가로 모바일 제스처 중단 시 상태 꼬임/리스너 잔존 방지
-- 검색결과 페이지 초기/변경 조회 로직 정리(즉시 watch 기반)로 중복 호출 감소
-- 리스트 이미지(`MainListItem`, `ChartListItem`) lazy/async 디코딩 적용으로 초기 렌더 비용 감소
-- 온보딩 날짜 휠 드래그 이벤트 처리 개선으로 모바일 스크롤 충돌 완화
-- `Logo`/`AppFooter` 애니메이션 타이머 정리(`beforeUnmount` clear)로 페이지 이동 시 타이머 누수 방지
+### 9-3) 인증 상태 관리 방식 (세션 + 클라이언트 보조 상태)
 
-## 8-2) 최근 작업 요약 (2026-03-14)
+- Axios 인스턴스(`src/api/api.js`)는 `withCredentials: true`를 사용합니다.
+- 즉, 인증의 기준은 PHP 세션 쿠키이며 서버 상태는 `GET /auth/checkAuth.php`로 확인합니다.
+- `src/store/auth.js`의 `fetchAuthData`는 캐시(`maxAgeMs`)를 두어 불필요한 인증 조회를 줄입니다.
+- `localStorage(login-check)`는 UI 렌더 보조용이며, 최종 사용자 정보는 `authData`(서버 응답)를 기준으로 사용합니다.
 
-### feat (기능 구현)
+# 문제점 / 개선
 
-- 소셜로그인 , 로컬 로그인 시 마이페이지에 이메일,이름(닉네임),프로필 이미지 출력
-- 소셜 로그인 , 로컬 로그인 시 공용 헤더 프로필 보이게 하기
--
+- 새로고침시 불필요한 인증데이터를 가져오는 문제점 --> 세션에 가져온 데이터를 store에 저장후 캐시하여 불필요 인증 조회 최소화
 
-### fix (오류수정)
+### 9-4) 플레이어/미니플레이어 상태 동기화
 
-- 구글 로그인 시 개발자계정외 다른계정 로그인시 실패 해결
-- 네이버 구글 카카오 env 수정
+- 공통 키: `localStorage('mute-player-state')`
+- 저장 데이터: `tracks`, `currentIndex`, `currentTime`, `isPlaying`, `songName`, `singerName`, `albumCover`, `playerPath`
+- 플레이어(`src/views/player/player.vue`)와 미니플레이어(`src/components/layout/MiniPlayer.vue`)가 같은 키를 읽고 씁니다.
+- 상태 변경 시 `window.dispatchEvent(new CustomEvent('mute-player-state-updated'))`로 같은 탭 내 즉시 동기화합니다.
+- 전체 플레이어 닫을 때 handoff 시간(`currentTime`)을 넘겨 재생 위치를 이어받도록 구현되어 있습니다.
+- `previewUrl`이 없는 트랙은 다음/이전 탐색 시 재생 가능한 트랙을 찾아 건너뜁니다.
+- autoplay 차단(`NotAllowedError`)이 발생하면 사용자 다음 제스처까지 재생 재시도를 보류합니다.
 
-## 9) 프로젝트 구조 (업데이트)
+### 9-5) 차트 데이터 구성 (Last.fm + iTunes 보강)
+
+- 메인 데이터는 Last.fm Top Tracks를 사용합니다 (`src/views/Chart/ChartView.vue`).
+- 트랙 메타(커버/미리듣기 URL)는 iTunes 검색 API를 추가 호출해 보강합니다.
+- iTunes 결과는 `sessionStorage('mute-chart-itunes-cache-v1')`에 캐시합니다.
+- 연속 실패가 누적되면 iTunes 보강을 일시 차단하고 Last.fm 데이터만으로 폴백합니다.
+- 차트에서 곡 클릭/전체듣기 시 플레이어 포맷으로 변환해 `mute-player-state`를 저장하고 `/main/player/:id`로 이동합니다.
+
+### 9-6) 라이브러리/플레이리스트 동작
+
+- 라이브러리 목록은 `src/views/library/Library.vue`에서 생성/보강됩니다.
+- 상세 화면은 `src/views/library/LibraryDetail.vue`, 내 플레이리스트는 `src/views/playlist/playlist.vue`에서 처리합니다.
+- 내 플레이리스트 키: `localStorage('my-playlist')`
+- 초기 진입 시 저장된 라이브러리 항목이 하나도 없으면(`storedItems.length === 0`), `buildApiLibrary()`로 기본 라이브러리 목록을 자동 생성해 저장/표시합니다.
+- 모달(`ListModal`, `PlayListModal`, `LibraryDetailModal`)에서 트랙 추가/삭제 시 중복 체크 후 저장합니다.
+- 저장 후 `my-playlist-updated`, `library-items-updated` 커스텀 이벤트를 발생시켜 목록과 상세를 동기화합니다.
+- 재생 시작 시 플레이리스트 트랙을 플레이어 공통 포맷으로 변환해 `mute-player-state`를 생성하고 플레이어로 이동합니다.
+
+### 9-7) AI 추천 기능
+
+- 입력 감정/키워드를 `src/views/ai/Ai.vue`에서 받아 `searchMusicByEmotion`으로 전송합니다.
+- 서버 엔드포인트는 `POST /ai/music_search.php`입니다 (`src/api/_ai.js`).
+- 응답 곡 목록은 iTunes 검색으로 커버/프리뷰 URL을 보강해 리스트로 렌더링합니다.
+- 결과를 한 번에 `my-playlist`에 추가하거나 라이브러리 항목으로 저장할 수 있습니다.
+- 저장 시 각 섹션이 즉시 반영되도록 커스텀 이벤트를 함께 발행합니다.
+
+### 9-8) 비디오 상세 + 댓글
+
+- 파일: `src/views/VideoDetail/VideoDetail.vue` (`script setup` 기반)
+- 초기 마운트 시 아래 순서로 상태를 복원/조회합니다.
+    - 로컬 상태 복원: 게시물 좋아요/공유/다운로드, 댓글 좋아요, 작성자 프로필 맵
+    - 사용자 정보 조회: `authStore.fetchAuthData()` -> 닉네임/프로필 반영
+    - 콘텐츠 조회: `getVideoApi(id)`, `getCommentsApi(id)`
+- 비디오 영역은 `result.post.video_url`로 렌더링하며, 아티스트명은 `artist/singer/artist_name/writer` 순서로 fallback 처리합니다.
+- 게시물 액션(좋아요/공유/다운로드)은 post id 기준 localStorage 키로 저장되어 새로고침 후에도 상태가 유지됩니다.
+    - `post_like_{id}`, `post_share_{id}`, `post_download_{id}`
+- 댓글 좋아요 상태도 localStorage(`liked_comments_{id}`)로 관리하며, UI 카운트는 서버 기본값 + 로컬 좋아요 여부로 계산합니다.
+- 댓글 작성자 프로필 매핑(`comment_profile_map_{id}`)을 저장해, 댓글에 프로필 이미지가 없을 때도 작성자별 이미지 fallback이 동작합니다.
+- 댓글 등록(`commentAddApi`) 시:
+    - 공백 입력 방지
+    - `isSubmitting`으로 중복 제출 방지
+    - 등록 성공 후 입력값 초기화 + `getComments()` 재호출로 목록 즉시 갱신
+
+## 10) 프로젝트 구조
 
 ```text
 .
 ├─ public/
 ├─ src/
-│  ├─ api/                    # axios 인스턴스, 인증 API
-│  ├─ assets/
-│  │  ├─ fonts/               # Pretendard 폰트
-│  │  ├─ images/              # 화면별 이미지 에셋
-│  │  └─ styles/
-│  │     ├─ global/           # 전역 스타일(reset, font, variables 등)
-│  │     └─ pages/            # 페이지 단위 스타일
-│  ├─ components/
-│  │  ├─ layout/              # Header/Footer/ListItem/Modal 등
-│  │  └─ ui/                  # 공용 UI 컴포넌트
-│  ├─ mixins/                 # 공통 믹스인
-│  ├─ router/                 # 라우터 설정
-│  ├─ store/                  # Pinia 스토어
+│  ├─ api/                    # axios 인스턴스, 인증/음악 API
+│  ├─ assets/                 # 이미지, 스타일, lottie
+│  ├─ components/             # layout/ui 공용 컴포넌트
+│  ├─ mixins/
+│  ├─ router/
+│  ├─ store/
 │  ├─ views/
-│  │  ├─ OnboardingFlow/      # 스플래시/회원가입/온보딩
-│  │  ├─ main/                # 메인 섹션 화면
-│  │  ├─ Chart/               # 차트
-│  │  ├─ search/              # 검색/검색결과
-│  │  ├─ player/              # 플레이어
-│  │  ├─ VideoDetail/         # 쇼츠 상세
-│  │  ├─ mypage/              # 마이페이지
-│  │  ├─ library/             # 라이브러리
-│  │  ├─ playlist/            # 플레이리스트
-│  │  ├─ ticket/              # 이용권 선택
-│  │  └─ artistinfo/          # 아티스트 소개
+│  │  ├─ OnboardingFlow/
+│  │  ├─ main/
+│  │  ├─ Chart/
+│  │  ├─ search/
+│  │  ├─ player/
+│  │  ├─ VideoDetail/
+│  │  ├─ mypage/
+│  │  ├─ library/
+│  │  ├─ playlist/
+│  │  ├─ ticket/
+│  │  ├─ artistinfo/
+│  │  └─ ai/
 │  ├─ App.vue
 │  └─ main.js
 ├─ .env
+├─ git-log.txt
 ├─ package.json
 ├─ vue.config.js
 └─ README.md
 ```
 
-## 10) 변경 이력 (Changelog)
+## 11) 변경 이력 (Changelog)
 
-| 날짜       | 유형     | 주요 내용                                                                                  |
-| ---------- | -------- | ------------------------------------------------------------------------------------------ |
-| 2026-03-12 | feat/fix | 미니플레이어-플레이어 오버레이 전환, 백드롭/닫기, 이전곡 버튼, 재생 handoff 안정화         |
-| 2026-03-12 | fix      | 트랙 순환 재생, 타임라인 초기화, 작은 높이에서 플레이어 하단 가림/헤더·푸터 노출 이슈 수정 |
-| 2026-03-13 | feat     | 차트 목록 클릭/전체듣기 시 트랙 목록 로컬스토리지 저장 후 플레이어 동기 재생               |
-| 2026-03-13 | perf     | Chart iTunes 캐시/요청 상한, 드래그 리스너 동적 바인딩, 모바일 터치/스크롤 성능 최적화     |
-| 2026-03-10 | fix      | 로그인 상태 세션으로 저장                                                                  |
-| 2026-03-10 | fix      | 로그인/회원가입/로그인확인 프론트코드 리팩토링                                             |
-| 2026-03-08 | fix      | 배포 후 PHP 연결 문제 수정, API 요청 경로 수정, `.env` 환경변수 전환                       |
-| 2026-03-08 | fix      | 플레이어 배포 환경 재생 오류 수정, 페이지 이동/다음 곡 자동 재생 보완                      |
-| 2026-03-07 | feat     | 검색결과 -> 플레이어 이동 후 재생 기능 추가                                                |
-| 2026-03-07 | feat/fix | 메인 쇼츠 기능 구현 및 인기 차트 관련 수정                                                 |
-| 2026-03-06 | refactor | 라우터/레이아웃 경로 수정, 소셜 로그인 관련 파일 정리                                      |
-| 2026-03-05 | feat     | 플레이어/라이브러리/플레이리스트/이용권 선택/아티스트 소개 페이지 추가                     |
-| 2026-03-04 | feat/fix | 소셜 로그인 추가 및 로그인/회원가입/마이페이지 기능 보완                                   |
-| 2026-03-03 | feat     | 공용/재사용 컴포넌트 확장 (`AppTopBar`, `MainListItem`, `ChartListItem` 등)                |
-| 2026-03-02 | init     | Vue 프로젝트 기본 골격 구성                                                                |
+| 날짜       | 유형     | 주요 내용                                                        |
+| ---------- | -------- | ---------------------------------------------------------------- |
+| 2026-03-22 | docs     | `git-log.txt` 기준으로 README 전면 재작성                        |
+| 2026-03-21 | fix/ui   | 전체 디자인 디테일 수정, 라이브러리/마이페이지/티켓 화면 보완    |
+| 2026-03-20 | refactor | API/상태관리/파일 구조 리팩토링 및 최적화                        |
+| 2026-03-20 | feat/fix | 플레이리스트 모달, 차트/검색/라이브러리/비디오 디테일 수정       |
+| 2026-03-19 | feat/fix | AI 기능/모달, 플레이리스트 담기, 메인/디자인 보완                |
+| 2026-03-18 | feat/fix | AI 페이지 추가, 미니플레이어 타임라인 추가, 레이아웃/디테일 보완 |
+| 2026-03-17 | fix/ui   | 플레이어/라이브러리/앨범커버/스크롤 수정                         |
+| 2026-03-16 | feat/fix | 마이페이지/모달 기능 추가, 뮤직비디오 페이지 보완                |
+| 2026-03-14 | feat/fix | 마이페이지 프로필 정보 출력, 소셜 로그인 처리 개선               |
+| 2026-03-12 | feat/fix | 미니플레이어-플레이어 오버레이 전환 및 재생 안정화               |
+| 2026-03-10 | fix      | 로그인 상태 세션 저장 및 인증 흐름 리팩토링                      |
+| 2026-03-08 | fix      | 배포 API 경로/PHP 연결/재생 이슈 수정                            |
+| 2026-03-02 | init     | Vue 프로젝트 기본 구조 구성                                      |
 
-## 11) 협업 및 브랜치 전략
+## 12) 배포 체크리스트
 
-- 기본 브랜치: `vue/main`
-- 기능 개발 브랜치 예시: `vue/main-xxx`
-- 작업 흐름:
-- 기능 브랜치에서 개발
-- `vue/main` 최신 내용 주기적 병합
-- 충돌 해결 후 기능 검증
-- 최종 `vue/main`으로 병합
+- `.env` 값이 환경별로 정확히 분리되어 있는지 확인
+- `/auth/*.php` API 접근 가능 여부 확인
+- `withCredentials: true`와 서버 CORS/세션 설정 확인
+- 소셜 로그인 콜백 URL(로컬/배포) 등록값 일치 확인
+- 플레이어 진입/이동/다음 곡 재생 흐름 확인
 
-## 12) 핵심 재사용 컴포넌트
+## 13) Known Issues
 
-- `src/components/layout/AppHeader.vue`: 상단 헤더
-- `src/components/layout/AppFooter.vue`: 하단 푸터 네비게이션
-- `src/components/layout/AppTopBar.vue`: 공통 탑바
-- `src/components/layout/MainListItem.vue`: 메인 리스트 아이템
-- `src/components/layout/ChartListItem.vue`: 차트 리스트 아이템
-- `src/components/layout/PlayListItem.vue`: 플레이리스트 아이템
-- `src/components/layout/Modal.vue`: 공통 모달
-- `src/components/ui/SearchInput.vue`: 검색 입력 UI
-- `src/components/ui/BaseButton.vue`, `src/components/ui/BaseInput.vue`: 기본 폼 UI
-
-## 13) 배포 체크리스트
-
-- `.env`와 `.env.production` 값이 환경별로 정확히 분리되어 있는지 확인
-- `VUE_APP_BASE_DOTHOME_URL` 및 API `baseURL`이 배포 주소와 일치하는지 확인
-- PHP API 엔드포인트(`/auth/*.php`) 접근 가능 여부 확인
-- 세션 기반 인증을 위해 `withCredentials: true`와 서버 CORS 설정 확인
-- 소셜 로그인 콜백 URL(로컬/배포) 등록값 확인
-- 플레이어 페이지 진입/이동 시 재생, 다음 곡 자동 재생 동작 확인
-
-## 14) Known Issues / 제한사항
-
-- 백엔드(PHP + 세션) 상태에 따라 로그인/재생 일부 기능이 영향을 받을 수 있습니다.
-- 로컬 개발 환경은 `http://localhost/backend/api`, 배포 환경은 `https://muteapp.dothome.co.kr/api`를 사용하므로 환경 변수 불일치 시 인증 오류가 발생할 수 있습니다.
-- 소셜 로그인은 각 플랫폼 콘솔에 등록된 콜백 URL과 프론트 설정이 정확히 일치해야 정상 동작합니다.
-- 브라우저 정책상 사용자 제스처 없이 자동 재생이 차단될 수 있으며(`NotAllowedError`), 이 경우 다음 사용자 입력 이후 재생이 재개됩니다.
+- 백엔드(PHP + 세션) 상태에 따라 로그인/재생 기능이 영향을 받을 수 있습니다.
+- 소셜 로그인은 플랫폼 콘솔의 콜백 URL 불일치 시 실패할 수 있습니다.
+- 브라우저 정책상 사용자 제스처 없이 자동 재생이 차단될 수 있습니다.

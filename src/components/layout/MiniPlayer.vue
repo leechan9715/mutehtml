@@ -793,34 +793,37 @@ export default {
 }
 
 @media (max-width: 500px) {
-    .mini-player {
-        bottom: 82px;
-        padding: 8px 20px;
-        gap: 20px;
-        grid-template-columns: 46px 1fr auto;
-    }
+    @media (max-width: 500px) {
+        .mini-player {
+            bottom: 82px;
+            height: 82px;
+            padding: 8px 20px;
+            gap: 20px;
+            grid-template-columns: 46px 1fr auto;
+        }
 
-    .mini-title {
-        font-size: clamp(11px, 3.5vw, 13px);
-    }
+        .mini-title {
+            font-size: clamp(11px, 3.5vw, 13px);
+        }
 
-    .mini-artist {
-        font-size: clamp(10px, 3vw, 11px);
-        margin-top: 3px;
-    }
+        .mini-artist {
+            font-size: clamp(10px, 3vw, 11px);
+            margin-top: 3px;
+        }
 
-    .mini-controls {
-        gap: clamp(18px, 5vw, 30px);
-    }
+        .mini-controls {
+            gap: clamp(18px, 5vw, 30px);
+        }
 
-    .mini-controls button {
-        width: clamp(22px, 6vw, 28px);
-        height: clamp(22px, 6vw, 28px);
-    }
+        .mini-controls button {
+            width: clamp(22px, 6vw, 28px);
+            height: clamp(22px, 6vw, 28px);
+        }
 
-    .mini-controls img {
-        width: clamp(14px, 4vw, 20px);
-        height: clamp(14px, 4vw, 20px);
+        .mini-controls img {
+            width: clamp(14px, 4vw, 20px);
+            height: clamp(14px, 4vw, 20px);
+        }
     }
 }
 </style>
