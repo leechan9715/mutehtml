@@ -7,12 +7,8 @@
 </template>
 
 <script>
-import AuthHeader from '@/components/layout/AuthHeader.vue';
 export default {
-    name: 'OnboardingLayout',
-    components: {
-        AuthHeader
-    }
+    name: 'OnboardingLayout'
 };
 </script>
 

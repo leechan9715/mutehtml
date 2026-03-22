@@ -18,7 +18,7 @@
             </div>
             <div class="col-2">
                 <router-link to="/main/mypage">
-                    <img :src="authData?.user?.profileImg || defaultImg" alt="test-img" />
+                    <img :src="authStore.authData?.user?.profileImg || defaultImg" alt="test-img" />
                 </router-link>
             </div>
         </div>
@@ -29,7 +29,7 @@
 import clockMixin from '@/mixins/clockMixin';
 import logo from '@/assets/images/common/logo.png';
 import defaultImg from '@/assets/images/mypage/test.jpg';
-import { checkAuthApi } from '@/api/_auth_api';
+import { useAuthStore } from '@/store/auth';
 export default {
     name: 'AppHeader',
     mixins: [clockMixin],
@@ -44,18 +44,13 @@ export default {
         return {
             logo,
             defaultImg,
-            authData: null
+            authStore: useAuthStore()
         };
     },
     mounted() {
-        this.checkAuthData();
-    },
-    methods: {
-        async checkAuthData() {
-            const { data } = await checkAuthApi();
-            this.authData = data;
-            console.log('로그인한 데이터 ', data);
-        }
+        this.authStore.fetchAuthData().catch((e) => {
+            console.error('프로필 데이터를 불러오지 못했습니다.', e);
+        });
     }
 };
 </script>

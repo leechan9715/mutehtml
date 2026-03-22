@@ -169,10 +169,11 @@
 }
 
 .track-more-btn {
-    width: 32px;
-    height: 32px;
     border: 0;
     background: transparent;
+    font-size: var(--font-24);
+    cursor: pointer;
+    padding: 0 10px;
 }
 
 .empty-track-box {

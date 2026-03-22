@@ -55,7 +55,6 @@
 <script>
 import logo1 from '@/assets/images/common/logo.png';
 import Logo from '@/components/ui/Logo.vue';
-import AuthHeader from '@/components/layout/AuthHeader.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseInput from '@/components/ui/BaseInput.vue';
 /* 일반 로그인 */
@@ -66,7 +65,6 @@ export default {
     name: 'SplashView',
     components: {
         Logo,
-        AuthHeader,
         BaseButton,
         BaseInput
     },

@@ -39,18 +39,18 @@ li a {
 
 li span:first-child {
     text-indent: 5px;
-    font-size: 24px;
+    font-size: var(--font-24);
 }
 li p {
     text-indent: 5px;
-    font-size: 16px;
+    font-size: var(--font-16);
     font-weight: var(--fw-medium);
 }
 
 li span:last-child {
     margin-left: auto;
     text-indent: 5px;
-    font-size: 24px;
+    font-size: var(--font-24);
 }
 .is-danger {
     color: var(--color-red);

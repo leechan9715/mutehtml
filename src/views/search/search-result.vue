@@ -1,4 +1,4 @@
-﻿<template>
+<template>
     <section class="container" id="section1">
         <div class="row">
             <form @submit.prevent="handleSearch" class="col-1">

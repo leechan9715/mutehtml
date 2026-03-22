@@ -1,4 +1,4 @@
-﻿<template>
+<template>
     <a href="javascript:void(0)" class="col-2" @click="onItemClick">
         <img :src="img || trackImg" alt="album_cover" loading="lazy" decoding="async" draggable="false" />
         <div class="box col-2">
@@ -130,7 +130,6 @@ img {
 
     .box .more-btn {
         font-size: clamp(18px, 5vw, var(--font-24));
-        transform: rotate(90deg) translateY(clamp(-5px, -1.6vw, -8px));
     }
 
     .artist-name-box p {

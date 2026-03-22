@@ -69,10 +69,7 @@
                         <p class="track-title">{{ track.title }}</p>
                         <p class="track-artist">{{ track.artistName }}</p>
                     </div>
-
-                    <button type="button" class="track-more-btn">
-                        <span class="material-symbols-outlined">more_vert</span>
-                    </button>
+                    <button type="button" class="track-more-btn" @click="openTrackModal(track)">⁝</button>
                 </article>
             </div>
 
@@ -80,6 +77,12 @@
                 <p>아직 추가된 음악이 없습니다.</p>
             </div>
         </div>
+
+        <LibraryDetailModal
+            v-model="isTrackModalOpen"
+            :track="selectedTrackForModal"
+            @action="handleTrackModalAction"
+        />
     </section>
 
     <section v-else class="container playlist-detail-page">
@@ -91,20 +94,34 @@
 import { getLibraryItemById, getLibraryItems, saveLibraryItems } from '@/utils/libraryStorage';
 import { searchApi } from '@/api/_music_api';
 import { useMusicImageStore } from '@/store/music';
+import LibraryDetailModal from '@/components/layout/LibraryDetailModal.vue';
 
 const PLAYER_STATE_KEY = 'mute-player-state';
 
 export default {
     name: 'PlaylistDetailView',
+    components: {
+        LibraryDetailModal
+    },
     data() {
         return {
             playlist: null,
             activeAction: '',
+            isTrackModalOpen: false,
+            selectedTrack: null,
             fallbackImage: require('@/assets/images/player/player-img1.png'),
             musicImageStore: useMusicImageStore()
         };
     },
     computed: {
+        selectedTrackForModal() {
+            return {
+                id: this.selectedTrack?.id || '',
+                img: this.selectedTrack?.artworkUrl100 || this.fallbackImage,
+                title: this.selectedTrack?.title || '-',
+                artist: this.selectedTrack?.artistName || '-'
+            };
+        },
         collageImages() {
             const covers = (this.playlist?.tracks || [])
                 .map((track) => track.artworkUrl100)
@@ -322,6 +339,27 @@ export default {
                 [tracks[i], tracks[j]] = [tracks[j], tracks[i]];
             }
             this.startPlayback(tracks);
+        },
+        openTrackModal(track) {
+            this.selectedTrack = track;
+            this.isTrackModalOpen = true;
+        },
+        handleTrackModalAction(type) {
+            if (type !== 'download' || !this.selectedTrack || !this.playlist) return;
+
+            const confirmed = window.confirm('이 곡을 플레이리스트에서 삭제할까요?');
+            if (!confirmed) return;
+
+            const updatedPlaylist = {
+                ...this.playlist,
+                tracks: (this.playlist.tracks || []).filter(
+                    (track) => String(track.id) !== String(this.selectedTrack.id)
+                )
+            };
+
+            this.playlist = updatedPlaylist;
+            this.persistPlaylist(updatedPlaylist);
+            this.selectedTrack = null;
         },
 
         persistPlaylist(updatedPlaylist) {

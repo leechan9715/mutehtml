@@ -172,14 +172,19 @@ const startGoogleLogin = () => {
                         nickname,
                         profileImg
                     });
-
-                    console.log('구글 서버 저장 결과:', data);
-
+                    if (isHtmlPayload(data)) {
+                        throw new Error('구글 로그인 API가 HTML을 반환했습니다. API 경로/프록시 확인 필요');
+                    }
+                    if (!data?.success) {
+                        throw new Error(data?.message || '구글 서버 로그인 실패');
+                    }
                     auth.setLocalStroge();
                     router.push('/welcome');
                 } catch (e) {
                     console.error('구글 로그인 처리 실패:', e);
-                    error.value = '구글 로그인 처리 중 오류가 발생했습니다.';
+                    error.value =
+                        e?.response?.data?.message || e?.message || '구글 로그인 처리 중 오류가 발생했습니다.';
+                    alert(error.value);
                 } finally {
                     isGoogleLoading.value = false;
                 }

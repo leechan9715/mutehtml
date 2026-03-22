@@ -27,5 +27,6 @@ export default {
 <style scoped>
 .category-container {
     background-color: aqua;
+    cursor: pointer;
 }
 </style>

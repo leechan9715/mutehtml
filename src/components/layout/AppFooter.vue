@@ -2,7 +2,7 @@
     <footer class="container">
         <div class="row g-5">
             <div class="col-5">
-                <router-link to="/main">
+                <router-link to="/main" @click="scrollMainToTop">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <g>
                             <path
@@ -15,7 +15,7 @@
                 </router-link>
             </div>
             <div class="col-5">
-                <router-link to="/main/chart">
+                <router-link to="/main/chart" @click="scrollMainToTop">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <g>
                             <path
@@ -28,7 +28,7 @@
                 </router-link>
             </div>
             <!--  -->
-            <router-link to="/main/ai" class="logo-link">
+            <router-link to="/main/ai" class="logo-link" @click="scrollMainToTop">
                 <div class="logo_box">
                     <!-- 1행 -->
                     <div class="face">
@@ -53,7 +53,7 @@
                 </div>
             </router-link>
             <div class="col-5">
-                <router-link to="/main/search" href="#">
+                <router-link to="/main/search" href="#" @click="scrollMainToTop">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <g>
                             <path
@@ -66,7 +66,7 @@
                 </router-link>
             </div>
             <div class="col-5">
-                <router-link to="/main/library" href="#">
+                <router-link to="/main/library" href="#" @click="scrollMainToTop">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                         <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)" fill="currentColor">
                             <path
@@ -157,6 +157,17 @@ export default {
         this.clearHelpMessageTimer();
     },
     methods: {
+        scrollMainToTop() {
+            const mainEl = document.querySelector('#wrap main');
+            if (!mainEl) return;
+
+            if (typeof mainEl.scrollTo === 'function') {
+                mainEl.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+                return;
+            }
+
+            mainEl.scrollTop = 0;
+        },
         startHelpMessageTimer() {
             this.clearHelpMessageTimer();
             this.showHelpMessage = true;
