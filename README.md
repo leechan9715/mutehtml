@@ -39,9 +39,14 @@ Vue 3 기반 음악 서비스 프론트엔드 프로젝트입니다.
 
 ## 🧩 기능 설명
 
+### 📝 회원가입
+
+- 일반 회원가입: `POST /auth/register.php` API를 통해 JSON데이터로 사용자 데이터를 전달하고, 비밀번호는 해시 처리 후 MySQL에 저장
+- 닉네임 중복 확인: `POST /auth/check_nickname.php` API를 통해 사용자가 입력한 닉네임을 백엔드로 전달한 뒤, MySQL에서 중복 여부를 검증하여 사용 가능 여부를 확인
+
 ### 🔐 로그인 (로컬)
 
-- `POST /auth/login.php` 호출로 로그인 요청을 전송합니다.
+- `POST /auth/login.php` 요청으로 로그인 정보를 백엔드에 전달하고, MySQL 검증 후 로그인 결과를 반환
 - 요청/인증 후 세션에 사용자 정보(`email`, `provider`, `nickname`)를 저장합니다.
 - 로컬 로그인은 `profileImg`를 저장하지 않으며, 마이페이지에서 기본 프로필 이미지로 표시합니다.
 
@@ -50,11 +55,6 @@ Vue 3 기반 음악 서비스 프론트엔드 프로젝트입니다.
 - 소셜 로그인 시 사용자 정보(`email`, `nickname`, `profileImg`, `provider`)를 전달합니다.
 - `POST /auth/social_login.php`로 처리 후 세션에 사용자 정보를 저장합니다.
 - 로그인 성공 시 `/welcome`으로 이동하고 `localStorage(login-check)`를 갱신합니다.
-
-### 📝 회원가입
-
-- 일반 회원가입: `POST /auth/register.php` API를 통해 JSON데이터로 사용자 데이터를 전달하고, 비밀번호는 해시 처리 후 MySQL에 저장
-- 닉네임 중복 확인: `POST /auth/check_nickname.php` API를 통해 사용자가 입력한 닉네임을 백엔드로 전달한 뒤, MySQL에서 중복 여부를 검증하여 사용 가능 여부를 확인
 
 ### 👤 인증 상태 관리
 
@@ -74,9 +74,9 @@ Vue 3 기반 음악 서비스 프론트엔드 프로젝트입니다.
 
 - Last.fm API의 Top Track 데이터를 가져온 뒤, iTunes Search API와 연동하여 인기 음원 목록을 출력
 
-### 메인페이지 (아티스트 모먼트)
+### 🎈 메인페이지 (아티스트 모먼트)
 
-- `cloudinary` 에 영상을 업로드후 MYSQL에 링크를 ㄷ
+- 영상을 `Cloudinary`에 업로드하고 발급된 호스팅 링크를 MySQL에 저장한 뒤, 해당 URL을 불러와 화면에 출력
 
 ### 😀 마이페이지
 
