@@ -109,8 +109,10 @@ VUE_APP_LASTFM_API_KEY=
 
 인증 동작 요약:
 
-- 소셜 로그인 닉네임(이름), 이메일 , 프로필 동의항목 추가
-- 로컬/소셜 로그인 성공 시 PHP 서버로 요청하여 세션 기반 인증을 유지합니다.
+- 로컬 로그인은 `POST /auth/login.php` 호출 시 `email`, `provider(local)`, `nickname`을 전달합니다.
+- 로컬 로그인은 `profileImg`를 저장하지 않으며, 마이페이지에서는 기본 프로필 이미지를 사용합니다.
+- 소셜 로그인은 로그인 시점에 `email`, `nickname(이름)`, `profileImg`, `provider`를 전달합니다.
+- 로컬/소셜 로그인 성공 후 PHP 서버 세션에 사용자 정보를 저장해 세션 기반 인증을 유지합니다.
 - `axios`는 `withCredentials: true`로 세션 쿠키를 포함해 요청합니다.
 - `localStorage(login-check)`는 UI 보조 상태이며, 실제 로그인 판별은 `checkAuth.php` 응답을 기준으로 합니다.
 - 프론트엔드에서 로그인 요청(POST) 전송 → PHP 백엔드에서 사용자 데이터 검증 및 세션 저장 → 로그인 성공 응답 반환
@@ -130,7 +132,7 @@ VUE_APP_LASTFM_API_KEY=
 - `/oauth2.0` -> `https://nid.naver.com`
 - `cookieDomainRewrite: 'localhost'`
 
-## 8) 최근 작업 요약 (git-log.txt 기준)
+## 8) 최근 작업 요약
 
 ### 2026-03-16 ~ 2026-03-21
 
@@ -155,8 +157,10 @@ VUE_APP_LASTFM_API_KEY=
 - 로그인 폼 제출 시 `src/views/OnboardingFlow/SplashView.vue`의 `handleLogin`이 실행됩니다.
 - 이메일/비밀번호 공백 검증 후 `loginApi`를 호출합니다.
 - 호출 API는 `src/api/_auth_api.js`의 `POST /auth/login.php`입니다.
+- 요청 본문에는 `email`, `password`, `provider(local)`가 포함되며, 서버에서 로그인된 사용자의 `nickname`/`email`/`provider`를 세션에 저장합니다.
+- 로컬 로그인은 `profileImg`를 저장하지 않아 마이페이지에서 기본 프로필 이미지 fallback으로 노출됩니다.
 - 로그인 성공 시 `auth.provider = 'local'`로 설정하고 `setLocalStroge()`로 `localStorage(login-check)`를 저장합니다.
-- 화면은 `/welcome`으로 이동하고, 이후 헤더/마이페이지 등에서 `fetchAuthData()`로 서버 인증 상태를 다시 조회합니다.
+- 화면은 `/welcome`으로 이동하고, 이후 메인페이지에서 헤더/마이페이지 등에서 `fetchAuthData()`로 서버 인증 상태를 다시 조회합니다.
 
 ### 9-1-2) 소셜 로그인 (Google/Naver/Kakao)
 
@@ -171,9 +175,10 @@ VUE_APP_LASTFM_API_KEY=
 - `window.Kakao.Auth.login`으로 토큰 획득 후 `Kakao.API.request('/v2/user/me')`로 프로필 정보를 조회합니다.
 - 토큰/프로필 정보를 `socialLoginApi`로 전달합니다.
 - 공통 서버 엔드포인트는 `POST /auth/social_login.php`입니다.
+- 소셜 로그인은 `email`, `nickname(이름)`, `profileImg`, `provider`를 사용자 정보로 받아 세션에 저장합니다.
 - 성공 시 `setLocalStroge()` 호출 후 `/welcome`으로 이동합니다.
 
-# fix
+## fix
 
 - 세션에 저장된 값을 요청해 Pinia 상태로 관리하고, 만료 시간을 설정해 로그인 여부를 확인하며 불필요한 데이터 요청을 최소화
 
@@ -188,10 +193,6 @@ VUE_APP_LASTFM_API_KEY=
 - 즉, 인증의 기준은 PHP 세션 쿠키이며 서버 상태는 `GET /auth/checkAuth.php`로 확인합니다.
 - `src/store/auth.js`의 `fetchAuthData`는 캐시(`maxAgeMs`)를 두어 불필요한 인증 조회를 줄입니다.
 - `localStorage(login-check)`는 UI 렌더 보조용이며, 최종 사용자 정보는 `authData`(서버 응답)를 기준으로 사용합니다.
-
-# 문제점 / 개선
-
-- 새로고침시 불필요한 인증데이터를 가져오는 문제점 --> 세션에 가져온 데이터를 store에 저장후 캐시하여 불필요 인증 조회 최소화
 
 ### 9-4) 플레이어/미니플레이어 상태 동기화
 
