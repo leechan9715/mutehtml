@@ -75,8 +75,6 @@
     height: 150px;
     background: url(@/assets/images/mypage/ticket.png) no-repeat center;
     background-size: contain;
-    display: flex;
-    align-items: center;
 }
 
 /* ===== 500px 이하에서만 크기 줄이기 / contain 유지 ===== */

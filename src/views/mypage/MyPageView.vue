@@ -16,7 +16,9 @@
         <div class="row use-auto">
             <div class="auto">
                 <div class="col-2">
-                    <h3 class="sub-title use-title">이용권 관리</h3>
+                    <router-link to="ticket">
+                        <h3 class="sub-title use-title">이용권 관리</h3>
+                    </router-link>
                 </div>
                 <div class="col-2">
                     <router-link to="ticket">
@@ -24,7 +26,7 @@
                     /></router-link>
                 </div>
             </div>
-            <div class="col-1 ticket-container"></div>
+            <router-link to="ticket" class="col-1 ticket-container"></router-link>
         </div>
         <div class="row">
             <h3 class="col-1 sub-title">설정</h3>
