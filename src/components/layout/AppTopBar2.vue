@@ -29,6 +29,9 @@ export default {
 </script>
 
 <style scoped>
+.row {
+    color: var(--color-black);
+}
 .row:nth-of-type(1) {
     margin-bottom: 40px;
     align-items: center;
