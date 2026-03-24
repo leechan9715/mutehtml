@@ -8,23 +8,30 @@
             </div>
         </div>
     </div>
+
     <form class="container" id="ticketForm">
-        <div class="row g-23">
-            <label class="col-3" for="basic" @click="select(0)">
+        <!-- 요금제 선택 -->
+        <div class="row g-23 tab-row">
+            <label class="col-3" :class="{ active: selected === 0 }" @click="select(0)">
                 <p><span>Basic</span></p>
-                <input type="radio" name="ticket" value="Basic" id="basic" checked class="hidden" />
+                <input type="radio" name="ticket" value="Basic" class="hidden" />
             </label>
-            <label class="col-3" for="standard" @click="select(1)">
+
+            <label class="col-3" :class="{ active: selected === 1 }" @click="select(1)">
                 <p><span>Standard</span></p>
-                <input type="radio" name="ticket" value="Standard" id="standard" class="hidden" />
+                <input type="radio" name="ticket" value="Standard" class="hidden" />
             </label>
-            <label class="col-3 premium" for="premium" @click="select(2)">
+
+            <label class="col-3 premium" :class="{ active: selected === 2 }" @click="select(2)">
                 <p><span>Premium</span></p>
-                <input type="radio" name="ticket" value="Premium" id="premium" class="hidden" />
+                <input type="radio" name="ticket" value="Premium" class="hidden" />
             </label>
         </div>
+
+        <!-- 기능 리스트 -->
         <ul class="row g-38">
             <TicketSelectList v-for="(list, index) in menuList" :key="index" :icon="list.icon" :label="list.label" />
+
             <div class="col-1 btn">
                 <button type="button" class="pay-btn" @click="TestBtn">결제하기</button>
             </div>
@@ -46,6 +53,8 @@ export default {
     },
     data() {
         return {
+            selected: 0,
+
             menuList: [
                 { icon: 'block', label: '광고제거' },
                 { icon: 'person_heart', label: '맞춤추천' },
@@ -54,39 +63,29 @@ export default {
                 { icon: 'mobile_sound', label: '고음질 스트리밍' },
                 { icon: 'stars_2', label: 'AI 비서' }
             ],
-            row3: null,
-            spans: [],
+
             checkBoxs: [],
             form: null,
+            row3: null,
             pos: ['6%', '40%', '74%']
         };
     },
+
     mounted() {
-        // DOM 캐싱 (mounted에서만)
-        this.row3 = document.querySelector('.container:nth-child(2) .row:nth-child(1)');
-        this.spans = Array.from(document.querySelectorAll('.container:nth-child(2) .row:nth-child(1) span'));
+        this.row3 = document.querySelector('.tab-row');
         this.checkBoxs = Array.from(document.querySelectorAll("input[type='checkbox']"));
         this.form = document.querySelector('#ticketForm');
 
-        console.log(this.checkBoxs);
-
-        // 초기 선택
         this.select(0);
     },
 
     methods: {
-        /* Basic Standard Premium 중 택1 클릭시 이벤트 함수 */
         select(i) {
-            // span 색 초기화
-            this.spans.forEach((s) => (s.style.color = 'black'));
+            this.selected = i;
 
             // 체크박스 초기화
             this.checkBoxs.forEach((cd) => (cd.checked = false));
 
-            // 선택 span 강조
-            if (this.spans[i]) this.spans[i].style.color = 'white';
-
-            // i에 따라 체크할 체크박스 묶음
             const checkboxList = [
                 [this.checkBoxs[0], this.checkBoxs[1]],
                 [this.checkBoxs[0], this.checkBoxs[1], this.checkBoxs[2], this.checkBoxs[3]],
@@ -100,20 +99,17 @@ export default {
                 ]
             ];
 
-            // CSS 변수 위치 이동
             if (this.row3) this.row3.style.setProperty('--bx', this.pos[i]);
 
-            // 체크 적용
             (checkboxList[i] || []).forEach((cd) => {
                 if (cd) cd.checked = true;
             });
         },
 
-        /* Submit 데이터 출력 테스트 버튼 */
         TestBtn() {
-            if (!this.form) return;
-            const checked = this.form.querySelector("input[name='ticket']:checked");
-            const value = checked ? checked.value : '';
+            const ticketList = ['Basic', 'Standard', 'Premium'];
+            const value = ticketList[this.selected];
+
             const messageMap = {
                 Basic: '베이직 결제가 완료되었습니다.',
                 Standard: '스탠다드 결제가 완료되었습니다.',
@@ -125,7 +121,7 @@ export default {
                 return;
             }
 
-            alert(messageMap[value] || `${value} 결제가 완료되었습니다.`);
+            alert(messageMap[value]);
         }
     }
 };
