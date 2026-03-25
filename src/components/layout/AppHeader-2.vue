@@ -14,7 +14,7 @@
         <!-- 프로필 헤더 부분 -->
         <div class="row">
             <div class="col-2">
-                <img :src="logo" alt="logo" />
+                <router-link to="/main"><img :src="logo" alt="logo" /></router-link>
             </div>
             <div class="col-2">
                 <router-link to="/main/mypage">
