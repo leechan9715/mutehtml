@@ -56,7 +56,7 @@
         </div>
 
         <div class="row top-one">
-            <div class="col-1 circlebox">
+            <div class="col-1 circlebox" @click="playTopOne">
                 <div class="circle"></div>
                 <img :src="activeTopOne?.artworkUrl100 || topOneFallbackCover" alt="top-one-cover" />
                 <div class="cir-type">
@@ -417,25 +417,12 @@ export default {
             localStorage.setItem(PLAYER_STATE_KEY, JSON.stringify(payload));
             window.dispatchEvent(new CustomEvent('mute-player-state-updated', { detail: payload }));
             this.$router.push({ path: `/main/player/${currentIndex}` });
+        },
+        playTopOne() {
+            if (!this.activeTopOne) return;
+            this.playChartTracks(this.activeTopOne);
         }
     }
 };
 </script>
 <style scoped src="@/assets/styles/pages/chart.css"></style>
-<style scoped>
-.loading-wrap {
-    position: sticky;
-    inset: 0;
-    z-index: 19;
-    background: rgba(255, 255, 255, 1);
-    min-height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-}
-.loading-lottie {
-    width: 100%;
-    height: 100%;
-}
-</style>

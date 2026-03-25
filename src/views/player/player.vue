@@ -257,24 +257,6 @@ export default {
     },
 
     methods: {
-        checkSongNameOverflow() {
-            const wrap = this.$refs.songNameWrap;
-            const text = this.$refs.songNameText;
-
-            if (!wrap || !text) {
-                this.isSongNameOverflow = false;
-                this.songNameOverflowDistance = '0px';
-                return;
-            }
-
-            const wrapWidth = wrap.clientWidth;
-            const textWidth = text.scrollWidth;
-
-            const isOverflow = textWidth > wrapWidth;
-
-            this.isSongNameOverflow = isOverflow;
-            this.songNameOverflowDistance = isOverflow ? `${textWidth + 32}px` : '0px';
-        },
         goToPlayList() {
             const audio = this.$refs.audio;
             const handoffTime = audio?.currentTime ?? this.currentTime ?? 0;
@@ -804,10 +786,10 @@ export default {
             const radius = Math.min(canvas.width, canvas.height) * 0.25;
             const { data } = ctx.getImageData(cx - radius, cy - radius, radius * 2, radius * 2);
 
-            let r = 0,
-                g = 0,
-                b = 0,
-                count = 0;
+            let r = 0;
+            let g = 0;
+            let b = 0;
+            let count = 0;
             for (let i = 0; i < data.length; i += 4) {
                 const [rd, gd, bd] = [data[i], data[i + 1], data[i + 2]];
                 if (Math.abs(rd - gd) + Math.abs(gd - bd) + Math.abs(bd - rd) > 30) {

@@ -60,6 +60,7 @@ h2 {
 
 .social-login-icon {
     justify-content: center;
+    cursor: pointer;
 }
 
 .social-login-icon img {

@@ -1,35 +1,32 @@
 <template>
     <div class="container">
-        <AppTopBar2 title="마이페이지"></AppTopBar2>
+        <AppTopBar2 title="마이페이지" />
         <div class="row">
             <div class="col-1">
                 <h3 class="sub-title profile-title">프로필</h3>
             </div>
             <div class="col-1 profile_container">
-                <img :src="checkAuthData.user?.profileImg || defaultProfileImg" alt="user_img" />
+                <img :src="authData?.user?.profileImg || defaultProfileImg" alt="user_img" />
                 <div class="profile_box">
-                    <p class="fw-medium">{{ checkAuthData.user?.nickname }}</p>
-                    <p class="color-gray fw-medium">{{ checkAuthData.user?.email }}</p>
+                    <p class="fw-medium">{{ authData?.user?.nickname }}</p>
+                    <p class="color-gray fw-medium">{{ authData?.user?.email }}</p>
                 </div>
             </div>
         </div>
         <div class="row use-auto">
-            <div class="col-2">
-                <h3 class="sub-title use-title">이용권 관리</h3>
-            </div>
-            <div class="col-2">
-                <img :src="require('@/assets/images/icon/right-arrow.png')" class="arrow" />
-            </div>
-            <div class="col-1 ticket-container">
-                <div class="ticket-box">
-                    <h3>Free</h3>
-                    <p>
-                        지금 이용권을 구매하고<br />
-                        무제한으로 음악을 즐기세요.
-                    </p>
+            <div class="auto">
+                <div class="col-2">
+                    <router-link to="ticket">
+                        <h3 class="sub-title use-title">이용권 관리</h3>
+                    </router-link>
                 </div>
-                <div class="logo_here"><Logo /></div>
+                <div class="col-2">
+                    <router-link to="ticket">
+                        <img :src="require('@/assets/images/icon/right-arrow.png')" class="arrow"
+                    /></router-link>
+                </div>
             </div>
+            <router-link to="ticket" class="col-1 ticket-container"></router-link>
         </div>
         <div class="row">
             <h3 class="col-1 sub-title">설정</h3>
@@ -55,13 +52,16 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import Logo from '@/components/ui/Logo.vue';
+import { storeToRefs } from 'pinia';
 import AppTopBar2 from '@/components/layout/AppTopBar2.vue';
 import MenuListItem from '@/components/ui/MenuListItem.vue';
 import profileImgSrc from '@/assets/images/mypage/test.jpg';
-import { checkAuthApi, logoutApi } from '@/api/_auth_api';
+import { logoutApi } from '@/api/_auth_api';
+import { useAuthStore } from '@/store/auth';
 const router = useRouter();
 const defaultProfileImg = profileImgSrc;
+const authStore = useAuthStore();
+const { authData } = storeToRefs(authStore);
 
 const settingsMenus = ref([
     { icon: 'notifications', title: '알림', to: '#' },
@@ -73,39 +73,35 @@ const settingsMenus = ref([
     { icon: 'info', title: '버전정보', to: '#' }
 ]);
 
-const checkAuthData = ref({});
 const naverAccessToken = ref();
 
 onMounted(async () => {
     try {
-        const { data } = await checkAuthApi();
-        checkAuthData.value = data;
-        console.log(checkAuthData.value);
+        await authStore.fetchAuthData();
     } catch (e) {
         console.error('로그인이 안되있습니다.', e);
     }
 });
 
 const logout = () => {
-    if (checkAuthData.value?.provider === 'kakao') {
+    if (authData.value?.provider === 'kakao') {
         kakaoLogout();
 
         return;
     }
 
-    if (checkAuthData.value?.provider === 'naver') {
+    if (authData.value?.provider === 'naver') {
         naverLogout();
         return;
     }
 
-    if (checkAuthData.value?.provider === 'google') {
+    if (authData.value?.provider === 'google') {
         googleLogout();
         return;
     }
 
-    if (checkAuthData.value?.provider === 'local') {
+    if (authData.value?.provider === 'local') {
         localLogout();
-        return;
     }
 };
 
@@ -120,12 +116,14 @@ const clearClientState = () => {
 const localLogout = async () => {
     clearClientState();
     await logoutApi();
+    authStore.clearAuthState();
     alert('로컬 정상적으로 로그아웃되었습니다.');
     router.push('/');
 };
 const googleLogout = async () => {
     clearClientState();
     await logoutApi();
+    authStore.clearAuthState();
     alert('구글 정상적으로 로그아웃되었습니다.');
     router.push('/');
 };
@@ -148,6 +146,7 @@ const kakaoLogout = async () => {
 
         // 3. 클라이언트 저장값 제거
         clearClientState();
+        authStore.clearAuthState();
         alert('카카오 정상적으로 로그아웃되었습니다.');
         router.push('/');
     } catch (error) {
@@ -156,7 +155,7 @@ const kakaoLogout = async () => {
     }
 };
 const naverLogout = async () => {
-    naverAccessToken.value = checkAuthData.value?.accessToken;
+    naverAccessToken.value = authData.value?.accessToken;
     if (!naverAccessToken.value) {
         alert('로그인 상태가 아닙니다.');
         return;
@@ -172,6 +171,7 @@ const naverLogout = async () => {
 
     clearClientState();
     await logoutApi();
+    authStore.clearAuthState();
     alert('네이버 정상적으로 로그아웃되었습니다.');
     router.push('/');
 };

@@ -1,5 +1,5 @@
 <template>
-    <div style="padding: 16px">
+    <div style="padding: 0 16px 20px 16px">
         <MainContainer title="아티스트 모먼트">
             <Swiper class="song-swiper" :slides-per-view="2.2" :space-between="16">
                 <SwiperSlide v-for="post in posts" :key="post.id" class="shorts" @click="linkTo(post.id)">
@@ -28,7 +28,6 @@
 import MainContainer from '@/components/ui/main-section-top.vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import 'swiper/css';
-import testImg from '@/assets/images/main/shorts/shorts_img1.png';
 import { mainShortsApi } from '@/api/_music_api';
 
 export default {
@@ -36,8 +35,7 @@ export default {
     components: { MainContainer, Swiper, SwiperSlide },
     data() {
         return {
-            posts: [],
-            testImg
+            posts: []
         };
     },
     methods: {
@@ -51,7 +49,7 @@ export default {
         },
 
         linkTo(id) {
-            this.$router.push(`/video-detail/${id}`);
+            this.$router.push(`/main/video-detail/${id}`);
         }
     },
     mounted() {

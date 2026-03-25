@@ -7,12 +7,8 @@
 </template>
 
 <script>
-import AuthHeader from '@/components/layout/AuthHeader.vue';
 export default {
-    name: 'OnboardingLayout',
-    components: {
-        AuthHeader
-    }
+    name: 'OnboardingLayout'
 };
 </script>
 
@@ -26,5 +22,6 @@ export default {
     background-image: url(@/assets/images/bg/bg_big.png);
     background-attachment: fixed;
     background-repeat: no-repeat;
+    background-position: center;
 }
 </style>

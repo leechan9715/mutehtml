@@ -3,109 +3,110 @@
 =====================*/
 
 .sub-title {
-    font-size: var(--font-20);
-    font-weight: var(--fw-semibold);
+    font-size: clamp(17px, 1.5vw, 20px);
     font-weight: 600;
 }
 
 .container {
-    margin-top: 24px;
+    margin-top: 23px;
     color: var(--color-black);
 }
 
 .profile-title {
-    font-size: 22px;
+    font-size: clamp(18px, 1.7vw, 22px);
 }
 
 .use-title {
-    font-size: 22px;
-    margin-bottom: 10px;
+    font-size: clamp(18px, 1.7vw, 22px);
+    margin-bottom: clamp(8px, 1vw, 10px);
 }
 
 .row:nth-of-type(1) {
-    margin-bottom: 40px;
+    margin-bottom: clamp(18px, 2.5vw, 30px);
     align-items: center;
 }
 
 .row:nth-of-type(2) {
-    margin-bottom: 40px;
+    margin-bottom: clamp(18px, 2.5vw, 30px);
 }
 
 .row:nth-of-type(2) .col-1:nth-of-type(1) {
-    margin-bottom: 9px;
+    margin-bottom: clamp(6px, 1vw, 9px);
 }
 
 .row:nth-of-type(2) .col-1:nth-of-type(2) {
-    padding: 11px 29px 10px 12px;
+    padding: clamp(15px, 1.5vw, 15px) clamp(6px, 1.2vw, 10px);
 }
 
 .profile_container {
     display: flex;
     align-items: center;
-    border-radius: 20px;
+    border-radius: clamp(8px, 1vw, 10px);
     box-shadow: 0px 2px 4px 0px var(--color-shadow);
     border: 1px solid var(--color-accent-blue);
 }
 
-.profile_container+img {
-    width: 64px;
+.profile_container img {
+    width: clamp(36px, 4vw, 48px);
     height: auto;
-    border-radius: 12px;
+    border-radius: clamp(8px, 1vw, 10px);
 }
 
 .profile_box {
+    margin-left: clamp(6px, 1vw, 10px);
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    margin-left: 14px;
-    width: 100%;
-    gap: 10px;
+    gap: clamp(1px, 0.7vw, 2px);
+}
+
+.profile_box p {
+    line-height: 1.2;
+    font-size: clamp(13px, 1.2vw, 16px);
 }
 
 .row:nth-of-type(3) {
     align-items: center;
-    margin-bottom: 37px;
+    margin-bottom: clamp(22px, 3vw, 37px);
 }
 
+/* ===== 티켓: 500px 이상은 고정 / contain 유지 ===== */
 .row:nth-of-type(3) .ticket-container {
     width: 100%;
     height: 150px;
-    background: url(@/assets/images/mypage/ticket.png) no-repeat;
-    background-size: cover;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
+    background: url(@/assets/images/mypage/ticket.png) no-repeat center;
+    background-size: contain;
+}
+
+/* ===== 500px 이하에서만 크기 줄이기 / contain 유지 ===== */
+@media (max-width: 500px) {
+    .row:nth-of-type(3) .ticket-container {
+        height: calc(60px + 18vw);
+        background-size: contain;
+    }
 }
 
 .ticket-box {
     width: 100%;
-    margin: 0 30px;
-
-    h3 {
-        font-size: 32px;
-        font-weight: 600;
-        margin-bottom: 10px;
-    }
-
-    p {
-        font-size: 16px;
-    }
+    margin: 0 clamp(14px, 3vw, 30px);
 }
 
-.logo_here {
-    position: absolute;
-    top: 15px;
-    right: 22px;
+.ticket-box h3 {
+    font-size: clamp(20px, 3vw, 32px);
+    font-weight: 600;
+    margin-bottom: clamp(6px, 1vw, 10px);
+}
+
+.ticket-box p {
+    font-size: clamp(13px, 1.4vw, 16px);
 }
 
 .row:nth-of-type(4) {
-    margin-bottom: 37px;
+    margin-bottom: clamp(22px, 3vw, 37px);
 }
 
 .row:nth-of-type(4) h3 {
-    margin-bottom: 17px;
-    font-size: 22px;
+    font-size: clamp(18px, 1.7vw, 22px);
+    margin-bottom: clamp(10px, 1.5vw, 17px);
 }
 
 .row:nth-of-type(4) ul {
@@ -115,8 +116,7 @@
 }
 
 .row:nth-of-type(4) ul li {
-    padding: 18px 0;
-    border-bottom: 1px solid var(--color-primary-5);
+    padding: clamp(12px, 1.8vw, 18px) 0;
 }
 
 .row:nth-of-type(4) ul li a {
@@ -127,20 +127,19 @@
 }
 
 .row:nth-of-type(4) ul li span:first-child {
-    text-indent: 20px;
-    font-size: var(--font-21);
+    font-size: var(--font-24);
+    text-indent: 5px;
 }
 
 .row:nth-of-type(4) ul li p {
-    text-indent: 20px;
     font-size: var(--font-16);
-    font-weight: var(--fw-medium);
+    font-weight: 500;
+    text-indent: 5px;
 }
 
 .row:nth-of-type(4) ul li span:last-child {
     margin-left: auto;
-    text-indent: 20px;
-    font-size: var(--font-18);
+    font-size: 18px;
 }
 
 .color-red {
@@ -149,10 +148,17 @@
 
 .material-symbols-outlined {
     font-size: 32px;
-    /* 원하는 크기 */
 }
 
 .arrow {
     width: 20px;
     margin-left: auto;
+}
+
+/* 로그아웃 같은 auto 영역은 고정 */
+.auto {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 0;
 }

@@ -1,4 +1,4 @@
-﻿<template>
+<template>
     <main>
         <form class="container" name="signup-info" @submit.prevent="handleSubmit">
             <div class="row">
@@ -84,7 +84,7 @@ export default {
             MAX_YEAR: new Date().getFullYear(),
             scrollTimeouts: new Map(),
             cleanupFns: [],
-            _timeouts: new Set(),
+            pendingTimeouts: new Set(),
 
             yearWheel: null,
             monthWheel: null,
@@ -107,14 +107,14 @@ export default {
         this.scrollTimeouts.forEach((id) => clearTimeout(id));
         this.scrollTimeouts.clear();
 
-        this._timeouts.forEach((id) => clearTimeout(id));
-        this._timeouts.clear();
+        this.pendingTimeouts.forEach((id) => clearTimeout(id));
+        this.pendingTimeouts.clear();
     },
 
     methods: {
         addTimeout(fn, ms) {
             const id = setTimeout(fn, ms);
-            this._timeouts.add(id);
+            this.pendingTimeouts.add(id);
             return id;
         },
 

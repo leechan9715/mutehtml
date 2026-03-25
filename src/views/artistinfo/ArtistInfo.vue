@@ -9,7 +9,7 @@
                 </div>
                 <p class="artist-name">Rosé</p>
                 <p class="artist-type">솔로가수 · 아티스트</p>
-                <p class="artist-fame">28,915,071 명이 응원합니다</p>
+                <p class="artist-fame">{{ fanCount.toLocaleString() }} 명이 응원합니다</p>
             </div>
         </div>
 
@@ -66,6 +66,7 @@ export default {
 
     data() {
         return {
+            fanCount: 28915071,
             likeAnimating: false,
 
             buttons: [
@@ -103,7 +104,10 @@ export default {
                 this.activeButtons.like = !this.activeButtons.like;
 
                 if (this.activeButtons.like) {
+                    this.fanCount++;
                     alert('해당 가수를 응원합니다!');
+                } else {
+                    this.fanCount--;
                 }
 
                 this.likeAnimating = false;

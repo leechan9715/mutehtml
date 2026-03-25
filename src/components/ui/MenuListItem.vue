@@ -38,19 +38,19 @@ li a {
 }
 
 li span:first-child {
-    text-indent: 20px;
-    font-size: 24px;
+    text-indent: 5px;
+    font-size: var(--font-24);
 }
 li p {
-    text-indent: 20px;
-    font-size: 16px;
+    text-indent: 5px;
+    font-size: var(--font-16);
     font-weight: var(--fw-medium);
 }
 
 li span:last-child {
     margin-left: auto;
-    text-indent: 20px;
-    font-size: 24px;
+    text-indent: 5px;
+    font-size: var(--font-24);
 }
 .is-danger {
     color: var(--color-red);
