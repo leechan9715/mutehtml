@@ -1,5 +1,5 @@
 <template>
-    <button :class="`btn ${variantClass}`">{{ label }}</button>
+    <button :type="type" :disabled="disabled" :class="`btn ${variantClass}`">{{ label }}</button>
 </template>
 
 <script>
@@ -7,7 +7,9 @@ export default {
     name: 'BaseButton',
     props: {
         label: { type: String, required: true },
-        variant: { type: String, default: 'active' }
+        variant: { type: String, default: 'active' },
+        type: { type: String, default: 'button' },
+        disabled: { type: Boolean, default: false }
     },
     computed: {
         variantClass() {

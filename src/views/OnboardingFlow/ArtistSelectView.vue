@@ -1,6 +1,6 @@
 <template>
     <main>
-        <form action="#" name="artist-form" class="container">
+        <form action="#" name="artist-form" class="container" @submit.prevent>
             <div class="row artist-select-header">
                 <div class="col-1">
                     <h2 class="text-center fw-semibold color-black">
