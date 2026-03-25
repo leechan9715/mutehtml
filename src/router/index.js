@@ -1,25 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import OnboardingLayout from '@/views/OnboardingFlow/OnboardingLayout.vue';
-import SplashView from '@/views/OnboardingFlow/SplashView.vue';
-import SignUp from '@/views/OnboardingFlow/SignUpView.vue';
-import WelcomeView from '@/views/OnboardingFlow/WelcomeView.vue';
-import MainLayout2 from '@/views/MainLayout-2.vue';
-import MainView from '@/views/main/MainView.vue';
-import ArtistSelectView from '@/views/OnboardingFlow/ArtistSelectView.vue';
-import SignUpInfoView from '@/views/OnboardingFlow/SignUpInfoView.vue';
-import MyPageView from '@/views/mypage/MyPageView.vue';
-import ChartView from '@/views/Chart/ChartView.vue';
-import Search from '@/views/search/search.vue';
-import SearchResult from '@/views/search/search-result.vue';
-import Loading from '@/views/OnboardingFlow/loading.vue';
-import TicketSelect from '@/views/ticket/TicketSelect.vue';
-import Library from '@/views/library/Library.vue';
-import PlaylistDetailView from '@/views/library/LibraryDetail.vue';
-import Playlist from '@/views/playlist/playlist.vue';
-import Player from '@/views/player/player.vue';
-import ArtistInfo from '@/views/artistinfo/ArtistInfo.vue';
-import VideoDetail from '@/views/VideoDetail/VideoDetail.vue';
-import Ai from '@/views/ai/Ai.vue';
+
+const OnboardingLayout = () => import('@/views/OnboardingFlow/OnboardingLayout.vue');
+const SplashView = () => import('@/views/OnboardingFlow/SplashView.vue');
+const SignUp = () => import('@/views/OnboardingFlow/SignUpView.vue');
+const WelcomeView = () => import('@/views/OnboardingFlow/WelcomeView.vue');
+const MainLayout2 = () => import('@/views/MainLayout-2.vue');
+const MainView = () => import('@/views/main/MainView.vue');
+const ArtistSelectView = () => import('@/views/OnboardingFlow/ArtistSelectView.vue');
+const SignUpInfoView = () => import('@/views/OnboardingFlow/SignUpInfoView.vue');
+const MyPageView = () => import('@/views/mypage/MyPageView.vue');
+const ChartView = () => import('@/views/Chart/ChartView.vue');
+const Search = () => import('@/views/search/search.vue');
+const SearchResult = () => import('@/views/search/search-result.vue');
+const Loading = () => import('@/views/OnboardingFlow/loading.vue');
+const TicketSelect = () => import('@/views/ticket/TicketSelect.vue');
+const Library = () => import('@/views/library/Library.vue');
+const PlaylistDetailView = () => import('@/views/library/LibraryDetail.vue');
+const Playlist = () => import('@/views/playlist/playlist.vue');
+const Player = () => import('@/views/player/player.vue');
+const ArtistInfo = () => import('@/views/artistinfo/ArtistInfo.vue');
+const VideoDetail = () => import('@/views/VideoDetail/VideoDetail.vue');
+const Ai = () => import('@/views/ai/Ai.vue');
 
 const routes = [
     {
@@ -55,20 +56,6 @@ const routes = [
             { path: 'ticket', component: TicketSelect, meta: { isProfile: false } }
         ]
     }
-    // {
-    //     path: '/main',
-    //     component: MainLayout,
-    //     children: [
-    //         { path: 'mypage', component: MyPageView },
-    //         { path: 'chart', component: ChartView },
-    //         { path: 'ticket-select', component: TicketSelect },
-    //         { path: 'library', component: Library },
-    //         { path: 'playlist', component: Playlist },
-    //         { path: 'player/:id', component: Player },
-    //         { path: 'artist-info', component: ArtistInfo },
-    //         { path: 'search-result', component: SearchResult }
-    //     ]
-    // },
 ];
 
 const router = createRouter({
