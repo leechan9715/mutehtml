@@ -1,5 +1,7 @@
 const { defineConfig } = require('@vue/cli-service');
 module.exports = defineConfig({
+    productionSourceMap: false,
+    parallel: false,
     transpileDependencies: true,
     lintOnSave: false,
     devServer: {
@@ -40,3 +42,4 @@ module.exports = defineConfig({
         }
     }
 });
+
