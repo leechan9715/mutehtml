@@ -109,19 +109,17 @@ export default {
         TestBtn() {
             const ticketList = ['Basic', 'Standard', 'Premium'];
             const value = ticketList[this.selected];
-
             const messageMap = {
                 Basic: '베이직 결제가 완료되었습니다.',
                 Standard: '스탠다드 결제가 완료되었습니다.',
                 Premium: '프리미엄 결제가 완료되었습니다.'
             };
-
             if (!value) {
                 alert('이용권을 선택해주세요.');
                 return;
             }
-
             alert(messageMap[value]);
+            this.$router.push('/main');
         }
     }
 };
