@@ -173,7 +173,7 @@ export default {
             this.showHelpMessage = true;
             this.helpTimerId = setTimeout(() => {
                 this.showHelpMessage = false;
-            }, 10000);
+            }, 3000);
         },
         clearHelpMessageTimer() {
             if (!this.helpTimerId) return;
