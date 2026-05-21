@@ -73,8 +73,8 @@ export default {
             isLoad: false,
             logo_1: logo1,
             /* 일반 로그인 */
-            email: '',
-            password: ''
+            email: 'test@naver.com',
+            password: 'test'
         };
     },
     async mounted() {
